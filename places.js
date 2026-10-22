@@ -137,6 +137,15 @@ const PLACES = [
     sources: ["https://www.trvlogue.com/ko/bomnal-cafe-aewol-jeju", "https://www.ktriptips.com/kor/food/3080165"]
   },
   {
+    id: "blissful-jeju", name: "블리스풀 제주", type: "카페",
+    stayMin: 60, cost: 5000, open: null, close: null, closedDays: ["금"],
+    lat: 33.40499, lng: 126.40720,
+    dog: true, stroller: null, stepFree: true, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "산록서로 383 1동 1층. 애견카페(소형견·대형견 구분된 잔디 운동장). 카카오맵(2026-10-23, 사업자 인증 매장): 반려동물 동반, 무료 주차, 매주 금요일 휴무, '계절마다 운영시간 다름', 아메리카노 5,000원, 064-799-8596. 구글 지도: 휠체어 이용 가능 출입구. 운영시간은 블로그(2026-02)에 11:30~17:30이라는 글만 있어서 확인 필요. 운동장 이용료 따로 있는지 확인 필요. 위치는 구글 플러스코드 8Q58CC34+XVW 기준.",
+    sources: ["https://place.map.kakao.com/1986467457", "https://maps.app.goo.gl/6wXE9Z3ScsMB4aMu6"]
+  },
+  {
     id: "eondeokjip-guksu", name: "언덕집국수", type: "식당",
     stayMin: 40, cost: 10000, open: "08:00", close: "16:00", closedDays: [],
     lat: null, lng: null,
