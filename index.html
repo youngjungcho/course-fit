@@ -120,7 +120,7 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="sample-banner">지금은 <b>예시 장소</b>로 보여 드려요. 실제 있는 곳이 아니에요.</div>
+  <div class="sample-banner"><b>제주 애월</b> 장소로 만들고 있어요. 아직 직접 확인하지 않은 정보가 많아요.</div>
 
   <div class="top">
     <button class="back" id="back" hidden>← 이전</button>
@@ -241,9 +241,9 @@ function travel(a, b, how) {
     else { min = 10 + km / 18 * 60; text = "버스·지하철로"; }
   } else if (how === "any") {
     if (km <= 1.2) { min = km / 4.5 * 60; text = "걸어서"; }
-    else { min = 5 + km / 20 * 60; text = "택시·차로"; }
+    else { min = 5 + km / 35 * 60; text = "택시·차로"; }
   } else if (how === "bike") { min = 3 + km / 12 * 60; text = "자전거로"; }
-  else { min = 5 + km / 20 * 60; text = "차로"; }
+  else { min = 5 + km / 35 * 60; text = "차로"; }
   return { min: Math.max(3, Math.ceil(min)), text };
 }
 
@@ -252,8 +252,9 @@ const NEED = { dog: "dog", kid: "stroller", wheel: "stepFree" };
 
 function makeCourse() {
   const need = NEED[state.who];
-  let unknownSkipped = 0;
+  let unknownSkipped = 0, noLocation = 0;
   const pool = PLACES.filter((p) => {
+    if (p.lat === null) { noLocation++; return false; }
     if (!need) return true;
     if (p[need] === null) unknownSkipped++;
     return p[need] === true;
@@ -269,7 +270,7 @@ function makeCourse() {
     for (const p of pool) {
       if (stops.some((s) => s.place === p)) continue;
       if (p.closedDays && p.closedDays.includes(today)) continue;
-      if (spent + p.cost > state.budget) continue;
+      if (spent + (p.cost ?? 0) > state.budget) continue;
 
       const mv = travel(here, p, state.how);
       let begin = now + mv.min;
@@ -293,10 +294,10 @@ function makeCourse() {
     }
     if (!best) break;
     stops.push(best);
-    here = best.place; now = best.leave; spent += best.place.cost; lastType = best.place.type;
+    here = best.place; now = best.leave; spent += best.place.cost ?? 0; lastType = best.place.type;
     if (best.place.type === "식당") lastMeal = best.begin;
   }
-  return { stops, spent, finish: now, unknownSkipped };
+  return { stops, spent, finish: now, unknownSkipped, noLocation };
 }
 
 function badgesFor(p) {
@@ -322,7 +323,8 @@ function badgesFor(p) {
 }
 
 function renderResult() {
-  const { stops, spent, finish, unknownSkipped } = makeCourse();
+  const { stops, spent, finish, unknownSkipped, noLocation } = makeCourse();
+  const costUnknown = stops.filter((s) => s.place.cost === null).length;
   const who = WHO.find((w) => w.id === state.who), how = HOW.find((h) => h.id === state.how);
   const used = finish - toMin(state.arrive);
 
@@ -331,7 +333,7 @@ function renderResult() {
     <li class="stop">
       <div class="time">${toHHMM(s.begin)} – ${toHHMM(s.leave)}</div>
       <div class="name">${esc(s.place.name)}</div>
-      <div class="meta">${s.place.type} · ${s.place.stayMin}분 · ${won(s.place.cost)} · ${esc(s.place.station)}</div>
+      <div class="meta">${s.place.type} · ${s.place.stayMin}분 · ${s.place.cost === null ? "비용 확인 필요" : won(s.place.cost)}${s.place.station ? ` · ${esc(s.place.station)}` : ""}</div>
       <div class="badges">${badgesFor(s.place)}</div>
     </li>`).join("");
 
@@ -343,17 +345,21 @@ function renderResult() {
       <div class="summary">
         <div><b>${stops.length}곳</b><span>장소</span></div>
         <div><b>${Math.floor(used / 60)}시간 ${used % 60}분</b><span>걸리는 시간</span></div>
-        <div><b>${spent.toLocaleString("ko-KR")}원</b><span>1명 비용</span></div>
+        <div><b>${spent.toLocaleString("ko-KR")}원${costUnknown ? "+" : ""}</b><span>1명 비용</span></div>
       </div>
       <ul class="timeline">
         <li class="endpoint">📍 ${toHHMM(toMin(state.arrive))} ${esc(START.name)}에서 출발</li>
         ${list}
         <li class="endpoint">🏁 ${toHHMM(finish)} 코스 끝</li>
       </ul>` : `
-      <div class="empty">조건에 맞는 곳을 찾지 못했어요. 도착 시각이나 시간, 예산을 바꿔 보세요.</div>`}
+      <div class="empty">${unknownSkipped
+        ? `아직 "${{ dog: "반려견 OK", kid: "유모차 OK", wheel: "계단 없음" }[state.who]}"이 확인된 장소가 부족해요. 장소 정보를 확인하면 코스가 나와요.`
+        : "조건에 맞는 곳을 찾지 못했어요. 도착 시각이나 시간, 예산을 바꿔 보세요."}</div>`}
     <div class="notes">
       <p>• 이동 시간은 직선거리로 대충 계산했어요. 실제와 다를 수 있어요.</p>
+      ${costUnknown ? `<p>• 비용을 모르는 곳 ${costUnknown}곳은 비용 합계에 들어가지 않았어요.</p>` : ""}
       ${unknownSkipped ? `<p>• 정보가 "확인 필요"인 곳 ${unknownSkipped}곳은 코스에서 뺐어요.</p>` : ""}
+      ${noLocation ? `<p>• 위치를 아직 모르는 곳 ${noLocation}곳은 코스에서 뺐어요.</p>` : ""}
     </div>
     <button class="primary" id="again">조건 바꾸기</button>`;
   document.getElementById("again").onclick = () => { state.step = 0; render(); };
