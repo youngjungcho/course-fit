@@ -289,7 +289,9 @@ function makeCourse() {
 
       const mealTime = (begin >= 660 && begin <= 840) || (begin >= 1020 && begin <= 1200);
       let score = -(begin - now);
-      if (p.type === "식당") score += (mealTime && begin - lastMeal > 180) ? 60 : -80;
+      // 식당은 앞 식사에서 3시간이 지나야 넣어요
+      if (p.type === "식당" && begin - lastMeal < 180) continue;
+      if (p.type === "식당") score += mealTime ? 60 : -80;
       if (p.type === lastType) score -= 25;
       if (state.who === "solo" && p.solo) score += 10;
       if (state.how === "bike" && p.bikeRack) score += 10;
