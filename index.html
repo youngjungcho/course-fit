@@ -262,8 +262,9 @@ function makeCourse() {
 
   const startMin = toMin(state.arrive);
   const endMin = startMin + state.hours * 60;
+  const maxCafes = state.hours <= 4 ? 1 : 2;
   const stops = [];
-  let here = START, now = startMin, spent = 0, lastType = null, lastMeal = -999;
+  let here = START, now = startMin, spent = 0, lastType = null, lastMeal = -999, cafes = 0;
 
   while (true) {
     let best = null;
@@ -271,13 +272,17 @@ function makeCourse() {
       if (stops.some((s) => s.place === p)) continue;
       if (p.closedDays && p.closedDays.includes(today)) continue;
       if (spent + (p.cost ?? 0) > state.budget) continue;
+      // 카페·식당은 연달아 넣지 않고, 카페는 4시간 이하면 1곳·그보다 길면 2곳까지
+      if (p.type === lastType && (p.type === "카페" || p.type === "식당")) continue;
+      if (p.type === "카페" && cafes >= maxCafes) continue;
 
       const mv = travel(here, p, state.how);
       let begin = now + mv.min;
-      if (p.open) {
-        const open = toMin(p.open);
-        if (begin < open) { if (open - begin > 30) continue; begin = open; }
-      }
+      // 문 열기 전이나 쉬는 시간이면 30분까지는 기다리고, 더 길면 다음 후보로
+      const waitUntil = (min) => { if (min - begin > 30) return false; begin = min; return true; };
+      if (p.open && begin < toMin(p.open) && !waitUntil(toMin(p.open))) continue;
+      const hitBreak = (p.breaks ?? []).find(([from, to]) => begin < toMin(to) && begin + p.stayMin > toMin(from));
+      if (hitBreak && !waitUntil(toMin(hitBreak[1]))) continue;
       const leave = begin + p.stayMin;
       if (leave > endMin) continue;
       if (p.close && leave > toMin(p.close)) continue;
@@ -296,6 +301,7 @@ function makeCourse() {
     stops.push(best);
     here = best.place; now = best.leave; spent += best.place.cost ?? 0; lastType = best.place.type;
     if (best.place.type === "식당") lastMeal = best.begin;
+    if (best.place.type === "카페") cafes++;
   }
   return { stops, spent, finish: now, unknownSkipped, noLocation };
 }
