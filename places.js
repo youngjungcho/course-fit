@@ -89,11 +89,11 @@ const PLACES = [
   },
   {
     id: "981-park", name: "9.81 파크 제주", type: "볼거리",
-    stayMin: 120, cost: null, open: null, close: null, closedDays: null,
+    stayMin: 120, cost: null, open: "09:00", close: "18:20", closedDays: [],
     lat: 33.39006, lng: 126.36652,
     dog: false, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
-    note: "천덕로 880-24. 반려견은 토요일 16:00 티켓만 13kg 이하·목줄·카트는 하네스(관광공사, 2025-11 수정) → 그 외에는 안 돼요로 넣었어요. 운영시간·요금 확인 필요. 카카오맵 시설정보(2026-10-24): 장애인 시설, 무료 주차. 관광공사 무장애 여행 정보(2025-11 수정): 수유실 있음(휠체어·유모차 정보는 없음).",
+    note: "천덕로 880-24. 반려견은 토요일 16:00 티켓만 13kg 이하·목줄·카트는 하네스(관광공사, 2025-11 수정) → 그 외에는 안 돼요로 넣었어요. 운영시간·요금 확인 필요. 카카오맵 시설정보(2026-10-24): 장애인 시설, 무료 주차. 관광공사 무장애 여행 정보(2025-11 수정): 수유실 있음(휠체어·유모차 정보는 없음). 카카오맵 영업정보(2026-10-24 확인): 매일 09:00~18:20. 요금은 카카오맵에도 없어서 확인 필요.",
     sources: ["관광공사 무장애 여행 정보 API 2609373", "https://place.map.kakao.com/1868828759", "관광공사 반려동물 API 2609373"]
   },
   {
@@ -129,7 +129,7 @@ const PLACES = [
     lat: 33.43368, lng: 126.33093,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: null,
-    note: "천연기념물 난대림. 무료·24시간이라는 정보는 2004년 기사라서 지금도 그런지 확인 필요.",
+    note: "천연기념물 난대림. 무료·24시간이라는 정보는 2004년 기사라서 지금도 그런지 확인 필요. 카카오맵 영업정보(2026-10-24 확인): 연중무휴(시간 표시는 없음).",
     sources: ["https://www.khan.co.kr/article/200412231602091/amp"]
   },
   {
@@ -271,38 +271,39 @@ const PLACES = [
   },
   {
     id: "aewol-onuii", name: "애월오누이 제주", type: "식당",
-    stayMin: 50, cost: 15000, open: "07:00", close: null, closedDays: null,
+    stayMin: 50, cost: 15000, open: "07:00", close: "20:00", closedDays: [],
     lat: 33.46662, lng: 126.31878,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: null,
-    note: "애월로9길 54. 성게미역국·두루치기·전복돌솥밥 15,000원, 각재기국 10,000원. 카카오맵(2026-10-24, 사업자 인증 매장): 태그 #애견동반식당 #아침식사, 07:00 오픈(닫는 시간·쉬는 날 확인 필요), 064-799-8846. 시설정보 칸에는 반려동물 표시가 없어서 태그 기준이에요.",
+    note: "애월로9길 54. 성게미역국·두루치기·전복돌솥밥 15,000원, 각재기국 10,000원. 카카오맵(2026-10-24, 사업자 인증 매장): 태그 #애견동반식당 #아침식사, 07:00 오픈(닫는 시간·쉬는 날 확인 필요), 064-799-8846. 시설정보 칸에는 반려동물 표시가 없어서 태그 기준이에요. 카카오맵 영업정보(2026-10-24 확인): 매일 07:00~20:00.",
     sources: ["https://place.map.kakao.com/974387661"]
   },
   {
     id: "lee-chunok", name: "이춘옥원조고등어쌈밥 제주애월본점", type: "식당",
-    stayMin: 60, cost: 17000, open: "10:00", close: null, closedDays: null,
+    stayMin: 60, cost: 17000, open: "10:00", close: "20:30", closedDays: [],
+    breaks: [["16:00", "17:00"]],
     lat: 33.48900, lng: 126.41870,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
-    note: "일주서로 7213(하귀 쪽, 애월리에서 차로 15분쯤). 전복뚝배기(1인) 17,000원, 고등어 묵은지찜(2인) 38,000원. 카카오맵(2026-10-24, 사업자 인증 매장): 반려동물 동반, 장애인 시설(계단 없음인지는 확인 필요), 무료 주차, 10:00 오픈·재료 소진 시 조기 마감, 064-799-9914.",
+    note: "일주서로 7213(하귀 쪽, 애월리에서 차로 15분쯤). 전복뚝배기(1인) 17,000원, 고등어 묵은지찜(2인) 38,000원. 카카오맵(2026-10-24, 사업자 인증 매장): 반려동물 동반, 장애인 시설(계단 없음인지는 확인 필요), 무료 주차, 10:00 오픈·재료 소진 시 조기 마감, 064-799-9914. 카카오맵 영업정보(2026-10-24 확인): 매일 10:00~20:30, 16:00~17:00 브레이크타임, 라스트오더 15:00·19:30.",
     sources: ["https://place.map.kakao.com/24780480"]
   },
   {
     id: "doldam-gogi", name: "돌담길괴기집", type: "식당",
-    stayMin: 80, cost: 32000, open: "17:00", close: null, closedDays: null,
+    stayMin: 80, cost: 32000, open: "17:00", close: "22:00", closedDays: ["일"],
     lat: 33.44978, lng: 126.30711,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: null,
-    note: "곽지5길 8-11. 흑돼지 오겹살·목살 600g 64,000원(2인 기준으로 1명 32,000원으로 넣었어요), 김치찌개 8,000원, 냉면 7,000원. 카카오맵(2026-10-24, 사업자 인증 매장): 반려동물 동반, 17:00 오픈(닫는 시간·쉬는 날 확인 필요), 010-5647-1107.",
+    note: "곽지5길 8-11. 흑돼지 오겹살·목살 600g 64,000원(2인 기준으로 1명 32,000원으로 넣었어요), 김치찌개 8,000원, 냉면 7,000원. 카카오맵(2026-10-24, 사업자 인증 매장): 반려동물 동반, 17:00 오픈(닫는 시간·쉬는 날 확인 필요), 010-5647-1107. 카카오맵 영업정보(2026-10-24 확인): 17:00~22:00, 일요일 휴무.",
     sources: ["https://place.map.kakao.com/686576469"]
   },
   {
     id: "bluegrass", name: "블루그라스", type: "식당",
-    stayMin: 50, cost: 10800, open: "10:00", close: "15:00", closedDays: null,
+    stayMin: 50, cost: 10800, open: "11:30", close: "15:30", closedDays: ["목"],
     lat: 33.44745, lng: 126.30924,
     dog: true, stroller: null, stepFree: null, solo: true,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
-    note: "곽지8길 23-9 (곽지해수욕장 근처). 떡갈비 10,800원, 열무국수 9,500원. 카카오맵(2026-10-24, 사업자 인증 매장): 반려동물 동반, 무료 주차, 태그 #혼밥, 10:00 오픈·주문 15:00까지·재료 소진 시 일찍 마감(15:00를 닫는 시간으로 넣었어요), 070-8806-4479.",
+    note: "곽지8길 23-9 (곽지해수욕장 근처). 떡갈비 10,800원, 열무국수 9,500원. 카카오맵(2026-10-24, 사업자 인증 매장): 반려동물 동반, 무료 주차, 태그 #혼밥, 10:00 오픈·주문 15:00까지·재료 소진 시 일찍 마감, 070-8806-4479. 카카오맵 영업정보(2026-10-24 확인): 토·일 10:00~15:30, 월·화·수·금 11:30~15:30, 목요일 휴무, 라스트오더 15:00 → 평일 시간(11:30~15:30)으로 넣었어요.",
     sources: ["https://place.map.kakao.com/2084120036"]
   },
   {
