@@ -24,6 +24,7 @@
 //
 // 위치(lat, lng)는 OpenStreetMap에서 찾았어요. "관광공사 반려동물 API"라고 적힌 곳은 그 API의 위치예요.
 // 관광공사 반려동물 API: 한국관광공사_반려동물_동반여행_서비스 (공공데이터포털, 2026-10-23 조회)
+// 관광공사 국문 관광정보 API: 한국관광공사_국문 관광정보 서비스_GW (공공데이터포털, 2026-10-24 조회)
 
 const START = { name: "애월읍사무소 정류장", lat: 33.4626, lng: 126.3303 };
 
@@ -138,12 +139,129 @@ const PLACES = [
   },
   {
     id: "blissful-jeju", name: "블리스풀 제주", type: "카페",
-    stayMin: 60, cost: 5000, open: null, close: null, closedDays: ["금"],
+    stayMin: 60, cost: 5000, open: "10:00", close: "18:00", closedDays: ["금"],
     lat: 33.40499, lng: 126.40720,
     dog: true, stroller: null, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
-    note: "산록서로 383 1동 1층. 애견카페(소형견·대형견 구분된 잔디 운동장). 카카오맵(2026-10-23, 사업자 인증 매장): 반려동물 동반, 무료 주차, 매주 금요일 휴무, '계절마다 운영시간 다름', 아메리카노 5,000원, 064-799-8596. 구글 지도: 휠체어 이용 가능 출입구. 운영시간은 블로그(2026-02)에 11:30~17:30이라는 글만 있어서 확인 필요. 운동장 이용료 따로 있는지 확인 필요. 위치는 구글 플러스코드 8Q58CC34+XVW 기준.",
+    note: "산록서로 383 1동 1층. 애견카페(소형견·대형견 구분된 잔디 운동장). 카카오맵(2026-10-23, 사업자 인증 매장): 반려동물 동반, 무료 주차, 매주 금요일 휴무, '계절마다 운영시간 다름', 아메리카노 5,000원, 064-799-8596. 구글 지도: 휠체어 이용 가능 출입구. 운영시간: 관광공사 국문 관광정보(2025-10 수정)는 평일 10~18시·주말 10~19시, 블로그(2026-02)는 11:30~17:30, 카카오는 '계절마다 다름' → 평일 시간으로 넣었고 확인 필요. 운동장 이용료 따로 있는지 확인 필요. 위치는 구글 플러스코드 8Q58CC34+XVW 기준.",
     sources: ["https://place.map.kakao.com/1986467457", "https://maps.app.goo.gl/6wXE9Z3ScsMB4aMu6"]
+  },
+  {
+    id: "jangin-house", name: "장인의집", type: "식당",
+    stayMin: 60, cost: null, open: "09:00", close: "22:00", closedDays: [],
+    lat: 33.46577, lng: 126.32685,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "애월로19길 31. 만두전골·갈비탕. 주문 21:00까지. 예약 가능. 관광공사 국문 관광정보(2025-06 수정): 09:00~22:00 (마지막 주문 21:00) / 쉬는 날 연중무휴. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2847672"]
+  },
+  {
+    id: "danso", name: "단소", type: "식당",
+    stayMin: 50, cost: null, open: "11:00", close: "15:30", closedDays: ["일"],
+    lat: 33.46445, lng: 126.32264,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: false,
+    note: "애월로 139-4. 한상차림·도시락. 주문 14:50까지. 관광공사 국문 관광정보(2025-01 수정): 11:00~15:30 (라스트오더 14:50) / 쉬는 날 매주 일요일. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2851913"]
+  },
+  {
+    id: "aewol-twigim", name: "애월튀김간", type: "식당",
+    stayMin: 40, cost: null, open: "11:00", close: "20:00", closedDays: [],
+    lat: 33.46440, lng: 126.31977,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: null,
+    note: "애월로 118. 떡볶이·튀김·김밥. 포장 가능. 관광공사 국문 관광정보(2025-09 수정): 11:00~20:00 / 쉬는 날 연중무휴. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2780230"]
+  },
+  {
+    id: "simba-curry", name: "심바카레", type: "식당",
+    stayMin: 50, cost: null, open: "10:00", close: "19:00", closedDays: ["수"],
+    lat: 33.46342, lng: 126.31686,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "애월로 87-16. 돈카츠 카레. 15:00~16:00 쉬는 시간(코스에는 아직 반영 안 돼요). 관광공사 국문 관광정보(2025-06 수정): - 10:00~19:00 - 준비시간 15:00~16:00 - 점심 마지막 주문 14:30 / 저녁 마지막 주문 18:30 / 쉬는 날 매주 수요일. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2852108"]
+  },
+  {
+    id: "aewolri-makguksu", name: "애월리순메밀막국수", type: "식당",
+    stayMin: 50, cost: null, open: "10:00", close: "20:00", closedDays: [],
+    lat: 33.46566, lng: 126.31639,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "애월해안로 11. 막국수·평양냉면. 주문 19:30까지. 관광공사 국문 관광정보(2025-06 수정): 10:00~20:00 (마지막 주문 19:30) / 쉬는 날 연중무휴. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2864216"]
+  },
+  {
+    id: "goijeong", name: "고이정", type: "식당",
+    stayMin: 70, cost: null, open: "11:00", close: "24:00", closedDays: [],
+    lat: 33.45933, lng: 126.31135,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "애월로 6. 흑돼지 근고기. 주문 23:00까지. 관광공사 국문 관광정보(2025-01 수정): 11:00~24:00 (라스트오더 23:00) / 쉬는 날 연중무휴. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2759061"]
+  },
+  {
+    id: "kkongsuni", name: "꽁순이네", type: "식당",
+    stayMin: 40, cost: null, open: "10:00", close: "16:30", closedDays: ["화"],
+    lat: 33.44695, lng: 126.33872,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "중산간서로 5642. 고기국수·몸국. 중산간서로 5642. 관광공사 국문 관광정보(2025-06 수정): 10:00~16:30 (마지막 주문 16:25) / 쉬는 날 매주 화요일. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2851868"]
+  },
+  {
+    id: "haenyeo-house", name: "해녀의집", type: "식당",
+    stayMin: 60, cost: null, open: "10:00", close: "20:00", closedDays: ["화"],
+    lat: 33.47841, lng: 126.36694,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: false,
+    note: "애월해안로 591. 전복죽·해산물. 14:00~15:00 쉬는 시간(코스에는 아직 반영 안 돼요). 관광공사 국문 관광정보(2025-06 수정): 10:00~20:00 (준비시간 14:00~15:00) / 쉬는 날 매주 화요일. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2852232"]
+  },
+  {
+    id: "jeongjikhan-don", name: "정직한돈 본점", type: "식당",
+    stayMin: 70, cost: null, open: "15:00", close: "23:00", closedDays: [],
+    lat: 33.46740, lng: 126.33900,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "애월해안로 253. 흑돼지 구이. 관광공사 국문 관광정보(2025-06 수정): 15:00~23:00 / 쉬는 날 연중무휴. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2853566"]
+  },
+  {
+    id: "jeremy-cafe", name: "제레미", type: "카페",
+    stayMin: 50, cost: null, open: "09:00", close: "17:30", closedDays: ["일", "월"],
+    lat: 33.46455, lng: 126.31852,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: false,
+    note: "애월로 106-1. 핸드드립 커피·토스트. 주문 17:10까지. 관광공사 국문 관광정보(2025-06 수정): 09:00~17:30 (마지막 주문 17:10) / 쉬는 날 매주 일요일, 월요일. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2852155"]
+  },
+  {
+    id: "tribe-cafe", name: "트라이브", type: "카페",
+    stayMin: 50, cost: null, open: "09:00", close: "21:00", closedDays: [],
+    lat: 33.46006, lng: 126.31128,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "애월로 11. 수플레. 애월로 11. 관광공사 국문 관광정보(2025-06 수정): 09:00~21:00 / 쉬는 날 연중무휴. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2861940"]
+  },
+  {
+    id: "sunset-cliff", name: "썬셋클리프", type: "카페",
+    stayMin: 60, cost: null, open: "10:00", close: "22:00", closedDays: [],
+    lat: 33.46184, lng: 126.31072,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "애월로1길 19-8. 피자·음료. 관광공사 국문 관광정보(2025-10 수정): 10:00~22:00 / 쉬는 날 연중무휴. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2893743"]
+  },
+  {
+    id: "matilda-cafe", name: "마틸다", type: "카페",
+    stayMin: 50, cost: null, open: "18:00", close: "24:00", closedDays: ["화"],
+    lat: 33.46573, lng: 126.33428,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "고내1길 33. 밤 카페. 실제로는 새벽 1시까지(주문 00:30). 관광공사 국문 관광정보(2025-06 수정): 18:00~01:00 (마지막 주문 00:30) / 쉬는 날 매주 화요일. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2851674"]
   },
   {
     id: "eondeokjip-guksu", name: "언덕집국수", type: "식당",
@@ -165,11 +283,11 @@ const PLACES = [
   },
   {
     id: "aewol-the-sunset", name: "애월 더선셋", type: "카페",
-    stayMin: 60, cost: null, open: null, close: null, closedDays: null,
-    lat: null, lng: null,
+    stayMin: 60, cost: null, open: "10:00", close: "19:00", closedDays: [],
+    lat: 33.45621, lng: 126.30904,
     dog: true, stroller: null, stepFree: null, solo: null,
-    station: null, bikeRack: null, evChargerMin: null, parking: null,
-    note: "바다 보이는 브런치 카페. 반려견 동반은 장소 정보 사이트 표시 기준. 위치·운영시간 확인 필요.",
-    sources: ["https://polle.com/place/2A8Nje/%EC%95%A0%EC%9B%94%20%EB%8D%94%EC%84%A0%EC%85%8B"]
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "일주서로 6111. 바다 보이는 브런치 카페(치즈 오믈렛 브런치). 관광공사 국문 관광정보(2025-06 수정): 10:00~19:00, 주문 18:20까지, 연중무휴, 주차 가능. 반려견 동반은 장소 정보 사이트 표시 기준이라 확인하면 좋아요. 가격 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2862045", "https://polle.com/place/2A8Nje/%EC%95%A0%EC%9B%94%20%EB%8D%94%EC%84%A0%EC%85%8B"]
   }
 ];
