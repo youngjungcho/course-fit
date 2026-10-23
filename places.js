@@ -26,6 +26,8 @@
 // 위치(lat, lng)는 OpenStreetMap에서 찾았어요. "관광공사 반려동물 API"라고 적힌 곳은 그 API의 위치예요.
 // 관광공사 반려동물 API: 한국관광공사_반려동물_동반여행_서비스 (공공데이터포털, 2026-10-23 조회)
 // 관광공사 국문 관광정보 API: 한국관광공사_국문 관광정보 서비스_GW (공공데이터포털, 2026-10-24 조회)
+// 관광공사 무장애 여행 정보 API: 한국관광공사_무장애 여행 정보 (공공데이터포털, 2026-10-24 조회)
+//   "턱 없음·경사로"가 확인되면 stepFree와 stroller를 true로 넣었어요 (휠체어가 다니면 유모차도 다닐 수 있어서)
 // 카카오맵: 카카오 로컬 API로 찾고, 장소 페이지(place.map.kakao.com)의 시설정보·메뉴를 직접 읽었어요 (2026-10-24)
 
 const START = { name: "애월읍사무소 정류장", lat: 33.4626, lng: 126.3303 };
@@ -35,19 +37,19 @@ const PLACES = [
     id: "handam-trail", name: "한담해안산책로", type: "공원",
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.45947, lng: 126.31050,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: null,
-    note: "애월항~곽지해변 약 1.2km 보행 전용 산책로. 무료는 공공 산책로라서 그렇게 봤어요.",
-    sources: ["https://www.telltrip.com/domestic-travel/jeju-aewol-handam-coastal-walking-trail/"]
+    note: "애월항~곽지해변 약 1.2km 보행 전용 산책로. 무료는 공공 산책로라서 그렇게 봤어요. 관광공사 무장애 여행 정보(2026-08 수정): 출입구까지·주출입구 턱 없음(휠체어 가능). 한담해변 자료(2026-10)에도 휠체어 이동 가능한 산책로 있음.",
+    sources: ["관광공사 무장애 여행 정보 API 2930935", "https://www.telltrip.com/domestic-travel/jeju-aewol-handam-coastal-walking-trail/"]
   },
   {
     id: "gwakji-beach", name: "곽지해수욕장", type: "공원",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.45596, lng: 126.30650,
-    dog: null, stroller: null, stepFree: null, solo: null,
-    station: null, bikeRack: null, evChargerMin: null, parking: null,
-    note: "해수욕장 개장 기간(2025년 6/24~8/31, 10~19시) 말고는 운영시간 확인 필요.",
-    sources: []
+    dog: null, stroller: true, stepFree: true, solo: null,
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "해수욕장 개장 기간(2025년 6/24~8/31, 10~19시) 말고는 운영시간 확인 필요. 관광공사 무장애 여행 정보(2025-07 수정): 경사로 있음, 장애인 전용 주차구역·화장실 있음. 모래사장 안쪽은 휠체어·유모차가 어려울 수 있어요.",
+    sources: ["관광공사 무장애 여행 정보 API 127870"]
   },
   {
     id: "gonae-port", name: "고내포구", type: "볼거리",
@@ -62,10 +64,10 @@ const PLACES = [
     id: "hangpaduri", name: "항파두리 항몽유적지", type: "볼거리",
     stayMin: 60, cost: 0, open: "09:00", close: "18:00", closedDays: [],
     lat: 33.45204, lng: 126.40754,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
-    note: "무료·연중무휴·주차 가능. 운영시간이 출처마다 달라요(09~18시, 입장 17:30까지 / 다른 곳은 10~17시). 공식 홈페이지 jeju.go.kr/hangpadori, 064-710-6726",
-    sources: ["https://xn--ok0b236bp0a.com/place/8169", "https://www.ktriptips.com/kor/tourspot/128050"]
+    note: "무료·연중무휴·주차 가능. 운영시간이 출처마다 달라요(09~18시, 입장 17:30까지 / 다른 곳은 10~17시). 공식 홈페이지 jeju.go.kr/hangpadori, 064-710-6726 관광공사 무장애 여행 정보(2026-08 수정): 출입구까지·주출입구 턱 없음(휠체어 가능), 휠체어 대여 1대, 유모차 대여 2대, 장애인 주차장·화장실 있음.",
+    sources: ["관광공사 무장애 여행 정보 API 128050", "https://xn--ok0b236bp0a.com/place/8169", "https://www.ktriptips.com/kor/tourspot/128050"]
   },
   {
     id: "saebyeol-oreum", name: "새별오름", type: "공원",
@@ -73,8 +75,8 @@ const PLACES = [
     lat: 33.36625, lng: 126.35769,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
-    note: "상시 개방·무료·주차 가능. 반려견: 전 구역·전 견종 가능, 목줄 필수, 맹견은 입마개, 배변봉투 지참(관광공사, 2026-07 수정). 정상까지 약 20분, 한 바퀴 1시간~1시간 30분(후기).",
-    sources: ["관광공사 반려동물 API 572973", "https://xn--ok0b236bp0a.com/place/7871", "https://www.telltrip.com/domestic-travel/saebyeol-oreum-autumn-silver-grass/"]
+    note: "상시 개방·무료·주차 가능. 반려견: 전 구역·전 견종 가능, 목줄 필수, 맹견은 입마개, 배변봉투 지참(관광공사, 2026-07 수정). 정상까지 약 20분, 한 바퀴 1시간~1시간 30분(후기). 카카오맵 시설정보(2026-10-24): 무료입장, 반려동물 동반, 입구 무료 공용주차장.",
+    sources: ["https://place.map.kakao.com/25274725", "관광공사 반려동물 API 572973", "https://xn--ok0b236bp0a.com/place/7871", "https://www.telltrip.com/domestic-travel/saebyeol-oreum-autumn-silver-grass/"]
   },
   {
     id: "dochidol-alpaca", name: "도치돌 알파카목장", type: "볼거리",
@@ -90,9 +92,9 @@ const PLACES = [
     stayMin: 120, cost: null, open: null, close: null, closedDays: null,
     lat: 33.39006, lng: 126.36652,
     dog: false, stroller: null, stepFree: null, solo: null,
-    station: null, bikeRack: null, evChargerMin: null, parking: null,
-    note: "천덕로 880-24. 반려견은 토요일 16:00 티켓만 13kg 이하·목줄·카트는 하네스(관광공사, 2025-11 수정) → 그 외에는 안 돼요로 넣었어요. 운영시간·요금 확인 필요.",
-    sources: ["관광공사 반려동물 API 2609373"]
+    station: null, bikeRack: null, evChargerMin: null, parking: true,
+    note: "천덕로 880-24. 반려견은 토요일 16:00 티켓만 13kg 이하·목줄·카트는 하네스(관광공사, 2025-11 수정) → 그 외에는 안 돼요로 넣었어요. 운영시간·요금 확인 필요. 카카오맵 시설정보(2026-10-24): 장애인 시설, 무료 주차. 관광공사 무장애 여행 정보(2025-11 수정): 수유실 있음(휠체어·유모차 정보는 없음).",
+    sources: ["관광공사 무장애 여행 정보 API 2609373", "https://place.map.kakao.com/1868828759", "관광공사 반려동물 API 2609373"]
   },
   {
     id: "gyulgyul-store", name: "귤귤스토어 애월점", type: "쇼핑",
@@ -118,8 +120,8 @@ const PLACES = [
     lat: 33.48195, lng: 126.37522,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
-    note: "애월해안로 686. 기념품·특산품. 매일 10~19시, 화장실 있음. 반려견 전 구역 가능(관광공사, 2026-03 수정). 064-747-9650",
-    sources: ["관광공사 반려동물 API 4013229"]
+    note: "애월해안로 686. 기념품·특산품. 매일 10~19시, 화장실 있음. 반려견 전 구역 가능(관광공사, 2026-03 수정). 064-747-9650 카카오맵 시설정보(2026-10-24): 반려동물 동반, 장애인 시설(계단 없음인지는 확인 필요), 무료 주차.",
+    sources: ["https://place.map.kakao.com/1480956546", "관광공사 반려동물 API 4013229"]
   },
   {
     id: "geumsan-park", name: "금산공원 (납읍 난대림)", type: "공원",
@@ -161,19 +163,19 @@ const PLACES = [
     id: "danso", name: "단소", type: "식당",
     stayMin: 50, cost: null, open: "11:00", close: "15:30", closedDays: ["일"],
     lat: 33.46445, lng: 126.32264,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: false,
-    note: "애월로 139-4. 한상차림·도시락. 주문 14:50까지. 관광공사 국문 관광정보(2025-01 수정): 11:00~15:30 (라스트오더 14:50) / 쉬는 날 매주 일요일. 가격 확인 필요.",
-    sources: ["관광공사 국문 관광정보 API 2851913"]
+    note: "애월로 139-4. 한상차림·도시락. 주문 14:50까지. 관광공사 국문 관광정보(2025-01 수정): 11:00~15:30 (라스트오더 14:50) / 쉬는 날 매주 일요일. 가격 확인 필요. 카카오맵 시설정보(2026-10-24): 반려동물 동반, 유아의자, 주차 공간 없음(근처 주차장 이용).",
+    sources: ["https://place.map.kakao.com/689714772", "관광공사 국문 관광정보 API 2851913"]
   },
   {
     id: "aewol-twigim", name: "애월튀김간", type: "식당",
     stayMin: 40, cost: null, open: "11:00", close: "20:00", closedDays: [],
     lat: 33.46440, lng: 126.31977,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: null,
-    note: "애월로 118. 떡볶이·튀김·김밥. 포장 가능. 관광공사 국문 관광정보(2025-09 수정): 11:00~20:00 / 쉬는 날 연중무휴. 가격 확인 필요.",
-    sources: ["관광공사 국문 관광정보 API 2780230"]
+    note: "애월로 118. 떡볶이·튀김·김밥. 포장 가능. 관광공사 국문 관광정보(2025-09 수정): 11:00~20:00 / 쉬는 날 연중무휴. 가격 확인 필요. 카카오맵 시설정보(2026-10-24): 반려동물 동반, 장애인 시설(계단 없음인지는 확인 필요).",
+    sources: ["https://place.map.kakao.com/19632858", "관광공사 국문 관광정보 API 2780230"]
   },
   {
     id: "simba-curry", name: "심바카레", type: "식당",
@@ -189,10 +191,10 @@ const PLACES = [
     id: "aewolri-makguksu", name: "애월리순메밀막국수", type: "식당",
     stayMin: 50, cost: null, open: "10:00", close: "20:00", closedDays: [],
     lat: 33.46566, lng: 126.31639,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
-    note: "애월해안로 11. 막국수·평양냉면. 주문 19:30까지. 관광공사 국문 관광정보(2025-06 수정): 10:00~20:00 (마지막 주문 19:30) / 쉬는 날 연중무휴. 가격 확인 필요.",
-    sources: ["관광공사 국문 관광정보 API 2864216"]
+    note: "애월해안로 11. 막국수·평양냉면. 주문 19:30까지. 관광공사 국문 관광정보(2025-06 수정): 10:00~20:00 (마지막 주문 19:30) / 쉬는 날 연중무휴. 가격 확인 필요. 카카오맵 시설정보(2026-10-24): 반려동물 동반, 테라스, 가게 옆 공터 무료 주차.",
+    sources: ["https://place.map.kakao.com/327549209", "관광공사 국문 관광정보 API 2864216"]
   },
   {
     id: "goijeong", name: "고이정", type: "식당",
@@ -209,18 +211,18 @@ const PLACES = [
     lat: 33.44695, lng: 126.33872,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
-    note: "중산간서로 5642. 고기국수·몸국. 중산간서로 5642. 관광공사 국문 관광정보(2025-06 수정): 10:00~16:30 (마지막 주문 16:25) / 쉬는 날 매주 화요일. 가격 확인 필요.",
-    sources: ["관광공사 국문 관광정보 API 2851868"]
+    note: "중산간서로 5642. 고기국수·몸국. 중산간서로 5642. 관광공사 국문 관광정보(2025-06 수정): 10:00~16:30 (마지막 주문 16:25) / 쉬는 날 매주 화요일. 가격 확인 필요. 카카오맵 시설정보(2026-10-24): 장애인 시설(계단 없음인지는 확인 필요), 무료 주차.",
+    sources: ["https://place.map.kakao.com/27174231", "관광공사 국문 관광정보 API 2851868"]
   },
   {
     id: "haenyeo-house", name: "해녀의집", type: "식당",
     stayMin: 60, cost: null, open: "10:00", close: "20:00", closedDays: ["화"],
     breaks: [["14:00", "15:00"]],
     lat: 33.47841, lng: 126.36694,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: false,
-    note: "애월해안로 591. 전복죽·해산물. 14:00~15:00 쉬는 시간. 관광공사 국문 관광정보(2025-06 수정): 10:00~20:00 (준비시간 14:00~15:00) / 쉬는 날 매주 화요일. 가격 확인 필요.",
-    sources: ["관광공사 국문 관광정보 API 2852232"]
+    note: "애월해안로 591. 전복죽·해산물. 14:00~15:00 쉬는 시간. 관광공사 국문 관광정보(2025-06 수정): 10:00~20:00 (준비시간 14:00~15:00) / 쉬는 날 매주 화요일. 가격 확인 필요. 카카오맵 시설정보(2026-10-24): 반려동물 동반, 테라스, 가게 양쪽 몇 대 주차 가능(관광공사 자료는 주차 불가라서 확인 필요).",
+    sources: ["https://place.map.kakao.com/9566466", "관광공사 국문 관광정보 API 2852232"]
   },
   {
     id: "jeongjikhan-don", name: "정직한돈 본점", type: "식당",
@@ -244,10 +246,10 @@ const PLACES = [
     id: "tribe-cafe", name: "트라이브", type: "카페",
     stayMin: 50, cost: null, open: "09:00", close: "21:00", closedDays: [],
     lat: 33.46006, lng: 126.31128,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
-    note: "애월로 11. 수플레. 애월로 11. 관광공사 국문 관광정보(2025-06 수정): 09:00~21:00 / 쉬는 날 연중무휴. 가격 확인 필요.",
-    sources: ["관광공사 국문 관광정보 API 2861940"]
+    note: "애월로 11. 수플레. 애월로 11. 관광공사 국문 관광정보(2025-06 수정): 09:00~21:00 / 쉬는 날 연중무휴. 가격 확인 필요. 카카오맵 시설정보(2026-10-24): 반려동물 동반, 무료 주차.",
+    sources: ["https://place.map.kakao.com/442131150", "관광공사 국문 관광정보 API 2861940"]
   },
   {
     id: "sunset-cliff", name: "썬셋클리프", type: "카페",
