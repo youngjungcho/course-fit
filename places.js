@@ -342,5 +342,257 @@ const PLACES = [
     station: "곽지모우물 정류장 걸어서 6분", bikeRack: null, evChargerMin: 4, parking: true,
     note: "일주서로 6111. 바다 보이는 브런치 카페(치즈 오믈렛 브런치). 관광공사 국문 관광정보(2025-06 수정): 10:00~19:00, 주문 18:20까지, 연중무휴, 주차 가능. 반려견 동반은 장소 정보 사이트 표시 기준이라 확인하면 좋아요. 가격 확인 필요. 카카오맵(2026-10-24, 사업자 인증 매장): 시설정보 반려동물 동반·무료 주차 확인, 동절기 10:00~19:00(주문 18:00), 아메리카노 6,500원.",
     sources: ["https://place.map.kakao.com/27149644", "관광공사 국문 관광정보 API 2862045", "https://polle.com/place/2A8Nje/%EC%95%A0%EC%9B%94%20%EB%8D%94%EC%84%A0%EC%85%8B"]
+  },
+  {
+    id: "arte-museum", name: "아르떼뮤지엄 제주", type: "볼거리",
+    stayMin: 90, cost: 18000, open: "10:00", close: "20:00", closedDays: [],
+    lat: 33.39670, lng: 126.34501,
+    dog: null, stroller: true, stepFree: true, solo: null,
+    station: "어음2리 정류장 걸어서 15분", bikeRack: null, evChargerMin: 12, parking: true,
+    note: "어림비로 478. 미디어아트 실내 전시. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 10:00~20:00(입장 19:00까지), 성인 18,000원, 장애인 시설, 태그 #이동약자접근 #전동휠체어급속충전기, 무료 주차. 1899-5008",
+    sources: ["https://place.map.kakao.com/1508345156"]
+  },
+  {
+    id: "jeju-bulbit", name: "제주불빛정원", type: "볼거리",
+    stayMin: 60, cost: null, open: "17:00", close: "24:00", closedDays: [],
+    lat: 33.42229, lng: 126.40918,
+    dog: true, stroller: true, stepFree: null, solo: null,
+    station: "유수암상동 정류장 걸어서 1분", bikeRack: null, evChargerMin: 4, parking: true,
+    note: "평화로 2346. 밤에 보는 빛 정원. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 17:00~24:00(입장 23:00까지, 악천후 시 조기 폐장), 유료(금액 확인 필요), 유모차 가능, 반려동물 동반, 무료 주차. 064-799-6996",
+    sources: ["https://place.map.kakao.com/891104398"]
+  },
+  {
+    id: "teseum", name: "테디베어하우스 테지움 제주점", type: "볼거리",
+    stayMin: 60, cost: null, open: "09:00", close: "19:00", closedDays: [],
+    lat: 33.41225, lng: 126.39361,
+    dog: null, stroller: true, stepFree: true, solo: null,
+    station: "렛츠런파크 정류장 걸어서 4분", bikeRack: null, evChargerMin: 2, parking: true,
+    note: "평화로 2159. 테디베어 박물관. 카카오맵(2026-10-24, 사업자 인증 매장): 연중무휴 09:00~19:00, 유료(금액 확인 필요), 휠체어 접근·유모차 가능, 수유실, 넓은 주차장. 064-799-4820",
+    sources: ["https://place.map.kakao.com/11950714"]
+  },
+  {
+    id: "pahoihoi", name: "파호이호이 라바필드파크", type: "볼거리",
+    stayMin: 90, cost: null, open: "09:00", close: "18:00", closedDays: [],
+    lat: 33.44743, lng: 126.37560,
+    dog: null, stroller: true, stepFree: true, solo: null,
+    station: "흥국사 정류장 걸어서 10분", bikeRack: null, evChargerMin: 15, parking: true,
+    note: "중산간서로 5994-47. 용암 지대 테마파크. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 09:00~18:00(입장 17:00까지), 유료(금액 확인 필요), 휠체어 접근·유모차 가능, 입장권 사면 무료 주차. 064-805-5855",
+    sources: ["https://place.map.kakao.com/902606653"]
+  },
+  {
+    id: "saebyeol-friends", name: "새별프렌즈", type: "볼거리",
+    stayMin: 60, cost: 18000, open: "09:00", close: "18:00", closedDays: [],
+    lat: 33.36155, lng: 126.36366,
+    dog: null, stroller: true, stepFree: true, solo: null,
+    station: "새별오름 정류장 걸어서 2분", bikeRack: null, evChargerMin: 1, parking: true,
+    note: "평화로 1529. 동물 체험(승마·먹이주기). 카카오맵(2026-10-24, 사업자 인증 매장): 매일 09:00~18:00(입장 17:00까지), 일반 18,000원, 장애인 시설, 태그 #이동약자접근, 무료 주차. 064-794-2828",
+    sources: ["https://place.map.kakao.com/336100555"]
+  },
+  {
+    id: "yeonhwa-pond", name: "연화못", type: "공원",
+    stayMin: 30, cost: 0, open: null, close: null, closedDays: [],
+    lat: 33.45487, lng: 126.34723,
+    dog: true, stroller: true, stepFree: true, solo: null,
+    station: "더럭초등학교 정류장 걸어서 2분", bikeRack: null, evChargerMin: 5, parking: true,
+    note: "하가리 1569-2. 연꽃 연못 산책로(하가리). 카카오맵(2026-10-24): 무료입장, 휠체어 접근·유모차 가능, 반려동물 동반, 무료 주차. 운영시간 표시 없음.",
+    sources: ["https://place.map.kakao.com/11108228"]
+  },
+  {
+    id: "sangga-palm", name: "상가리야자숲", type: "공원",
+    stayMin: 50, cost: null, open: null, close: null, closedDays: null,
+    lat: 33.43921, lng: 126.35828,
+    dog: true, stroller: true, stepFree: null, solo: null,
+    station: "존손이굴 정류장 걸어서 26분", bikeRack: null, evChargerMin: 7, parking: true,
+    note: "상가리 536. 야자수 숲 산책. 카카오맵(2026-10-24): 유료입장(금액 확인 필요), 유모차 가능, 반려동물 동반, 무료 주차. 운영시간·쉬는 날 확인 필요.",
+    sources: ["https://place.map.kakao.com/878819879"]
+  },
+  {
+    id: "handam-culture", name: "한담컬쳐", type: "볼거리",
+    stayMin: 50, cost: null, open: "09:00", close: "20:00", closedDays: [],
+    lat: 33.46242, lng: 126.31065,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: "한담동 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: null,
+    note: "애월로1길 18. 한복·민속놀이 체험(한담 카페거리). 카카오맵(2026-10-24, 사업자 인증 매장): 매일 09:00~20:00, 유료(금액 확인 필요). 주차는 근처 공용주차장(애월한담공원주차장 무료).",
+    sources: ["https://place.map.kakao.com/517188017"]
+  },
+  {
+    id: "gueom-saltpan", name: "구엄리 돌염전", type: "볼거리",
+    stayMin: 30, cost: 0, open: null, close: null, closedDays: [],
+    lat: 33.48344, lng: 126.37647,
+    dog: true, stroller: null, stepFree: null, solo: null,
+    station: "구엄포구 정류장 걸어서 1분", bikeRack: null, evChargerMin: 17, parking: true,
+    note: "구엄리. 바닷가 돌소금밭. 카카오맵(2026-10-24, 사업자 인증 매장): 무료입장, 반려동물 동반, 입구 옆 9대 주차.",
+    sources: ["https://place.map.kakao.com/22761633"]
+  },
+  {
+    id: "susanbong", name: "수산봉", type: "공원",
+    stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
+    lat: 33.47301, lng: 126.38456,
+    dog: null, stroller: true, stepFree: null, solo: null,
+    station: "모감동 정류장 걸어서 8분", bikeRack: null, evChargerMin: 9, parking: null,
+    note: "수산리 산 1-1. 오름 둘레 산책로(수산리). 카카오맵(2026-10-24): 무료입장, 유모차 가능, 공중화장실.",
+    sources: ["https://place.map.kakao.com/7964847"]
+  },
+  {
+    id: "dolphin-view", name: "애월돌고래전망대", type: "볼거리",
+    stayMin: 20, cost: 0, open: null, close: null, closedDays: [],
+    lat: 33.47857, lng: 126.36354,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: "신엄입구 정류장 걸어서 1분", bikeRack: null, evChargerMin: 4, parking: true,
+    note: "신엄리 2731. 바다 전망대(신엄리). 카카오맵(2026-10-24, 사업자 인증 매장): 무료입장, 앞에 주차장(주말엔 부족할 수 있어요).",
+    sources: ["https://place.map.kakao.com/25575353"]
+  },
+  {
+    id: "badang-hangeureut", name: "바당한그릇", type: "식당",
+    stayMin: 60, cost: 21000, open: "10:30", close: "19:30", closedDays: ["수"],
+    breaks: [["14:30", "17:00"]],
+    lat: 33.47843, lng: 126.36244,
+    dog: true, stroller: null, stepFree: null, solo: null,
+    station: "신엄입구 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
+    note: "애월해안로 552-3. 물회·해산물. 카카오맵(2026-10-24, 사업자 인증 매장): 10:30~19:30, 14:30~17:00 브레이크타임, 수요일 휴무, 특물회(1인)+소면 21,000원, 반려동물 동반, 유아의자, 넓은 주차장. 064-799-8022",
+    sources: ["https://place.map.kakao.com/392582130"]
+  },
+  {
+    id: "guisai", name: "구이사이식당", type: "식당",
+    stayMin: 50, cost: 10000, open: "07:00", close: "23:00", closedDays: ["일"],
+    breaks: [["15:00", "17:00"]],
+    lat: 33.47221, lng: 126.36854,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: "신엄리 정류장 걸어서 1분", bikeRack: null, evChargerMin: 3, parking: null,
+    note: "신엄9길 2. 정식·해장국(아침식사). 카카오맵(2026-10-24, 사업자 인증 매장): 07:00~23:00, 15:00~17:00 브레이크타임, 일요일 휴무, 정식 10,000원, 유아의자. 064-799-9242",
+    sources: ["https://place.map.kakao.com/26417963"]
+  },
+  {
+    id: "ikkan-shita", name: "잇칸시타", type: "식당",
+    stayMin: 60, cost: 18000, open: "11:00", close: "20:50", closedDays: [],
+    lat: 33.47707, lng: 126.37024,
+    dog: null, stroller: true, stepFree: true, solo: true,
+    station: "중엄새물 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
+    note: "신엄안2길 54-1. 일본 가정식. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 11:00~20:50(주문 20:20까지), 텐동정식 18,000원, 태그 #이동약자접근 #혼밥, 유아의자·키즈메뉴, 무료 주차. 064-713-5450",
+    sources: ["https://place.map.kakao.com/1365667514"]
+  },
+  {
+    id: "norabah", name: "노라바", type: "식당",
+    stayMin: 40, cost: 11000, open: "10:00", close: "17:00", closedDays: [],
+    breaks: [["14:00", "15:00"]],
+    lat: 33.47776, lng: 126.36488,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: "신엄입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 4, parking: null,
+    note: "애월해안로 570-1. 해물라면. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 10:00~17:00, 14:00~15:00 브레이크타임, 해물라면 11,000원. 064-772-1900",
+    sources: ["https://place.map.kakao.com/26352466"]
+  },
+  {
+    id: "bada-boneun-nal", name: "바다보는날", type: "식당",
+    stayMin: 40, cost: 9900, open: "10:00", close: "20:00", closedDays: [],
+    breaks: [["15:00", "16:30"]],
+    lat: 33.48391, lng: 126.37801,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: "구엄포구 정류장 걸어서 2분", bikeRack: null, evChargerMin: 19, parking: null,
+    note: "애월해안로 722. 해물라면·돈까스. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 10:00~20:00, 15:00~16:30 브레이크타임, 해물듬뿍라면 9,900원. 0507-1352-7411",
+    sources: ["https://place.map.kakao.com/1099481075"]
+  },
+  {
+    id: "modeul-hansang", name: "모들한상", type: "식당",
+    stayMin: 60, cost: 17500, open: "11:00", close: "19:00", closedDays: ["수"],
+    breaks: [["15:30", "17:00"]],
+    lat: 33.45535, lng: 126.34698,
+    dog: true, stroller: null, stepFree: null, solo: null,
+    station: "하가리연못 정류장 걸어서 2분", bikeRack: null, evChargerMin: 6, parking: true,
+    note: "하가로 180. 고사리 파스타·돈가스. 카카오맵(2026-10-24, 사업자 인증 매장): 11:00~19:00, 15:30~17:00 브레이크타임, 수요일 휴무, 고사리보말파스타 17,500원, 반려동물 동반, 태그 #예스키즈존, 무료 주차. 070-7576-3503",
+    sources: ["https://place.map.kakao.com/1962005012"]
+  },
+  {
+    id: "meat-town", name: "미트타운", type: "식당",
+    stayMin: 50, cost: 11500, open: "10:00", close: "21:00", closedDays: [],
+    hoursByDay: { "월": ["10:00", "19:00"] },
+    lat: 33.47906, lng: 126.39132,
+    dog: true, stroller: null, stepFree: null, solo: null,
+    station: "번대동 정류장 걸어서 1분", bikeRack: null, evChargerMin: 14, parking: null,
+    note: "일주서로 6935. 수제버거. 카카오맵(2026-10-24, 사업자 인증 매장): 10:00~21:00(월요일은 19:00까지), 미트버거 11,500원, 태그 #애견동반식당 #야외정원(시설정보 칸엔 반려동물 표시 없음). 010-7733-4686",
+    sources: ["https://place.map.kakao.com/1986029114"]
+  },
+  {
+    id: "geumdonga", name: "금돈가 제주 애월해안도로 본점", type: "식당",
+    stayMin: 70, cost: 32000, open: "11:00", close: "22:30", closedDays: [],
+    lat: 33.48430, lng: 126.39113,
+    dog: true, stroller: null, stepFree: null, solo: null,
+    station: "가문동마을길 정류장 걸어서 8분", bikeRack: null, evChargerMin: 9, parking: null,
+    note: "가문동남길 63. 흑돼지 구이. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 11:00~22:30(주문 21:30까지), 근고기 600g 64,000원(2인 기준으로 1명 32,000원), 김치찌개 8,000원, 태그 #애견동반식당(시설정보 칸엔 표시 없음). 010-6870-7679",
+    sources: ["https://place.map.kakao.com/890714292"]
+  },
+  {
+    id: "yoons-grill", name: "윤스그릴", type: "식당",
+    stayMin: 70, cost: 18000, open: "18:00", close: "24:00", closedDays: ["일"],
+    lat: 33.48205, lng: 126.41356,
+    dog: true, stroller: null, stepFree: null, solo: true,
+    station: "하귀휴먼시아 2단지 입구 정류장 걸어서 1분", bikeRack: null, evChargerMin: 3, parking: true,
+    note: "하광로 42-1. 파스타·술집(저녁). 카카오맵(2026-10-24, 사업자 인증 매장): 18:00~24:00, 일요일 휴무, 전복명란파스타 18,000원, 반려동물 동반, 장애인 시설, 태그 #혼술, 무료 주차. 010-8946-9964",
+    sources: ["https://place.map.kakao.com/589379401"]
+  },
+  {
+    id: "dalja-cafe", name: "달자카페", type: "카페",
+    stayMin: 50, cost: 4500, open: "10:00", close: "18:00", closedDays: [],
+    lat: 33.48364, lng: 126.37965,
+    dog: true, stroller: null, stepFree: null, solo: null,
+    station: "구엄포구 정류장 걸어서 4분", bikeRack: null, evChargerMin: 18, parking: null,
+    note: "애월해안로 738. 오션뷰 카페. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 10:00~18:00, 아메리카노 4,500원, 태그 #애견동반카페(시설정보 칸엔 표시 없음). 064-744-8877",
+    sources: ["https://place.map.kakao.com/26303350"]
+  },
+  {
+    id: "sogil-dabang", name: "소길다방", type: "카페",
+    stayMin: 50, cost: 6500, open: "10:00", close: "18:00", closedDays: ["화"],
+    lat: 33.43881, lng: 126.37944,
+    dog: true, stroller: null, stepFree: null, solo: null,
+    station: "소길리사무소 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
+    note: "소길2길 45-3. 핸드드립·카이막(소길리). 카카오맵(2026-10-24, 사업자 인증 매장): 10:00~18:00(주문 17:30까지), 화요일 휴무, 핸드드립 6,500원, 반려동물 동반, 무료 주차. 0502-5554-5566",
+    sources: ["https://place.map.kakao.com/2032708564"]
+  },
+  {
+    id: "aewol-husik", name: "애월후식", type: "카페",
+    stayMin: 50, cost: 16000, open: "10:00", close: "18:00", closedDays: ["수"],
+    hoursByDay: { "토": ["09:00", "18:00"], "일": ["09:00", "18:00"] },
+    lat: 33.43901, lng: 126.33018,
+    dog: true, stroller: null, stepFree: null, solo: null,
+    station: "납읍리사무소 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: true,
+    note: "납읍로 21. 수플레 팬케이크(납읍). 카카오맵(2026-10-24, 사업자 인증 매장): 평일 10:00~18:00·주말 09:00~18:00, 수요일 휴무, 디저트 수플레 16,000원, 반려동물 동반, 무료 주차. 0503-7151-4597",
+    sources: ["https://place.map.kakao.com/2138824476"]
+  },
+  {
+    id: "cutiepie-cafe", name: "큐티파이카페", type: "카페",
+    stayMin: 50, cost: 6500, open: "08:30", close: "24:00", closedDays: [],
+    lat: 33.47788, lng: 126.36862,
+    dog: true, stroller: true, stepFree: true, solo: null,
+    station: "중엄새물 정류장 걸어서 1분", bikeRack: null, evChargerMin: 6, parking: true,
+    note: "애월해안로 610. 오션뷰 브런치 카페. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 08:30~24:00, 아메리카노 6,500원, 반려동물 동반, 장애인 시설, 태그 #이동약자접근, 무료 주차. 064-711-7666",
+    sources: ["https://place.map.kakao.com/419491158"]
+  },
+  {
+    id: "siso-kaymak", name: "시소카이막 애월점", type: "카페",
+    stayMin: 40, cost: 13000, open: "09:00", close: "19:00", closedDays: [],
+    hoursByDay: { "토": ["09:00", "20:00"], "일": ["09:00", "20:00"] },
+    lat: 33.47801, lng: 126.36422,
+    dog: true, stroller: null, stepFree: null, solo: null,
+    station: "신엄입구 정류장 걸어서 1분", bikeRack: null, evChargerMin: 4, parking: true,
+    note: "애월해안로 566. 카이막 카페. 카카오맵(2026-10-24, 사업자 인증 매장): 평일 09:00~19:00·주말 09:00~20:00, 시소 카이막 13,000원, 반려동물 동반, 무료 주차. 064-799-0865",
+    sources: ["https://place.map.kakao.com/710832152"]
+  },
+  {
+    id: "noeulri-cafe", name: "노을리카페", type: "카페",
+    stayMin: 60, cost: 11000, open: "09:00", close: "21:00", closedDays: [],
+    lat: 33.47990, lng: 126.37271,
+    dog: null, stroller: true, stepFree: true, solo: null,
+    station: "서치강물 정류장 걸어서 6분", bikeRack: null, evChargerMin: 8, parking: true,
+    note: "애월해안로 654. 대형 베이커리 카페. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 09:00~21:00(주문 20:30까지), 노을리 에이드 11,000원, 장애인 시설, 태그 #이동약자접근, 무료 주차. 064-741-5050",
+    sources: ["https://place.map.kakao.com/1525547515"]
+  },
+  {
+    id: "windstone", name: "윈드스톤", type: "카페",
+    stayMin: 50, cost: 5500, open: "09:00", close: "17:00", closedDays: [],
+    hoursByDay: { "일": ["12:00", "17:00"] },
+    lat: 33.46048, lng: 126.43609,
+    dog: true, stroller: null, stepFree: null, solo: null,
+    station: "광령초등학교 정류장 걸어서 1분", bikeRack: null, evChargerMin: 5, parking: null,
+    note: "광성로 272. 북카페(독립서점). 카카오맵(2026-10-24, 사업자 인증 매장): 09:00~17:00(일요일 12:00~17:00), 스트롱라떼 5,500원, 반려동물 동반, 테라스, 길 건너 주차장.",
+    sources: ["https://place.map.kakao.com/693016371"]
   }
 ];
