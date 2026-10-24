@@ -30,7 +30,11 @@
 //   "턱 없음·경사로"가 확인되면 stepFree와 stroller를 true로 넣었어요 (휠체어가 다니면 유모차도 다닐 수 있어서)
 // 카카오맵: 카카오 로컬 API로 찾고, 장소 페이지(place.map.kakao.com)의 시설정보·메뉴를 직접 읽었어요 (2026-10-24)
 
-const START = { name: "애월읍사무소 정류장", lat: 33.4626, lng: 126.3303 };
+// 출발 장소 (화면 ③에서 골라요. "지금 내 위치"는 화면에서 따로 처리해요)
+const STARTS = [
+  { id: "airport", emoji: "✈️", label: "제주공항", name: "제주국제공항", lat: 33.50684, lng: 126.49272 },
+  { id: "aewol",   emoji: "🏠", label: "애월에 있어요", name: "애월읍사무소 정류장", lat: 33.4626, lng: 126.3303 }
+];
 
 const PLACES = [
   {
