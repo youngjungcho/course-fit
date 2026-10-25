@@ -153,8 +153,13 @@ const HOURS = [3, 4, 6, 8];
 const BUDGET = [30000, 50000, 100000, 150000];
 const HERE = { id: "here", emoji: "📍", label: "지금 내 위치" };
 const JEJU = { latMin: 33.1, latMax: 33.6, lngMin: 126.1, lngMax: 127.0 };
+const AREAS = [
+  { id: "mix",      label: "🤷 골고루" },
+  { id: "sea",      label: "🌊 바닷가 위주" },
+  { id: "mountain", label: "⛰️ 산 쪽 위주" }
+];
 
-const state = { step: 0, who: null, how: null, from: null, here: null, depart: null, hours: null, budget: null };
+const state = { step: 0, who: null, how: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix" };
 
 const screen = document.getElementById("screen");
 const bar = document.getElementById("bar");
@@ -214,12 +219,13 @@ function renderWhen() {
   const froms = [HERE, ...STARTS];
   screen.innerHTML = `
     <h1>출발이랑 예산은요?</h1>
-    <p class="sub">네 가지를 골라 주세요.</p>
+    <p class="sub">네 가지를 골라 주세요. 마지막 칸은 그대로 둬도 돼요.</p>
     ${chipGroup("어디서 출발해요?", "from", froms.map((f) => f.id), (id) => { const f = froms.find((x) => x.id === id); return `${f.emoji} ${f.label}`; })}
     <p class="geo" id="geo" hidden></p>
     ${chipGroup("몇 시에 출발해요?", "depart", DEPART, (v) => v)}
     ${chipGroup("몇 시간 있어요?", "hours", HOURS, (v) => `${v}시간`)}
     ${chipGroup("1명 예산은요?", "budget", BUDGET, manwon)}
+    ${chipGroup("어디 위주로 볼까요?", "area", AREAS.map((a) => a.id), (id) => AREAS.find((a) => a.id === id).label)}
     <button class="primary" id="go">코스 짜기</button>`;
   const go = document.getElementById("go");
   const geo = document.getElementById("geo");
@@ -244,7 +250,7 @@ function renderWhen() {
   screen.querySelectorAll(".chip").forEach((chip) => {
     chip.onclick = () => {
       const key = chip.dataset.key;
-      state[key] = (key === "depart" || key === "from") ? chip.dataset.v : Number(chip.dataset.v);
+      state[key] = (key === "depart" || key === "from" || key === "area") ? chip.dataset.v : Number(chip.dataset.v);
       screen.querySelectorAll(`.chip[data-key="${key}"]`).forEach((c) => c.setAttribute("aria-pressed", c === chip));
       if (key === "from") { if (chip.dataset.v === "here") askHere(); else say(""); }
       sync();
@@ -281,6 +287,13 @@ const NEED = { dog: "dog", kid: "stroller", wheel: "stepFree" };
 
 // 오늘 요일에 따로 정한 운영시간이 있으면 그걸 써요 (예: 주말엔 더 일찍 열어요)
 const hoursOf = (p) => (p.hoursByDay && p.hoursByDay[today]) || [p.open, p.close];
+
+// 해안선(COASTLINE)에서 남쪽으로 2.5km 넘게 떨어지면 산 쪽(중산간)
+function isInland(p) {
+  const [a, b] = COASTLINE;
+  const coastLat = a.lat + (p.lng - a.lng) / (b.lng - a.lng) * (b.lat - a.lat);
+  return (coastLat - p.lat) * 111 > 2.5;
+}
 
 // 한 번 코스 짜기: 지금 자리에서 갈 수 있는 곳 중 점수가 제일 높은 곳을 하나씩 이어 붙여요.
 // first를 주면 첫 장소는 그곳으로 정해요.
@@ -322,6 +335,8 @@ function buildCourse(pool, first) {
       if (state.who === "solo" && p.solo) score += 10;
       if (state.how === "bike" && p.bikeRack) score += 10;
       if (state.how === "ev" && p.parking) score += 10;
+      // 바닷가·산 쪽 위주를 골랐으면 그쪽 장소를 먼저 (식당은 산 쪽에 적어서 조금만)
+      if (state.area !== "mix") score += (isInland(p) === (state.area === "mountain") ? 1 : -1) * (p.type === "식당" ? 15 : 40);
 
       if (!best || score > best.score) best = { place: p, move: mv, begin, leave, score };
     }
@@ -339,7 +354,11 @@ function courseScore(c) {
   if (c.stops.length === 0) return -Infinity;
   const moving = c.stops.reduce((sum, s) => sum + s.move.min, 0);
   const meal = c.stops.some((s) => s.place.type === "식당") ? 30 : 0;
-  return c.stops.length * 45 - moving + meal;
+  const inland = c.stops.filter((s) => isInland(s.place)).length;
+  // 골고루: 바닷가와 산 쪽이 둘 다 있으면 좋아요 / 한쪽 위주: 그쪽 장소가 많을수록 좋아요
+  const area = state.area === "mix" ? (inland > 0 && inland < c.stops.length ? 40 : 0)
+    : 30 * (state.area === "mountain" ? inland : c.stops.length - inland);
+  return c.stops.length * 45 - moving + meal + area;
 }
 
 function makeCourse() {
@@ -402,7 +421,7 @@ function renderResult() {
   screen.innerHTML = `
     <h1>이런 코스 어때요?</h1>
     <p class="sub">${who.emoji} ${who.label} · ${how.emoji} ${how.label}</p>
-    <p class="tags">${esc(start.name)}에서 ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · 오늘(${today}) 기준</p>
+    <p class="tags">${esc(start.name)}에서 ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label} · 오늘(${today}) 기준</p>
     ${stops.length ? `
       <div class="summary">
         <div><b>${stops.length}곳</b><span>장소</span></div>
