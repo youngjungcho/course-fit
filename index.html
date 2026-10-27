@@ -349,7 +349,7 @@ function buildCourse(pool, first) {
   return { stops, spent, finish: now };
 }
 
-// 코스 좋은 정도: 장소가 많을수록, 이동이 짧을수록, 식사가 들어갈수록 좋아요
+// 코스 좋은 정도: 장소에서 즐기는 시간이 길수록, 이동이 짧을수록, 식사가 들어갈수록 좋아요 (오래 머무는 곳도 공평하게)
 function courseScore(c) {
   if (c.stops.length === 0) return -Infinity;
   const moving = c.stops.reduce((sum, s) => sum + s.move.min, 0);
@@ -358,7 +358,8 @@ function courseScore(c) {
   // 골고루: 바닷가와 산 쪽이 둘 다 있으면 좋아요 / 한쪽 위주: 그쪽 장소가 많을수록 좋아요
   const area = state.area === "mix" ? (inland > 0 && inland < c.stops.length ? 40 : 0)
     : 30 * (state.area === "mountain" ? inland : c.stops.length - inland);
-  return c.stops.length * 45 - moving + meal + area;
+  const staying = c.stops.reduce((sum, s) => sum + s.place.stayMin, 0);
+  return staying + c.stops.length * 10 - moving + meal + area;
 }
 
 function makeCourse() {
