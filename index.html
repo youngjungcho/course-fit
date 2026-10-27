@@ -150,7 +150,7 @@ const WHO = [
   { id: "solo",   emoji: "🙋", label: "혼자",              hint: "혼자 가기 좋은 곳을 먼저" }
 ];
 const HOW = [
-  { id: "walk", emoji: "🚶", label: "뚜벅이",   hint: "걷거나 버스·지하철" },
+  { id: "walk", emoji: "🚶", label: "뚜벅이",   hint: "걷거나 버스" },
   { id: "bike", emoji: "🚲", label: "자전거",   hint: "자전거 세울 곳을 먼저" },
   { id: "ev",   emoji: "🔌", label: "전기차",   hint: "충전소까지 거리도 보여 드려요" },
   { id: "any",  emoji: "🤷", label: "상관없어요", hint: "가까우면 걷고, 멀면 택시·차로" }
@@ -282,12 +282,14 @@ function distKm(a, b) {
 function travel(a, b, how) {
   const i = travelIndex(a), j = travelIndex(b);
   if (i === undefined || j === undefined) return travelGuess(a, b, how);
-  const walk = TRAVEL.walk[i][j], car = TRAVEL.car[i][j], bike = TRAVEL.bike[i][j], km = TRAVEL.carKm[i][j];
+  const walk = TRAVEL.walk[i][j], car = TRAVEL.car[i][j], bike = TRAVEL.bike[i][j];
   let min, text;
   if (how === "walk") {
-    // 걸어서 20분 안이면 걷고, 멀면 버스 (버스는 표가 없어서 기다리는 시간 10분 + 시속 18km로 어림)
-    if (walk <= 20) { min = walk; text = "걸어서"; }
-    else { min = 10 + km / 18 * 60; text = "버스로(어림)"; }
+    // 걸어서 20분 안이면 걷고, 멀면 버스 (기다리는 시간 포함 평균). 버스가 더 느리면 걸어요
+    const bus = TRAVEL.bus[i][j], no = TRAVEL.busNo[i][j];
+    if (walk <= 20 || (bus !== null && walk <= bus)) { min = walk; text = "걸어서"; }
+    else if (bus === null) { min = Infinity; text = "버스로 못 가요"; }
+    else { min = bus; text = no === "갈아타기" ? "버스로(1번 갈아타기)" : `${no}번 버스로`; }
   } else if (how === "any") {
     if (walk <= 15) { min = walk; text = "걸어서"; }
     else { min = car + 5; text = "택시·차로"; }
@@ -345,6 +347,7 @@ function buildCourse(pool, first) {
 
       const [open, close] = hoursOf(p);
       const mv = travel(here, p, state.how);
+      if (mv.min === Infinity) continue; // 버스로 못 가는 곳
       let begin = now + mv.min;
       // 문 열기 전이나 쉬는 시간이면 30분까지는 기다리고, 더 길면 다음 후보로
       const waitUntil = (min) => { if (min - begin > 30) return false; begin = min; return true; };
@@ -475,7 +478,7 @@ function renderResult() {
         ? `아직 "${{ dog: "반려견 OK", kid: "유모차 OK", wheel: "계단 없음" }[state.who]}"이 확인된 장소가 부족해요. 장소 정보를 확인하면 코스가 나와요.`
         : "조건에 맞는 곳을 찾지 못했어요. 도착 시각이나 시간, 예산을 바꿔 보세요."}</div>`}
     <div class="notes">
-      <p>• 이동 시간은 실제 길 기준이에요. 막히는 길은 반영되지 않고, 버스는 어림이에요. ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}(길 데이터 © OpenStreetMap · openrouteservice.org)</p>
+      <p>• 이동 시간은 실제 길 기준이에요. 막히는 길은 반영되지 않아요. 버스는 시간표의 평균 배차 간격으로 기다리는 시간까지 넣었어요(실시간 도착 정보는 아니에요). ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}(길 데이터 © OpenStreetMap · openrouteservice.org · 버스 국토교통부 TAGO · 제주버스정보시스템)</p>
       ${costUnknown ? `<p>• 비용을 모르는 곳 ${costUnknown}곳은 비용 합계에 들어가지 않았어요.</p>` : ""}
       ${unknownSkipped ? `<p>• ${{ dog: "반려견", kid: "유모차", wheel: "계단" }[state.who]} 정보가 없는 곳 ${unknownSkipped}곳은 안전하게 뺐어요. 꼭 가고 싶은 곳이 있으면 전화로 확인해 보세요.</p>` : ""}
       ${noLocation ? `<p>• 위치를 아직 모르는 곳 ${noLocation}곳은 코스에서 뺐어요.</p>` : ""}
