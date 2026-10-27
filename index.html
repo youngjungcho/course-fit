@@ -140,6 +140,7 @@
 </div>
 
 <script src="places.js"></script>
+<script src="travel.js"></script>
 <script>
 // ----- 고를 수 있는 것들 -----
 const WHO = [
@@ -266,7 +267,11 @@ function renderWhen() {
   sync();
 }
 
-// ----- 이동 시간 (지금은 직선거리로 대충 계산) -----
+// ----- 이동 시간 -----
+// 장소끼리는 travel.js의 길 기준 시간표를 쓰고, 표에 없으면(지금 내 위치 등) 직선거리로 어림해요
+const TRAVEL_INDEX = Object.fromEntries(TRAVEL.ids.map((id, i) => [id, i]));
+const travelIndex = (p) => TRAVEL_INDEX[p.id] ?? TRAVEL_INDEX[`start:${p.id}`];
+
 function distKm(a, b) {
   const R = 6371, rad = Math.PI / 180;
   const dLat = (b.lat - a.lat) * rad, dLng = (b.lng - a.lng) * rad;
@@ -275,11 +280,29 @@ function distKm(a, b) {
 }
 
 function travel(a, b, how) {
+  const i = travelIndex(a), j = travelIndex(b);
+  if (i === undefined || j === undefined) return travelGuess(a, b, how);
+  const walk = TRAVEL.walk[i][j], car = TRAVEL.car[i][j], bike = TRAVEL.bike[i][j], km = TRAVEL.carKm[i][j];
+  let min, text;
+  if (how === "walk") {
+    // 걸어서 20분 안이면 걷고, 멀면 버스 (버스는 표가 없어서 기다리는 시간 10분 + 시속 18km로 어림)
+    if (walk <= 20) { min = walk; text = "걸어서"; }
+    else { min = 10 + km / 18 * 60; text = "버스로(어림)"; }
+  } else if (how === "any") {
+    if (walk <= 15) { min = walk; text = "걸어서"; }
+    else { min = car + 5; text = "택시·차로"; }
+  } else if (how === "bike") { min = bike + 3; text = "자전거로"; }
+  else { min = car + 5; text = "차로"; } // 주차 5분
+  return { min: Math.max(1, Math.ceil(min)), text };
+}
+
+// 직선거리 어림 (시간표에 없는 곳)
+function travelGuess(a, b, how) {
   const km = distKm(a, b);
   let min, text;
   if (how === "walk") {
     if (km <= 1.2) { min = km / 4.5 * 60; text = "걸어서"; }
-    else { min = 10 + km / 18 * 60; text = "버스·지하철로"; }
+    else { min = 10 + km / 18 * 60; text = "버스로(어림)"; }
   } else if (how === "any") {
     if (km <= 1.2) { min = km / 4.5 * 60; text = "걸어서"; }
     else { min = 5 + km / 35 * 60; text = "택시·차로"; }
@@ -452,7 +475,7 @@ function renderResult() {
         ? `아직 "${{ dog: "반려견 OK", kid: "유모차 OK", wheel: "계단 없음" }[state.who]}"이 확인된 장소가 부족해요. 장소 정보를 확인하면 코스가 나와요.`
         : "조건에 맞는 곳을 찾지 못했어요. 도착 시각이나 시간, 예산을 바꿔 보세요."}</div>`}
     <div class="notes">
-      <p>• 이동 시간은 직선거리로 대충 계산했어요. 실제와 다를 수 있어요.</p>
+      <p>• 이동 시간은 실제 길 기준이에요. 막히는 길은 반영되지 않고, 버스는 어림이에요. ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}(길 데이터 © OpenStreetMap · openrouteservice.org)</p>
       ${costUnknown ? `<p>• 비용을 모르는 곳 ${costUnknown}곳은 비용 합계에 들어가지 않았어요.</p>` : ""}
       ${unknownSkipped ? `<p>• ${{ dog: "반려견", kid: "유모차", wheel: "계단" }[state.who]} 정보가 없는 곳 ${unknownSkipped}곳은 안전하게 뺐어요. 꼭 가고 싶은 곳이 있으면 전화로 확인해 보세요.</p>` : ""}
       ${noLocation ? `<p>• 위치를 아직 모르는 곳 ${noLocation}곳은 코스에서 뺐어요.</p>` : ""}
