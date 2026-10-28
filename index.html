@@ -144,8 +144,8 @@
   <main id="screen"></main>
 </div>
 
-<script src="places.js"></script>
-<script src="travel.js"></script>
+<script src="places.js?v=20261028"></script>
+<script src="travel.js?v=20261028"></script>
 <script>
 // ----- 고를 수 있는 것들 -----
 const WHO = [
@@ -315,14 +315,18 @@ function distKm(a, b) {
 function travel(a, b, how) {
   const i = travelIndex(a), j = travelIndex(b);
   if (i === undefined || j === undefined) return travelGuess(a, b, how);
-  const walk = TRAVEL.walk[i][j], car = TRAVEL.car[i][j], bike = TRAVEL.bike[i][j];
+  // 휠체어·어르신은 1.5배 느리게 걸어요
+  const wheel = state.who === "wheel";
+  const walk = TRAVEL.walk[i][j] * (wheel ? 1.5 : 1), car = TRAVEL.car[i][j], bike = TRAVEL.bike[i][j];
   let min, text;
   if (how === "walk") {
     // 걸어서 20분 안이면 걷고, 멀면 버스 (기다리는 시간 포함 평균). 버스가 더 느리면 걸어요
-    const bus = TRAVEL.bus[i][j], no = TRAVEL.busNo[i][j];
-    if (walk <= 20 || (bus !== null && walk <= bus)) { min = walk; text = "걸어서"; }
-    else if (bus === null) { min = Infinity; text = "버스로 못 가요"; }
-    else { min = bus; text = no === "갈아타기" ? "버스로(1번 갈아타기)" : `${no}번 버스로`; }
+    // 휠체어·어르신은 저상버스가 있는 노선만 타고, 30분 넘게는 걷지 않아요
+    const bus = (wheel ? TRAVEL.busWheel : TRAVEL.bus)[i][j], no = (wheel ? TRAVEL.busWheelNo : TRAVEL.busNo)[i][j];
+    const kind = wheel ? "저상버스" : "버스";
+    if (walk <= 20 || (bus !== null && walk <= bus && (!wheel || walk <= 30))) { min = walk; text = "걸어서"; }
+    else if (bus === null) { min = Infinity; text = `${kind}로 못 가요`; }
+    else { min = bus; text = no === "갈아타기" ? `${kind}로(1번 갈아타기)` : `${no}번 ${kind}로`; }
   } else if (how === "any") {
     if (walk <= 15) { min = walk; text = "걸어서"; }
     else { min = car + 5; text = "택시·차로"; }
@@ -334,12 +338,13 @@ function travel(a, b, how) {
 // 직선거리 어림 (시간표에 없는 곳)
 function travelGuess(a, b, how) {
   const km = distKm(a, b);
+  const walkKmh = state.who === "wheel" ? 3 : 4.5;
   let min, text;
   if (how === "walk") {
-    if (km <= 1.2) { min = km / 4.5 * 60; text = "걸어서"; }
+    if (km <= 1.2) { min = km / walkKmh * 60; text = "걸어서"; }
     else { min = 10 + km / 18 * 60; text = "버스로(어림)"; }
   } else if (how === "any") {
-    if (km <= 1.2) { min = km / 4.5 * 60; text = "걸어서"; }
+    if (km <= 1.2) { min = km / walkKmh * 60; text = "걸어서"; }
     else { min = 5 + km / 35 * 60; text = "택시·차로"; }
   } else if (how === "bike") { min = 3 + km / 12 * 60; text = "자전거로"; }
   else { min = 5 + km / 35 * 60; text = "차로"; }
@@ -569,11 +574,14 @@ function renderResult() {
         ${back ? `<li class="move">${back.text} 약 ${back.min}분</li>` : ""}
         <li class="endpoint">🏁 ${toHHMM(finish)} ${end ? `${esc(end.name)} 도착` : "코스 끝"}</li>
       </ul>` : `
-      <div class="empty">${unknownSkipped
+      <div class="empty">${state.who === "wheel" && state.how === "walk"
+        ? `저상버스와 걷기로는 ${state.hours}시간 안에 다녀올 수 있는 곳이 없어요. 시간을 늘리거나, 이동을 "상관없어요"(택시·차)로 바꿔 보세요. 행복콜(<a href="tel:18996884">1899-6884</a>) 휠체어 차량도 있어요.`
+        : unknownSkipped
         ? `아직 "${{ dog: "반려견 OK", kid: "유모차 OK", wheel: "계단 없음" }[state.who]}"이 확인된 장소가 부족해요. 장소 정보를 확인하면 코스가 나와요.`
         : "조건에 맞는 곳을 찾지 못했어요. 도착 시각이나 시간, 예산을 바꿔 보세요."}</div>`}
     <div class="notes">
-      <p>• 이동 시간은 실제 길 기준이에요. 막히는 길은 반영되지 않아요. 버스는 시간표의 평균 배차 간격으로 기다리는 시간까지 넣었어요(실시간 도착 정보는 아니에요). ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}(길 데이터 © OpenStreetMap · openrouteservice.org · 버스 국토교통부 TAGO · 제주버스정보시스템)</p>
+      <p>• 이동 시간은 실제 길 기준이에요. 막히는 길은 반영되지 않아요. 버스는 시간표의 평균 배차 간격으로 기다리는 시간까지 넣었어요(실시간 도착 정보는 아니에요). ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}(길 데이터 © OpenStreetMap · openrouteservice.org · 버스 국토교통부 TAGO · 제주버스정보시스템 · 제주특별자치도 저상버스 운행노선 현황)</p>
+      ${state.who === "wheel" && (state.how === "walk" || state.how === "any") ? `<p>• 걷는 시간은 보통보다 1.5배 넉넉히 잡았어요.${state.how === "walk" ? " 버스는 저상버스가 있는 노선만 넣었어요. 저상버스는 일부 차량만이라 기다리는 시간을 배차 간격만큼 잡았어요. 오는 버스가 저상버스인지는 그때그때 달라요." : ""} 휠체어를 쓰는 분은 제주 교통약자이동지원센터(행복콜, <a href="tel:18996884">1899-6884</a>, 24시간)의 휠체어 차량을 쓸 수 있어요. 미리 회원등록이 필요해요.</p>` : ""}
       ${costUnknown ? `<p>• 비용을 모르는 곳 ${costUnknown}곳은 비용 합계에 들어가지 않았어요.</p>` : ""}
       ${unknownSkipped ? `<p>• ${{ dog: "반려견", kid: "유모차", wheel: "계단" }[state.who]} 정보가 없는 곳 ${unknownSkipped}곳은 안전하게 뺐어요. 꼭 가고 싶은 곳이 있으면 전화로 확인해 보세요.</p>` : ""}
       ${noLocation ? `<p>• 위치를 아직 모르는 곳 ${noLocation}곳은 코스에서 뺐어요.</p>` : ""}
