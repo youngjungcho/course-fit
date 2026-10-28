@@ -3,7 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>내 조건 여행 코스</title>
+<title>제주 애월 여행 코스 · 내 조건에 맞춰</title>
+<meta name="description" content="반려견·유모차·휠체어·혼자, 뚜벅이·자전거·전기차. 누구랑 어떻게 다니는지 고르면 제주 애월 하루 코스를 짜 드려요. 운영시간·버스·교통비까지 따져요.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="제주 애월 여행 코스 · 내 조건에 맞춰">
+<meta property="og:description" content="누구랑, 어떻게, 몇 시간 — 고르면 제주 애월 하루 코스가 나와요.">
+<meta property="og:url" content="https://youngjungcho.github.io/course-fit/">
+<meta property="og:image" content="https://youngjungcho.github.io/course-fit/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1f7a5a">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231f7a5a'/><circle cx='68' cy='36' r='16' fill='%23f2a541'/><path d='M0 66 Q25 56 50 66 T100 66 V100 H0Z' fill='%23e3f1ea'/></svg>">
 <style>
   :root {
     --bg: #f6f4ef;
@@ -57,6 +69,9 @@
     padding: 8px 4px; cursor: pointer;
   }
   .back[hidden] { display: none; }
+  .step-text { color: var(--muted); font-size: 14px; min-width: 28px; text-align: right; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  h1:focus { outline: none; }
   .progress { flex: 1; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
   .progress > div { height: 100%; background: var(--accent); transition: width .25s; }
 
@@ -72,7 +87,7 @@
   }
   .choice .emoji { font-size: 28px; }
   .choice small { display: block; color: var(--muted); font-size: 15px; }
-  .choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .choice.picked { border-color: var(--accent); background: var(--accent-soft); }
 
   .group { margin-bottom: 24px; }
   .group h2 { font-size: 18px; margin: 0 0 10px; }
@@ -82,7 +97,7 @@
     background: var(--card); color: var(--text);
     border: 2px solid var(--line); font-size: 17px; cursor: pointer;
   }
-  .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+  .chip[aria-checked="true"] { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
 
   .geo { margin: -14px 0 24px; color: var(--muted); font-size: 15px; }
   .geo[hidden] { display: none; }
@@ -104,7 +119,8 @@
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 20px;
   }
   .summary div { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px; text-align: center; }
-  .summary b { display: block; font-size: 20px; }
+  .summary b { display: block; font-size: 20px; white-space: nowrap; }
+  @media (max-width: 400px) { .summary b { font-size: 17px; } }
   .summary span { color: var(--muted); font-size: 14px; }
   .tags { color: var(--muted); font-size: 15px; margin: -12px 0 16px; }
 
@@ -121,6 +137,16 @@
   .badge { font-size: 13px; padding: 3px 9px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); }
   .badge.warn { background: var(--warn-soft); color: var(--warn); }
   .badge.sun { background: var(--warn-soft); color: var(--text); }
+  .links .skip { flex: 0 0 auto; min-height: 40px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; background: none; color: var(--muted); font-size: 14px; cursor: pointer; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 8px; }
+  .ghost { flex: 1; min-height: 44px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--text); font-size: 15px; cursor: pointer; }
+  .link { border: 0; background: none; color: var(--accent); font-size: 15px; text-decoration: underline; cursor: pointer; padding: 4px; }
+  .share-msg { color: var(--muted); font-size: 14px; margin: 0 0 8px; min-height: 0; }
+  .skipped { color: var(--muted); font-size: 15px; margin: 0 0 8px; }
+  .map { height: 260px; border-radius: 16px; border: 1px solid var(--line); margin: 0 0 16px; z-index: 0; }
+  .map[hidden] { display: none; }
+  .pin { width: auto !important; }
+  .pin span { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 30px; padding: 0 6px; border-radius: 15px; white-space: nowrap; transform: translate(-50%, 0); margin-left: 15px; background: var(--accent); color: #fff; font-weight: 700; font-size: 12px; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
   .more { margin-top: 10px; font-size: 14px; color: var(--muted); }
   .more summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; }
   .more p { margin: 6px 0; line-height: 1.6; }
@@ -140,36 +166,37 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="sample-banner"><b>제주 애월</b> 장소로 만들고 있어요. 아직 직접 확인하지 않은 정보가 많아요.</div>
+  <div class="sample-banner"><b>제주 애월</b> 60곳, 2026년 10월에 확인한 정보예요. 장소마다 "메모·출처 보기"에 확인한 날과 출처가 있어요. 가기 전에 운영시간은 한 번 더 확인해 주세요.</div>
 
   <div class="top">
     <button class="back" id="back" hidden>← 이전</button>
-    <div class="progress"><div id="bar"></div></div>
+    <div class="progress" id="progress" role="progressbar" aria-label="진행" aria-valuemin="1" aria-valuemax="4"><div id="bar"></div></div>
+    <span class="step-text" id="stepText" aria-hidden="true"></span>
   </div>
 
   <main id="screen"></main>
 </div>
 
-<script src="places.js?v=20261028d"></script>
-<script src="travel.js?v=20261028d"></script>
+<script src="places.js?v=20261028e"></script>
+<script src="travel.js?v=20261028e"></script>
 <script>
 // ----- 고를 수 있는 것들 -----
 const WHO = [
   { id: "dog",    emoji: "🐶", label: "반려견이랑",        hint: "반려견이 들어갈 수 있는 곳만" },
   { id: "kid",    emoji: "👶", label: "아기랑 (유모차)",   hint: "유모차가 다닐 수 있는 곳만" },
   { id: "wheel",  emoji: "♿", label: "휠체어·어르신이랑", hint: "계단 없이 들어갈 수 있는 곳만" },
-  { id: "solo",   emoji: "🙋", label: "혼자",              hint: "혼자 가기 좋은 곳을 먼저" }
+  { id: "solo",   emoji: "🙋", label: "혼자",              hint: "혼밥 되는 곳처럼 혼자 가기 좋은 곳을 먼저" }
 ];
 const HOW = [
   { id: "walk", emoji: "🚶", label: "뚜벅이",   hint: "걷거나 버스" },
   { id: "bike", emoji: "🚲", label: "자전거",   hint: "자전거 세울 곳을 먼저" },
-  { id: "ev",   emoji: "🔌", label: "전기차",   hint: "충전소까지 거리도 보여 드려요" },
+  { id: "ev",   emoji: "🔌", label: "전기차",   hint: "충전소 가까운 곳에서 오래 머물게 짜요" },
   { id: "any",  emoji: "🤷", label: "상관없어요", hint: "가까우면 걷고, 멀면 택시·차로" }
 ];
 const WHEN = [
   { id: "today",    label: () => `오늘 (${dayOf(kstToday())})`,              date: () => kstToday() },
   { id: "tomorrow", label: () => `내일 (${dayOf(addDays(kstToday(), 1))})`, date: () => addDays(kstToday(), 1) },
-  { id: "pick",     label: () => "📅 날짜 고르기",                          date: () => null }
+  { id: "pick",     label: () => `${em("📅")} 날짜 고르기`,                          date: () => null }
 ];
 const DEPART = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
 const HOURS = [3, 4, 6, 8];
@@ -177,28 +204,77 @@ const BUDGET = [30000, 50000, 100000, 150000];
 const HERE = { id: "here", emoji: "📍", label: "지금 내 위치" };
 const JEJU = { latMin: 33.1, latMax: 33.6, lngMin: 126.1, lngMax: 127.0 };
 const ENDS = [
-  { id: "start",   label: "🔁 출발한 곳으로" },
-  { id: "airport", label: "✈️ 제주공항" },
-  { id: "any",     label: "🤷 상관없어요" }
+  { id: "start",   emoji: "🔁", label: "출발한 곳으로" },
+  { id: "airport", emoji: "✈️", label: "제주공항" },
+  { id: "any",     emoji: "🤷", label: "상관없어요" }
 ];
 const AREAS = [
-  { id: "mix",      label: "🤷 골고루" },
-  { id: "sea",      label: "🌊 바닷가 위주" },
-  { id: "mountain", label: "⛰️ 산 쪽 위주" }
+  { id: "mix",      emoji: "🤷", label: "골고루" },
+  { id: "sea",      emoji: "🌊", label: "바닷가 위주" },
+  { id: "mountain", emoji: "⛰️", label: "산 쪽 위주" }
 ];
 
-const state = { step: 0, who: null, how: null, when: null, date: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix", end: "start" };
+const state = { step: 0, who: null, how: null, when: null, date: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix", end: "start", skip: [], alt: 0 };
 
 const screen = document.getElementById("screen");
 const bar = document.getElementById("bar");
 const back = document.getElementById("back");
-back.onclick = () => { state.step = Math.max(0, state.step - 1); render(); };
+
+// ----- 주소(URL)에 고른 조건 담기: 새로고침해도 그대로, 링크로 보내면 같은 코스가 떠요 -----
+// "지금 내 위치"는 위치라서 주소에 넣지 않아요
+const URL_KEYS = { who: "who", how: "how", date: "date", from: "from", depart: "time", hours: "hours", budget: "budget", end: "end", area: "area" };
+function queryOf() {
+  const q = new URLSearchParams();
+  for (const [k, name] of Object.entries(URL_KEYS)) {
+    const v = state[k];
+    if (v === null || v === undefined || (k === "from" && v === "here")) continue;
+    if ((k === "end" && v === "start") || (k === "area" && v === "mix")) continue; // 기본값은 빼요
+    q.set(name, v);
+  }
+  if (state.skip.length) q.set("skip", state.skip.join(","));
+  if (state.alt) q.set("alt", state.alt);
+  if (state.step) q.set("step", state.step);
+  return q.toString();
+}
+function readQuery() {
+  const q = new URLSearchParams(location.search);
+  const one = (name, ok) => { const v = q.get(name); return v !== null && ok(v) ? v : null; };
+  const num = (name, list) => { const v = Number(q.get(name)); return list.includes(v) ? v : null; };
+  state.who = one("who", (v) => WHO.some((w) => w.id === v));
+  state.how = one("how", (v) => HOW.some((h) => h.id === v));
+  state.date = one("date", (v) => /^\d{4}-\d\d-\d\d$/.test(v));
+  state.when = !state.date ? null : state.date === kstToday() ? "today" : state.date === addDays(kstToday(), 1) ? "tomorrow" : "pick";
+  state.from = one("from", (v) => STARTS.some((s) => s.id === v));
+  state.depart = one("time", (v) => DEPART.includes(v));
+  state.hours = num("hours", HOURS);
+  state.budget = num("budget", BUDGET);
+  state.end = one("end", (v) => ENDS.some((e) => e.id === v)) ?? "start";
+  state.area = one("area", (v) => AREAS.some((a) => a.id === v)) ?? "mix";
+  state.skip = (q.get("skip") ?? "").split(",").filter((id) => PLACES.some((p) => p.id === id));
+  state.alt = Math.max(0, Number(q.get("alt")) || 0);
+  // 앞 단계를 다 골라야 다음 단계로 갈 수 있어요
+  const ready = [true, !!state.who, !!state.how, !!(state.date && state.from && state.depart && state.hours && state.budget)];
+  let step = Math.min(3, Math.max(0, Number(q.get("step")) || 0));
+  while (step > 0 && !ready[step]) step--;
+  state.step = step;
+}
+const syncUrl = (push) => history[push ? "pushState" : "replaceState"]({ step: state.step }, "", `${location.pathname}${queryOf() ? `?${queryOf()}` : ""}`);
+// 다음 단계로: 브라우저 기록에 남겨서 폰의 뒤로가기로 돌아올 수 있어요
+const goStep = (step) => { state.step = step; syncUrl(true); render(); };
+back.onclick = () => history.back();
+// 뒤로·앞으로 가기: 단계만 옮기고 고른 값은 그대로 둬요 (돌아가도 고른 것이 표시돼요)
+window.addEventListener("popstate", () => {
+  state.step = Math.min(3, Math.max(0, Number(new URLSearchParams(location.search).get("step")) || 0));
+  syncUrl(false); render();
+});
 
 // ----- 작은 도우미 -----
 const toMin = (hhmm) => { const [h, m] = hhmm.split(":").map(Number); return h * 60 + m; };
 const toHHMM = (min) => `${String(Math.floor(min / 60)).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
 const won = (n) => n === 0 ? "무료" : `${n.toLocaleString("ko-KR")}원`;
 const manwon = (n) => `${n / 10000}만 원`;
+// 이모지는 화면낭독기가 읽지 않게 숨겨요
+const em = (e) => `<span aria-hidden="true">${e}</span>`;
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 // 날짜는 "2026-10-31" 글자로 다뤄요. 기기 시간대와 상관없이 한국 시간 기준이에요
@@ -210,22 +286,31 @@ const dateLabel = (iso) => `${Number(iso.slice(5, 7))}월 ${Number(iso.slice(8, 
 // ----- 화면 그리기 -----
 function render() {
   bar.style.width = `${(state.step + 1) * 25}%`;
+  const progress = document.getElementById("progress");
+  progress.setAttribute("aria-valuenow", state.step + 1);
+  progress.setAttribute("aria-valuetext", `${state.step + 1}/4단계`);
+  document.getElementById("stepText").textContent = `${state.step + 1}/4`;
   back.hidden = state.step === 0;
   [renderWho, renderHow, renderWhen, renderResult][state.step]();
   window.scrollTo(0, 0);
+  // 화면이 바뀌면 제목으로 포커스를 옮겨서 화면낭독기가 새 화면을 읽게 해요 (처음 열 때는 빼고)
+  const h1 = screen.querySelector("h1");
+  if (h1 && rendered) { h1.tabIndex = -1; h1.focus({ preventScroll: true }); }
+  rendered = true;
 }
+let rendered = false;
 
 function choiceList(items, key) {
   return `<div class="choices">${items.map((it) => `
-    <button class="choice" data-id="${it.id}" aria-pressed="${state[key] === it.id}">
-      <span class="emoji">${it.emoji}</span>
-      <span>${it.label}<small>${it.hint}</small></span>
+    <button class="choice${state[key] === it.id ? " picked" : ""}" data-id="${it.id}">
+      <span class="emoji" aria-hidden="true">${it.emoji}</span>
+      <span>${it.label}${state[key] === it.id ? `<span class="sr"> (골랐던 것)</span>` : ""}<small>${it.hint}</small></span>
     </button>`).join("")}</div>`;
 }
 
 function bindChoices(key) {
   screen.querySelectorAll(".choice").forEach((btn) => {
-    btn.onclick = () => { state[key] = btn.dataset.id; state.step++; render(); };
+    btn.onclick = () => { state[key] = btn.dataset.id; goStep(state.step + 1); };
   });
 }
 
@@ -239,9 +324,10 @@ function renderHow() {
   bindChoices("how");
 }
 
+// 하나만 고르는 묶음(radiogroup). 화면낭독기는 "언제 가요? 오늘, 선택됨"처럼 읽어요
 function chipGroup(title, key, values, label) {
-  return `<div class="group"><h2>${title}</h2><div class="chips">${values.map((v) =>
-    `<button class="chip" data-key="${key}" data-v="${v}" aria-pressed="${state[key] === v}">${label(v)}</button>`
+  return `<div class="group"><h2 id="g-${key}">${title}</h2><div class="chips" role="radiogroup" aria-labelledby="g-${key}">${values.map((v) =>
+    `<button class="chip" role="radio" data-key="${key}" data-v="${v}" aria-checked="${state[key] === v}">${label(v)}</button>`
   ).join("")}</div></div>`;
 }
 
@@ -253,26 +339,26 @@ function renderWhen() {
   const froms = [HERE, ...STARTS];
   screen.innerHTML = `
     <h1>출발이랑 예산은요?</h1>
-    <p class="sub">다섯 가지를 골라 주세요. 아래 두 칸은 그대로 둬도 돼요.</p>
-    <div class="group"><h2>언제 가요?</h2><div class="chips">${WHEN.map((w) =>
-      `<button class="chip" data-key="when" data-v="${w.id}" aria-pressed="${state.when === w.id}">${w.label()}</button>`).join("")}</div>
+    <p class="sub">필수 5가지(언제·어디서·몇 시·몇 시간·예산)를 골라 주세요. 끝나는 곳과 어디 위주는 그대로 둬도 돼요.</p>
+    <div class="group"><h2 id="g-when">언제 가요?</h2><div class="chips" role="radiogroup" aria-labelledby="g-when">${WHEN.map((w) =>
+      `<button class="chip" role="radio" data-key="when" data-v="${w.id}" aria-checked="${state.when === w.id}">${w.label()}</button>`).join("")}</div>
       <input type="date" class="date-pick" id="datePick" aria-label="여행 날짜" min="${kstToday()}" value="${state.when === "pick" ? state.date : ""}" ${state.when === "pick" ? "" : "hidden"}>
     </div>
-    ${chipGroup("어디서 출발해요?", "from", froms.map((f) => f.id), (id) => { const f = froms.find((x) => x.id === id); return `${f.emoji} ${f.label}`; })}
+    ${chipGroup("어디서 출발해요?", "from", froms.map((f) => f.id), (id) => { const f = froms.find((x) => x.id === id); return `${em(f.emoji)} ${f.label}`; })}
     <p class="geo" id="geo" hidden></p>
     ${chipGroup("몇 시에 출발해요?", "depart", DEPART, (v) => v)}
     ${chipGroup("몇 시간 있어요?", "hours", HOURS, (v) => `${v}시간`)}
     ${chipGroup("1명 예산은요?", "budget", BUDGET, manwon)}
-    ${chipGroup("어디서 끝나요?", "end", ENDS.map((e) => e.id), (id) => ENDS.find((e) => e.id === id).label)}
-    ${chipGroup("어디 위주로 볼까요?", "area", AREAS.map((a) => a.id), (id) => AREAS.find((a) => a.id === id).label)}
+    ${chipGroup("어디서 끝나요?", "end", ENDS.map((e) => e.id), (id) => { const e = ENDS.find((x) => x.id === id); return `${em(e.emoji)} ${e.label}`; })}
+    ${chipGroup("어디 위주로 볼까요?", "area", AREAS.map((a) => a.id), (id) => { const a = AREAS.find((x) => x.id === id); return `${em(a.emoji)} ${a.label}`; })}
     <button class="primary" id="go">코스 짜기</button>`;
   const go = document.getElementById("go");
   const geo = document.getElementById("geo");
   const say = (msg) => { geo.textContent = msg; geo.hidden = !msg; };
-  const sync = () => { go.disabled = !(state.date && startPoint() && state.depart && state.hours && state.budget); };
+  const sync = () => { go.disabled = !(state.date && startPoint() && state.depart && state.hours && state.budget); syncUrl(false); };
   const datePick = document.getElementById("datePick");
   datePick.onchange = () => { state.date = datePick.value || null; sync(); };
-  if (state.from === "here" && state.here) say("📍 지금 위치에서 출발해요.");
+  if (state.from === "here" && state.here) say("지금 위치에서 출발해요.");
 
   // "지금 내 위치"는 휴대폰·브라우저에 위치를 물어봐요. 제주 밖이면 쓰지 않아요
   const askHere = () => {
@@ -282,7 +368,7 @@ function renderWhen() {
       const { latitude: lat, longitude: lng } = pos.coords;
       const inJeju = lat >= JEJU.latMin && lat <= JEJU.latMax && lng >= JEJU.lngMin && lng <= JEJU.lngMax;
       state.here = inJeju ? { name: "내 위치", lat, lng } : null;
-      say(inJeju ? "📍 지금 위치에서 출발해요." : "지금 제주가 아닌 곳에 있어요. 제주에 도착하면 써 주세요. 지금은 제주공항이나 애월을 골라 주세요.");
+      say(inJeju ? "지금 위치에서 출발해요." : "지금 제주가 아닌 곳에 있어요. 제주에 도착하면 써 주세요. 지금은 제주공항이나 애월을 골라 주세요.");
       sync();
     }, () => { state.here = null; say("위치를 알 수 없었어요. 위치 허용을 확인하거나 다른 출발 장소를 골라 주세요."); sync(); },
     { enableHighAccuracy: false, timeout: 10000 });
@@ -297,12 +383,12 @@ function renderWhen() {
         state.date = state.when === "pick" ? (datePick.value || null) : WHEN.find((w) => w.id === state.when).date();
         if (state.when === "pick" && !datePick.value) datePick.focus();
       }
-      screen.querySelectorAll(`.chip[data-key="${key}"]`).forEach((c) => c.setAttribute("aria-pressed", c === chip));
+      screen.querySelectorAll(`.chip[data-key="${key}"]`).forEach((c) => c.setAttribute("aria-checked", c === chip));
       if (key === "from") { if (chip.dataset.v === "here") askHere(); else say(""); }
       sync();
     };
   });
-  go.onclick = () => { state.step++; render(); };
+  go.onclick = () => { state.skip = []; state.alt = 0; goStep(3); };
   sync();
 }
 
@@ -379,6 +465,9 @@ function lastOrderMin(p, close) {
   return toMin(close) - gap;
 }
 
+// 전기차: 충전소가 걸어서 5분 안이고 50분 넘게 머무는 곳이면, 충전해 두고 다녀오기 좋아요
+const chargesHere = (p) => p.evChargerMin !== null && p.evChargerMin <= 5 && p.stayMin >= 50;
+
 // 일몰 시각(한국 시간, 분). 미국 해양대기청(NOAA)의 간단한 태양 계산식이에요. 애월 기준으로 1~2분 차이 정도
 function sunsetMin(iso, lat = 33.46, lng = 126.33) {
   const rad = Math.PI / 180;
@@ -390,10 +479,16 @@ function sunsetMin(iso, lat = 33.46, lng = 126.33) {
   return Math.round(720 - 4 * lng - eqtime + 4 * ha + 540);
 }
 // 노을 보기 좋은 곳: 이름·메모에 노을·선셋이 있는 곳, 또는 바다가 보이는 바닷가 야외 장소(공원·볼거리)
-const isSunsetSpot = (p) => /노을|일몰|선셋|썬셋/.test(p.name + p.note)
-  || ((p.type === "공원" || p.type === "볼거리") && /바다|해안|포구|해수욕|전망/.test(p.name + p.note) && !isInland(p));
+const sunsetSpots = new Map();
+const isSunsetSpot = (p) => {
+  if (!sunsetSpots.has(p)) sunsetSpots.set(p, /노을|일몰|선셋|썬셋/.test(p.name + p.note)
+    || ((p.type === "공원" || p.type === "볼거리") && /바다|해안|포구|해수욕|전망/.test(p.name + p.note) && !isInland(p)));
+  return sunsetSpots.get(p);
+};
 // 해 지기 20분 전부터 해 질 때까지 사이에 그곳에 있으면 노을을 봐요
-const seesSunset = (p, begin, leave) => isSunsetSpot(p) && begin <= sunsetMin(state.date) && leave >= sunsetMin(state.date) - 20;
+const sunsetCache = {};
+const sunsetToday = () => (sunsetCache[state.date] ??= sunsetMin(state.date));
+const seesSunset = (p, begin, leave) => isSunsetSpot(p) && begin <= sunsetToday() && leave >= sunsetToday() - 20;
 // 해수욕장 개장 기간인지 (beachSeason이 없으면 null)
 const inBeachSeason = (p) => p.beachSeason ? state.date.slice(5) >= p.beachSeason[0] && state.date.slice(5) <= p.beachSeason[1] : null;
 
@@ -447,9 +542,10 @@ function visit(ctx, p) {
   let score = -(begin - ctx.now);
   if (p.type === "식당") score += 60;
   if (p.type === ctx.lastType) score -= 25;
-  if (state.who === "solo" && p.solo) score += 10;
+  if (state.who === "solo" && p.solo) score += 30;
   if (state.how === "bike" && p.bikeRack) score += 10;
   if (state.how === "ev" && p.parking) score += 10;
+  if (state.how === "ev" && chargesHere(p)) score += 20;
   if (seesSunset(p, begin, leave)) score += 40;
   // 바닷가·산 쪽 위주를 골랐으면 그쪽 장소를 먼저 (식당은 산 쪽에 적어서 조금만)
   if (state.area !== "mix") score += (isInland(p) === (state.area === "mountain") ? 1 : -1) * (p.type === "식당" ? 15 : 40);
@@ -537,23 +633,44 @@ function courseScore(c) {
   return staying + c.stops.length * 10 - moving + meal + area + sunsetOf(c) * 40;
 }
 
-function makeCourse() {
-  const need = NEED[state.who];
+// includeUnknown: 정보가 없는 곳도 넣어 보기 (코스가 안 나올 때 이유를 찾으려고만 써요)
+function makeCourse({ includeUnknown = false } = {}) {
+  const need = NEED[state.who], skip = state.skip ?? [];
   let unknownSkipped = 0, noLocation = 0;
   const pool = PLACES.filter((p) => {
     if (p.lat === null) { noLocation++; return false; }
+    if (skip.includes(p.id)) return false;
     if (!need) return true;
     if (p[need] === null) unknownSkipped++;
-    return p[need] === true;
+    return p[need] === true || (includeUnknown && p[need] === null);
   });
 
-  // 첫 장소를 하나씩 바꿔 가며 여러 코스를 짜 보고, 제일 좋은 걸 골라요 (왔다 갔다를 줄여요)
-  let best = buildCourse(pool, null);
-  for (const p of pool) {
-    const c = buildCourse(pool, p);
-    if (courseScore(c) > courseScore(best)) best = c;
+  // 첫 장소를 하나씩 바꿔 가며 여러 코스를 짜 보고, 좋은 순서로 줄 세워요 (왔다 갔다를 줄여요)
+  // "다른 코스 보기"를 누르면 그다음 코스를 보여 줘요
+  const seen = new Set(), courses = [];
+  for (const first of [null, ...pool]) {
+    const c = buildCourse(pool, first);
+    const key = c.stops.map((s) => s.place.id).sort().join();
+    if (!c.stops.length || seen.has(key)) continue;
+    seen.add(key); courses.push(c);
   }
-  return { ...best, unknownSkipped, noLocation };
+  courses.sort((a, b) => courseScore(b) - courseScore(a));
+  const pick = courses.length ? courses[(state.alt ?? 0) % courses.length] : { stops: [], spent: 0, fares: 0, finish: toMin(state.depart) };
+  return { ...pick, unknownSkipped, noLocation, count: courses.length };
+}
+
+// 코스가 안 나오면 조건을 하나씩 풀어 보고 진짜 이유를 알려 줘요
+function whyEmpty() {
+  const tryWith = (change) => {
+    const saved = { ...state }; Object.assign(state, change);
+    const ok = makeCourse().stops.length > 0;
+    Object.assign(state, saved); return ok;
+  };
+  if (state.skip.length && tryWith({ skip: [] })) return "skip";
+  if (tryWith({ budget: Infinity })) return "budget";
+  if (tryWith({ hours: 12 })) return "hours";
+  if (makeCourse({ includeUnknown: true }).stops.length) return "unknown";
+  return "other";
 }
 
 // 지도 바로가기: 카카오맵은 장소 번호로, 네이버지도는 이름 검색으로 열어요
@@ -583,14 +700,62 @@ function badgesFor(s) {
     out.push(p.evChargerMin === null
       ? `<span class="badge warn">충전소 거리 확인 필요</span>`
       : `<span class="badge">충전소 걸어서 ${p.evChargerMin}분</span>`);
+    if (chargesHere(p)) out.push(`<span class="badge">${em("🔌")} 여기서 충전하며 쉬기 좋아요</span>`);
   }
   if (p.closedDays === null) out.push(`<span class="badge warn">쉬는 날 확인 필요</span>`);
   if (p.open === null) out.push(`<span class="badge warn">운영시간 확인 필요</span>`);
   if (p.seasonalHours) out.push(`<span class="badge warn">계절마다 시간이 달라요</span>`);
   const beach = inBeachSeason(p);
   if (beach !== null) out.push(beach ? `<span class="badge">해수욕장 개장 기간</span>` : `<span class="badge warn">해수욕장 개장 기간 아님 · 산책·노을만</span>`);
-  if (seesSunset(p, s.begin, s.leave)) out.push(`<span class="badge sun">🌅 노을 볼 시간</span>`);
+  if (seesSunset(p, s.begin, s.leave)) out.push(`<span class="badge sun">${em("🌅")} 노을 볼 시간</span>`);
   return out.join("");
+}
+
+// 코스 공유: 폰이면 공유 창(카톡 등), 아니면 링크 복사
+async function shareCourse() {
+  const msg = document.getElementById("shareMsg");
+  const url = location.href;
+  if (state.from === "here") msg.textContent = "\"지금 내 위치\"는 링크에 담기지 않아요. 받는 사람은 출발 장소를 다시 골라야 해요.";
+  try {
+    if (navigator.share) { await navigator.share({ title: "제주 애월 여행 코스", url }); return; }
+    await navigator.clipboard.writeText(url);
+    msg.textContent = (msg.textContent ? msg.textContent + " " : "") + "링크를 복사했어요. 카톡에 붙여 넣어 보내 보세요.";
+  } catch (e) {
+    if (e.name !== "AbortError") msg.textContent = `이 링크를 복사해 보내 주세요: ${url}`;
+  }
+}
+
+// 코스 지도: OpenStreetMap 지도 위에 순서대로 번호를 찍고 잇는 선을 그려요 (선은 직선이라 실제 길과 달라요)
+let leafletLoading = null;
+function loadLeaflet() {
+  leafletLoading ??= new Promise((ok, fail) => {
+    const css = document.createElement("link");
+    css.rel = "stylesheet"; css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+    document.head.append(css);
+    const js = document.createElement("script");
+    js.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    js.onload = ok; js.onerror = fail;
+    document.head.append(js);
+  });
+  return leafletLoading;
+}
+async function drawMap(points, n) {
+  const box = document.getElementById("map");
+  try { await loadLeaflet(); } catch { box.hidden = true; return; }
+  if (!document.body.contains(box)) return; // 그새 다른 화면으로 넘어갔어요
+  const map = L.map(box, { scrollWheelZoom: false, attributionControl: true });
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18, attribution: "© OpenStreetMap" }).addTo(map);
+  // 출발한 곳으로 돌아오면 '출발·끝' 핀 하나로 합쳐요
+  const loop = points.length > 2 && points[0] === points[points.length - 1];
+  const ll = points.map((p) => [p.lat, p.lng]);
+  L.polyline(ll, { color: getComputedStyle(document.documentElement).getPropertyValue("--accent").trim(), weight: 3, dashArray: "6 6" }).addTo(map);
+  points.forEach((p, i) => {
+    if (loop && i === points.length - 1) return;
+    const label = i === 0 ? (loop ? "출발·끝" : "출발") : i <= n ? String(i) : "끝";
+    L.marker([p.lat, p.lng], { icon: L.divIcon({ className: "pin", html: `<span>${label}</span>`, iconSize: [30, 30] }), alt: `${label} ${p.name}` })
+      .addTo(map).bindTooltip(p.name);
+  });
+  map.fitBounds(ll, { padding: [24, 24] });
 }
 
 // 메모·출처: 휠체어·유모차 이용자에게 쓸모 있는 이야기(예: 모래사장 안쪽은 어려워요)가 메모에 많아요
@@ -604,8 +769,22 @@ function moreInfo(p) {
     <p>${esc(p.note)}</p>${src ? `<ul>${src}</ul>` : ""}</details>`;
 }
 
+function emptyMessage(why) {
+  const wheelBus = state.who === "wheel" && state.how === "walk";
+  const call = `행복콜(<a href="tel:18996884">1899-6884</a>) 휠체어 차량도 있어요.`;
+  return {
+    skip: `뺀 곳을 빼고 나니 코스를 짤 수 없어요. 위의 "다시 넣기"를 눌러 보세요.`,
+    budget: `예산이 모자라요. ${state.how === "any" ? "택시비까지 넣으면 " : ""}1명 ${manwon(state.budget)}으로는 다녀올 수 있는 곳이 없어요. 예산을 늘리거나${state.how === "any" ? ", 이동을 뚜벅이로 바꾸거나" : ""} 끝나는 곳을 "상관없어요"로 바꿔 보세요.`,
+    hours: wheelBus
+      ? `저상버스와 걷기로는 ${state.hours}시간 안에 다녀올 수 있는 곳이 없어요. 시간을 늘리거나, 이동을 "상관없어요"(택시·차)로 바꿔 보세요. ${call}`
+      : `${state.hours}시간 안에 다녀올 수 있는 곳이 없어요. 시간을 늘리거나 끝나는 곳을 "상관없어요"로 바꿔 보세요.`,
+    unknown: `아직 "${{ dog: "반려견 OK", kid: "유모차 OK", wheel: "계단 없음" }[state.who]}"이 확인된 장소가 부족해요. 장소 정보를 확인하면 코스가 나와요.`,
+    other: `이 날짜·출발 시각에 문을 연 곳 중 조건에 맞는 곳이 없어요. 출발 시각이나 날짜를 바꿔 보세요.${wheelBus ? ` ${call}` : ""}`
+  }[why];
+}
+
 function renderResult() {
-  const { stops, spent, fares, back, finish, unknownSkipped, noLocation } = makeCourse();
+  const { stops, spent, fares, back, finish, unknownSkipped, noLocation, count } = makeCourse();
   const moveLine = (m) => `<li class="move">${m.text} 약 ${m.min}분${m.fare ? ` · ${m.text === "택시로" ? "약 " : ""}${won(m.fare)}` : ""}</li>`;
   const costUnknown = stops.filter((s) => s.place.cost === null).length;
   const who = WHO.find((w) => w.id === state.who), how = HOW.find((h) => h.id === state.how);
@@ -619,33 +798,37 @@ function renderResult() {
       <div class="name">${esc(s.place.name)}</div>
       <div class="meta">${s.place.type} · ${s.place.stayMin}분 · ${s.place.cost === null ? "비용 확인 필요" : won(s.place.cost)}${s.place.lastOrder && !s.place.hoursByDay ? ` · 마지막 주문 ${s.place.lastOrder}` : ""}${s.place.station ? ` · ${esc(s.place.station)}` : ""}</div>
       <div class="badges">${badgesFor(s)}</div>
-      <div class="links">${mapLinks(s.place)}</div>
+      <div class="links">${mapLinks(s.place)}<button class="skip" data-id="${s.place.id}">이곳 빼기</button></div>
       ${moreInfo(s.place)}
     </li>`).join("");
 
   screen.innerHTML = `
     <h1>이런 코스 어때요?</h1>
-    <p class="sub">${who.emoji} ${who.label} · ${how.emoji} ${how.label}</p>
-    <p class="tags">${esc(start.name)}에서 ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${end ? `${esc(end.name)}에서 끝` : "끝나는 곳 상관없음"} · ${AREAS.find((a) => a.id === state.area).label} · ${dateLabel(state.date)} 기준 · 🌅 일몰 ${toHHMM(sunsetMin(state.date))}</p>
+    <p class="sub">${em(who.emoji)} ${who.label} · ${em(how.emoji)} ${how.label}</p>
+    <p class="tags">${esc(start.name)}에서 ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${end ? `${esc(end.name)}에서 끝` : "끝나는 곳 상관없음"} · ${AREAS.find((a) => a.id === state.area).label} · ${dateLabel(state.date)} 기준 · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
     ${stops.length ? `
       <div class="summary">
         <div><b>${stops.length}곳</b><span>장소</span></div>
         <div><b>${Math.floor(used / 60)}시간 ${used % 60}분</b><span>걸리는 시간</span></div>
         <div><b>${spent.toLocaleString("ko-KR")}원${costUnknown ? "+" : ""}</b><span>1명 비용${fares ? `<br>(교통비 ${won(fares)} 포함)` : ""}</span></div>
       </div>
+      <div class="actions">
+        ${count > 1 ? `<button class="ghost" id="alt">${em("🔄")} 다른 코스 보기 (${(state.alt % count) + 1}/${count})</button>` : ""}
+        <button class="ghost" id="share">${em("🔗")} 코스 공유하기</button>
+      </div>
+      <p class="share-msg" id="shareMsg" role="status"></p>
+      ${state.skip.length ? `<p class="skipped">뺀 곳: ${state.skip.map((id) => esc(PLACES.find((p) => p.id === id).name)).join(", ")} <button class="link" id="unskip">다시 넣기</button></p>` : ""}
+      <div class="map" id="map" aria-label="코스 지도"></div>
       <ul class="timeline">
-        <li class="endpoint">📍 ${state.depart} ${esc(start.name)}에서 출발</li>
+        <li class="endpoint">${em("📍")} ${state.depart} ${esc(start.name)}에서 출발</li>
         ${list}
         ${back ? moveLine(back) : ""}
-        <li class="endpoint">🏁 ${toHHMM(finish)} ${end ? `${esc(end.name)} 도착` : "코스 끝"}</li>
+        <li class="endpoint">${em("🏁")} ${toHHMM(finish)} ${end ? `${esc(end.name)} 도착` : "코스 끝"}</li>
       </ul>` : `
-      <div class="empty">${state.who === "wheel" && state.how === "walk"
-        ? `저상버스와 걷기로는 ${state.hours}시간 안에 다녀올 수 있는 곳이 없어요. 시간을 늘리거나, 이동을 "상관없어요"(택시·차)로 바꿔 보세요. 행복콜(<a href="tel:18996884">1899-6884</a>) 휠체어 차량도 있어요.`
-        : unknownSkipped
-        ? `아직 "${{ dog: "반려견 OK", kid: "유모차 OK", wheel: "계단 없음" }[state.who]}"이 확인된 장소가 부족해요. 장소 정보를 확인하면 코스가 나와요.`
-        : "조건에 맞는 곳을 찾지 못했어요. 도착 시각이나 시간, 예산을 바꿔 보세요."}</div>`}
+      <div class="empty">${emptyMessage(whyEmpty())}</div>`}
     <div class="notes">
-      <p>• 이동 시간은 실제 길 기준이에요. 막히는 길은 반영되지 않아요. 버스는 시간표의 평균 배차 간격으로 기다리는 시간까지 넣었어요(실시간 도착 정보는 아니에요). ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}(길 데이터 © OpenStreetMap · openrouteservice.org · 버스 국토교통부 TAGO · 제주버스정보시스템 · 제주특별자치도 저상버스 운행노선 현황)</p>
+      <p>• 이동 시간은 실제 길 기준이에요.${state.how !== "walk" ? " 막히는 길은 반영되지 않아요." : " 버스는 시간표의 평균 배차 간격으로 기다리는 시간까지 넣었어요(실시간 도착 정보는 아니에요)."}${state.how === "ev" ? " 충전 시간은 따로 넣지 않았어요. 충전소가 가까운 곳에서 오래 머물게 짰으니 그동안 충전해 두세요." : ""} ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}지도의 선은 순서만 보여 주는 직선이에요.
+        (길 데이터 © OpenStreetMap · openrouteservice.org${state.how === "walk" ? ` · 버스 국토교통부 TAGO · 제주버스정보시스템${state.who === "wheel" ? " · 제주특별자치도 저상버스 운행노선 현황" : ""}` : ""})</p>
       ${state.who === "wheel" && (state.how === "walk" || state.how === "any") ? `<p>• 걷는 시간은 보통보다 1.5배 넉넉히 잡았어요.${state.how === "walk" ? " 버스는 저상버스가 있는 노선만 넣었어요. 저상버스는 일부 차량만이라 기다리는 시간을 배차 간격만큼 잡았어요. 오는 버스가 저상버스인지는 그때그때 달라요." : ""} 휠체어를 쓰는 분은 제주 교통약자이동지원센터(행복콜, <a href="tel:18996884">1899-6884</a>, 24시간)의 휠체어 차량을 쓸 수 있어요. 미리 회원등록이 필요해요.</p>` : ""}
       ${fares ? `<p>• 교통비는 어른 1명 기준이에요. ${state.how === "walk" ? "버스는 교통카드 요금이고, 40분 안에 갈아타면 환승 할인으로 따로 내지 않아요. " : "택시비는 거리로 어림했어요(막힐 때 붙는 요금·밤 11시 이후 할증은 빠졌어요). 여럿이 같이 타면 나눠 내니 1명 몫은 줄어요. 렌터카로 다니면 택시비는 빼고 보세요. "}</p>` : ""}
       ${costUnknown ? `<p>• 비용을 모르는 곳 ${costUnknown}곳은 비용 합계에 들어가지 않았어요.</p>` : ""}
@@ -653,9 +836,20 @@ function renderResult() {
       ${noLocation ? `<p>• 위치를 아직 모르는 곳 ${noLocation}곳은 코스에서 뺐어요.</p>` : ""}
     </div>
     <button class="primary" id="again">조건 바꾸기</button>`;
-  document.getElementById("again").onclick = () => { state.step = 0; render(); };
+  document.getElementById("again").onclick = () => goStep(2);
+  const redo = () => { syncUrl(false); renderResult(); window.scrollTo(0, 0); };
+  screen.querySelectorAll(".skip").forEach((b) => { b.onclick = () => { state.skip.push(b.dataset.id); state.alt = 0; redo(); }; });
+  document.getElementById("unskip")?.addEventListener("click", () => { state.skip = []; state.alt = 0; redo(); });
+  document.getElementById("alt")?.addEventListener("click", () => { state.alt = (state.alt + 1) % count; redo(); });
+  document.getElementById("share")?.addEventListener("click", shareCourse);
+  if (stops.length) drawMap([start, ...stops.map((s) => s.place), ...(end ? [end] : [])], stops.length);
 }
 
+// 처음 열 때: 주소에 담긴 조건을 읽고, 중간 단계로 바로 열렸으면 앞 단계들도 기록에 넣어 뒤로가기가 되게 해요
+readQuery();
+const firstStep = state.step;
+state.step = 0; syncUrl(false);
+for (let k = 1; k <= firstStep; k++) { state.step = k; syncUrl(true); }
 render();
 </script>
 </body>
