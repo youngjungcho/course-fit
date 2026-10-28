@@ -352,60 +352,113 @@ function isInland(p) {
   return (coastLat - p.lat) * 111 > 2.5;
 }
 
-// 한 번 코스 짜기: 지금 자리에서 갈 수 있는 곳 중 점수가 제일 높은 곳을 하나씩 이어 붙여요.
-// first를 주면 첫 장소는 그곳으로 정해요.
-function buildCourse(pool, first) {
+// 코스를 짜는 중의 상태: 지금 어디서 몇 시인지, 돈·카페·식사를 얼마나 썼는지
+function startCtx() {
   const startMin = toMin(state.depart);
-  const endMin = startMin + state.hours * 60;
-  const maxCafes = state.hours <= 4 ? 1 : 2;
-  const stops = [];
-  const day = tripDay();
-  let here = startPoint(), now = startMin, spent = 0, lastType = null, lastMeal = -999, cafes = 0;
+  return {
+    stops: [], here: startPoint(), now: startMin, spent: 0, lastType: null, lastMeal: -999, cafes: 0,
+    endMin: startMin + state.hours * 60, maxCafes: state.hours <= 4 ? 1 : 2, day: tripDay()
+  };
+}
 
+// 지금 자리에서 p로 가면 어떻게 되는지 (못 가면 null)
+function visit(ctx, p) {
+  if (ctx.stops.some((s) => s.place === p)) return null;
+  if (p.closedDays && p.closedDays.includes(ctx.day)) return null;
+  if (ctx.spent + (p.cost ?? 0) > state.budget) return null;
+  // 카페·식당은 연달아 넣지 않고, 카페는 4시간 이하면 1곳·그보다 길면 2곳까지
+  if (p.type === ctx.lastType && (p.type === "카페" || p.type === "식당")) return null;
+  if (p.type === "카페" && ctx.cafes >= ctx.maxCafes) return null;
+
+  const [open, close] = hoursOf(p);
+  const mv = travel(ctx.here, p, state.how);
+  if (mv.min === Infinity) return null; // 버스로 못 가는 곳
+  let begin = ctx.now + mv.min;
+  // 문 열기 전이나 쉬는 시간이면 30분까지는 기다리고, 더 길면 다음 후보로
+  const waitUntil = (min) => { if (min - begin > 30) return false; begin = min; return true; };
+  if (open && begin < toMin(open) && !waitUntil(toMin(open))) return null;
+  const hitBreak = (p.breaks ?? []).find(([from, to]) => begin < toMin(to) && begin + p.stayMin > toMin(from));
+  if (hitBreak && !waitUntil(toMin(hitBreak[1]))) return null;
+  const leave = begin + p.stayMin;
+  if (leave > ctx.endMin) return null;
+  if (close && leave > toMin(close)) return null;
+
+  // 식당은 밥때(아침 7~9:30, 점심 11~14시, 저녁 17~20시)에만, 앞 식사에서 3시간이 지나야 넣어요
+  const mealTime = (begin >= 420 && begin <= 570) || (begin >= 660 && begin <= 840) || (begin >= 1020 && begin <= 1200);
+  if (p.type === "식당" && (!mealTime || begin - ctx.lastMeal < 180)) return null;
+
+  let score = -(begin - ctx.now);
+  if (p.type === "식당") score += 60;
+  if (p.type === ctx.lastType) score -= 25;
+  if (state.who === "solo" && p.solo) score += 10;
+  if (state.how === "bike" && p.bikeRack) score += 10;
+  if (state.how === "ev" && p.parking) score += 10;
+  // 바닷가·산 쪽 위주를 골랐으면 그쪽 장소를 먼저 (식당은 산 쪽에 적어서 조금만)
+  if (state.area !== "mix") score += (isInland(p) === (state.area === "mountain") ? 1 : -1) * (p.type === "식당" ? 15 : 40);
+  return { place: p, move: mv, begin, leave, score };
+}
+
+function add(ctx, stop) {
+  ctx.stops.push(stop);
+  ctx.here = stop.place; ctx.now = stop.leave; ctx.spent += stop.place.cost ?? 0; ctx.lastType = stop.place.type;
+  if (stop.place.type === "식당") ctx.lastMeal = stop.begin;
+  if (stop.place.type === "카페") ctx.cafes++;
+}
+
+// 갈 수 있는 곳 중 점수가 제일 높은 곳을 하나씩 이어 붙여요
+function extend(ctx, pool) {
   while (true) {
     let best = null;
-    for (const p of (stops.length === 0 && first ? [first] : pool)) {
-      if (stops.some((s) => s.place === p)) continue;
-      if (p.closedDays && p.closedDays.includes(day)) continue;
-      if (spent + (p.cost ?? 0) > state.budget) continue;
-      // 카페·식당은 연달아 넣지 않고, 카페는 4시간 이하면 1곳·그보다 길면 2곳까지
-      if (p.type === lastType && (p.type === "카페" || p.type === "식당")) continue;
-      if (p.type === "카페" && cafes >= maxCafes) continue;
-
-      const [open, close] = hoursOf(p);
-      const mv = travel(here, p, state.how);
-      if (mv.min === Infinity) continue; // 버스로 못 가는 곳
-      let begin = now + mv.min;
-      // 문 열기 전이나 쉬는 시간이면 30분까지는 기다리고, 더 길면 다음 후보로
-      const waitUntil = (min) => { if (min - begin > 30) return false; begin = min; return true; };
-      if (open && begin < toMin(open) && !waitUntil(toMin(open))) continue;
-      const hitBreak = (p.breaks ?? []).find(([from, to]) => begin < toMin(to) && begin + p.stayMin > toMin(from));
-      if (hitBreak && !waitUntil(toMin(hitBreak[1]))) continue;
-      const leave = begin + p.stayMin;
-      if (leave > endMin) continue;
-      if (close && leave > toMin(close)) continue;
-
-      let score = -(begin - now);
-      // 식당은 밥때(아침 7~9:30, 점심 11~14시, 저녁 17~20시)에만, 앞 식사에서 3시간이 지나야 넣어요
-      const mealTime = (begin >= 420 && begin <= 570) || (begin >= 660 && begin <= 840) || (begin >= 1020 && begin <= 1200);
-      if (p.type === "식당" && (!mealTime || begin - lastMeal < 180)) continue;
-      if (p.type === "식당") score += 60;
-      if (p.type === lastType) score -= 25;
-      if (state.who === "solo" && p.solo) score += 10;
-      if (state.how === "bike" && p.bikeRack) score += 10;
-      if (state.how === "ev" && p.parking) score += 10;
-      // 바닷가·산 쪽 위주를 골랐으면 그쪽 장소를 먼저 (식당은 산 쪽에 적어서 조금만)
-      if (state.area !== "mix") score += (isInland(p) === (state.area === "mountain") ? 1 : -1) * (p.type === "식당" ? 15 : 40);
-
-      if (!best || score > best.score) best = { place: p, move: mv, begin, leave, score };
+    for (const p of pool) {
+      const v = visit(ctx, p);
+      if (v && (!best || v.score > best.score)) best = v;
     }
-    if (!best) break;
-    stops.push(best);
-    here = best.place; now = best.leave; spent += best.place.cost ?? 0; lastType = best.place.type;
-    if (best.place.type === "식당") lastMeal = best.begin;
-    if (best.place.type === "카페") cafes++;
+    if (!best) return ctx;
+    add(ctx, best);
   }
-  return { stops, spent, finish: now };
+}
+
+// 정한 순서대로 다녀 보기 (규칙에 안 맞으면 null)
+function follow(places) {
+  const ctx = startCtx();
+  for (const p of places) {
+    const v = visit(ctx, p);
+    if (!v) return null;
+    add(ctx, v);
+  }
+  return ctx;
+}
+
+const movingOf = (ctx) => ctx.stops.reduce((sum, s) => sum + s.move.min, 0);
+
+// 다 짠 뒤 순서를 바꿔 이동 시간을 줄여요 (구간 뒤집기 2-opt + 한 곳 옮기기). 줄어든 시간에 더 넣을 수 있으면 넣어요
+function shorten(ctx, pool) {
+  let best = ctx, improved = true;
+  while (improved) {
+    improved = false;
+    const order = best.stops.map((s) => s.place), n = order.length;
+    const tries = [];
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++)
+      tries.push([...order.slice(0, i), ...order.slice(i, j + 1).reverse(), ...order.slice(j + 1)]);
+    for (let i = 0; i < n; i++) for (let k = 0; k < n; k++) if (k !== i && k !== i - 1) {
+      const rest = order.filter((_, x) => x !== i);
+      rest.splice(k > i ? k - 1 : k, 0, order[i]);
+      tries.push(rest);
+    }
+    for (const t of tries) {
+      const c = follow(t);
+      if (c && movingOf(c) < movingOf(best)) { best = c; improved = true; }
+    }
+  }
+  return best === ctx ? ctx : extend(best, pool);
+}
+
+// 한 번 코스 짜기. first를 주면 첫 장소는 그곳으로 정해요.
+function buildCourse(pool, first) {
+  const ctx = startCtx();
+  if (first) { const v = visit(ctx, first); if (v) add(ctx, v); else return { stops: [], spent: 0, finish: ctx.now }; }
+  const c = shorten(extend(ctx, pool), pool);
+  return { stops: c.stops, spent: c.spent, finish: c.now };
 }
 
 // 코스 좋은 정도: 장소에서 즐기는 시간이 길수록, 이동이 짧을수록, 식사가 들어갈수록 좋아요 (오래 머무는 곳도 공평하게)
