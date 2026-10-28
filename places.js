@@ -9,6 +9,7 @@
 //   stayMin       머무는 시간(분) — 코스 짤 때 쓰는 대략 값
 //   cost          1인 예상 비용(원). 무료면 0 (모르면 null)
 //   open, close   운영시간 "HH:MM" (24시간이면 "00:00", "24:00" / 모르면 null)
+//   lastOrder     식당·카페 마지막 주문 "HH:MM" (메모에 적은 관광공사·카카오맵 정보에서. 없으면 칸 없음 → 식당은 닫기 1시간 전, 카페는 30분 전으로 어림)
 //   closedDays    쉬는 요일 예: ["월"]. 쉬는 날 없으면 [] (모르면 null)
 //   hoursByDay    요일마다 시간이 다르면 그 요일만 따로 예: { "토": ["10:00", "15:30"] }. 없으면 안 써도 돼요
 //   breaks        쉬는 시간(브레이크 타임) 예: [["15:00", "16:00"]]. 없으면 이 칸을 안 써도 돼요
@@ -158,7 +159,7 @@ const PLACES = [
   },
   {
     id: "bomnal-cafe", name: "카페 봄날", type: "카페",
-    stayMin: 50, cost: null, open: "09:00", close: "21:30", closedDays: [],
+    stayMin: 50, cost: null, open: "09:00", close: "21:30", lastOrder: "21:00", closedDays: [],
     lat: 33.46253, lng: 126.30960,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "한담동 정류장 걸어서 5분", bikeRack: null, evChargerMin: 4, parking: null,
@@ -179,7 +180,7 @@ const PLACES = [
   },
   {
     id: "jangin-house", name: "장인의집", type: "식당",
-    stayMin: 60, cost: 20000, open: "09:00", close: "22:00", closedDays: [],
+    stayMin: 60, cost: 20000, open: "09:00", close: "22:00", lastOrder: "21:00", closedDays: [],
     lat: 33.46577, lng: 126.32685,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "애월중학교 정류장 걸어서 6분", bikeRack: null, evChargerMin: 3, parking: true,
@@ -189,7 +190,7 @@ const PLACES = [
   },
   {
     id: "danso", name: "단소", type: "식당",
-    stayMin: 50, cost: 17000, open: "11:00", close: "15:30", closedDays: ["일"],
+    stayMin: 50, cost: 17000, open: "11:00", close: "15:30", lastOrder: "14:50", closedDays: ["일"],
     lat: 33.46445, lng: 126.32264,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "애월중학교 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: false,
@@ -209,7 +210,7 @@ const PLACES = [
   },
   {
     id: "simba-curry", name: "심바카레", type: "식당",
-    stayMin: 50, cost: 14000, open: "10:00", close: "19:00", closedDays: ["수"],
+    stayMin: 50, cost: 14000, open: "10:00", close: "19:00", lastOrder: "18:30", closedDays: ["수"],
     breaks: [["15:00", "16:00"]],
     lat: 33.46342, lng: 126.31686,
     dog: true, stroller: null, stepFree: null, solo: true,
@@ -220,7 +221,7 @@ const PLACES = [
   },
   {
     id: "aewolri-makguksu", name: "애월리순메밀막국수", type: "식당",
-    stayMin: 50, cost: 11000, open: "10:00", close: "20:00", closedDays: [],
+    stayMin: 50, cost: 11000, open: "10:00", close: "20:00", lastOrder: "19:30", closedDays: [],
     lat: 33.46566, lng: 126.31639,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "신설동 정류장 걸어서 3분", bikeRack: null, evChargerMin: 5, parking: true,
@@ -230,7 +231,7 @@ const PLACES = [
   },
   {
     id: "goijeong", name: "고이정", type: "식당",
-    stayMin: 70, cost: 26000, open: "11:00", close: "24:00", closedDays: [],
+    stayMin: 70, cost: 26000, open: "11:00", close: "24:00", lastOrder: "23:00", closedDays: [],
     lat: 33.45933, lng: 126.31135,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "한담동 정류장 걸어서 6분", bikeRack: null, evChargerMin: 3, parking: true,
@@ -240,7 +241,7 @@ const PLACES = [
   },
   {
     id: "kkongsuni", name: "꽁순이네", type: "식당",
-    stayMin: 40, cost: 10000, open: "10:00", close: "16:30", closedDays: ["화"],
+    stayMin: 40, cost: 10000, open: "10:00", close: "16:30", lastOrder: "16:25", closedDays: ["화"],
     lat: 33.44695, lng: 126.33872,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "처남빌레 정류장 걸어서 2분", bikeRack: null, evChargerMin: 15, parking: true,
@@ -271,7 +272,7 @@ const PLACES = [
   },
   {
     id: "jeremy-cafe", name: "제레미", type: "카페",
-    stayMin: 50, cost: 6000, open: "09:00", close: "17:30", closedDays: ["일", "월"],
+    stayMin: 50, cost: 6000, open: "09:00", close: "17:30", lastOrder: "17:10", closedDays: ["일", "월"],
     lat: 33.46455, lng: 126.31852,
     dog: null, stroller: null, stepFree: false, solo: null,
     station: "애월환승정류장(애월리) 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: false,
@@ -321,7 +322,7 @@ const PLACES = [
   },
   {
     id: "lee-chunok", name: "이춘옥원조고등어쌈밥 제주애월본점", type: "식당",
-    stayMin: 60, cost: 17000, open: "10:00", close: "20:30", closedDays: [],
+    stayMin: 60, cost: 17000, open: "10:00", close: "20:30", lastOrder: "19:30", closedDays: [],
     breaks: [["16:00", "17:00"]],
     lat: 33.48900, lng: 126.41870,
     dog: true, stroller: true, stepFree: true, solo: null,
@@ -342,7 +343,7 @@ const PLACES = [
   },
   {
     id: "bluegrass", name: "블루그라스", type: "식당",
-    stayMin: 50, cost: 10800, open: "11:30", close: "15:30", closedDays: ["목"],
+    stayMin: 50, cost: 10800, open: "11:30", close: "15:30", lastOrder: "15:00", closedDays: ["목"],
     hoursByDay: { "토": ["10:00", "15:30"], "일": ["10:00", "15:30"] },
     lat: 33.44745, lng: 126.30924,
     dog: true, stroller: null, stepFree: false, solo: true,
@@ -373,7 +374,7 @@ const PLACES = [
   },
   {
     id: "aewol-the-sunset", name: "애월 더선셋", type: "카페",
-    stayMin: 60, cost: 6500, open: "10:00", close: "19:00", closedDays: [],
+    stayMin: 60, cost: 6500, open: "10:00", close: "19:00", lastOrder: "18:00", closedDays: [],
     lat: 33.45621, lng: 126.30904,
     dog: true, stroller: null, stepFree: false, solo: null,
     station: "곽지모우물 정류장 걸어서 6분", bikeRack: null, evChargerMin: 4, parking: true,
@@ -515,7 +516,7 @@ const PLACES = [
   },
   {
     id: "ikkan-shita", name: "잇칸시타", type: "식당",
-    stayMin: 60, cost: 18000, open: "11:00", close: "20:50", closedDays: [],
+    stayMin: 60, cost: 18000, open: "11:00", close: "20:50", lastOrder: "20:20", closedDays: [],
     lat: 33.47707, lng: 126.37024,
     dog: null, stroller: true, stepFree: true, solo: true,
     station: "중엄새물 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
@@ -569,7 +570,7 @@ const PLACES = [
   },
   {
     id: "geumdonga", name: "금돈가 제주 애월해안도로 본점", type: "식당",
-    stayMin: 70, cost: 32000, open: "11:00", close: "22:30", closedDays: [],
+    stayMin: 70, cost: 32000, open: "11:00", close: "22:30", lastOrder: "21:30", closedDays: [],
     lat: 33.48430, lng: 126.39113,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "가문동마을길 정류장 걸어서 8분", bikeRack: null, evChargerMin: 9, parking: null,
@@ -599,7 +600,7 @@ const PLACES = [
   },
   {
     id: "sogil-dabang", name: "소길다방", type: "카페",
-    stayMin: 50, cost: 6500, open: "10:00", close: "18:00", closedDays: ["화"],
+    stayMin: 50, cost: 6500, open: "10:00", close: "18:00", lastOrder: "17:30", closedDays: ["화"],
     lat: 33.43881, lng: 126.37944,
     dog: true, stroller: null, stepFree: false, solo: null,
     station: "소길리사무소 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
@@ -641,7 +642,7 @@ const PLACES = [
   },
   {
     id: "noeulri-cafe", name: "노을리카페", type: "카페",
-    stayMin: 60, cost: 11000, open: "09:00", close: "21:00", closedDays: [],
+    stayMin: 60, cost: 11000, open: "09:00", close: "21:00", lastOrder: "20:30", closedDays: [],
     lat: 33.47990, lng: 126.37271,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "서치강물 정류장 걸어서 6분", bikeRack: null, evChargerMin: 8, parking: true,

@@ -144,8 +144,8 @@
   <main id="screen"></main>
 </div>
 
-<script src="places.js?v=20261028b"></script>
-<script src="travel.js?v=20261028b"></script>
+<script src="places.js?v=20261028c"></script>
+<script src="travel.js?v=20261028c"></script>
 <script>
 // ----- 고를 수 있는 것들 -----
 const WHO = [
@@ -365,6 +365,13 @@ const NEED = { dog: "dog", kid: "stroller", wheel: "stepFree" };
 // 가는 날 요일에 따로 정한 운영시간이 있으면 그걸 써요 (예: 주말엔 더 일찍 열어요)
 const tripDay = () => dayOf(state.date);
 const hoursOf = (p) => (p.hoursByDay && p.hoursByDay[tripDay()]) || [p.open, p.close];
+// 식당·카페는 마지막 주문 전에 들어가야 해요. 모르면 식당은 닫기 1시간 전, 카페는 30분 전으로 어림
+// (요일마다 닫는 시간이 다르면 닫는 시간과 마지막 주문 사이 간격을 그날에 맞춰요)
+function lastOrderMin(p, close) {
+  if (p.type !== "식당" && p.type !== "카페") return Infinity;
+  const gap = p.lastOrder ? toMin(p.close) - toMin(p.lastOrder) : (p.type === "식당" ? 60 : 30);
+  return toMin(close) - gap;
+}
 
 // 해안선(COASTLINE)에서 남쪽으로 2.5km 넘게 떨어지면 산 쪽(중산간)
 function isInland(p) {
@@ -402,6 +409,7 @@ function visit(ctx, p) {
   const leave = begin + p.stayMin;
   if (leave > ctx.endMin) return null;
   if (close && leave > toMin(close)) return null;
+  if (close && begin > lastOrderMin(p, close)) return null;
   // 끝나는 곳이 있으면 거기까지 돌아가는 시간도 넣어서 시간 안에 들어와야 해요
   const end = endPoint(), back = end && travel(p, end, state.how);
   if (back && (back.min === Infinity || leave + back.min > ctx.endMin)) return null;
@@ -564,7 +572,7 @@ function renderResult() {
     <li class="stop">
       <div class="time">${toHHMM(s.begin)} – ${toHHMM(s.leave)}</div>
       <div class="name">${esc(s.place.name)}</div>
-      <div class="meta">${s.place.type} · ${s.place.stayMin}분 · ${s.place.cost === null ? "비용 확인 필요" : won(s.place.cost)}${s.place.station ? ` · ${esc(s.place.station)}` : ""}</div>
+      <div class="meta">${s.place.type} · ${s.place.stayMin}분 · ${s.place.cost === null ? "비용 확인 필요" : won(s.place.cost)}${s.place.lastOrder && !s.place.hoursByDay ? ` · 마지막 주문 ${s.place.lastOrder}` : ""}${s.place.station ? ` · ${esc(s.place.station)}` : ""}</div>
       <div class="badges">${badgesFor(s.place)}</div>
       <div class="links">${mapLinks(s.place)}</div>
     </li>`).join("");
