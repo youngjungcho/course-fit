@@ -170,13 +170,18 @@ const HOURS = [3, 4, 6, 8];
 const BUDGET = [30000, 50000, 100000, 150000];
 const HERE = { id: "here", emoji: "📍", label: "지금 내 위치" };
 const JEJU = { latMin: 33.1, latMax: 33.6, lngMin: 126.1, lngMax: 127.0 };
+const ENDS = [
+  { id: "start",   label: "🔁 출발한 곳으로" },
+  { id: "airport", label: "✈️ 제주공항" },
+  { id: "any",     label: "🤷 상관없어요" }
+];
 const AREAS = [
   { id: "mix",      label: "🤷 골고루" },
   { id: "sea",      label: "🌊 바닷가 위주" },
   { id: "mountain", label: "⛰️ 산 쪽 위주" }
 ];
 
-const state = { step: 0, who: null, how: null, when: null, date: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix" };
+const state = { step: 0, who: null, how: null, when: null, date: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix", end: "start" };
 
 const screen = document.getElementById("screen");
 const bar = document.getElementById("bar");
@@ -235,12 +240,14 @@ function chipGroup(title, key, values, label) {
 }
 
 const startPoint = () => state.from === "here" ? state.here : STARTS.find((s) => s.id === state.from);
+// 코스가 끝나고 돌아갈 곳 (상관없으면 null)
+const endPoint = () => state.end === "any" ? null : state.end === "airport" ? STARTS.find((s) => s.id === "airport") : startPoint();
 
 function renderWhen() {
   const froms = [HERE, ...STARTS];
   screen.innerHTML = `
     <h1>출발이랑 예산은요?</h1>
-    <p class="sub">다섯 가지를 골라 주세요. 마지막 칸은 그대로 둬도 돼요.</p>
+    <p class="sub">다섯 가지를 골라 주세요. 아래 두 칸은 그대로 둬도 돼요.</p>
     <div class="group"><h2>언제 가요?</h2><div class="chips">${WHEN.map((w) =>
       `<button class="chip" data-key="when" data-v="${w.id}" aria-pressed="${state.when === w.id}">${w.label()}</button>`).join("")}</div>
       <input type="date" class="date-pick" id="datePick" aria-label="여행 날짜" min="${kstToday()}" value="${state.when === "pick" ? state.date : ""}" ${state.when === "pick" ? "" : "hidden"}>
@@ -250,6 +257,7 @@ function renderWhen() {
     ${chipGroup("몇 시에 출발해요?", "depart", DEPART, (v) => v)}
     ${chipGroup("몇 시간 있어요?", "hours", HOURS, (v) => `${v}시간`)}
     ${chipGroup("1명 예산은요?", "budget", BUDGET, manwon)}
+    ${chipGroup("어디서 끝나요?", "end", ENDS.map((e) => e.id), (id) => ENDS.find((e) => e.id === id).label)}
     ${chipGroup("어디 위주로 볼까요?", "area", AREAS.map((a) => a.id), (id) => AREAS.find((a) => a.id === id).label)}
     <button class="primary" id="go">코스 짜기</button>`;
   const go = document.getElementById("go");
@@ -277,7 +285,7 @@ function renderWhen() {
   screen.querySelectorAll(".chip").forEach((chip) => {
     chip.onclick = () => {
       const key = chip.dataset.key;
-      state[key] = (key === "depart" || key === "from" || key === "area" || key === "when") ? chip.dataset.v : Number(chip.dataset.v);
+      state[key] = (key === "depart" || key === "from" || key === "area" || key === "when" || key === "end") ? chip.dataset.v : Number(chip.dataset.v);
       if (key === "when") {
         datePick.hidden = state.when !== "pick";
         state.date = state.when === "pick" ? (datePick.value || null) : WHEN.find((w) => w.id === state.when).date();
@@ -382,6 +390,9 @@ function visit(ctx, p) {
   const leave = begin + p.stayMin;
   if (leave > ctx.endMin) return null;
   if (close && leave > toMin(close)) return null;
+  // 끝나는 곳이 있으면 거기까지 돌아가는 시간도 넣어서 시간 안에 들어와야 해요
+  const end = endPoint();
+  if (end) { const back = travel(p, end, state.how); if (back.min === Infinity || leave + back.min > ctx.endMin) return null; }
 
   // 식당은 밥때(아침 7~9:30, 점심 11~14시, 저녁 17~20시)에만, 앞 식사에서 3시간이 지나야 넣어요
   const mealTime = (begin >= 420 && begin <= 570) || (begin >= 660 && begin <= 840) || (begin >= 1020 && begin <= 1200);
@@ -429,7 +440,9 @@ function follow(places) {
   return ctx;
 }
 
-const movingOf = (ctx) => ctx.stops.reduce((sum, s) => sum + s.move.min, 0);
+// 마지막 장소에서 끝나는 곳까지 (끝나는 곳이 상관없거나 장소가 없으면 null)
+const backOf = (ctx) => endPoint() && ctx.stops.length ? travel(ctx.here, endPoint(), state.how) : null;
+const movingOf = (ctx) => ctx.stops.reduce((sum, s) => sum + s.move.min, 0) + (backOf(ctx)?.min ?? 0);
 
 // 다 짠 뒤 순서를 바꿔 이동 시간을 줄여요 (구간 뒤집기 2-opt + 한 곳 옮기기). 줄어든 시간에 더 넣을 수 있으면 넣어요
 function shorten(ctx, pool) {
@@ -458,13 +471,14 @@ function buildCourse(pool, first) {
   const ctx = startCtx();
   if (first) { const v = visit(ctx, first); if (v) add(ctx, v); else return { stops: [], spent: 0, finish: ctx.now }; }
   const c = shorten(extend(ctx, pool), pool);
-  return { stops: c.stops, spent: c.spent, finish: c.now };
+  const back = backOf(c);
+  return { stops: c.stops, spent: c.spent, back, finish: c.now + (back?.min ?? 0) };
 }
 
 // 코스 좋은 정도: 장소에서 즐기는 시간이 길수록, 이동이 짧을수록, 식사가 들어갈수록 좋아요 (오래 머무는 곳도 공평하게)
 function courseScore(c) {
   if (c.stops.length === 0) return -Infinity;
-  const moving = c.stops.reduce((sum, s) => sum + s.move.min, 0);
+  const moving = c.stops.reduce((sum, s) => sum + s.move.min, 0) + (c.back?.min ?? 0);
   const meal = c.stops.some((s) => s.place.type === "식당") ? 30 : 0;
   const inland = c.stops.filter((s) => isInland(s.place)).length;
   // 골고루: 바닷가와 산 쪽이 둘 다 있으면 좋아요 / 한쪽 위주: 그쪽 장소가 많을수록 좋아요
@@ -523,11 +537,11 @@ function badgesFor(p) {
 }
 
 function renderResult() {
-  const { stops, spent, finish, unknownSkipped, noLocation } = makeCourse();
+  const { stops, spent, back, finish, unknownSkipped, noLocation } = makeCourse();
   const costUnknown = stops.filter((s) => s.place.cost === null).length;
   const who = WHO.find((w) => w.id === state.who), how = HOW.find((h) => h.id === state.how);
   const used = finish - toMin(state.depart);
-  const start = startPoint();
+  const start = startPoint(), end = endPoint();
 
   const list = stops.map((s) => `
     <li class="move">${s.move.text} 약 ${s.move.min}분</li>
@@ -542,7 +556,7 @@ function renderResult() {
   screen.innerHTML = `
     <h1>이런 코스 어때요?</h1>
     <p class="sub">${who.emoji} ${who.label} · ${how.emoji} ${how.label}</p>
-    <p class="tags">${esc(start.name)}에서 ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label} · ${dateLabel(state.date)} 기준</p>
+    <p class="tags">${esc(start.name)}에서 ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${end ? `${esc(end.name)}에서 끝` : "끝나는 곳 상관없음"} · ${AREAS.find((a) => a.id === state.area).label} · ${dateLabel(state.date)} 기준</p>
     ${stops.length ? `
       <div class="summary">
         <div><b>${stops.length}곳</b><span>장소</span></div>
@@ -552,7 +566,8 @@ function renderResult() {
       <ul class="timeline">
         <li class="endpoint">📍 ${state.depart} ${esc(start.name)}에서 출발</li>
         ${list}
-        <li class="endpoint">🏁 ${toHHMM(finish)} 코스 끝</li>
+        ${back ? `<li class="move">${back.text} 약 ${back.min}분</li>` : ""}
+        <li class="endpoint">🏁 ${toHHMM(finish)} ${end ? `${esc(end.name)} 도착` : "코스 끝"}</li>
       </ul>` : `
       <div class="empty">${unknownSkipped
         ? `아직 "${{ dog: "반려견 OK", kid: "유모차 OK", wheel: "계단 없음" }[state.who]}"이 확인된 장소가 부족해요. 장소 정보를 확인하면 코스가 나와요.`
