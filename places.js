@@ -12,6 +12,8 @@
 //   lastOrder     식당·카페 마지막 주문 "HH:MM" (메모에 적은 관광공사·카카오맵 정보에서. 없으면 칸 없음 → 식당은 닫기 1시간 전, 카페는 30분 전으로 어림)
 //   closedDays    쉬는 요일 예: ["월"]. 쉬는 날 없으면 [] (모르면 null)
 //   hoursByDay    요일마다 시간이 다르면 그 요일만 따로 예: { "토": ["10:00", "15:30"] }. 없으면 안 써도 돼요
+//   beachSeason   해수욕장 개장 기간 ["MM-DD", "MM-DD"]. 그 밖에는 산책·노을만 (없으면 안 써도 돼요)
+//   seasonalHours 계절마다 운영시간이 달라요 (true면 화면에 확인하라고 띄워요)
 //   breaks        쉬는 시간(브레이크 타임) 예: [["15:00", "16:00"]]. 없으면 이 칸을 안 써도 돼요
 //   lat, lng      위치 (모르면 null → 코스에서 빠져요)
 //   dog           반려견 들어가도 돼요?
@@ -60,6 +62,7 @@ const PLACES = [
   {
     id: "gwakji-beach", name: "곽지해수욕장", type: "공원",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
+    beachSeason: ["06-24", "08-31"], // 2025년 개장 기간(10~19시). 2026년 날짜는 아직 확인 못 했어요
     lat: 33.45596, lng: 126.30650,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "곽지모우물 정류장 걸어서 6분", bikeRack: null, evChargerMin: 8, parking: true,
@@ -170,6 +173,7 @@ const PLACES = [
   {
     id: "blissful-jeju", name: "블리스풀 제주", type: "카페",
     stayMin: 60, cost: 5000, open: "10:00", close: "18:00", closedDays: ["금"],
+    seasonalHours: true,
     hoursByDay: { "토": ["10:00", "19:00"], "일": ["10:00", "19:00"] },
     lat: 33.40499, lng: 126.40720,
     dog: true, stroller: null, stepFree: true, solo: null,
@@ -405,6 +409,7 @@ const PLACES = [
   {
     id: "teseum", name: "테디베어하우스 테지움 제주점", type: "볼거리",
     stayMin: 60, cost: 12500, open: "09:00", close: "19:00", closedDays: [],
+    seasonalHours: true,
     lat: 33.41225, lng: 126.39361,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "렛츠런파크 정류장 걸어서 4분", bikeRack: null, evChargerMin: 2, parking: true,

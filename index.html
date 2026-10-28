@@ -120,6 +120,12 @@
   .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
   .badge { font-size: 13px; padding: 3px 9px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); }
   .badge.warn { background: var(--warn-soft); color: var(--warn); }
+  .badge.sun { background: var(--warn-soft); color: var(--text); }
+  .more { margin-top: 10px; font-size: 14px; color: var(--muted); }
+  .more summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; }
+  .more p { margin: 6px 0; line-height: 1.6; }
+  .more ul { margin: 4px 0; padding-left: 18px; word-break: break-all; }
+  .more a { color: var(--accent); }
   .links { display: flex; gap: 8px; margin-top: 10px; }
   .links a {
     flex: 1; min-height: 40px; display: flex; align-items: center; justify-content: center;
@@ -144,8 +150,8 @@
   <main id="screen"></main>
 </div>
 
-<script src="places.js?v=20261028c"></script>
-<script src="travel.js?v=20261028c"></script>
+<script src="places.js?v=20261028d"></script>
+<script src="travel.js?v=20261028d"></script>
 <script>
 // ----- 고를 수 있는 것들 -----
 const WHO = [
@@ -373,6 +379,24 @@ function lastOrderMin(p, close) {
   return toMin(close) - gap;
 }
 
+// 일몰 시각(한국 시간, 분). 미국 해양대기청(NOAA)의 간단한 태양 계산식이에요. 애월 기준으로 1~2분 차이 정도
+function sunsetMin(iso, lat = 33.46, lng = 126.33) {
+  const rad = Math.PI / 180;
+  const day = (Date.parse(iso) - Date.parse(`${iso.slice(0, 4)}-01-01`)) / 864e5;
+  const g = 2 * Math.PI / 365 * day;
+  const eqtime = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+  const decl = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+  const ha = Math.acos(Math.cos(90.833 * rad) / (Math.cos(lat * rad) * Math.cos(decl)) - Math.tan(lat * rad) * Math.tan(decl)) / rad;
+  return Math.round(720 - 4 * lng - eqtime + 4 * ha + 540);
+}
+// 노을 보기 좋은 곳: 이름·메모에 노을·선셋이 있는 곳, 또는 바다가 보이는 바닷가 야외 장소(공원·볼거리)
+const isSunsetSpot = (p) => /노을|일몰|선셋|썬셋/.test(p.name + p.note)
+  || ((p.type === "공원" || p.type === "볼거리") && /바다|해안|포구|해수욕|전망/.test(p.name + p.note) && !isInland(p));
+// 해 지기 20분 전부터 해 질 때까지 사이에 그곳에 있으면 노을을 봐요
+const seesSunset = (p, begin, leave) => isSunsetSpot(p) && begin <= sunsetMin(state.date) && leave >= sunsetMin(state.date) - 20;
+// 해수욕장 개장 기간인지 (beachSeason이 없으면 null)
+const inBeachSeason = (p) => p.beachSeason ? state.date.slice(5) >= p.beachSeason[0] && state.date.slice(5) <= p.beachSeason[1] : null;
+
 // 해안선(COASTLINE)에서 남쪽으로 2.5km 넘게 떨어지면 산 쪽(중산간)
 function isInland(p) {
   const [a, b] = COASTLINE;
@@ -426,6 +450,7 @@ function visit(ctx, p) {
   if (state.who === "solo" && p.solo) score += 10;
   if (state.how === "bike" && p.bikeRack) score += 10;
   if (state.how === "ev" && p.parking) score += 10;
+  if (seesSunset(p, begin, leave)) score += 40;
   // 바닷가·산 쪽 위주를 골랐으면 그쪽 장소를 먼저 (식당은 산 쪽에 적어서 조금만)
   if (state.area !== "mix") score += (isInland(p) === (state.area === "mountain") ? 1 : -1) * (p.type === "식당" ? 15 : 40);
   return { place: p, move: mv, begin, leave, score };
@@ -464,6 +489,7 @@ function follow(places) {
 
 // 마지막 장소에서 끝나는 곳까지 (끝나는 곳이 상관없거나 장소가 없으면 null)
 const backOf = (ctx) => endPoint() && ctx.stops.length ? travel(ctx.here, endPoint(), state.how) : null;
+const sunsetOf = (c) => c.stops.some((s) => seesSunset(s.place, s.begin, s.leave)) ? 1 : 0;
 const movingOf = (ctx) => ctx.stops.reduce((sum, s) => sum + s.move.min, 0) + (backOf(ctx)?.min ?? 0);
 
 // 다 짠 뒤 순서를 바꿔 이동 시간을 줄여요 (구간 뒤집기 2-opt + 한 곳 옮기기). 줄어든 시간에 더 넣을 수 있으면 넣어요
@@ -482,7 +508,7 @@ function shorten(ctx, pool) {
     }
     for (const t of tries) {
       const c = follow(t);
-      if (c && movingOf(c) < movingOf(best)) { best = c; improved = true; }
+      if (c && movingOf(c) < movingOf(best) && sunsetOf(c) >= sunsetOf(best)) { best = c; improved = true; }
     }
   }
   return best === ctx ? ctx : extend(best, pool);
@@ -508,7 +534,7 @@ function courseScore(c) {
   const area = state.area === "mix" ? (inland > 0 && inland < c.stops.length ? 40 : 0)
     : 30 * (state.area === "mountain" ? inland : c.stops.length - inland);
   const staying = c.stops.reduce((sum, s) => sum + s.place.stayMin, 0);
-  return staying + c.stops.length * 10 - moving + meal + area;
+  return staying + c.stops.length * 10 - moving + meal + area + sunsetOf(c) * 40;
 }
 
 function makeCourse() {
@@ -537,8 +563,11 @@ function mapLinks(p) {
   return `<a href="${kakao}" target="_blank" rel="noopener">카카오맵</a><a href="${naver}" target="_blank" rel="noopener">네이버지도</a>`;
 }
 
-function badgesFor(p) {
-  const out = [];
+// 전부 정보가 없는 칸은 배지를 안 띄워요 (예: 자전거 거치대는 아직 60곳 모두 모름)
+const NO_DATA_YET = { bikeRack: PLACES.every((p) => p.bikeRack === null) };
+
+function badgesFor(s) {
+  const p = s.place, out = [];
   const yesNo = (v, ok, label) => {
     if (v === true) out.push(`<span class="badge">${ok}</span>`);
     else if (v === null) out.push(`<span class="badge warn">${label}</span>`);
@@ -546,8 +575,9 @@ function badgesFor(p) {
   if (state.who === "dog") yesNo(p.dog, "반려견 OK", "반려견 정보 없음");
   if (state.who === "kid") yesNo(p.stroller, "유모차 OK", "유모차 정보 없음");
   if (state.who === "wheel") yesNo(p.stepFree, "계단 없음", "계단 정보 없음");
-  if (state.who === "solo") yesNo(p.solo, "혼자 좋아요", "혼자 확인 필요");
-  if (state.how === "bike") yesNo(p.bikeRack, "자전거 거치대", "자전거 거치대 확인 필요");
+  // 혼자 좋은 곳만 표시해요 (모르는 곳까지 '확인 필요'를 띄우면 화면이 지저분해져요)
+  if (state.who === "solo" && p.solo) out.push(`<span class="badge">혼자 좋아요</span>`);
+  if (state.how === "bike" && !NO_DATA_YET.bikeRack) yesNo(p.bikeRack, "자전거 거치대", "자전거 거치대 확인 필요");
   if (state.how === "ev") {
     yesNo(p.parking, "주차 가능", "주차 확인 필요");
     out.push(p.evChargerMin === null
@@ -556,7 +586,22 @@ function badgesFor(p) {
   }
   if (p.closedDays === null) out.push(`<span class="badge warn">쉬는 날 확인 필요</span>`);
   if (p.open === null) out.push(`<span class="badge warn">운영시간 확인 필요</span>`);
+  if (p.seasonalHours) out.push(`<span class="badge warn">계절마다 시간이 달라요</span>`);
+  const beach = inBeachSeason(p);
+  if (beach !== null) out.push(beach ? `<span class="badge">해수욕장 개장 기간</span>` : `<span class="badge warn">해수욕장 개장 기간 아님 · 산책·노을만</span>`);
+  if (seesSunset(p, s.begin, s.leave)) out.push(`<span class="badge sun">🌅 노을 볼 시간</span>`);
   return out.join("");
+}
+
+// 메모·출처: 휠체어·유모차 이용자에게 쓸모 있는 이야기(예: 모래사장 안쪽은 어려워요)가 메모에 많아요
+const lastChecked = (p) => (p.note.match(/20\d\d-\d\d(-\d\d)?/g) ?? []).sort().pop();
+function moreInfo(p) {
+  const src = (p.sources ?? []).map((x) => /^https?:/.test(x)
+    ? `<li><a href="${esc(x)}" target="_blank" rel="noopener">${esc(x.replace(/^https?:\/\/(www\.)?/, "").slice(0, 40))}</a></li>`
+    : `<li>${esc(x)}</li>`).join("");
+  const checked = lastChecked(p);
+  return `<details class="more"><summary>메모·출처 보기${checked ? ` <span class="checked">· ${checked} 확인</span>` : ""}</summary>
+    <p>${esc(p.note)}</p>${src ? `<ul>${src}</ul>` : ""}</details>`;
 }
 
 function renderResult() {
@@ -573,14 +618,15 @@ function renderResult() {
       <div class="time">${toHHMM(s.begin)} – ${toHHMM(s.leave)}</div>
       <div class="name">${esc(s.place.name)}</div>
       <div class="meta">${s.place.type} · ${s.place.stayMin}분 · ${s.place.cost === null ? "비용 확인 필요" : won(s.place.cost)}${s.place.lastOrder && !s.place.hoursByDay ? ` · 마지막 주문 ${s.place.lastOrder}` : ""}${s.place.station ? ` · ${esc(s.place.station)}` : ""}</div>
-      <div class="badges">${badgesFor(s.place)}</div>
+      <div class="badges">${badgesFor(s)}</div>
       <div class="links">${mapLinks(s.place)}</div>
+      ${moreInfo(s.place)}
     </li>`).join("");
 
   screen.innerHTML = `
     <h1>이런 코스 어때요?</h1>
     <p class="sub">${who.emoji} ${who.label} · ${how.emoji} ${how.label}</p>
-    <p class="tags">${esc(start.name)}에서 ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${end ? `${esc(end.name)}에서 끝` : "끝나는 곳 상관없음"} · ${AREAS.find((a) => a.id === state.area).label} · ${dateLabel(state.date)} 기준</p>
+    <p class="tags">${esc(start.name)}에서 ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${end ? `${esc(end.name)}에서 끝` : "끝나는 곳 상관없음"} · ${AREAS.find((a) => a.id === state.area).label} · ${dateLabel(state.date)} 기준 · 🌅 일몰 ${toHHMM(sunsetMin(state.date))}</p>
     ${stops.length ? `
       <div class="summary">
         <div><b>${stops.length}곳</b><span>장소</span></div>
