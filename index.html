@@ -86,6 +86,11 @@
 
   .geo { margin: -14px 0 24px; color: var(--muted); font-size: 15px; }
   .geo[hidden] { display: none; }
+  .date-pick {
+    min-height: 48px; padding: 0 14px; margin-top: 10px; border-radius: 12px;
+    background: var(--card); color: var(--text); border: 2px solid var(--line); font-size: 17px;
+  }
+  .date-pick[hidden] { display: none; }
 
   .primary {
     width: 100%; min-height: 56px; border: 0; border-radius: 16px;
@@ -155,6 +160,11 @@ const HOW = [
   { id: "ev",   emoji: "🔌", label: "전기차",   hint: "충전소까지 거리도 보여 드려요" },
   { id: "any",  emoji: "🤷", label: "상관없어요", hint: "가까우면 걷고, 멀면 택시·차로" }
 ];
+const WHEN = [
+  { id: "today",    label: () => `오늘 (${dayOf(kstToday())})`,              date: () => kstToday() },
+  { id: "tomorrow", label: () => `내일 (${dayOf(addDays(kstToday(), 1))})`, date: () => addDays(kstToday(), 1) },
+  { id: "pick",     label: () => "📅 날짜 고르기",                          date: () => null }
+];
 const DEPART = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
 const HOURS = [3, 4, 6, 8];
 const BUDGET = [30000, 50000, 100000, 150000];
@@ -166,7 +176,7 @@ const AREAS = [
   { id: "mountain", label: "⛰️ 산 쪽 위주" }
 ];
 
-const state = { step: 0, who: null, how: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix" };
+const state = { step: 0, who: null, how: null, when: null, date: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix" };
 
 const screen = document.getElementById("screen");
 const bar = document.getElementById("bar");
@@ -180,7 +190,11 @@ const won = (n) => n === 0 ? "무료" : `${n.toLocaleString("ko-KR")}원`;
 const manwon = (n) => `${n / 10000}만 원`;
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
-const today = DAYS[new Date().getDay()];
+// 날짜는 "2026-10-31" 글자로 다뤄요. 기기 시간대와 상관없이 한국 시간 기준이에요
+const kstToday = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+const addDays = (iso, n) => new Date(Date.parse(iso) + n * 864e5).toISOString().slice(0, 10);
+const dayOf = (iso) => DAYS[new Date(`${iso}T00:00:00Z`).getUTCDay()];
+const dateLabel = (iso) => `${Number(iso.slice(5, 7))}월 ${Number(iso.slice(8, 10))}일(${dayOf(iso)})`;
 
 // ----- 화면 그리기 -----
 function render() {
@@ -226,7 +240,11 @@ function renderWhen() {
   const froms = [HERE, ...STARTS];
   screen.innerHTML = `
     <h1>출발이랑 예산은요?</h1>
-    <p class="sub">네 가지를 골라 주세요. 마지막 칸은 그대로 둬도 돼요.</p>
+    <p class="sub">다섯 가지를 골라 주세요. 마지막 칸은 그대로 둬도 돼요.</p>
+    <div class="group"><h2>언제 가요?</h2><div class="chips">${WHEN.map((w) =>
+      `<button class="chip" data-key="when" data-v="${w.id}" aria-pressed="${state.when === w.id}">${w.label()}</button>`).join("")}</div>
+      <input type="date" class="date-pick" id="datePick" aria-label="여행 날짜" min="${kstToday()}" value="${state.when === "pick" ? state.date : ""}" ${state.when === "pick" ? "" : "hidden"}>
+    </div>
     ${chipGroup("어디서 출발해요?", "from", froms.map((f) => f.id), (id) => { const f = froms.find((x) => x.id === id); return `${f.emoji} ${f.label}`; })}
     <p class="geo" id="geo" hidden></p>
     ${chipGroup("몇 시에 출발해요?", "depart", DEPART, (v) => v)}
@@ -237,7 +255,9 @@ function renderWhen() {
   const go = document.getElementById("go");
   const geo = document.getElementById("geo");
   const say = (msg) => { geo.textContent = msg; geo.hidden = !msg; };
-  const sync = () => { go.disabled = !(startPoint() && state.depart && state.hours && state.budget); };
+  const sync = () => { go.disabled = !(state.date && startPoint() && state.depart && state.hours && state.budget); };
+  const datePick = document.getElementById("datePick");
+  datePick.onchange = () => { state.date = datePick.value || null; sync(); };
   if (state.from === "here" && state.here) say("📍 지금 위치에서 출발해요.");
 
   // "지금 내 위치"는 휴대폰·브라우저에 위치를 물어봐요. 제주 밖이면 쓰지 않아요
@@ -257,7 +277,12 @@ function renderWhen() {
   screen.querySelectorAll(".chip").forEach((chip) => {
     chip.onclick = () => {
       const key = chip.dataset.key;
-      state[key] = (key === "depart" || key === "from" || key === "area") ? chip.dataset.v : Number(chip.dataset.v);
+      state[key] = (key === "depart" || key === "from" || key === "area" || key === "when") ? chip.dataset.v : Number(chip.dataset.v);
+      if (key === "when") {
+        datePick.hidden = state.when !== "pick";
+        state.date = state.when === "pick" ? (datePick.value || null) : WHEN.find((w) => w.id === state.when).date();
+        if (state.when === "pick" && !datePick.value) datePick.focus();
+      }
       screen.querySelectorAll(`.chip[data-key="${key}"]`).forEach((c) => c.setAttribute("aria-pressed", c === chip));
       if (key === "from") { if (chip.dataset.v === "here") askHere(); else say(""); }
       sync();
@@ -316,8 +341,9 @@ function travelGuess(a, b, how) {
 // ----- 코스 짜기 -----
 const NEED = { dog: "dog", kid: "stroller", wheel: "stepFree" };
 
-// 오늘 요일에 따로 정한 운영시간이 있으면 그걸 써요 (예: 주말엔 더 일찍 열어요)
-const hoursOf = (p) => (p.hoursByDay && p.hoursByDay[today]) || [p.open, p.close];
+// 가는 날 요일에 따로 정한 운영시간이 있으면 그걸 써요 (예: 주말엔 더 일찍 열어요)
+const tripDay = () => dayOf(state.date);
+const hoursOf = (p) => (p.hoursByDay && p.hoursByDay[tripDay()]) || [p.open, p.close];
 
 // 해안선(COASTLINE)에서 남쪽으로 2.5km 넘게 떨어지면 산 쪽(중산간)
 function isInland(p) {
@@ -333,13 +359,14 @@ function buildCourse(pool, first) {
   const endMin = startMin + state.hours * 60;
   const maxCafes = state.hours <= 4 ? 1 : 2;
   const stops = [];
+  const day = tripDay();
   let here = startPoint(), now = startMin, spent = 0, lastType = null, lastMeal = -999, cafes = 0;
 
   while (true) {
     let best = null;
     for (const p of (stops.length === 0 && first ? [first] : pool)) {
       if (stops.some((s) => s.place === p)) continue;
-      if (p.closedDays && p.closedDays.includes(today)) continue;
+      if (p.closedDays && p.closedDays.includes(day)) continue;
       if (spent + (p.cost ?? 0) > state.budget) continue;
       // 카페·식당은 연달아 넣지 않고, 카페는 4시간 이하면 1곳·그보다 길면 2곳까지
       if (p.type === lastType && (p.type === "카페" || p.type === "식당")) continue;
@@ -462,7 +489,7 @@ function renderResult() {
   screen.innerHTML = `
     <h1>이런 코스 어때요?</h1>
     <p class="sub">${who.emoji} ${who.label} · ${how.emoji} ${how.label}</p>
-    <p class="tags">${esc(start.name)}에서 ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label} · 오늘(${today}) 기준</p>
+    <p class="tags">${esc(start.name)}에서 ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label} · ${dateLabel(state.date)} 기준</p>
     ${stops.length ? `
       <div class="summary">
         <div><b>${stops.length}곳</b><span>장소</span></div>
