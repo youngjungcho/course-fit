@@ -169,7 +169,7 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="sample-banner"><b>제주 애월</b> 60곳 · 2026년 10월 확인</div>
+  <div class="sample-banner"><b>제주 애월</b> <span id="placeCount"></span>곳 · 2026년 10월 확인</div>
 
   <div class="top">
     <button class="back" id="back" hidden>← 이전</button>
@@ -180,8 +180,8 @@
   <main id="screen"></main>
 </div>
 
-<script src="places.js?v=20261029a"></script>
-<script src="travel.js?v=20261029a"></script>
+<script src="places.js?v=20261029b"></script>
+<script src="travel.js?v=20261029b"></script>
 <script>
 // ----- 고를 수 있는 것들 -----
 const WHO = [
@@ -893,6 +893,7 @@ function renderResult() {
 
 // 처음 열 때: 주소에 담긴 조건을 읽어요. 공유 링크로 바로 결과가 열려도 기록은 하나만 둬요
 // (카톡에서 연 사람이 뒤로가기 한 번에 카톡으로 돌아가요. 앞 단계는 '← 이전' 버튼으로)
+document.getElementById("placeCount").textContent = PLACES.length;
 readQuery();
 history.replaceState({ step: state.step, depth: 0 }, "", `${location.pathname}${queryOf() ? `?${queryOf()}` : ""}`);
 render();

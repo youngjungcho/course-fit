@@ -152,13 +152,13 @@ const PLACES = [
   },
   {
     id: "geumsan-park", name: "금산공원 (납읍 난대림)", type: "공원",
-    stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
+    stayMin: 40, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     lat: 33.43368, lng: 126.33093,
-    dog: null, stroller: null, stepFree: null, solo: null,
-    station: "납읍리 섯잣길 정류장 걸어서 8분", bikeRack: null, evChargerMin: 10, parking: null,
+    dog: null, stroller: false, stepFree: false, solo: null,
+    station: "납읍리 섯잣길 정류장 걸어서 8분", bikeRack: null, evChargerMin: 10, parking: false,
     kakaoId: "8209104",
-    note: "천연기념물 난대림. 무료·24시간이라는 정보는 2004년 기사라서 지금도 그런지 확인 필요. 카카오맵 영업정보(2026-10-24 확인): 연중무휴(시간 표시는 없음).",
-    sources: ["https://www.khan.co.kr/article/200412231602091/amp"]
+    note: "천연기념물 난대림. 무료·24시간이라는 정보는 2004년 기사라서 지금도 그런지 확인 필요. 카카오맵 영업정보(2026-10-24 확인): 연중무휴(시간 표시는 없음). 관광공사 국문 관광정보(2026-03 수정, 2026-10-29 확인): 상시 개방, 연중무휴, 주차 불가, 유모차 대여·이용 '불가' → 유모차 안 됨·24시간으로 넣었어요. 구글 지도(2026-10-29): 휠체어 이용 가능 입구 없음 → 계단 없음은 아니에요.",
+    sources: ["https://www.khan.co.kr/article/200412231602091/amp", "관광공사 국문 관광정보 API 127310"]
   },
   {
     id: "bomnal-cafe", name: "카페 봄날", type: "카페",
@@ -400,10 +400,10 @@ const PLACES = [
     id: "jeju-bulbit", name: "제주불빛정원", type: "볼거리",
     stayMin: 60, cost: 12000, open: "17:00", close: "24:00", closedDays: [],
     lat: 33.42229, lng: 126.40918,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "유수암상동 정류장 걸어서 1분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "891104398",
-    note: "평화로 2346. 밤에 보는 빛 정원. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 17:00~24:00(입장 23:00까지, 악천후 시 조기 폐장), 유료(금액 확인 필요), 유모차 가능, 반려동물 동반, 무료 주차. 064-799-6996 입장료: 성인 12,000원·청소년 10,000원·어린이 8,000원(관광공사 기반 정보 사이트, 2025-10 수정이라 확인하면 좋아요).",
+    note: "평화로 2346. 밤에 보는 빛 정원. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 17:00~24:00(입장 23:00까지, 악천후 시 조기 폐장), 유료(금액 확인 필요), 유모차 가능, 반려동물 동반, 무료 주차. 064-799-6996 입장료: 성인 12,000원·청소년 10,000원·어린이 8,000원(관광공사 기반 정보 사이트, 2025-10 수정이라 확인하면 좋아요). 구글 지도(2026-10-29, '제주불빛정원&바베큐'로 등록): 휠체어 이용 가능 입구 있음 → 계단 없음으로 넣었어요.",
     sources: ["https://www.ktriptips.com/kor/tourspot/2479639", "https://place.map.kakao.com/891104398"]
   },
   {
@@ -665,5 +665,58 @@ const PLACES = [
     kakaoId: "693016371",
     note: "광성로 272. 북카페(독립서점). 카카오맵(2026-10-24, 사업자 인증 매장): 09:00~17:00(일요일 12:00~17:00), 스트롱라떼 5,500원, 반려동물 동반, 테라스, 길 건너 주차장. 휠체어·계단: 구글 지도·카카오 시설정보·카카오 리뷰 모두 단서 없음(2026-10-27) → 전화로 확인해 주세요.",
     sources: ["https://place.map.kakao.com/693016371"]
+  },
+  // ---- 2026-10-29 추가: 공원·볼거리 (관광공사 국문 관광정보 API, 카카오 로컬 API로 찾음) ----
+  // 정류장은 국토교통부 TAGO 정류장 위치에서 가장 가까운 곳이에요
+  {
+    id: "aewol-handam-park", name: "애월한담공원", type: "공원",
+    stayMin: 30, cost: 0, open: "00:00", close: "24:00", closedDays: [],
+    lat: 33.46003, lng: 126.31126,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: "놀우시 동산(한담삼거리) 정류장 걸어서 5분", bikeRack: null, evChargerMin: 4, parking: true,
+    kakaoId: "11320888",
+    note: "애월로 11. 바다가 보이는 해안가 공원, 물허벅여인상, 공원 아래 애월 해안산책로·올레 15코스, 애월 카페거리 옆. 관광공사 국문 관광정보(2026-04 수정): 상시 개방, 연중무휴, 무료 주차장. 휠체어·유모차·반려견: 자료에 단서 없음(2026-10-29) → 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 3056625", "https://place.map.kakao.com/11320888"]
+  },
+  {
+    id: "gwetmul-oreum", name: "궷물오름", type: "공원",
+    stayMin: 60, cost: 0, open: "00:00", close: "24:00", closedDays: [],
+    lat: 33.39708, lng: 126.40750,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: "렛츠런파크 정류장 걸어서 35분", bikeRack: null, evChargerMin: 16, parking: true,
+    kakaoId: "8217224",
+    note: "유수암리. 높지 않아 가볍게 걷는 오름, 산책로·쉼터가 있고 가을 억새, 노꼬메오름과 이어져요. 관광공사 국문 관광정보(2026-09 수정): 상시 개방, 연중무휴, 주차 가능. 휠체어·유모차·반려견: 자료에 단서 없음(2026-10-29) → 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2765234", "https://place.map.kakao.com/8217224"]
+  },
+  {
+    id: "keun-nokkome", name: "큰노꼬메오름", type: "공원",
+    stayMin: 150, cost: 0, open: "00:00", close: "24:00", closedDays: [],
+    lat: 33.38944, lng: 126.41040,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: "렛츠런파크 정류장 걸어서 49분", bikeRack: null, evChargerMin: 31, parking: true,
+    kakaoId: "10271092",
+    note: "유수암리. 가파른 사면과 상당한 높이의 오름, 정상에 데크 전망대(노을), 궷물오름으로 이어지는 산책로. 관광공사 국문 관광정보(2026-03 수정): 연중무휴, 주차 가능, '일부 통제될 수 있으니 방문 전 전화 문의'(064-740-6000). 머무는 시간 150분은 오르내리는 시간을 넉넉히 어림한 값이에요. 휠체어·유모차·반려견: 자료에 단서 없음 → 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2738712", "https://place.map.kakao.com/10271092"]
+  },
+  {
+    id: "hwajowon", name: "화조원", type: "볼거리",
+    stayMin: 90, cost: null, open: "09:00", close: "17:30", closedDays: [],
+    seasonalHours: true,
+    lat: 33.41131, lng: 126.37200,
+    dog: null, stroller: true, stepFree: true, solo: null,
+    station: "원동 정류장 걸어서 24분", bikeRack: null, evChargerMin: 10, parking: true,
+    kakaoId: "747735691",
+    note: "애원로 804. 새·알파카·카피바라를 가까이 보고 먹이주기 체험하는 조류 동물원, 하루 4번 조류생태설명회. 관광공사 국문 관광정보(2026-10 수정): 하절기(3~10월) 09:00~18:00(입장 17:00까지), 동절기(11~2월) 09:00~17:30(입장 16:50까지), 연중무휴, 주차 가능. 공식 홈페이지는 동절기를 10/21~3/20로 적어서, 1년 내내 더 이른 17:30으로 넣었어요. 36개월 미만 무료(증빙). 입장료는 공식 홈페이지·카카오맵에 없어서 확인 필요. 관람 1시간 30분쯤(후기). 구글 지도(2026-10-29): 휠체어 이용 가능 입구 있음 → 계단 없음·유모차 OK로 넣었어요. 반려견: 자료에 단서 없음 → 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 2606209", "https://place.map.kakao.com/747735691", "https://www.flowerbirdpark.com/"]
+  },
+  {
+    id: "susan-reservoir", name: "수산저수지", type: "공원",
+    stayMin: 30, cost: 0, open: "00:00", close: "24:00", closedDays: [],
+    lat: 33.47122, lng: 126.38753,
+    dog: null, stroller: null, stepFree: null, solo: null,
+    station: "수운교 정류장 걸어서 5분", bikeRack: null, evChargerMin: 12, parking: true,
+    kakaoId: "7962202",
+    note: "수산리, 수산봉 기슭의 큰 저수지. 천연기념물 곰솔나무(400여 년), 올레 16코스가 지나요. 관광공사 국문 관광정보(2026-05 수정): 상시 개방, 연중무휴, 주차 가능. 휠체어·유모차·반려견: 자료에 단서 없음 → 확인 필요.",
+    sources: ["관광공사 국문 관광정보 API 4063148", "https://place.map.kakao.com/7962202"]
   }
 ];
