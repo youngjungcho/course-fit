@@ -6,6 +6,7 @@
 //   id            겹치지 않는 영어 이름
 //   name          장소 이름
 //   type          "식당" | "카페" | "볼거리" | "공원" | "쇼핑"
+//   desc          카드에 보여 줄 한 줄 소개 (메모에 적은 관광공사·카카오맵 내용에서만 뽑았어요)
 //   stayMin       머무는 시간(분) — 코스 짤 때 쓰는 대략 값
 //   cost          1인 예상 비용(원). 무료면 0 (모르면 null)
 //   open, close   운영시간 "HH:MM" (24시간이면 "00:00", "24:00" / 모르면 null)
@@ -51,6 +52,7 @@ const STARTS = [
 const PLACES = [
   {
     id: "handam-trail", name: "한담해안산책로", type: "공원",
+    desc: "애월항~곽지해변 1.2km 바닷길 산책로",
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.45947, lng: 126.31050,
     dog: null, stroller: true, stepFree: true, solo: null,
@@ -61,6 +63,7 @@ const PLACES = [
   },
   {
     id: "gwakji-beach", name: "곽지해수욕장", type: "공원",
+    desc: "해수욕장, 경사로·장애인 화장실 있음",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     beachSeason: ["06-24", "08-31"], // 2025년 개장 기간(10~19시). 2026년 날짜는 아직 확인 못 했어요
     lat: 33.45596, lng: 126.30650,
@@ -72,6 +75,7 @@ const PLACES = [
   },
   {
     id: "gonae-port", name: "고내포구", type: "볼거리",
+    desc: "고내리 바닷가 포구",
     stayMin: 30, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.46710, lng: 126.33718,
     dog: null, stroller: null, stepFree: null, solo: null,
@@ -82,6 +86,7 @@ const PLACES = [
   },
   {
     id: "hangpaduri", name: "항파두리 항몽유적지", type: "볼거리",
+    desc: "항몽 유적지, 무료로 넓게 걷는 곳",
     stayMin: 60, cost: 0, open: "09:00", close: "18:00", closedDays: [],
     lat: 33.45204, lng: 126.40754,
     dog: null, stroller: true, stepFree: true, solo: null,
@@ -92,6 +97,7 @@ const PLACES = [
   },
   {
     id: "saebyeol-oreum", name: "새별오름", type: "공원",
+    desc: "정상까지 20분쯤, 억새로 유명한 오름",
     stayMin: 80, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     lat: 33.36625, lng: 126.35769,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -102,6 +108,7 @@ const PLACES = [
   },
   {
     id: "dochidol-alpaca", name: "도치돌 알파카목장", type: "볼거리",
+    desc: "알파카를 가까이 보는 목장",
     stayMin: 60, cost: 15000, open: "10:00", close: "18:00", closedDays: [],
     lat: 33.40972, lng: 126.36676,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -112,6 +119,7 @@ const PLACES = [
   },
   {
     id: "981-park", name: "9.81 파크 제주", type: "볼거리",
+    desc: "카트를 타는 테마파크",
     stayMin: 120, cost: null, open: "09:00", close: "18:20", closedDays: [],
     lat: 33.39006, lng: 126.36652,
     dog: false, stroller: true, stepFree: true, solo: null,
@@ -122,6 +130,7 @@ const PLACES = [
   },
   {
     id: "gyulgyul-store", name: "귤귤스토어 애월점", type: "쇼핑",
+    desc: "공예품·기념품 가게",
     stayMin: 30, cost: 0, open: "09:00", close: "19:00", closedDays: [],
     lat: 33.46328, lng: 126.30992,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -132,6 +141,7 @@ const PLACES = [
   },
   {
     id: "lifework-aewol", name: "라이프워크 메가스토어 애월점", type: "쇼핑",
+    desc: "옷·식료품 큰 매장, 화장실 있음",
     stayMin: 30, cost: 0, open: "10:00", close: "20:00", closedDays: [],
     lat: 33.46646, lng: 126.33368,
     dog: true, stroller: true, stepFree: true, solo: null,
@@ -142,6 +152,7 @@ const PLACES = [
   },
   {
     id: "lovely-jeju", name: "러블리제주", type: "쇼핑",
+    desc: "제주 기념품·특산품 가게",
     stayMin: 30, cost: 0, open: "10:00", close: "19:00", closedDays: [],
     lat: 33.48195, lng: 126.37522,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -152,6 +163,7 @@ const PLACES = [
   },
   {
     id: "geumsan-park", name: "금산공원 (납읍 난대림)", type: "공원",
+    desc: "천연기념물 난대림 숲길",
     stayMin: 40, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     lat: 33.43368, lng: 126.33093,
     dog: null, stroller: false, stepFree: false, solo: null,
@@ -162,6 +174,7 @@ const PLACES = [
   },
   {
     id: "bomnal-cafe", name: "카페 봄날", type: "카페",
+    desc: "밤 9시 30분까지 여는 카페",
     stayMin: 50, cost: null, open: "09:00", close: "21:30", lastOrder: "21:00", closedDays: [],
     lat: 33.46253, lng: 126.30960,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -172,6 +185,7 @@ const PLACES = [
   },
   {
     id: "blissful-jeju", name: "블리스풀 제주", type: "카페",
+    desc: "잔디 운동장이 있는 애견카페",
     stayMin: 60, cost: 5000, open: "10:00", close: "18:00", closedDays: ["금"],
     seasonalHours: true,
     hoursByDay: { "토": ["10:00", "19:00"], "일": ["10:00", "19:00"] },
@@ -184,6 +198,7 @@ const PLACES = [
   },
   {
     id: "jangin-house", name: "장인의집", type: "식당",
+    desc: "만두전골·갈비탕",
     stayMin: 60, cost: 20000, open: "09:00", close: "22:00", lastOrder: "21:00", closedDays: [],
     lat: 33.46577, lng: 126.32685,
     dog: null, stroller: true, stepFree: true, solo: null,
@@ -194,6 +209,7 @@ const PLACES = [
   },
   {
     id: "danso", name: "단소", type: "식당",
+    desc: "한상차림·도시락 (점심만)",
     stayMin: 50, cost: 17000, open: "11:00", close: "15:30", lastOrder: "14:50", closedDays: ["일"],
     lat: 33.46445, lng: 126.32264,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -204,6 +220,7 @@ const PLACES = [
   },
   {
     id: "aewol-twigim", name: "애월튀김간", type: "식당",
+    desc: "떡볶이·튀김·김밥, 포장 가능",
     stayMin: 40, cost: 12000, open: "11:00", close: "20:00", closedDays: [],
     lat: 33.46440, lng: 126.31977,
     dog: true, stroller: null, stepFree: false, solo: true,
@@ -214,6 +231,7 @@ const PLACES = [
   },
   {
     id: "simba-curry", name: "심바카레", type: "식당",
+    desc: "돈카츠 카레",
     stayMin: 50, cost: 14000, open: "10:00", close: "19:00", lastOrder: "18:30", closedDays: ["수"],
     breaks: [["15:00", "16:00"]],
     lat: 33.46342, lng: 126.31686,
@@ -225,6 +243,7 @@ const PLACES = [
   },
   {
     id: "aewolri-makguksu", name: "애월리순메밀막국수", type: "식당",
+    desc: "막국수·평양냉면",
     stayMin: 50, cost: 11000, open: "10:00", close: "20:00", lastOrder: "19:30", closedDays: [],
     lat: 33.46566, lng: 126.31639,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -235,6 +254,7 @@ const PLACES = [
   },
   {
     id: "goijeong", name: "고이정", type: "식당",
+    desc: "흑돼지 근고기",
     stayMin: 70, cost: 26000, open: "11:00", close: "24:00", lastOrder: "23:00", closedDays: [],
     lat: 33.45933, lng: 126.31135,
     dog: null, stroller: null, stepFree: null, solo: null,
@@ -245,6 +265,7 @@ const PLACES = [
   },
   {
     id: "kkongsuni", name: "꽁순이네", type: "식당",
+    desc: "고기국수·몸국",
     stayMin: 40, cost: 10000, open: "10:00", close: "16:30", lastOrder: "16:25", closedDays: ["화"],
     lat: 33.44695, lng: 126.33872,
     dog: null, stroller: true, stepFree: true, solo: null,
@@ -255,6 +276,7 @@ const PLACES = [
   },
   {
     id: "haenyeo-house", name: "해녀의집", type: "식당",
+    desc: "전복죽·해산물",
     stayMin: 60, cost: 12000, open: "10:00", close: "20:00", closedDays: ["화"],
     breaks: [["14:00", "15:00"]],
     lat: 33.47841, lng: 126.36694,
@@ -266,6 +288,7 @@ const PLACES = [
   },
   {
     id: "jeongjikhan-don", name: "정직한돈 본점", type: "식당",
+    desc: "흑돼지 구이",
     stayMin: 70, cost: 30000, open: "15:00", close: "23:00", closedDays: [],
     lat: 33.46740, lng: 126.33900,
     dog: null, stroller: null, stepFree: null, solo: null,
@@ -276,6 +299,7 @@ const PLACES = [
   },
   {
     id: "jeremy-cafe", name: "제레미", type: "카페",
+    desc: "핸드드립 커피·토스트",
     stayMin: 50, cost: 6000, open: "09:00", close: "17:30", lastOrder: "17:10", closedDays: ["일", "월"],
     lat: 33.46455, lng: 126.31852,
     dog: null, stroller: null, stepFree: false, solo: null,
@@ -286,6 +310,7 @@ const PLACES = [
   },
   {
     id: "tribe-cafe", name: "트라이브", type: "카페",
+    desc: "수플레 카페",
     stayMin: 50, cost: 18000, open: "09:00", close: "21:00", closedDays: [],
     lat: 33.46006, lng: 126.31128,
     dog: true, stroller: null, stepFree: false, solo: null,
@@ -296,6 +321,7 @@ const PLACES = [
   },
   {
     id: "sunset-cliff", name: "썬셋클리프", type: "카페",
+    desc: "피자·음료, 테라스·루프탑",
     stayMin: 60, cost: 20000, open: "10:00", close: "22:00", closedDays: [],
     lat: 33.46184, lng: 126.31072,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -306,6 +332,7 @@ const PLACES = [
   },
   {
     id: "matilda-cafe", name: "마틸다", type: "카페",
+    desc: "밤에 여는 카페 (칵테일·LP)",
     stayMin: 50, cost: 10000, open: "18:00", close: "24:00", closedDays: ["화"],
     lat: 33.46573, lng: 126.33428,
     dog: null, stroller: null, stepFree: false, solo: true,
@@ -316,6 +343,7 @@ const PLACES = [
   },
   {
     id: "aewol-onuii", name: "애월오누이 제주", type: "식당",
+    desc: "성게미역국·전복돌솥밥, 아침 7시부터",
     stayMin: 50, cost: 15000, open: "07:00", close: "20:00", closedDays: [],
     lat: 33.46662, lng: 126.31878,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -326,6 +354,7 @@ const PLACES = [
   },
   {
     id: "lee-chunok", name: "이춘옥원조고등어쌈밥 제주애월본점", type: "식당",
+    desc: "고등어쌈밥·전복뚝배기",
     stayMin: 60, cost: 17000, open: "10:00", close: "20:30", lastOrder: "19:30", closedDays: [],
     breaks: [["16:00", "17:00"]],
     lat: 33.48900, lng: 126.41870,
@@ -337,6 +366,7 @@ const PLACES = [
   },
   {
     id: "doldam-gogi", name: "돌담길괴기집", type: "식당",
+    desc: "흑돼지 오겹살·목살",
     stayMin: 80, cost: 32000, open: "17:00", close: "22:00", closedDays: ["일"],
     lat: 33.44978, lng: 126.30711,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -347,6 +377,7 @@ const PLACES = [
   },
   {
     id: "bluegrass", name: "블루그라스", type: "식당",
+    desc: "떡갈비·열무국수, 혼밥 좋아요",
     stayMin: 50, cost: 10800, open: "11:30", close: "15:30", lastOrder: "15:00", closedDays: ["목"],
     hoursByDay: { "토": ["10:00", "15:30"], "일": ["10:00", "15:30"] },
     lat: 33.44745, lng: 126.30924,
@@ -358,6 +389,7 @@ const PLACES = [
   },
   {
     id: "eondeokjip-guksu", name: "언덕집국수", type: "식당",
+    desc: "고기국수·비빔국수, 아침 8시부터",
     stayMin: 40, cost: 10000, open: "08:00", close: "16:00", closedDays: [],
     lat: 33.47840, lng: 126.35691,
     dog: null, stroller: null, stepFree: false, solo: true,
@@ -368,6 +400,7 @@ const PLACES = [
   },
   {
     id: "paul-cafe", name: "폴카페", type: "카페",
+    desc: "반려견과 가는 카페",
     stayMin: 50, cost: null, open: null, close: null, closedDays: null,
     lat: null, lng: null,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -378,6 +411,7 @@ const PLACES = [
   },
   {
     id: "aewol-the-sunset", name: "애월 더선셋", type: "카페",
+    desc: "바다 보이는 브런치 카페",
     stayMin: 60, cost: 6500, open: "10:00", close: "19:00", lastOrder: "18:00", closedDays: [],
     lat: 33.45621, lng: 126.30904,
     dog: true, stroller: null, stepFree: false, solo: null,
@@ -388,6 +422,7 @@ const PLACES = [
   },
   {
     id: "arte-museum", name: "아르떼뮤지엄 제주", type: "볼거리",
+    desc: "미디어아트 실내 전시",
     stayMin: 90, cost: 18000, open: "10:00", close: "20:00", closedDays: [],
     lat: 33.39670, lng: 126.34501,
     dog: null, stroller: true, stepFree: true, solo: null,
@@ -398,6 +433,7 @@ const PLACES = [
   },
   {
     id: "jeju-bulbit", name: "제주불빛정원", type: "볼거리",
+    desc: "밤에 보는 빛 정원",
     stayMin: 60, cost: 12000, open: "17:00", close: "24:00", closedDays: [],
     lat: 33.42229, lng: 126.40918,
     dog: true, stroller: true, stepFree: true, solo: null,
@@ -408,6 +444,7 @@ const PLACES = [
   },
   {
     id: "teseum", name: "테디베어하우스 테지움 제주점", type: "볼거리",
+    desc: "테디베어 박물관, 수유실 있음",
     stayMin: 60, cost: 12500, open: "09:00", close: "19:00", closedDays: [],
     seasonalHours: true,
     lat: 33.41225, lng: 126.39361,
@@ -419,6 +456,7 @@ const PLACES = [
   },
   {
     id: "pahoihoi", name: "파호이호이 라바필드파크", type: "볼거리",
+    desc: "용암 지대 테마파크",
     stayMin: 90, cost: null, open: "09:00", close: "18:00", closedDays: [],
     lat: 33.44743, lng: 126.37560,
     dog: null, stroller: true, stepFree: true, solo: null,
@@ -429,6 +467,7 @@ const PLACES = [
   },
   {
     id: "saebyeol-friends", name: "새별프렌즈", type: "볼거리",
+    desc: "승마·먹이주기 동물 체험",
     stayMin: 60, cost: 18000, open: "09:00", close: "18:00", closedDays: [],
     lat: 33.36155, lng: 126.36366,
     dog: null, stroller: true, stepFree: true, solo: null,
@@ -439,6 +478,7 @@ const PLACES = [
   },
   {
     id: "yeonhwa-pond", name: "연화못", type: "공원",
+    desc: "연꽃 연못 산책로",
     stayMin: 30, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.45487, lng: 126.34723,
     dog: true, stroller: true, stepFree: true, solo: null,
@@ -449,6 +489,7 @@ const PLACES = [
   },
   {
     id: "sangga-palm", name: "상가리야자숲", type: "공원",
+    desc: "야자수 숲 산책",
     stayMin: 50, cost: 8000, open: "09:00", close: "18:00", closedDays: [],
     lat: 33.43921, lng: 126.35828,
     dog: true, stroller: true, stepFree: null, solo: null,
@@ -459,6 +500,7 @@ const PLACES = [
   },
   {
     id: "handam-culture", name: "한담컬쳐", type: "볼거리",
+    desc: "한복·민속놀이 체험",
     stayMin: 50, cost: null, open: "09:00", close: "20:00", closedDays: [],
     lat: 33.46242, lng: 126.31065,
     dog: null, stroller: null, stepFree: null, solo: null,
@@ -469,6 +511,7 @@ const PLACES = [
   },
   {
     id: "gueom-saltpan", name: "구엄리 돌염전", type: "볼거리",
+    desc: "바닷가 돌소금밭",
     stayMin: 30, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.48344, lng: 126.37647,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -479,6 +522,7 @@ const PLACES = [
   },
   {
     id: "susanbong", name: "수산봉", type: "공원",
+    desc: "오름 둘레 산책로",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.47301, lng: 126.38456,
     dog: null, stroller: true, stepFree: null, solo: null,
@@ -489,6 +533,7 @@ const PLACES = [
   },
   {
     id: "dolphin-view", name: "애월돌고래전망대", type: "볼거리",
+    desc: "바다 전망대",
     stayMin: 20, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.47857, lng: 126.36354,
     dog: null, stroller: null, stepFree: null, solo: null,
@@ -499,6 +544,7 @@ const PLACES = [
   },
   {
     id: "badang-hangeureut", name: "바당한그릇", type: "식당",
+    desc: "물회·해산물",
     stayMin: 60, cost: 21000, open: "10:30", close: "19:30", closedDays: ["수"],
     breaks: [["14:30", "17:00"]],
     lat: 33.47843, lng: 126.36244,
@@ -510,6 +556,7 @@ const PLACES = [
   },
   {
     id: "guisai", name: "구이사이식당", type: "식당",
+    desc: "정식·해장국, 아침 7시부터",
     stayMin: 50, cost: 10000, open: "07:00", close: "23:00", closedDays: ["일"],
     breaks: [["15:00", "17:00"]],
     lat: 33.47221, lng: 126.36854,
@@ -521,6 +568,7 @@ const PLACES = [
   },
   {
     id: "ikkan-shita", name: "잇칸시타", type: "식당",
+    desc: "일본 가정식 (텐동)",
     stayMin: 60, cost: 18000, open: "11:00", close: "20:50", lastOrder: "20:20", closedDays: [],
     lat: 33.47707, lng: 126.37024,
     dog: null, stroller: true, stepFree: true, solo: true,
@@ -531,6 +579,7 @@ const PLACES = [
   },
   {
     id: "norabah", name: "노라바", type: "식당",
+    desc: "해물라면",
     stayMin: 40, cost: 11000, open: "10:00", close: "17:00", closedDays: [],
     breaks: [["14:00", "15:00"]],
     lat: 33.47776, lng: 126.36488,
@@ -542,6 +591,7 @@ const PLACES = [
   },
   {
     id: "bada-boneun-nal", name: "바다보는날", type: "식당",
+    desc: "해물라면·돈까스",
     stayMin: 40, cost: 9900, open: "10:00", close: "20:00", closedDays: [],
     breaks: [["15:00", "16:30"]],
     lat: 33.48391, lng: 126.37801,
@@ -553,6 +603,7 @@ const PLACES = [
   },
   {
     id: "modeul-hansang", name: "모들한상", type: "식당",
+    desc: "고사리 파스타·돈가스",
     stayMin: 60, cost: 17500, open: "11:00", close: "19:00", closedDays: ["수"],
     breaks: [["15:30", "17:00"]],
     lat: 33.45535, lng: 126.34698,
@@ -564,6 +615,7 @@ const PLACES = [
   },
   {
     id: "meat-town", name: "미트타운", type: "식당",
+    desc: "수제버거, 야외 정원",
     stayMin: 50, cost: 11500, open: "10:00", close: "21:00", closedDays: [],
     hoursByDay: { "월": ["10:00", "19:00"] },
     lat: 33.47906, lng: 126.39132,
@@ -575,6 +627,7 @@ const PLACES = [
   },
   {
     id: "geumdonga", name: "금돈가 제주 애월해안도로 본점", type: "식당",
+    desc: "흑돼지 구이",
     stayMin: 70, cost: 32000, open: "11:00", close: "22:30", lastOrder: "21:30", closedDays: [],
     lat: 33.48430, lng: 126.39113,
     dog: true, stroller: null, stepFree: null, solo: null,
@@ -585,6 +638,7 @@ const PLACES = [
   },
   {
     id: "yoons-grill", name: "윤스그릴", type: "식당",
+    desc: "파스타·술집 (저녁)",
     stayMin: 70, cost: 18000, open: "18:00", close: "24:00", closedDays: ["일"],
     lat: 33.48205, lng: 126.41356,
     dog: true, stroller: null, stepFree: null, solo: true,
@@ -595,6 +649,7 @@ const PLACES = [
   },
   {
     id: "dalja-cafe", name: "달자카페", type: "카페",
+    desc: "오션뷰 카페",
     stayMin: 50, cost: 4500, open: "10:00", close: "18:00", closedDays: [],
     lat: 33.48364, lng: 126.37965,
     dog: true, stroller: null, stepFree: false, solo: null,
@@ -605,6 +660,7 @@ const PLACES = [
   },
   {
     id: "sogil-dabang", name: "소길다방", type: "카페",
+    desc: "핸드드립·카이막",
     stayMin: 50, cost: 6500, open: "10:00", close: "18:00", lastOrder: "17:30", closedDays: ["화"],
     lat: 33.43881, lng: 126.37944,
     dog: true, stroller: null, stepFree: false, solo: null,
@@ -615,6 +671,7 @@ const PLACES = [
   },
   {
     id: "aewol-husik", name: "애월후식", type: "카페",
+    desc: "수플레 팬케이크",
     stayMin: 50, cost: 16000, open: "10:00", close: "18:00", closedDays: ["수"],
     hoursByDay: { "토": ["09:00", "18:00"], "일": ["09:00", "18:00"] },
     lat: 33.43901, lng: 126.33018,
@@ -626,6 +683,7 @@ const PLACES = [
   },
   {
     id: "cutiepie-cafe", name: "큐티파이카페", type: "카페",
+    desc: "오션뷰 브런치 카페, 밤 12시까지",
     stayMin: 50, cost: 6500, open: "08:30", close: "24:00", closedDays: [],
     lat: 33.47788, lng: 126.36862,
     dog: true, stroller: true, stepFree: true, solo: null,
@@ -636,6 +694,7 @@ const PLACES = [
   },
   {
     id: "siso-kaymak", name: "시소카이막 애월점", type: "카페",
+    desc: "카이막 카페",
     stayMin: 40, cost: 13000, open: "09:00", close: "19:00", closedDays: [],
     hoursByDay: { "토": ["09:00", "20:00"], "일": ["09:00", "20:00"] },
     lat: 33.47801, lng: 126.36422,
@@ -647,6 +706,7 @@ const PLACES = [
   },
   {
     id: "noeulri-cafe", name: "노을리카페", type: "카페",
+    desc: "대형 베이커리 카페",
     stayMin: 60, cost: 11000, open: "09:00", close: "21:00", lastOrder: "20:30", closedDays: [],
     lat: 33.47990, lng: 126.37271,
     dog: null, stroller: true, stepFree: true, solo: null,
@@ -657,6 +717,7 @@ const PLACES = [
   },
   {
     id: "windstone", name: "윈드스톤", type: "카페",
+    desc: "북카페 (독립서점)",
     stayMin: 50, cost: 5500, open: "09:00", close: "17:00", closedDays: [],
     hoursByDay: { "일": ["12:00", "17:00"] },
     lat: 33.46048, lng: 126.43609,
@@ -670,6 +731,7 @@ const PLACES = [
   // 정류장은 국토교통부 TAGO 정류장 위치에서 가장 가까운 곳이에요
   {
     id: "aewol-handam-park", name: "애월한담공원", type: "공원",
+    desc: "바다 보이는 해안 공원, 카페거리 옆",
     stayMin: 30, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     lat: 33.46003, lng: 126.31126,
     dog: null, stroller: null, stepFree: null, solo: null,
@@ -680,6 +742,7 @@ const PLACES = [
   },
   {
     id: "gwetmul-oreum", name: "궷물오름", type: "공원",
+    desc: "가볍게 걷는 오름, 가을 억새",
     stayMin: 60, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     lat: 33.39708, lng: 126.40750,
     dog: null, stroller: null, stepFree: null, solo: null,
@@ -690,6 +753,7 @@ const PLACES = [
   },
   {
     id: "keun-nokkome", name: "큰노꼬메오름", type: "공원",
+    desc: "가파른 오름, 정상 전망대",
     stayMin: 150, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     lat: 33.38944, lng: 126.41040,
     dog: null, stroller: null, stepFree: null, solo: null,
@@ -700,6 +764,7 @@ const PLACES = [
   },
   {
     id: "hwajowon", name: "화조원", type: "볼거리",
+    desc: "새·알파카 먹이주기 동물원",
     stayMin: 90, cost: null, open: "09:00", close: "17:30", closedDays: [],
     seasonalHours: true,
     lat: 33.41131, lng: 126.37200,
@@ -711,6 +776,7 @@ const PLACES = [
   },
   {
     id: "susan-reservoir", name: "수산저수지", type: "공원",
+    desc: "곰솔나무가 있는 큰 저수지",
     stayMin: 30, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     lat: 33.47122, lng: 126.38753,
     dog: null, stroller: null, stepFree: null, solo: null,
