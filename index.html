@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>제주 애월 여행 코스 · 내 조건에 맞춰</title>
-<meta name="description" content="반려견·유모차·휠체어·혼자, 뚜벅이·자전거·전기차. 누구랑 어떻게 다니는지 고르면 제주 애월 하루 코스를 짜 드려요. 운영시간·버스·교통비까지 따져요.">
+<title>제주 여행 코스 · 내 조건에 맞춰</title>
+<meta name="description" content="반려견·유모차·휠체어·혼자, 뚜벅이·자전거·전기차. 누구랑 어떻게 다니는지 고르면 제주 하루 코스를 짜 드려요. 운영시간·버스·교통비까지 따져요.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="제주 애월 여행 코스 · 내 조건에 맞춰">
-<meta property="og:description" content="누구랑, 어떻게, 몇 시간 — 고르면 제주 애월 하루 코스가 나와요.">
+<meta property="og:title" content="제주 여행 코스 · 내 조건에 맞춰">
+<meta property="og:description" content="누구랑, 어떻게, 몇 시간 — 고르면 제주 하루 코스가 나와요.">
 <meta property="og:url" content="https://youngjungcho.github.io/course-fit/">
 <meta property="og:image" content="https://youngjungcho.github.io/course-fit/og.png">
 <meta property="og:image:width" content="1200">
@@ -63,6 +63,7 @@
     background: var(--warn-soft); color: var(--warn);
     border-radius: 12px; padding: 10px 14px; font-size: 15px; margin-bottom: 16px;
   }
+  .sample-banner select { font: inherit; font-weight: 700; color: inherit; background: transparent; border: 1px solid currentColor; border-radius: 8px; padding: 4px 8px; }
   .top { display: flex; align-items: center; gap: 12px; min-height: 44px; margin-bottom: 8px; }
   .back {
     border: 0; background: none; color: var(--muted); font-size: 16px;
@@ -175,7 +176,7 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="sample-banner"><b>제주 애월</b> <span id="placeCount"></span>곳 · 2026년 10월 자료 기준</div>
+  <div class="sample-banner"><label><b>제주</b> <select id="regionPick" aria-label="지역 고르기"></select></label> <span id="placeCount"></span>곳 · 2026년 10월 자료 기준</div>
 
   <div class="top">
     <button class="back" id="back" hidden>← 이전</button>
@@ -186,8 +187,12 @@
   <main id="screen"></main>
 </div>
 
-<script src="places.js?v=20261031c"></script>
-<script src="travel.js?v=20261031c"></script>
+<script src="regions.js?v=20261101a"></script>
+<script id="regionLoader">
+// 고른 지역의 자료만 불러와요 (지역 없는 예전 링크는 애월)
+const REGION = REGIONS.find((r) => r.id === new URLSearchParams(location.search).get("region")) ?? REGIONS[0];
+document.write(`<script src="regions/${REGION.id}/places.js?v=20261101a"><\/script><script src="regions/${REGION.id}/travel.js?v=20261101a"><\/script>`);
+</script>
 <script>
 // ----- 고를 수 있는 것들 -----
 const WHO = [
@@ -247,6 +252,7 @@ function queryOf() {
     if (k === "people" && state.how !== "any") continue; // 인원은 택시비를 나눌 때만 써요
     q.set(name, v);
   }
+  if (REGION !== REGIONS[0]) q.set("region", REGION.id);
   if (state.skip.length) q.set("skip", state.skip.join(","));
   if (state.alt) q.set("alt", state.alt);
   if (state.step) q.set("step", state.step);
@@ -747,7 +753,7 @@ function whyEmpty() {
 // 지도 바로가기: 카카오맵은 장소 번호로, 네이버지도는 이름 검색으로 열어요
 function mapLinks(p) {
   const kakao = p.kakaoId ? `https://place.map.kakao.com/${p.kakaoId}` : `https://map.kakao.com/?q=${encodeURIComponent(p.name)}`;
-  const naver = `https://map.naver.com/p/search/${encodeURIComponent(`${p.name} 애월`)}`;
+  const naver = `https://map.naver.com/p/search/${encodeURIComponent(`${p.name} ${REGION.search}`)}`;
   return `<a href="${kakao}" target="_blank" rel="noopener">카카오맵</a><a href="${naver}" target="_blank" rel="noopener">네이버지도</a>`;
 }
 
@@ -834,7 +840,7 @@ async function shareCourse() {
   const url = location.href;
   if (state.from === "here") msg.textContent = "\"지금 내 위치\"는 링크에 담기지 않아요. 받는 사람은 출발 장소를 다시 골라야 해요.";
   try {
-    if (navigator.share) { await navigator.share({ title: "제주 애월 여행 코스", url }); return; }
+    if (navigator.share) { await navigator.share({ title: `제주 ${REGION.name} 여행 코스`, url }); return; }
     await navigator.clipboard.writeText(url);
     msg.textContent = (msg.textContent ? msg.textContent + " " : "") + "링크를 복사했어요. 카톡에 붙여 넣어 보내 보세요.";
   } catch (e) {
@@ -994,6 +1000,15 @@ function renderResult() {
 // 처음 열 때: 주소에 담긴 조건을 읽어요. 공유 링크로 바로 결과가 열려도 기록은 하나만 둬요
 // (카톡에서 연 사람이 뒤로가기 한 번에 카톡으로 돌아가요. 앞 단계는 '← 이전' 버튼으로)
 document.getElementById("placeCount").textContent = PLACES.length;
+// 지역 바꾸기: 고른 조건은 그대로 두고 그 지역 자료로 다시 열어요 (없는 출발 장소·뺀 장소는 읽을 때 걸러져요)
+const regionPick = document.getElementById("regionPick");
+regionPick.innerHTML = REGIONS.map((r) => `<option value="${r.id}">${esc(r.name)}</option>`).join("");
+regionPick.value = REGION.id;
+regionPick.onchange = () => {
+  const q = new URLSearchParams(queryOf());
+  q.set("region", regionPick.value); q.delete("skip"); q.delete("alt");
+  location.search = q.toString();
+};
 readQuery();
 history.replaceState({ step: state.step, depth: 0 }, "", `${location.pathname}${queryOf() ? `?${queryOf()}` : ""}`);
 render();
