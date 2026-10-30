@@ -95,10 +95,10 @@ const PLACES = [
     stayMin: 90, cost: 15000, open: "09:00", close: "18:00", closedDays: [],
     strollerReview: true,
     lat: 33.39023, lng: 126.23969,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "한림공원 정류장 걸어서 4분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "10941032",
-    note: "한림로 300. 카카오맵(2026-10-31): 09:00~18:00, 일반 15,000원·청소년 10,000원·어린이 9,000원, 반려동물 동반, 장애인 시설. 유모차 후기(블로그, 2026-11-01 확인): 유모차 이동이 편했다는 후기 여러 건. 유모차 대여 1,000원, 동굴은 유모차가 못 들어가요.",
+    note: "한림로 300. 카카오맵(2026-10-31): 09:00~18:00, 일반 15,000원·청소년 10,000원·어린이 9,000원, 반려동물 동반, 장애인 시설. 유모차 후기(블로그, 2026-11-01 확인): 유모차 이동이 편했다는 후기 여러 건. 유모차 대여 1,000원, 동굴은 유모차가 못 들어가요. 구글 지도(2026-11-01): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
     sources: ["https://place.map.kakao.com/10941032","https://blog.naver.com/habbu-/224124665079","https://blog.naver.com/06jin/224256818634"]
   },
   {
@@ -119,10 +119,10 @@ const PLACES = [
     stayMin: 90, cost: 25000, open: "09:30", close: "18:00", closedDays: [],
     indoor: true,
     lat: 33.38113, lng: 126.23608,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: null, stepFree: true, solo: null,
     station: "청소년수련원 정류장 걸어서 8분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "627270178",
-    note: "금능남로 76. 카카오맵(2026-10-31): 09:30~18:00, 클립앤클라임 30,000원·레저카트 1인승 25,000원, 장애인 시설, 아이놀이방.",
+    note: "금능남로 76. 카카오맵(2026-10-31): 09:30~18:00, 클립앤클라임 30,000원·레저카트 1인승 25,000원, 장애인 시설, 아이놀이방. 구글 지도(2026-11-01): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
     sources: ["https://place.map.kakao.com/627270178"]
   },
   {
@@ -164,10 +164,10 @@ const PLACES = [
     desc: "말 공연과 승마를 보는 곳",
     stayMin: 90, cost: 22000, open: "09:00", close: "17:30", closedDays: [],
     lat: 33.35554, lng: 126.24150,
-    dog: true, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: null, stepFree: true, solo: null,
     station: "더마파크 정류장 걸어서 4분", bikeRack: null, evChargerMin: 6, parking: true,
     kakaoId: "11470870",
-    note: "월림리. 카카오맵(2026-10-31): 09:00~17:30(상황에 따라 일찍 마감), 공연 원가 22,000원·승마 원가 15,000원, 반려동물 동반, 장애인 시설, 무료 주차.",
+    note: "월림리. 카카오맵(2026-10-31): 09:00~17:30(상황에 따라 일찍 마감), 공연 원가 22,000원·승마 원가 15,000원, 반려동물 동반, 장애인 시설, 무료 주차. 구글 지도(2026-11-01): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
     sources: ["https://place.map.kakao.com/11470870"]
   },
   {
@@ -227,10 +227,10 @@ const PLACES = [
     dogReview: true,
     strollerReview: true,
     lat: 33.39787, lng: 126.24342,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "협재리 정류장 걸어서 3분", bikeRack: null, evChargerMin: 5, parking: true,
     kakaoId: "1614966348",
-    note: "협재1길 30. 카카오맵(2026-10-31): 09:00~16:30, 15:50 마지막 주문, 딱새우장비빔밥 17,000원, 유아의자, 무료 주차. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 갔다는 후기 2건. 반려견 후기(블로그, 2026-11-01 확인): 후기 여러 건.",
+    note: "협재1길 30. 카카오맵(2026-10-31): 09:00~16:30, 15:50 마지막 주문, 딱새우장비빔밥 17,000원, 유아의자, 무료 주차. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 갔다는 후기 2건. 반려견 후기(블로그, 2026-11-01 확인): 후기 여러 건. 구글 지도(2026-11-01): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
     sources: ["관광공사 API 2792536","https://place.map.kakao.com/1614966348","https://blog.naver.com/skfk5546/224327587335","https://blog.naver.com/money_miner/224055795884","https://blog.naver.com/psa1996/224376172712","https://blog.naver.com/kongsomme/224362613235"]
   },
   {
@@ -460,6 +460,55 @@ const PLACES = [
     kakaoId: "216762434",
     note: "귀덕3길 44. 카카오맵(2026-10-31): 토·일 11:00~20:00, 월·화·목·금 11:00~16:00, 수 휴무, 함박스테이크 13,500원, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-11-01 확인): 후기 2건.",
     sources: ["관광공사 API 2839771","https://place.map.kakao.com/216762434","https://blog.naver.com/soondoobudaddy/224158474370","https://blog.naver.com/stay_mosim2024/223735908793"]
+  },
+  {
+    id: "onjeong-jorim", name: "온정조림 제주협재점", type: "식당",
+    desc: "마늘 양념 갈치조림",
+    stayMin: 60, cost: 15000, open: "10:00", close: "22:00", closedDays: [],
+    strollerReview: true,
+    lat: 33.39281, lng: 126.23998,
+    dog: true, stroller: true, stepFree: null, solo: null,
+    station: "한림공원 정류장 걸어서 3분", bikeRack: null, evChargerMin: 1, parking: true,
+    kakaoId: "746777952",
+    note: "한림로 328. 카카오맵(2026-10-31): 10:00~22:00, 제주마농갈치조림(1인) 15,000원, 단체석, 유아의자, 반려동물 동반, 매장 앞 주차 가능. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 들어갔다는 후기 2건.",
+    sources: ["https://place.map.kakao.com/746777952","https://blog.naver.com/kmz5623/224333509331","https://blog.naver.com/j21777/224208599091"]
+  },
+  {
+    id: "hyeopjae-sot", name: "협재솥", type: "식당",
+    desc: "바다 보며 먹는 제주 솥밥",
+    stayMin: 60, cost: 15000, open: "10:00", close: "21:00", closedDays: ["목"],
+    lastOrder: "20:00",
+    strollerReview: true,
+    lat: 33.39478, lng: 126.24157,
+    dog: null, stroller: true, stepFree: null, solo: null,
+    station: "협재해수욕장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 4, parking: true,
+    kakaoId: "2029505529",
+    note: "한림로 354 3층. 카카오맵(2026-10-31): 10:00~21:00, 20:00 마지막 주문, 목 휴무, 흑돼지솥밥 15,000원, 테라스, 유아의자, 전용 주차. 엘리베이터가 있다는 후기가 있어요. 유모차 후기(블로그, 2026-11-01 확인): 엘리베이터로 유모차를 끌고 갔다는 후기 여러 건.",
+    sources: ["https://place.map.kakao.com/2029505529","https://blog.naver.com/nang0e/223782589368","https://blog.naver.com/luvyeyoung/224244523135"]
+  },
+  {
+    id: "the-beach-crab", name: "더비치크랩 제주협재점", type: "식당",
+    desc: "이국적인 해산물 한상",
+    stayMin: 80, cost: null, open: "11:00", close: "22:00", closedDays: [],
+    strollerReview: true,
+    lat: 33.39225, lng: 126.24109,
+    dog: null, stroller: true, stepFree: null, solo: null,
+    station: "한림공원 정류장 걸어서 4분", bikeRack: null, evChargerMin: 2, parking: true,
+    kakaoId: "1783500473",
+    note: "협재2길 10-1 2층. 카카오맵(2026-10-31): 11:00~22:00, 더비치세트 89,900원(여럿이 먹는 세트라 1인 가격은 비워 뒀어요), 단체석, 유아의자, 무료 주차. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 편하게 갔다는 글 여러 건.",
+    sources: ["https://place.map.kakao.com/1783500473","https://blog.naver.com/kkangsa/223746013574","https://blog.naver.com/etude36/223785914563"]
+  },
+  {
+    id: "original-romance", name: "오리지날로맨스 협재", type: "카페",
+    desc: "바다 앞 카페와 소금빵 아이스크림",
+    stayMin: 50, cost: 12000, open: "11:00", close: "17:00", closedDays: ["금"],
+    strollerReview: true,
+    lat: 33.40081, lng: 126.25045,
+    dog: true, stroller: true, stepFree: true, solo: null,
+    station: "옹포리 정류장 걸어서 5분", bikeRack: null, evChargerMin: 1, parking: true,
+    kakaoId: "1130369934",
+    note: "옹포2길 1. 카카오맵(2026-10-31): 11:00~17:00, 금 휴무, 카라멜 소금빵 아이스크림 12,000원, 테라스, 반려동물 동반, 장애인 시설, 무료 주차. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 앉았다는 글과 경사로가 있다는 후기. 구글 지도(2026-11-01): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    sources: ["https://place.map.kakao.com/1130369934","https://blog.naver.com/jjuya_st/223717574764","https://wecan-cafe.tistory.com/86"]
   },
   {
     id: "be-my-guest", name: "비마이게스트", type: "카페",
