@@ -21,6 +21,7 @@
 //   dogRule       반려견이 되지만 조건이 있으면 그 조건 (없으면 안 써도 돼요)
 //   forDogs       애견카페처럼 반려견과 갈 때만 코스에 넣는 곳 true
 //   stroller      유모차 다닐 수 있어요?
+//   dogReview, strollerReview  블로그 후기 2건 이상으로만 아는 값 true (화면에 '후기 기준'으로 표시해요)
 //   stepFree      계단 없이 들어갈 수 있어요? (휠체어·어르신)
 //   indoor        공원·볼거리 중 실내인 곳 true (실내 위주 코스에 넣어요. 메모에 실내로 나온 곳만)
 //   solo          혼자 가기 좋아요?
@@ -63,11 +64,13 @@ const PLACES = [
     desc: "애월항~곽지해변 1.2km 바닷길 산책로",
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.45947, lng: 126.31050,
-    dog: null, stroller: true, stepFree: true, solo: null,
+    dogRule: "목줄 필수",
+    dogReview: true,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "한담동 정류장 걸어서 7분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "23705150",
-    note: "애월항~곽지해변 약 1.2km 보행 전용 산책로. 무료는 공공 산책로라서 그렇게 봤어요. 관광공사 무장애 여행 정보(2026-08 수정): 출입구까지·주출입구 턱 없음(휠체어 가능). 한담해변 자료(2026-10)에도 휠체어 이동 가능한 산책로 있음.",
-    sources: ["관광공사 무장애 여행 정보 API 2930935", "https://www.telltrip.com/domestic-travel/jeju-aewol-handam-coastal-walking-trail/"]
+    note: "애월항~곽지해변 약 1.2km 보행 전용 산책로. 무료는 공공 산책로라서 그렇게 봤어요. 관광공사 무장애 여행 정보(2026-08 수정): 출입구까지·주출입구 턱 없음(휠체어 가능). 한담해변 자료(2026-10)에도 휠체어 이동 가능한 산책로 있음. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책한 후기 여러 건. 주말엔 붐벼요.",
+    sources: ["관광공사 무장애 여행 정보 API 2930935", "https://www.telltrip.com/domestic-travel/jeju-aewol-handam-coastal-walking-trail/", "https://blog.naver.com/ilmare_story_/224421148325", "https://blog.naver.com/bananazzuni01/223913494134"]
   },
   {
     id: "gwakji-beach", name: "곽지해수욕장", type: "공원",
@@ -86,22 +89,24 @@ const PLACES = [
     desc: "고내리 바닷가 포구",
     stayMin: 30, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.46710, lng: 126.33718,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dogReview: true,
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: "고내포구 정류장 걸어서 1분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "8175875",
-    note: "위치는 '고내포구' 버스 정류장 기준이에요.",
-    sources: []
+    note: "위치는 '고내포구' 버스 정류장 기준이에요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책한 후기 여러 건.",
+    sources: ["https://blog.naver.com/senmayong/223860273836", "https://blog.naver.com/simjuree/223937325061"]
   },
   {
     id: "hangpaduri", name: "항파두리 항몽유적지", type: "볼거리",
     desc: "항몽 유적지, 무료로 넓게 걷는 곳",
     stayMin: 60, cost: 0, open: "09:00", close: "18:00", closedDays: [],
     lat: 33.45204, lng: 126.40754,
-    dog: null, stroller: true, stepFree: true, solo: null,
+    dogReview: true,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "항몽유적지 정류장 걸어서 1분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "8641860",
-    note: "무료·연중무휴·주차 가능. 운영시간이 출처마다 달라요(09~18시, 입장 17:30까지 / 다른 곳은 10~17시). 공식 홈페이지 jeju.go.kr/hangpadori, 064-710-6726 관광공사 무장애 여행 정보(2026-08 수정): 출입구까지·주출입구 턱 없음(휠체어 가능), 휠체어 대여 1대, 유모차 대여 2대, 장애인 주차장·화장실 있음.",
-    sources: ["관광공사 무장애 여행 정보 API 128050", "https://xn--ok0b236bp0a.com/place/8169", "https://www.ktriptips.com/kor/tourspot/128050"]
+    note: "무료·연중무휴·주차 가능. 운영시간이 출처마다 달라요(09~18시, 입장 17:30까지 / 다른 곳은 10~17시). 공식 홈페이지 jeju.go.kr/hangpadori, 064-710-6726 관광공사 무장애 여행 정보(2026-08 수정): 출입구까지·주출입구 턱 없음(휠체어 가능), 휠체어 대여 1대, 유모차 대여 2대, 장애인 주차장·화장실 있음. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책한 후기 여러 건.",
+    sources: ["관광공사 무장애 여행 정보 API 128050", "https://xn--ok0b236bp0a.com/place/8169", "https://www.ktriptips.com/kor/tourspot/128050", "https://blog.naver.com/with_moongchi/224437446258", "https://blog.naver.com/qothgus0571/224433474549"]
   },
   {
     id: "saebyeol-oreum", name: "새별오름", type: "공원",
@@ -121,11 +126,12 @@ const PLACES = [
     desc: "알파카를 가까이 보는 목장",
     stayMin: 60, cost: 15000, open: "10:00", close: "18:00", closedDays: [],
     lat: 33.40972, lng: 126.36676,
-    dog: true, stroller: null, stepFree: null, solo: null,
+    strollerReview: true,
+    dog: true, stroller: true, stepFree: null, solo: null,
     station: "원동 정류장 걸어서 27분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "1422737411",
-    note: "도치돌길 303. 2/15~11월 10:00~18:00, 12월~2/14 09:30~17:30, 입장 17:00까지, 연중무휴(인스타 공지 따로). 반려견: 9kg 이하만, 목줄 하고 안아서, 알파카 울타리 안은 안 돼요(관광공사, 2026-10 수정). 입장료 확인 필요. 0507-1361-6694 입장료: 성인 15,000원(관광 정보 사이트, 2024-07 기준이라 확인 필요).",
-    sources: ["https://www.ktriptips.com/ger/tourspot/3336004", "관광공사 반려동물 API 2751854"]
+    note: "도치돌길 303. 2/15~11월 10:00~18:00, 12월~2/14 09:30~17:30, 입장 17:00까지, 연중무휴(인스타 공지 따로). 반려견: 9kg 이하만, 목줄 하고 안아서, 알파카 울타리 안은 안 돼요(관광공사, 2026-10 수정). 입장료 확인 필요. 0507-1361-6694 입장료: 성인 15,000원(관광 정보 사이트, 2024-07 기준이라 확인 필요). 유모차 후기(블로그, 2026-10-31 확인): 목장에서 유모차를 무료로 빌려줘요(비 오면 안 된다는 후기 있음).",
+    sources: ["https://www.ktriptips.com/ger/tourspot/3336004", "관광공사 반려동물 API 2751854", "https://blog.naver.com/juholic1/224420263087", "https://blog.naver.com/yeah_53/224321588742"]
   },
   {
     id: "981-park", name: "9.81 파크 제주", type: "볼거리",
@@ -176,11 +182,12 @@ const PLACES = [
     desc: "천연기념물 난대림 숲길",
     stayMin: 40, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     lat: 33.43368, lng: 126.33093,
-    dog: null, stroller: false, stepFree: false, solo: null,
+    dogReview: true,
+    dog: true, stroller: false, stepFree: false, solo: null,
     station: "납읍리 섯잣길 정류장 걸어서 8분", bikeRack: null, evChargerMin: 10, parking: false,
     kakaoId: "8209104",
-    note: "천연기념물 난대림. 무료·24시간이라는 정보는 2004년 기사라서 지금도 그런지 확인 필요. 카카오맵 영업정보(2026-10-24 확인): 연중무휴(시간 표시는 없음). 관광공사 국문 관광정보(2026-03 수정, 2026-10-29 확인): 상시 개방, 연중무휴, 주차 불가, 유모차 대여·이용 '불가' → 유모차 안 됨·24시간으로 넣었어요. 구글 지도(2026-10-29): 휠체어 이용 가능 입구 없음 → 계단 없음은 아니에요.",
-    sources: ["https://www.khan.co.kr/article/200412231602091/amp", "관광공사 국문 관광정보 API 127310"]
+    note: "천연기념물 난대림. 무료·24시간이라는 정보는 2004년 기사라서 지금도 그런지 확인 필요. 카카오맵 영업정보(2026-10-24 확인): 연중무휴(시간 표시는 없음). 관광공사 국문 관광정보(2026-03 수정, 2026-10-29 확인): 상시 개방, 연중무휴, 주차 불가, 유모차 대여·이용 '불가' → 유모차 안 됨·24시간으로 넣었어요. 구글 지도(2026-10-29): 휠체어 이용 가능 입구 없음 → 계단 없음은 아니에요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 걸은 후기 여러 건. 나무 계단이 있어요.",
+    sources: ["https://www.khan.co.kr/article/200412231602091/amp", "관광공사 국문 관광정보 API 127310", "https://blog.naver.com/senmayong/223845077603", "https://blog.naver.com/reo2002_kr/223886041588"]
   },
   {
     id: "bomnal-cafe", name: "카페 봄날", type: "카페",
@@ -246,11 +253,13 @@ const PLACES = [
     stayMin: 50, cost: 14000, open: "10:00", close: "19:00", lastOrder: "18:30", closedDays: ["수"],
     breaks: [["15:00", "16:00"]],
     lat: 33.46342, lng: 126.31686,
+    dogRule: "이동가방이나 유모차에 넣어서",
+    dogReview: true,
     dog: true, stroller: null, stepFree: null, solo: true,
     station: "신설동 정류장 걸어서 2분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "292550130",
-    note: "애월로 87-16. 돈카츠 카레. 15:00~16:00 쉬는 시간. 관광공사 국문 관광정보(2025-06 수정): - 10:00~19:00 - 준비시간 15:00~16:00 - 점심 마지막 주문 14:30 / 저녁 마지막 주문 18:30 / 쉬는 날 매주 수요일. 가격 확인 필요. 카카오맵(2026-10-24, 사업자 인증 매장): 태그 #애견동반식당 #혼밥, 소개 '반려견과 함께하는 일식풍 카레', 돈카츠 카레 14,000원. 시설정보 칸에는 반려동물 표시가 없어서 태그 기준이에요. 휠체어·계단: 구글 지도·카카오 시설정보·카카오 리뷰 모두 단서 없음(2026-10-27) → 전화로 확인해 주세요.",
-    sources: ["https://place.map.kakao.com/292550130", "관광공사 국문 관광정보 API 2852108"]
+    note: "애월로 87-16. 돈카츠 카레. 15:00~16:00 쉬는 시간. 관광공사 국문 관광정보(2025-06 수정): - 10:00~19:00 - 준비시간 15:00~16:00 - 점심 마지막 주문 14:30 / 저녁 마지막 주문 18:30 / 쉬는 날 매주 수요일. 가격 확인 필요. 카카오맵(2026-10-24, 사업자 인증 매장): 태그 #애견동반식당 #혼밥, 소개 '반려견과 함께하는 일식풍 카레', 돈카츠 카레 14,000원. 시설정보 칸에는 반려동물 표시가 없어서 태그 기준이에요. 휠체어·계단: 구글 지도·카카오 시설정보·카카오 리뷰 모두 단서 없음(2026-10-27) → 전화로 확인해 주세요. 반려견 후기(블로그, 2026-10-31 확인): 후기 여러 건.",
+    sources: ["https://place.map.kakao.com/292550130", "관광공사 국문 관광정보 API 2852108", "https://blog.naver.com/pupusky_/223761023585", "https://blog.naver.com/dreamnote_/223826708801"]
   },
   {
     id: "aewolri-makguksu", name: "애월리순메밀막국수", type: "식당",
@@ -268,11 +277,14 @@ const PLACES = [
     desc: "흑돼지 근고기",
     stayMin: 70, cost: 26000, open: "11:00", close: "24:00", lastOrder: "23:00", closedDays: [],
     lat: 33.45933, lng: 126.31135,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dogRule: "이동가방이나 유모차에 넣어서",
+    dogReview: true,
+    strollerReview: true,
+    dog: true, stroller: true, stepFree: null, solo: null,
     station: "한담동 정류장 걸어서 6분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "2030021121",
-    note: "애월로 6. 흑돼지 근고기. 주문 23:00까지. 관광공사 국문 관광정보(2025-01 수정): 11:00~24:00 (라스트오더 23:00) / 쉬는 날 연중무휴. 가격 확인 필요. 카카오맵 메뉴(2026-10-24): 숙성가브리살 200g 26,000원, 근고기 600g 72,000원, 김치찌개 7,000원 → 1인 26,000원으로 넣었어요. 휠체어·계단: 구글 지도·카카오 시설정보·카카오 리뷰 모두 단서 없음(2026-10-27) → 전화로 확인해 주세요.",
-    sources: ["https://place.map.kakao.com/2030021121", "관광공사 국문 관광정보 API 2759061"]
+    note: "애월로 6. 흑돼지 근고기. 주문 23:00까지. 관광공사 국문 관광정보(2025-01 수정): 11:00~24:00 (라스트오더 23:00) / 쉬는 날 연중무휴. 가격 확인 필요. 카카오맵 메뉴(2026-10-24): 숙성가브리살 200g 26,000원, 근고기 600g 72,000원, 김치찌개 7,000원 → 1인 26,000원으로 넣었어요. 휠체어·계단: 구글 지도·카카오 시설정보·카카오 리뷰 모두 단서 없음(2026-10-27) → 전화로 확인해 주세요. 반려견 후기(블로그, 2026-10-31 확인): 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 테이블 간격이 넓어 유모차를 둘 수 있었다는 후기 여러 건.",
+    sources: ["https://place.map.kakao.com/2030021121", "관광공사 국문 관광정보 API 2759061", "https://blog.naver.com/rlagusro2810/224402403976", "https://blog.naver.com/go_ggoma/224172589607", "https://blog.naver.com/ssu07/224018868856", "https://blog.naver.com/sssong21_/224140808066"]
   },
   {
     id: "kkongsuni", name: "꽁순이네", type: "식당",
@@ -302,22 +314,25 @@ const PLACES = [
     desc: "흑돼지 구이",
     stayMin: 70, cost: 30000, open: "15:00", close: "23:00", closedDays: [],
     lat: 33.46740, lng: 126.33900,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dogRule: "이동가방이나 유모차에 넣어서",
+    dogReview: true,
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: "고내포구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "1580336980",
-    note: "애월해안로 253. 흑돼지 구이. 관광공사 국문 관광정보(2025-06 수정): 15:00~23:00 / 쉬는 날 연중무휴. 가격 확인 필요. 카카오맵 메뉴(2026-10-24): 정직한돈세트(2인) 59,000원 → 1인 30,000원으로 넣었어요. 시설정보: 유아의자, 키즈메뉴, 무료 주차. 휠체어·계단: 구글 지도·카카오 시설정보·카카오 리뷰 모두 단서 없음(2026-10-27) → 전화로 확인해 주세요.",
-    sources: ["https://place.map.kakao.com/1580336980", "관광공사 국문 관광정보 API 2853566"]
+    note: "애월해안로 253. 흑돼지 구이. 관광공사 국문 관광정보(2025-06 수정): 15:00~23:00 / 쉬는 날 연중무휴. 가격 확인 필요. 카카오맵 메뉴(2026-10-24): 정직한돈세트(2인) 59,000원 → 1인 30,000원으로 넣었어요. 시설정보: 유아의자, 키즈메뉴, 무료 주차. 휠체어·계단: 구글 지도·카카오 시설정보·카카오 리뷰 모두 단서 없음(2026-10-27) → 전화로 확인해 주세요. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건.",
+    sources: ["https://place.map.kakao.com/1580336980", "관광공사 국문 관광정보 API 2853566", "https://blog.naver.com/bya2447/224354466346", "https://blog.naver.com/chlwl1358/223915194456"]
   },
   {
     id: "jeremy-cafe", name: "제레미", type: "카페",
     desc: "핸드드립 커피·토스트",
     stayMin: 50, cost: 6000, open: "09:00", close: "17:30", lastOrder: "17:10", closedDays: ["일", "월"],
     lat: 33.46455, lng: 126.31852,
-    dog: null, stroller: null, stepFree: false, solo: null,
+    dogReview: true,
+    dog: false, stroller: null, stepFree: false, solo: null,
     station: "애월환승정류장(애월리) 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: false,
     kakaoId: "1170785054",
-    note: "애월로 106-1. 핸드드립 커피·토스트. 주문 17:10까지. 관광공사 국문 관광정보(2025-06 수정): 09:00~17:30 (마지막 주문 17:10) / 쉬는 날 매주 일요일, 월요일. 가격 확인 필요. 카카오맵 메뉴(2026-10-24): 핸드드립 커피 6,000원. 구글 지도(2026-10-25): 휠체어 이용가능 입구·좌석·주차장 없음 → 계단 없음은 아니에요.",
-    sources: ["https://place.map.kakao.com/1170785054", "관광공사 국문 관광정보 API 2852155"]
+    note: "애월로 106-1. 핸드드립 커피·토스트. 주문 17:10까지. 관광공사 국문 관광정보(2025-06 수정): 09:00~17:30 (마지막 주문 17:10) / 쉬는 날 매주 일요일, 월요일. 가격 확인 필요. 카카오맵 메뉴(2026-10-24): 핸드드립 커피 6,000원. 구글 지도(2026-10-25): 휠체어 이용가능 입구·좌석·주차장 없음 → 계단 없음은 아니에요. 반려견 후기(블로그, 2026-10-31 확인): 반려견 동반이 안 된다는 후기 2건.",
+    sources: ["https://place.map.kakao.com/1170785054", "관광공사 국문 관광정보 API 2852155", "https://blog.naver.com/thanks_519/224059419186", "https://blog.naver.com/rhl0225/223882334690"]
   },
   {
     id: "tribe-cafe", name: "트라이브", type: "카페",
@@ -403,11 +418,13 @@ const PLACES = [
     desc: "고기국수·비빔국수, 아침 8시부터",
     stayMin: 40, cost: 10000, open: "08:00", close: "16:00", closedDays: [],
     lat: 33.47840, lng: 126.35691,
-    dog: null, stroller: null, stepFree: false, solo: true,
+    dogRule: "바깥 테라스에서만",
+    dogReview: true,
+    dog: true, stroller: null, stepFree: false, solo: true,
     station: "신엄입구 정류장 걸어서 11분", bikeRack: null, evChargerMin: 5, parking: null,
     kakaoId: "571769164",
-    note: "애월해안로 494(블로그 기준). 매일 08~16시, 주문 15시까지. 고기국수 1만 원. 위치 확인 필요. 카카오맵(2026-10-24, 사업자 인증 매장): 고기국수·비빔국수·고기국밥 각 10,000원, 태그 #혼밥 #아침식사, 070-8657-3107. 위치는 카카오 기준. 반려동물 표시는 없어요. 구글 지도(2026-10-25): 휠체어 이용가능 입구·좌석 없음 → 계단 없음은 아니에요.",
-    sources: ["https://place.map.kakao.com/571769164", "https://www.trvlogue.com/ko/ondeokjip-guksu-jeju-aewol"]
+    note: "애월해안로 494(블로그 기준). 매일 08~16시, 주문 15시까지. 고기국수 1만 원. 위치 확인 필요. 카카오맵(2026-10-24, 사업자 인증 매장): 고기국수·비빔국수·고기국밥 각 10,000원, 태그 #혼밥 #아침식사, 070-8657-3107. 위치는 카카오 기준. 반려동물 표시는 없어요. 구글 지도(2026-10-25): 휠체어 이용가능 입구·좌석 없음 → 계단 없음은 아니에요. 반려견 후기(블로그, 2026-10-31 확인): 후기 여러 건.",
+    sources: ["https://place.map.kakao.com/571769164", "https://www.trvlogue.com/ko/ondeokjip-guksu-jeju-aewol", "https://blog.naver.com/nancykim1998/224412680466", "https://blog.naver.com/qduddl1122/224199214343"]
   },
   {
     id: "paul-cafe", name: "폴카페", type: "카페",
@@ -426,11 +443,13 @@ const PLACES = [
     desc: "바다 보이는 브런치 카페",
     stayMin: 60, cost: 6500, open: "10:00", close: "19:00", lastOrder: "18:00", closedDays: [],
     lat: 33.45621, lng: 126.30904,
+    dogRule: "소형견만, 실내는 유모차나 케이지에 넣어서",
+    dogReview: true,
     dog: true, stroller: null, stepFree: false, solo: null,
     station: "곽지모우물 정류장 걸어서 6분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "27149644",
-    note: "일주서로 6111. 바다 보이는 브런치 카페(치즈 오믈렛 브런치). 관광공사 국문 관광정보(2025-06 수정): 10:00~19:00, 주문 18:20까지, 연중무휴, 주차 가능. 반려견 동반은 장소 정보 사이트 표시 기준이라 확인하면 좋아요. 가격 확인 필요. 카카오맵(2026-10-24, 사업자 인증 매장): 시설정보 반려동물 동반·무료 주차 확인, 동절기 10:00~19:00(주문 18:00), 아메리카노 6,500원. 구글 지도(2026-10-25): 휠체어 이용가능 입구·좌석·주차장·화장실 없음 → 계단 없음은 아니에요.",
-    sources: ["https://place.map.kakao.com/27149644", "관광공사 국문 관광정보 API 2862045", "https://polle.com/place/2A8Nje/%EC%95%A0%EC%9B%94%20%EB%8D%94%EC%84%A0%EC%85%8B"]
+    note: "일주서로 6111. 바다 보이는 브런치 카페(치즈 오믈렛 브런치). 관광공사 국문 관광정보(2025-06 수정): 10:00~19:00, 주문 18:20까지, 연중무휴, 주차 가능. 반려견 동반은 장소 정보 사이트 표시 기준이라 확인하면 좋아요. 가격 확인 필요. 카카오맵(2026-10-24, 사업자 인증 매장): 시설정보 반려동물 동반·무료 주차 확인, 동절기 10:00~19:00(주문 18:00), 아메리카노 6,500원. 구글 지도(2026-10-25): 휠체어 이용가능 입구·좌석·주차장·화장실 없음 → 계단 없음은 아니에요. 반려견 후기(블로그, 2026-10-31 확인): 후기 여러 건.",
+    sources: ["https://place.map.kakao.com/27149644", "관광공사 국문 관광정보 API 2862045", "https://polle.com/place/2A8Nje/%EC%95%A0%EC%9B%94%20%EB%8D%94%EC%84%A0%EC%85%8B", "https://blog.naver.com/jjy9942-/224361392200", "https://blog.naver.com/bacookie/224338106693"]
   },
   {
     id: "arte-museum", name: "아르떼뮤지엄 제주", type: "볼거리",
@@ -438,11 +457,12 @@ const PLACES = [
     desc: "미디어아트 실내 전시",
     stayMin: 90, cost: 18000, open: "10:00", close: "20:00", closedDays: [],
     lat: 33.39670, lng: 126.34501,
-    dog: null, stroller: true, stepFree: true, solo: null,
+    dogReview: true,
+    dog: false, stroller: true, stepFree: true, solo: null,
     station: "어음2리 정류장 걸어서 15분", bikeRack: null, evChargerMin: 12, parking: true,
     kakaoId: "1508345156",
-    note: "어림비로 478. 미디어아트 실내 전시. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 10:00~20:00(입장 19:00까지), 성인 18,000원, 장애인 시설, 태그 #이동약자접근 #전동휠체어급속충전기, 무료 주차. 1899-5008",
-    sources: ["https://place.map.kakao.com/1508345156"]
+    note: "어림비로 478. 미디어아트 실내 전시. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 10:00~20:00(입장 19:00까지), 성인 18,000원, 장애인 시설, 태그 #이동약자접근 #전동휠체어급속충전기, 무료 주차. 1899-5008 반려견 후기(블로그, 2026-10-31 확인): 전시관 안에 반려견이 못 들어간다는 글 2건.",
+    sources: ["https://place.map.kakao.com/1508345156", "https://blog.naver.com/hawaiplay/224452726416", "https://blog.naver.com/healyou_/224429758104"]
   },
   {
     id: "jeju-bulbit", name: "제주불빛정원", type: "볼거리",
@@ -484,11 +504,12 @@ const PLACES = [
     desc: "승마·먹이주기 동물 체험",
     stayMin: 60, cost: 18000, open: "09:00", close: "18:00", closedDays: [],
     lat: 33.36155, lng: 126.36366,
-    dog: null, stroller: true, stepFree: true, solo: null,
+    dogReview: true,
+    dog: false, stroller: true, stepFree: true, solo: null,
     station: "새별오름 정류장 걸어서 2분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "336100555",
-    note: "평화로 1529. 동물 체험(승마·먹이주기). 카카오맵(2026-10-24, 사업자 인증 매장): 매일 09:00~18:00(입장 17:00까지), 일반 18,000원, 장애인 시설, 태그 #이동약자접근, 무료 주차. 064-794-2828",
-    sources: ["https://place.map.kakao.com/336100555"]
+    note: "평화로 1529. 동물 체험(승마·먹이주기). 카카오맵(2026-10-24, 사업자 인증 매장): 매일 09:00~18:00(입장 17:00까지), 일반 18,000원, 장애인 시설, 태그 #이동약자접근, 무료 주차. 064-794-2828 반려견 후기(블로그, 2026-10-31 확인): 반려견 동반이 안 된다는 후기 2건.",
+    sources: ["https://place.map.kakao.com/336100555", "https://blog.naver.com/springminty/223744310923", "https://blog.naver.com/gyrud618/224445677955"]
   },
   {
     id: "yeonhwa-pond", name: "연화못", type: "공원",
@@ -539,11 +560,13 @@ const PLACES = [
     desc: "오름 둘레 산책로",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.47301, lng: 126.38456,
-    dog: null, stroller: true, stepFree: null, solo: null,
+    dogRule: "목줄 필수",
+    dogReview: true,
+    dog: true, stroller: true, stepFree: null, solo: null,
     station: "모감동 정류장 걸어서 8분", bikeRack: null, evChargerMin: 9, parking: null,
     kakaoId: "7964847",
-    note: "수산리 산 1-1. 오름 둘레 산책로(수산리). 카카오맵(2026-10-24): 무료입장, 유모차 가능, 공중화장실.",
-    sources: ["https://place.map.kakao.com/7964847"]
+    note: "수산리 산 1-1. 오름 둘레 산책로(수산리). 카카오맵(2026-10-24): 무료입장, 유모차 가능, 공중화장실. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 오른 후기와 산책 안내 글.",
+    sources: ["https://place.map.kakao.com/7964847", "https://blog.naver.com/senmayong/223865669451", "https://blog.naver.com/realplan_travel/223896587663"]
   },
   {
     id: "dolphin-view", name: "애월돌고래전망대", type: "볼거리",
@@ -597,11 +620,13 @@ const PLACES = [
     stayMin: 40, cost: 11000, open: "10:00", close: "17:00", closedDays: [],
     breaks: [["14:00", "15:00"]],
     lat: 33.47776, lng: 126.36488,
-    dog: null, stroller: null, stepFree: false, solo: null,
+    dogRule: "야외 자리만, 케이지 필수",
+    dogReview: true,
+    dog: true, stroller: null, stepFree: false, solo: null,
     station: "신엄입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "26352466",
-    note: "애월해안로 570-1. 해물라면. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 10:00~17:00, 14:00~15:00 브레이크타임, 해물라면 11,000원. 064-772-1900 구글 지도(2026-10-25): 휠체어 이용가능 입구·좌석·주차장 없음 → 계단 없음은 아니에요.",
-    sources: ["https://place.map.kakao.com/26352466"]
+    note: "애월해안로 570-1. 해물라면. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 10:00~17:00, 14:00~15:00 브레이크타임, 해물라면 11,000원. 064-772-1900 구글 지도(2026-10-25): 휠체어 이용가능 입구·좌석·주차장 없음 → 계단 없음은 아니에요. 반려견 후기(블로그, 2026-10-31 확인): 실내는 안 된다는 후기 여러 건.",
+    sources: ["https://place.map.kakao.com/26352466", "https://blog.naver.com/jjudoary/223894185463", "https://blog.naver.com/hagoc/223942254773"]
   },
   {
     id: "bada-boneun-nal", name: "바다보는날", type: "식당",
@@ -644,11 +669,13 @@ const PLACES = [
     desc: "흑돼지 구이",
     stayMin: 70, cost: 32000, open: "11:00", close: "22:30", lastOrder: "21:30", closedDays: [],
     lat: 33.48430, lng: 126.39113,
+    dogRule: "캐리어나 유모차에 넣어서",
+    dogReview: true,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "가문동마을길 정류장 걸어서 8분", bikeRack: null, evChargerMin: 9, parking: null,
     kakaoId: "890714292",
-    note: "가문동남길 63. 흑돼지 구이. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 11:00~22:30(주문 21:30까지), 근고기 600g 64,000원(2인 기준으로 1명 32,000원), 김치찌개 8,000원, 태그 #애견동반식당(시설정보 칸엔 표시 없음). 010-6870-7679 휠체어·계단: 구글 지도·카카오 시설정보·카카오 리뷰 모두 단서 없음(2026-10-27) → 전화로 확인해 주세요.",
-    sources: ["https://place.map.kakao.com/890714292"]
+    note: "가문동남길 63. 흑돼지 구이. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 11:00~22:30(주문 21:30까지), 근고기 600g 64,000원(2인 기준으로 1명 32,000원), 김치찌개 8,000원, 태그 #애견동반식당(시설정보 칸엔 표시 없음). 010-6870-7679 휠체어·계단: 구글 지도·카카오 시설정보·카카오 리뷰 모두 단서 없음(2026-10-27) → 전화로 확인해 주세요. 반려견 후기(블로그, 2026-10-31 확인): 후기 여러 건.",
+    sources: ["https://place.map.kakao.com/890714292", "https://blog.naver.com/je_mattt/223701886173", "https://blog.naver.com/yyj3jung/223981820264"]
   },
   {
     id: "yoons-grill", name: "윤스그릴", type: "식당",
@@ -689,11 +716,13 @@ const PLACES = [
     stayMin: 50, cost: 16000, open: "10:00", close: "18:00", closedDays: ["수"],
     hoursByDay: { "토": ["09:00", "18:00"], "일": ["09:00", "18:00"] },
     lat: 33.43901, lng: 126.33018,
+    dogRule: "케이지나 유모차에 넣어서",
+    dogReview: true,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "납읍리사무소 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "2138824476",
-    note: "납읍로 21. 수플레 팬케이크(납읍). 카카오맵(2026-10-24, 사업자 인증 매장): 평일 10:00~18:00·주말 09:00~18:00, 수요일 휴무, 디저트 수플레 16,000원, 반려동물 동반, 무료 주차. 0503-7151-4597 휠체어·계단: 구글 지도·카카오 시설정보·카카오 리뷰 모두 단서 없음(2026-10-27) → 전화로 확인해 주세요.",
-    sources: ["https://place.map.kakao.com/2138824476"]
+    note: "납읍로 21. 수플레 팬케이크(납읍). 카카오맵(2026-10-24, 사업자 인증 매장): 평일 10:00~18:00·주말 09:00~18:00, 수요일 휴무, 디저트 수플레 16,000원, 반려동물 동반, 무료 주차. 0503-7151-4597 휠체어·계단: 구글 지도·카카오 시설정보·카카오 리뷰 모두 단서 없음(2026-10-27) → 전화로 확인해 주세요. 반려견 후기(블로그, 2026-10-31 확인): 후기 여러 건.",
+    sources: ["https://place.map.kakao.com/2138824476", "https://blog.naver.com/luvjejuwith/224388732232", "https://blog.naver.com/corini_____/224397814667"]
   },
   {
     id: "cutiepie-cafe", name: "큐티파이카페", type: "카페",
@@ -723,11 +752,12 @@ const PLACES = [
     desc: "대형 베이커리 카페",
     stayMin: 60, cost: 11000, open: "09:00", close: "21:00", lastOrder: "20:30", closedDays: [],
     lat: 33.47990, lng: 126.37271,
-    dog: null, stroller: true, stepFree: true, solo: null,
+    dogReview: true,
+    dog: false, stroller: true, stepFree: true, solo: null,
     station: "서치강물 정류장 걸어서 6분", bikeRack: null, evChargerMin: 8, parking: true,
     kakaoId: "1525547515",
-    note: "애월해안로 654. 대형 베이커리 카페. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 09:00~21:00(주문 20:30까지), 노을리 에이드 11,000원, 장애인 시설, 태그 #이동약자접근, 무료 주차. 064-741-5050",
-    sources: ["https://place.map.kakao.com/1525547515"]
+    note: "애월해안로 654. 대형 베이커리 카페. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 09:00~21:00(주문 20:30까지), 노을리 에이드 11,000원, 장애인 시설, 태그 #이동약자접근, 무료 주차. 064-741-5050 반려견 후기(블로그, 2026-10-31 확인): 반려견 동반이 안 된다는 후기 여러 건.",
+    sources: ["https://place.map.kakao.com/1525547515", "https://blog.naver.com/calmmooon/224091416064", "https://blog.naver.com/lbl9887/224186815355"]
   },
   {
     id: "windstone", name: "윈드스톤", type: "카페",
@@ -759,22 +789,26 @@ const PLACES = [
     desc: "가볍게 걷는 오름, 가을 억새",
     stayMin: 60, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     lat: 33.39708, lng: 126.40750,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dogRule: "목줄 필수",
+    dogReview: true,
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: "렛츠런파크 정류장 걸어서 35분", bikeRack: null, evChargerMin: 16, parking: true,
     kakaoId: "8217224",
-    note: "유수암리. 높지 않아 가볍게 걷는 오름, 산책로·쉼터가 있고 가을 억새, 노꼬메오름과 이어져요. 관광공사 국문 관광정보(2026-09 수정): 상시 개방, 연중무휴, 주차 가능. 휠체어·유모차·반려견: 자료에 단서 없음(2026-10-29) → 확인 필요.",
-    sources: ["관광공사 국문 관광정보 API 2765234", "https://place.map.kakao.com/8217224"]
+    note: "유수암리. 높지 않아 가볍게 걷는 오름, 산책로·쉼터가 있고 가을 억새, 노꼬메오름과 이어져요. 관광공사 국문 관광정보(2026-09 수정): 상시 개방, 연중무휴, 주차 가능. 휠체어·유모차·반려견: 자료에 단서 없음(2026-10-29) → 확인 필요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 걸은 후기 여러 건.",
+    sources: ["관광공사 국문 관광정보 API 2765234", "https://place.map.kakao.com/8217224", "https://blog.naver.com/jieunsilver/223704683440", "https://blog.naver.com/yimsusu-/223955796288"]
   },
   {
     id: "keun-nokkome", name: "큰노꼬메오름", type: "공원",
     desc: "가파른 오름, 정상 전망대",
     stayMin: 150, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     lat: 33.38944, lng: 126.41040,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dogRule: "목줄 필수",
+    dogReview: true,
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: "렛츠런파크 정류장 걸어서 49분", bikeRack: null, evChargerMin: 31, parking: true,
     kakaoId: "10271092",
-    note: "유수암리. 가파른 사면과 상당한 높이의 오름, 정상에 데크 전망대(노을), 궷물오름으로 이어지는 산책로. 관광공사 국문 관광정보(2026-03 수정): 연중무휴, 주차 가능, '일부 통제될 수 있으니 방문 전 전화 문의'(064-740-6000). 머무는 시간 150분은 오르내리는 시간을 넉넉히 어림한 값이에요. 휠체어·유모차·반려견: 자료에 단서 없음 → 확인 필요.",
-    sources: ["관광공사 국문 관광정보 API 2738712", "https://place.map.kakao.com/10271092"]
+    note: "유수암리. 가파른 사면과 상당한 높이의 오름, 정상에 데크 전망대(노을), 궷물오름으로 이어지는 산책로. 관광공사 국문 관광정보(2026-03 수정): 연중무휴, 주차 가능, '일부 통제될 수 있으니 방문 전 전화 문의'(064-740-6000). 머무는 시간 150분은 오르내리는 시간을 넉넉히 어림한 값이에요. 휠체어·유모차·반려견: 자료에 단서 없음 → 확인 필요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 오른 후기와 산책 안내 글. 길이 긴 편이에요.",
+    sources: ["관광공사 국문 관광정보 API 2738712", "https://place.map.kakao.com/10271092", "https://blog.naver.com/senmayong/223867904690", "https://blog.naver.com/jejuangelhouse/224383844323"]
   },
   {
     id: "hwajowon", name: "화조원", type: "볼거리",
