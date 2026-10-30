@@ -18,8 +18,11 @@
 //   breaks        쉬는 시간(브레이크 타임) 예: [["15:00", "16:00"]]. 없으면 이 칸을 안 써도 돼요
 //   lat, lng      위치 (모르면 null → 코스에서 빠져요)
 //   dog           반려견 들어가도 돼요?
+//   dogRule       반려견이 되지만 조건이 있으면 그 조건 (없으면 안 써도 돼요)
+//   forDogs       애견카페처럼 반려견과 갈 때만 코스에 넣는 곳 true
 //   stroller      유모차 다닐 수 있어요?
 //   stepFree      계단 없이 들어갈 수 있어요? (휠체어·어르신)
+//   indoor        공원·볼거리 중 실내인 곳 true (실내 위주 코스에 넣어요. 메모에 실내로 나온 곳만)
 //   solo          혼자 가기 좋아요?
 //   station       가까운 정류장과 걸어서 몇 분 (모르면 null)
 //   bikeRack      자전거 세울 곳 있어요?
@@ -46,7 +49,12 @@ const COASTLINE = [{ lat: 33.452, lng: 126.300 }, { lat: 33.493, lng: 126.420 }]
 // 출발 장소 (화면 ③에서 골라요. "지금 내 위치"는 화면에서 따로 처리해요)
 const STARTS = [
   { id: "airport", emoji: "✈️", label: "제주공항", name: "제주국제공항", lat: 33.50684, lng: 126.49272 },
-  { id: "aewol",   emoji: "🏠", label: "애월에 있어요", name: "애월읍사무소 정류장", lat: 33.4626, lng: 126.3303 }
+  { id: "aewol",   emoji: "🏠", label: "애월리·고내 근처", name: "애월읍사무소 정류장", lat: 33.4626, lng: 126.3303 },
+  // 숙소에서 출발하는 사람을 위한 동네 (그 동네 버스 정류장 위치 기준이라 숙소와 조금 달라요)
+  { id: "handam",  emoji: "🏠", label: "한담·곽지 근처", name: "한담·곽지 근처", lat: 33.4578, lng: 126.3104 },
+  { id: "sineom",  emoji: "🏠", label: "신엄·구엄 근처", name: "신엄·구엄 근처", lat: 33.4784, lng: 126.3634 },
+  { id: "hagwi",   emoji: "🏠", label: "하귀 근처", name: "하귀 근처", lat: 33.4857, lng: 126.4119 },
+  { id: "nabeup",  emoji: "🏠", label: "납읍·중산간 근처", name: "납읍·중산간 근처", lat: 33.4370, lng: 126.3275 }
 ];
 
 const PLACES = [
@@ -97,6 +105,7 @@ const PLACES = [
   },
   {
     id: "saebyeol-oreum", name: "새별오름", type: "공원",
+    dogRule: "목줄 필수, 맹견은 입마개",
     desc: "정상까지 20분쯤, 억새로 유명한 오름",
     stayMin: 80, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     lat: 33.36625, lng: 126.35769,
@@ -108,6 +117,7 @@ const PLACES = [
   },
   {
     id: "dochidol-alpaca", name: "도치돌 알파카목장", type: "볼거리",
+    dogRule: "9kg 이하만, 안아서, 울타리 안은 안 돼요",
     desc: "알파카를 가까이 보는 목장",
     stayMin: 60, cost: 15000, open: "10:00", close: "18:00", closedDays: [],
     lat: 33.40972, lng: 126.36676,
@@ -185,6 +195,7 @@ const PLACES = [
   },
   {
     id: "blissful-jeju", name: "블리스풀 제주", type: "카페",
+    forDogs: true,
     desc: "잔디 운동장이 있는 애견카페",
     stayMin: 60, cost: 5000, open: "10:00", close: "18:00", closedDays: ["금"],
     seasonalHours: true,
@@ -400,6 +411,7 @@ const PLACES = [
   },
   {
     id: "paul-cafe", name: "폴카페", type: "카페",
+    dogRule: "10kg 넘으면 야외 자리만",
     desc: "반려견과 가는 카페",
     stayMin: 50, cost: null, open: null, close: null, closedDays: null,
     lat: null, lng: null,
@@ -422,6 +434,7 @@ const PLACES = [
   },
   {
     id: "arte-museum", name: "아르떼뮤지엄 제주", type: "볼거리",
+    indoor: true,
     desc: "미디어아트 실내 전시",
     stayMin: 90, cost: 18000, open: "10:00", close: "20:00", closedDays: [],
     lat: 33.39670, lng: 126.34501,
@@ -444,6 +457,7 @@ const PLACES = [
   },
   {
     id: "teseum", name: "테디베어하우스 테지움 제주점", type: "볼거리",
+    indoor: true,
     desc: "테디베어 박물관, 수유실 있음",
     stayMin: 60, cost: 12500, open: "09:00", close: "19:00", closedDays: [],
     seasonalHours: true,
