@@ -2,5 +2,6 @@
 // name = 화면에 보여 줄 이름, search = 네이버지도에서 장소를 찾을 때 이름 뒤에 붙이는 말
 const REGIONS = [
   { id: "aewol", name: "애월", search: "애월" },
-  { id: "hallim", name: "한림·협재", search: "한림" }
+  { id: "hallim", name: "한림·협재", search: "한림" },
+  { id: "jejusi", name: "제주시내", search: "제주시" }
 ];
