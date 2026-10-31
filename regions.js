@@ -4,9 +4,9 @@ const REGIONS = [
   { id: "aewol", name: "애월", search: "애월" },
   { id: "hallim", name: "한림·협재", search: "한림" },
   { id: "jejusi", name: "제주시내", search: "제주시" },
-  { id: "seogwipo", name: "서귀포·중문", search: "서귀포" },
-  { id: "east", name: "함덕·조천·구좌", search: "제주" },
-  { id: "seongsan", name: "성산·표선", search: "서귀포" },
-  { id: "southwest", name: "한경·대정·안덕", search: "제주" },
-  { id: "namwon", name: "남원", search: "서귀포 남원" }
+  { id: "seogwipo", router: "OSRM", name: "서귀포·중문", search: "서귀포" },
+  { id: "east", router: "OSRM", name: "함덕·조천·구좌", search: "제주" },
+  { id: "seongsan", router: "OSRM", name: "성산·표선", search: "서귀포" },
+  { id: "southwest", router: "OSRM", name: "한경·대정·안덕", search: "제주" },
+  { id: "namwon", router: "OSRM", name: "남원", search: "서귀포 남원" }
 ];
