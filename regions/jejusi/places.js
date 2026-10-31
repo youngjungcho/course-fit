@@ -1,6 +1,6 @@
-// 장소 데이터 · 제주시내 (2026-11-01 정리, 아직 직접 확인 안 함)
+// 장소 데이터 · 제주시내 (2026-10-31 정리, 아직 직접 확인 안 함)
 // 칸 설명은 regions/aewol/places.js 맨 위를 보세요.
-// 운영시간·시설: 카카오맵 장소 페이지(2026-11-01 읽음)를 먼저 쓰고, 없으면 한국관광공사 API를 썼어요.
+// 운영시간·시설: 카카오맵 장소 페이지(2026-10-31 읽음)를 먼저 쓰고, 없으면 한국관광공사 API를 썼어요.
 // 모르는 것은 null이에요. 2·7일에만 서는 민속오일시장은 일정 계산이 달라서 뺐어요.
 
 // 제주시내 해안선을 대충 잇는 선 (이호 → 삼양). 이 선에서 남쪽으로 2.5km 넘게 떨어지면 '산 쪽'으로 봐요
@@ -26,7 +26,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "이호테우해수욕장 정류장 걸어서 5분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "8552559",
-    note: "이호일동. 카카오맵(2026-11-01): 무료입장, 유모차 가능, 휴게공간, 전용 주차장. 개장 기간은 확인 못 했어요. 반려견 후기(블로그, 2026-11-01 확인): 반려견과 산책할 수 있다는 후기 여러 건.",
+    note: "이호일동. 카카오맵(2026-10-31): 무료입장, 유모차 가능, 휴게공간, 전용 주차장. 개장 기간은 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책할 수 있다는 후기 여러 건.",
     sources: ["https://place.map.kakao.com/8552559","https://blog.naver.com/satyr334/224369863603","https://blog.naver.com/ssoyeon_yoon/224315361881"]
   },
   {
@@ -37,7 +37,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "삼양해수욕장입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "7934984",
-    note: "삼양이동. 카카오맵(2026-11-01): 무료입장, 공영주차장 무료. 관광공사 무장애: 출입구까지 경사로(가파름), 주출입구 턱 없음, 장애인 화장실 있음. 모래사장 안쪽은 따로 확인이 필요해요.",
+    note: "삼양이동. 카카오맵(2026-10-31): 무료입장, 공영주차장 무료. 관광공사 무장애: 출입구까지 경사로(가파름), 주출입구 턱 없음, 장애인 화장실 있음. 모래사장 안쪽은 따로 확인이 필요해요.",
     sources: ["관광공사 API 129401","https://place.map.kakao.com/7934984"]
   },
   {
@@ -49,7 +49,7 @@ const PLACES = [
     dog: true, stroller: false, stepFree: null, solo: null,
     station: "오래물광장 정류장 걸어서 6분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "7834621",
-    note: "도두일동. 카카오맵(2026-11-01): 무료입장, 휴게공간, 반려동물 동반, 공영주차장(협소). 유모차 후기(블로그, 2026-11-01 확인): 계단이 있어 유모차를 권하지 않는다는 글 여러 건.",
+    note: "도두일동. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반, 공영주차장(협소). 유모차 후기(블로그, 2026-10-31 확인): 계단이 있어 유모차를 권하지 않는다는 글 여러 건.",
     sources: ["https://place.map.kakao.com/7834621","https://aurora-1.tistory.com/2","https://blog.naver.com/ssoyeon_yoon/224378209580"]
   },
   {
@@ -60,7 +60,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "한라수목원 정류장 걸어서 14분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "8641180",
-    note: "수목원길 72. 카카오맵(2026-11-01): 09:00~18:00, 무료입장, 휠체어 접근, 유모차 가능, 주차(2시간까지 1,000원).",
+    note: "수목원길 72. 카카오맵(2026-10-31): 09:00~18:00, 무료입장, 휠체어 접근, 유모차 가능, 주차(2시간까지 1,000원).",
     sources: ["https://place.map.kakao.com/8641180"]
   },
   {
@@ -71,7 +71,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "한라생태숲 정류장 걸어서 4분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "11426355",
-    note: "516로 2596. 카카오맵(2026-11-01): 09:00~17:00(입장 마감은 계절마다 달라요), 무료입장, 휠체어 접근, 유모차 가능, 무료 주차.",
+    note: "516로 2596. 카카오맵(2026-10-31): 09:00~17:00(입장 마감은 계절마다 달라요), 무료입장, 휠체어 접근, 유모차 가능, 무료 주차.",
     sources: ["https://place.map.kakao.com/11426355"]
   },
   {
@@ -82,7 +82,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "내도동 서마을 정류장 걸어서 5분", bikeRack: null, evChargerMin: 7, parking: true,
     kakaoId: "13323388",
-    note: "내도동. 카카오맵(2026-11-01): 무료입장, 반려동물 동반, 작은 주차장.",
+    note: "내도동. 카카오맵(2026-10-31): 무료입장, 반려동물 동반, 작은 주차장.",
     sources: ["https://place.map.kakao.com/13323388"]
   },
   {
@@ -94,7 +94,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "용담사거리 정류장 걸어서 4분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "1698424203",
-    note: "용담일동. 카카오맵(2026-11-01): 무료입장, 휠체어 접근, 휴게공간, 반려동물 동반, 협소한 무료 주차. 유모차 후기(블로그, 2026-11-01 확인): 구름다리까지 유모차로 갈 수 있다는 글 2건.",
+    note: "용담일동. 카카오맵(2026-10-31): 무료입장, 휠체어 접근, 휴게공간, 반려동물 동반, 협소한 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 구름다리까지 유모차로 갈 수 있다는 글 2건.",
     sources: ["https://place.map.kakao.com/1698424203","https://blog.naver.com/lstory_/224045206287","https://blog.naver.com/minac3612/224089961421"]
   },
   {
@@ -106,7 +106,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "제주사대부설중학교 정류장 걸어서 4분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "11540370",
-    note: "용담이동. 카카오맵(2026-11-01): 무료입장, 공영주차장 최초 30분 무료. 반려견 후기(블로그, 2026-11-01 확인): 반려견과 다녀온 후기 여러 건.",
+    note: "용담이동. 카카오맵(2026-10-31): 무료입장, 공영주차장 최초 30분 무료. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건.",
     sources: ["https://place.map.kakao.com/11540370","https://blog.naver.com/hs871004/223682961586","https://blog.naver.com/ddubbi_02/224452467890"]
   },
   {
@@ -119,7 +119,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "사라봉 정류장 걸어서 9분", bikeRack: null, evChargerMin: 6, parking: true,
     kakaoId: "7922396",
-    note: "건입동. 카카오맵(2026-11-01): 무료입장, 휴게공간, 무료 주차장. 반려견 후기(블로그, 2026-11-01 확인): 반려견 산책 글 여러 건.",
+    note: "건입동. 카카오맵(2026-10-31): 무료입장, 휴게공간, 무료 주차장. 반려견 후기(블로그, 2026-10-31 확인): 반려견 산책 글 여러 건.",
     sources: ["https://place.map.kakao.com/7922396","https://blog.naver.com/jejuangelhouse/224292278610","https://blog.naver.com/cycyel/223928954927"]
   },
   {
@@ -131,7 +131,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "거로 입구 정류장 걸어서 11분", bikeRack: null, evChargerMin: 9, parking: true,
     kakaoId: "7899031",
-    note: "화북일동. 카카오맵(2026-11-01): 무료입장. 관광공사(2025-08 수정): 상시 개방, 연중무휴, 주차 가능. 반려견 후기(블로그, 2026-11-01 확인): 반려견 산책 글 여러 건.",
+    note: "화북일동. 카카오맵(2026-10-31): 무료입장. 관광공사(2025-08 수정): 상시 개방, 연중무휴, 주차 가능. 반려견 후기(블로그, 2026-10-31 확인): 반려견 산책 글 여러 건.",
     sources: ["관광공사 API 1069292","https://place.map.kakao.com/7899031","https://blog.naver.com/rindahwa/224095919640","https://blog.naver.com/yumyum_jeju/224112911286"]
   },
   {
@@ -143,7 +143,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "어영마을 정류장 걸어서 5분", bikeRack: null, evChargerMin: 8, parking: true,
     kakaoId: "13723959",
-    note: "용담삼동. 카카오맵(2026-11-01): 무료입장, 유모차 가능, 공영주차장. 관광공사 무장애: 대부분 단차 없지만 돌길이 있어요. 반려견 후기(블로그, 2026-11-01 확인): 반려견과 다녀온 후기 여러 건.",
+    note: "용담삼동. 카카오맵(2026-10-31): 무료입장, 유모차 가능, 공영주차장. 관광공사 무장애: 대부분 단차 없지만 돌길이 있어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건.",
     sources: ["관광공사 API 1925362","https://place.map.kakao.com/13723959","https://blog.naver.com/dikefr/223838613453","https://blog.naver.com/bbolife_/223909688946"]
   },
   {
@@ -156,7 +156,7 @@ const PLACES = [
     dog: false, stroller: true, stepFree: true, solo: null,
     station: "국립제주박물관 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "8192179",
-    note: "일주동로 17. 카카오맵(2026-11-01): 09:00~18:00, 월 휴무, 무료입장, 휠체어 접근, 유모차 가능, 수유실, 야외 주차장. 반려견 후기(블로그, 2026-11-01 확인): 전시실에 반려견이 못 들어간다는 글 2건.",
+    note: "일주동로 17. 카카오맵(2026-10-31): 09:00~18:00, 월 휴무, 무료입장, 휠체어 접근, 유모차 가능, 수유실, 야외 주차장. 반려견 후기(블로그, 2026-10-31 확인): 전시실에 반려견이 못 들어간다는 글 2건.",
     sources: ["https://place.map.kakao.com/8192179","https://blog.naver.com/eslt1234/224396905734","https://blog.naver.com/barena950/224191703501"]
   },
   {
@@ -169,7 +169,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: null, solo: null,
     station: "민속자연사박물관 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "8067497",
-    note: "삼성로 40. 카카오맵(2026-11-01): 09:00~18:00, 월 휴무, 장애인 시설, 유료 주차, 수유실. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-11-01 확인): 경사로·엘리베이터로 유모차 이동이 편했다는 후기 2건.",
+    note: "삼성로 40. 카카오맵(2026-10-31): 09:00~18:00, 월 휴무, 장애인 시설, 유료 주차, 수유실. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 경사로·엘리베이터로 유모차 이동이 편했다는 후기 2건.",
     sources: ["https://place.map.kakao.com/8067497","https://blog.naver.com/managemm/224422028733","https://blog.naver.com/wjsqhfka73/224356463686"]
   },
   {
@@ -182,7 +182,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: null, solo: null,
     station: "제주도립미술관입구 정류장 걸어서 6분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "10801589",
-    note: "1100로 2894-78. 카카오맵(2026-11-01): 10:00~18:00(7~9월 09:00~20:00), 월 휴무, 장애인 시설, 주차. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 다녀온 후기, 유모차 대여 가능.",
+    note: "1100로 2894-78. 카카오맵(2026-10-31): 10:00~18:00(7~9월 09:00~20:00), 월 휴무, 장애인 시설, 주차. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 다녀온 후기, 유모차 대여 가능.",
     sources: ["https://place.map.kakao.com/10801589","https://blog.naver.com/blackout10/224433419624","https://blog.naver.com/hana_315/224329912092"]
   },
   {
@@ -194,7 +194,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "제주해변공연장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "25811890",
-    note: "탑동로 14. 카카오맵(2026-11-01): 10:00~19:00, 월 휴무, 유료입장, 휠체어 접근, 앞 공영주차장. 입장료는 확인 못 했어요.",
+    note: "탑동로 14. 카카오맵(2026-10-31): 10:00~19:00, 월 휴무, 유료입장, 휠체어 접근, 앞 공영주차장. 입장료는 확인 못 했어요.",
     sources: ["https://place.map.kakao.com/25811890"]
   },
   {
@@ -206,7 +206,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "제주고등학교 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "20303776",
-    note: "노형동. 카카오맵(2026-11-01): 10:00~18:00, 월 휴관, 성인 14,000원·청소년 12,000원·어린이 10,000원, 장애인 시설, 무료 주차.",
+    note: "노형동. 카카오맵(2026-10-31): 10:00~18:00, 월 휴관, 성인 14,000원·청소년 12,000원·어린이 10,000원, 장애인 시설, 무료 주차.",
     sources: ["https://place.map.kakao.com/20303776"]
   },
   {
@@ -218,7 +218,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "도두봉 동쪽 정류장 걸어서 2분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "581695647",
-    note: "도두일동. 카카오맵(2026-11-01): 무료입장, 유모차 가능, 기념품샵, 무료 공영주차장. 반려견 후기(블로그, 2026-11-01 확인): 반려견과 걸은 후기 여러 건.",
+    note: "도두일동. 카카오맵(2026-10-31): 무료입장, 유모차 가능, 기념품샵, 무료 공영주차장. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 걸은 후기 여러 건.",
     sources: ["https://place.map.kakao.com/581695647","https://blog.naver.com/iamshuri0913/224146068401","https://blog.naver.com/lovely_jjanga/224357140385"]
   },
   {
@@ -229,7 +229,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "주르레마을 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "7973783",
-    note: "노형동. 카카오맵(2026-11-01): 무료입장, 휴게공간, 공용주차장.",
+    note: "노형동. 카카오맵(2026-10-31): 무료입장, 휴게공간, 공용주차장.",
     sources: ["https://place.map.kakao.com/7973783"]
   },
   {
@@ -241,7 +241,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "별빛누리공원/난타공연장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "17360759",
-    note: "선돌목동길 60. 카카오맵(2026-11-01): 14:00~22:00, 월 휴무, 관람료 5,000원, 무료 주차. 관광공사 무장애: 출입구까지 턱 없음, 주출입구 경사로, 장애인 화장실, 휠체어·유모차 대여. 4~9월은 15:00~23:00이에요.",
+    note: "선돌목동길 60. 카카오맵(2026-10-31): 14:00~22:00, 월 휴무, 관람료 5,000원, 무료 주차. 관광공사 무장애: 출입구까지 턱 없음, 주출입구 경사로, 장애인 화장실, 휠체어·유모차 대여. 4~9월은 15:00~23:00이에요.",
     sources: ["관광공사 API 745313","https://place.map.kakao.com/17360759"]
   },
   {
@@ -252,7 +252,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "보성시장 정류장 걸어서 4분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "7923901",
-    note: "삼성로. 카카오맵(2026-11-01): 09:00~18:00, 유료입장, 휠체어 접근, 유모차 가능, 관람객 1시간 30분 무료 주차. 입장료는 확인 못 했어요.",
+    note: "삼성로. 카카오맵(2026-10-31): 09:00~18:00, 유료입장, 휠체어 접근, 유모차 가능, 관람객 1시간 30분 무료 주차. 입장료는 확인 못 했어요.",
     sources: ["https://place.map.kakao.com/7923901"]
   },
   {
@@ -264,7 +264,7 @@ const PLACES = [
     dog: false, stroller: true, stepFree: null, solo: null,
     station: "관덕정 정류장 걸어서 3분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "10805294",
-    note: "관덕로. 카카오맵(2026-11-01): 09:00~18:00, 연중무휴, 유료입장, 유모차 가능, 주차장 작음. 입장료는 확인 못 했어요. 반려견 후기(블로그, 2026-11-01 확인): 반려견 금지 구역이라는 글 2건(축제 때는 다를 수 있어요).",
+    note: "관덕로. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유료입장, 유모차 가능, 주차장 작음. 입장료는 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견 금지 구역이라는 글 2건(축제 때는 다를 수 있어요).",
     sources: ["https://place.map.kakao.com/10805294","https://blog.naver.com/yunjung7870/224124838730","https://blog.naver.com/athena0930/223817017143"]
   },
   {
@@ -276,7 +276,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "한라도서관입구/제주문학관 정류장 걸어서 3분", bikeRack: null, evChargerMin: 0, parking: true,
     kakaoId: "882483584",
-    note: "연북로 339. 카카오맵(2026-11-01): 09:00~18:00(입장 17:30까지), 월 휴무, 무료입장, 휠체어 접근, 유모차 가능, 수유실, 주차장. 관광공사 무장애: 휠체어·유모차 대여, 장애인 화장실.",
+    note: "연북로 339. 카카오맵(2026-10-31): 09:00~18:00(입장 17:30까지), 월 휴무, 무료입장, 휠체어 접근, 유모차 가능, 수유실, 주차장. 관광공사 무장애: 휠체어·유모차 대여, 장애인 화장실.",
     sources: ["관광공사 API 2949573","https://place.map.kakao.com/882483584"]
   },
   {
@@ -288,7 +288,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "탐라교육원 정류장 걸어서 3분", bikeRack: null, evChargerMin: 5, parking: true,
     kakaoId: "518140268",
-    note: "산록북로 421-1. 카카오맵(2026-11-01): 09:30~16:30, 월 휴무, 무료 주차. 관광공사 무장애: 출입구까지 경사로, 주출입구 턱 없음, 장애인 화장실. 요금은 확인 못 했어요.",
+    note: "산록북로 421-1. 카카오맵(2026-10-31): 09:30~16:30, 월 휴무, 무료 주차. 관광공사 무장애: 출입구까지 경사로, 주출입구 턱 없음, 장애인 화장실. 요금은 확인 못 했어요.",
     sources: ["관광공사 API 2905116","https://place.map.kakao.com/518140268"]
   },
   {
@@ -310,7 +310,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "동문로터리, 동문시장 정류장 걸어서 1분", bikeRack: null, evChargerMin: 6, parking: true,
     kakaoId: "1262338999",
-    note: "동문로 16. 카카오맵(2026-11-01): 08:00~21:00, 반려동물 동반, 장애인 시설, 유료 주차. 물건값은 빼고 0원으로 넣었어요.",
+    note: "동문로 16. 카카오맵(2026-10-31): 08:00~21:00, 반려동물 동반, 장애인 시설, 유료 주차. 물건값은 빼고 0원으로 넣었어요.",
     sources: ["https://place.map.kakao.com/1262338999"]
   },
   {
@@ -321,7 +321,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "탐라광장/제주여성가족연구원 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "1185434720",
-    note: "중앙로7길 25. 카카오맵(2026-11-01): 11:00~19:00, 연중무휴(휴무는 인스타 공지), 반려동물 동반, 장애인 시설, 공영주차장. 물건값은 빼고 0원으로 넣었어요.",
+    note: "중앙로7길 25. 카카오맵(2026-10-31): 11:00~19:00, 연중무휴(휴무는 인스타 공지), 반려동물 동반, 장애인 시설, 공영주차장. 물건값은 빼고 0원으로 넣었어요.",
     sources: ["https://place.map.kakao.com/1185434720"]
   },
   {
@@ -332,7 +332,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "제주사대부설중학교 정류장 걸어서 4분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "1175638899",
-    note: "용두암길 20. 카카오맵(2026-11-01): 13:00~18:00. 물건값은 빼고 0원으로 넣었어요.",
+    note: "용두암길 20. 카카오맵(2026-10-31): 13:00~18:00. 물건값은 빼고 0원으로 넣었어요.",
     sources: ["https://place.map.kakao.com/1175638899"]
   },
   {
@@ -343,7 +343,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "동문로터리, 동문시장 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "1011656238",
-    note: "칠성로길 38. 카카오맵(2026-11-01): 11:30~19:00, 목 휴무. 물건값은 빼고 0원으로 넣었어요.",
+    note: "칠성로길 38. 카카오맵(2026-10-31): 11:30~19:00, 목 휴무. 물건값은 빼고 0원으로 넣었어요.",
     sources: ["https://place.map.kakao.com/1011656238"]
   },
   {
@@ -356,7 +356,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "이호동주민센터 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "21455793",
-    note: "항골남길 46. 카카오맵(2026-11-01): 09:00~18:00, 14:30~16:10 브레이크타임, 17:50 마지막 주문, 고기국수 10,000원, 유아의자, 전용 주차장.",
+    note: "항골남길 46. 카카오맵(2026-10-31): 09:00~18:00, 14:30~16:10 브레이크타임, 17:50 마지막 주문, 고기국수 10,000원, 유아의자, 전용 주차장.",
     sources: ["https://place.map.kakao.com/21455793"]
   },
   {
@@ -369,7 +369,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "종합어시장 정류장 걸어서 1분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "232056222",
-    note: "임항로 30. 카카오맵(2026-11-01): 10:00~21:30, 15:00~17:00 브레이크타임, 저녁 20:20 마지막 주문, 메뉴 28,000원(2인부터), 유아의자, 장애인 시설, 유료 주차.",
+    note: "임항로 30. 카카오맵(2026-10-31): 10:00~21:30, 15:00~17:00 브레이크타임, 저녁 20:20 마지막 주문, 메뉴 28,000원(2인부터), 유아의자, 장애인 시설, 유료 주차.",
     sources: ["https://place.map.kakao.com/232056222"]
   },
   {
@@ -380,7 +380,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "도두봉 동쪽 정류장 걸어서 6분", bikeRack: null, evChargerMin: 6, parking: true,
     kakaoId: "19065619",
-    note: "도두봉2길 43. 카카오맵(2026-11-01): 09:00~21:00, 화 휴무, 여럿이 먹는 세트가 많아 1인 가격은 비워 뒀어요, 전용 주차장.",
+    note: "도두봉2길 43. 카카오맵(2026-10-31): 09:00~21:00, 화 휴무, 여럿이 먹는 세트가 많아 1인 가격은 비워 뒀어요, 전용 주차장.",
     sources: ["https://place.map.kakao.com/19065619"]
   },
   {
@@ -392,7 +392,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "한전 제주전력지사 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: false,
     kakaoId: "8244466",
-    note: "청귤로 12. 카카오맵(2026-11-01): 11:00~16:30, 16:00 마지막 주문, 일 휴무, 콩국수 11,000원, 유아의자, 반려동물 동반. 전용 주차장 없어요.",
+    note: "청귤로 12. 카카오맵(2026-10-31): 11:00~16:30, 16:00 마지막 주문, 일 휴무, 콩국수 11,000원, 유아의자, 반려동물 동반. 전용 주차장 없어요.",
     sources: ["관광공사 API 2860705","https://place.map.kakao.com/8244466"]
   },
   {
@@ -404,7 +404,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "으뜸마을 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "138874038",
-    note: "진군1길 27. 카카오맵(2026-11-01): 07:30~19:00, 18:30 마지막 주문, 수 휴무, 보말 톳 칼국수 11,000원, 전용 주차 3대.",
+    note: "진군1길 27. 카카오맵(2026-10-31): 07:30~19:00, 18:30 마지막 주문, 수 휴무, 보말 톳 칼국수 11,000원, 전용 주차 3대.",
     sources: ["https://place.map.kakao.com/138874038"]
   },
   {
@@ -416,7 +416,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "동문로터리, 동문시장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 5, parking: true,
     kakaoId: "18479714",
-    note: "동문로4길 9-6. 카카오맵(2026-11-01): 08:00~19:00, 18:00 마지막 주문, 키즈메뉴, 주차. 1인 가격은 확인 못 했어요.",
+    note: "동문로4길 9-6. 카카오맵(2026-10-31): 08:00~19:00, 18:00 마지막 주문, 키즈메뉴, 주차. 1인 가격은 확인 못 했어요.",
     sources: ["https://place.map.kakao.com/18479714"]
   },
   {
@@ -427,7 +427,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "동문로터리, 동문시장 정류장 걸어서 1분", bikeRack: null, evChargerMin: 6, parking: true,
     kakaoId: "7915275",
-    note: "동문로4길 12. 카카오맵(2026-11-01): 10:30~19:30, 월·화·수 휴무, 사랑식 5,500원, 유아의자, 장애인 시설, 유료 주차.",
+    note: "동문로4길 12. 카카오맵(2026-10-31): 10:30~19:30, 월·화·수 휴무, 사랑식 5,500원, 유아의자, 장애인 시설, 유료 주차.",
     sources: ["관광공사 API 2870910","https://place.map.kakao.com/7915275"]
   },
   {
@@ -439,7 +439,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "오일장동길 정류장 걸어서 9분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "776635732",
-    note: "오일장중길 89-16. 카카오맵(2026-11-01): 08:40~19:00, 18:10 마지막 주문, 목 휴무, 아보카도전복밥 15,000원, 유아의자, 무료 주차. 관광공사 무장애: 자동문, 내부 턱 없음, 테이블 간격 넓음.",
+    note: "오일장중길 89-16. 카카오맵(2026-10-31): 08:40~19:00, 18:10 마지막 주문, 목 휴무, 아보카도전복밥 15,000원, 유아의자, 무료 주차. 관광공사 무장애: 자동문, 내부 턱 없음, 테이블 간격 넓음.",
     sources: ["관광공사 API 2767589","https://place.map.kakao.com/776635732"]
   },
   {
@@ -450,7 +450,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "신산마을 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "1022638275",
-    note: "일주서로 7489. 카카오맵(2026-11-01): 06:00~15:00, 수 휴무, 해장국 11,000원, 유아의자.",
+    note: "일주서로 7489. 카카오맵(2026-10-31): 06:00~15:00, 수 휴무, 해장국 11,000원, 유아의자.",
     sources: ["https://place.map.kakao.com/1022638275"]
   },
   {
@@ -461,7 +461,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "종합어시장 정류장 걸어서 1분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "25430346",
-    note: "임항로 34. 카카오맵(2026-11-01): 06:00~14:30, 수 휴무, 소고기해장국 10,000원. 근처 공영주차장 이용.",
+    note: "임항로 34. 카카오맵(2026-10-31): 06:00~14:30, 수 휴무, 소고기해장국 10,000원. 근처 공영주차장 이용.",
     sources: ["https://place.map.kakao.com/25430346"]
   },
   {
@@ -473,7 +473,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "종합어시장 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "7875124",
-    note: "임항로 37-4. 카카오맵(2026-11-01): 08:00~21:00, 15:00~16:00 브레이크타임, 화 휴무, 갈치조림(중) 45,000원(2명 기준으로 1인 22,500원으로 넣었어요), 유아의자, 주차.",
+    note: "임항로 37-4. 카카오맵(2026-10-31): 08:00~21:00, 15:00~16:00 브레이크타임, 화 휴무, 갈치조림(중) 45,000원(2명 기준으로 1인 22,500원으로 넣었어요), 유아의자, 주차.",
     sources: ["https://place.map.kakao.com/7875124"]
   },
   {
@@ -485,7 +485,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: null, solo: null,
     station: "몰래물 정류장 걸어서 4분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "1903594998",
-    note: "서해안로 372. 카카오맵(2026-11-01): 09:00~21:00, 화 휴무, 갈치조림 2인 50,000원(1인 25,000원), 무료 주차. 유모차 후기(블로그, 2026-11-01 확인): 테이블 공간이 넓어 유모차가 들어온다는 글 2건.",
+    note: "서해안로 372. 카카오맵(2026-10-31): 09:00~21:00, 화 휴무, 갈치조림 2인 50,000원(1인 25,000원), 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 테이블 공간이 넓어 유모차가 들어온다는 글 2건.",
     sources: ["https://place.map.kakao.com/1903594998","https://blog.naver.com/peb1102/224213646944","https://blog.naver.com/nunuworld1011/224020443845"]
   },
   {
@@ -496,7 +496,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "제주도청 신제주로터리 정류장 걸어서 1분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "1387964178",
-    note: "귀아랑길 24. 카카오맵(2026-11-01): 08:00~15:00, 일 휴무, 고기국수 11,000원, 15시 마지막 주문, 재료 소진시 조기 마감, 유아의자, 반려동물 동반, 장애인 시설, 유료 주차.",
+    note: "귀아랑길 24. 카카오맵(2026-10-31): 08:00~15:00, 일 휴무, 고기국수 11,000원, 15시 마지막 주문, 재료 소진시 조기 마감, 유아의자, 반려동물 동반, 장애인 시설, 유료 주차.",
     sources: ["관광공사 API 1827714","https://place.map.kakao.com/1387964178"]
   },
   {
@@ -507,7 +507,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: true, solo: null,
     station: "오래물광장 정류장 걸어서 6분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "1423552465",
-    note: "도두항서길 42. 카카오맵(2026-11-01): 16:00~24:00, 반려동물 동반, 장애인 시설, 주차. 관광공사 무장애: 출입구까지·주출입구 경사로. 1인 가격은 확인 못 했어요.",
+    note: "도두항서길 42. 카카오맵(2026-10-31): 16:00~24:00, 반려동물 동반, 장애인 시설, 주차. 관광공사 무장애: 출입구까지·주출입구 경사로. 1인 가격은 확인 못 했어요.",
     sources: ["관광공사 API 2870537","https://place.map.kakao.com/1423552465"]
   },
   {
@@ -519,7 +519,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "제원아파트 정류장 걸어서 2분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "316010726",
-    note: "제원길 30. 카카오맵(2026-11-01): 11:30~22:00, 21:10 마지막 주문, 960숙성뼈등심 39,000원, 고기 구워 줌, 유아의자, 장애인 시설, 무료 주차.",
+    note: "제원길 30. 카카오맵(2026-10-31): 11:30~22:00, 21:10 마지막 주문, 960숙성뼈등심 39,000원, 고기 구워 줌, 유아의자, 장애인 시설, 무료 주차.",
     sources: ["관광공사 API 2798036","https://place.map.kakao.com/316010726"]
   },
   {
@@ -532,7 +532,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "동부경찰서 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "27207846",
-    note: "가령로 19. 카카오맵(2026-11-01): 09:00~21:30, 16:30~17:30 브레이크타임, 화 휴무, 고기국수 10,000원, 유아의자, 앞 주차. 관광공사 무장애: 출입구까지·주출입구 경사로.",
+    note: "가령로 19. 카카오맵(2026-10-31): 09:00~21:30, 16:30~17:30 브레이크타임, 화 휴무, 고기국수 10,000원, 유아의자, 앞 주차. 관광공사 무장애: 출입구까지·주출입구 경사로.",
     sources: ["관광공사 API 2854271","https://place.map.kakao.com/27207846"]
   },
   {
@@ -543,7 +543,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "오일장서쪽 입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "309907939",
-    note: "도공로 154-12. 카카오맵(2026-11-01): 11:30~22:00, 흑오겹살(180g) 22,000원, 유아의자, 키즈메뉴, 넓은 주차장. 관광공사 무장애: 자동문, 내부 턱 없음, 테이블 간격 넓음.",
+    note: "도공로 154-12. 카카오맵(2026-10-31): 11:30~22:00, 흑오겹살(180g) 22,000원, 유아의자, 키즈메뉴, 넓은 주차장. 관광공사 무장애: 자동문, 내부 턱 없음, 테이블 간격 넓음.",
     sources: ["관광공사 API 2789395","https://place.map.kakao.com/309907939"]
   },
   {
@@ -554,7 +554,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "탐라장애인 종합복지관 정류장 걸어서 7분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "8260298",
-    note: "도남로6길 16. 카카오맵(2026-11-01): 15:00~23:00, 월 휴무, 유아의자, 키즈메뉴, 착한가격업소. 관광공사 무장애: 내부 턱 없음, 테이블 간격 넓음. 관광공사: 주차 가능. 1인 가격은 확인 못 했어요.",
+    note: "도남로6길 16. 카카오맵(2026-10-31): 15:00~23:00, 월 휴무, 유아의자, 키즈메뉴, 착한가격업소. 관광공사 무장애: 내부 턱 없음, 테이블 간격 넓음. 관광공사: 주차 가능. 1인 가격은 확인 못 했어요.",
     sources: ["관광공사 API 687869","https://place.map.kakao.com/8260298"]
   },
   {
@@ -566,7 +566,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "정존마을 정류장 걸어서 3분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "1754846295",
-    note: "한라대학로 11. 카카오맵(2026-11-01): 11:20~22:30, 15:00~17:00 브레이크타임, 흑돼지 생구이(180g) 22,000원, 유아의자, 주차. 관광공사 무장애: 내부 턱 없음, 출입 통로 넓음, 안쪽 문 자동.",
+    note: "한라대학로 11. 카카오맵(2026-10-31): 11:20~22:30, 15:00~17:00 브레이크타임, 흑돼지 생구이(180g) 22,000원, 유아의자, 주차. 관광공사 무장애: 내부 턱 없음, 출입 통로 넓음, 안쪽 문 자동.",
     sources: ["관광공사 API 1019491","https://place.map.kakao.com/1754846295"]
   },
   {
@@ -580,7 +580,7 @@ const PLACES = [
     dog: false, stroller: null, stepFree: null, solo: null,
     station: "오래물광장 정류장 걸어서 3분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "8894680",
-    note: "도두항길 16. 카카오맵(2026-11-01): 10:00~20:00, 15:30~17:00 브레이크타임, 19:30 마지막 주문, 전복물회 12,000원, 키즈메뉴, 무료 주차. 반려견 후기(블로그, 2026-11-01 확인): 반려견 동반이 안 된다는 후기 여러 건.",
+    note: "도두항길 16. 카카오맵(2026-10-31): 10:00~20:00, 15:30~17:00 브레이크타임, 19:30 마지막 주문, 전복물회 12,000원, 키즈메뉴, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려견 동반이 안 된다는 후기 여러 건.",
     sources: ["관광공사 API 2758939","https://place.map.kakao.com/8894680","https://blog.naver.com/mozzi0626-/223910892698","https://blog.naver.com/leolog1203/224290513478"]
   },
   {
@@ -592,7 +592,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: null, solo: null,
     station: "제주국제공항입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "1588732308",
-    note: "공항로1길 14. 카카오맵(2026-11-01): 08:00~20:00, 고기국수 10,000원, 장애인 시설, 무료 주차. 유모차 후기(블로그, 2026-11-01 확인): 엘리베이터로 유모차를 끌고 간 후기 여러 건.",
+    note: "공항로1길 14. 카카오맵(2026-10-31): 08:00~20:00, 고기국수 10,000원, 장애인 시설, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 엘리베이터로 유모차를 끌고 간 후기 여러 건.",
     sources: ["관광공사 API 2899667","https://place.map.kakao.com/1588732308","https://blog.naver.com/06jin/224251000360","https://blog.naver.com/llolloll1991/224058520764"]
   },
   {
@@ -603,7 +603,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "탑동푸른쉼터 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "8268353",
-    note: "관덕로15길 25. 카카오맵(2026-11-01): 11:00~23:00, 흑오겹세트(2인) 57,000원(1인 28,500원), 단체석, 전용 주차·발렛.",
+    note: "관덕로15길 25. 카카오맵(2026-10-31): 11:00~23:00, 흑오겹세트(2인) 57,000원(1인 28,500원), 단체석, 전용 주차·발렛.",
     sources: ["관광공사 API 135919","https://place.map.kakao.com/8268353"]
   },
   {
@@ -614,7 +614,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "서문사거리 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "11547525",
-    note: "서사로 11. 카카오맵(2026-11-01): 06:00~22:00, 고사리육개장 11,000원, 유아의자.",
+    note: "서사로 11. 카카오맵(2026-10-31): 06:00~22:00, 고사리육개장 11,000원, 유아의자.",
     sources: ["https://place.map.kakao.com/11547525"]
   },
   {
@@ -628,7 +628,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: null, solo: null,
     station: "성화마을/제주출입국·외국인청 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "17869257",
-    note: "성화로9길 10. 카카오맵(2026-11-01): 10:30~21:30, 15:30~17:00 브레이크타임, 20:30 마지막 주문, 일 휴무, 전복뚝배기 18,000원, 유아의자. 유모차 후기(블로그, 2026-11-01 확인): 유모차 자리를 마련해 줬다는 후기와 간격이 넉넉하다는 글.",
+    note: "성화로9길 10. 카카오맵(2026-10-31): 10:30~21:30, 15:30~17:00 브레이크타임, 20:30 마지막 주문, 일 휴무, 전복뚝배기 18,000원, 유아의자. 유모차 후기(블로그, 2026-10-31 확인): 유모차 자리를 마련해 줬다는 후기와 간격이 넉넉하다는 글.",
     sources: ["관광공사 API 2783400","https://place.map.kakao.com/17869257","https://blog.naver.com/aahyeonn53/224345137497","https://cutethings365.com/711"]
   },
   {
@@ -640,7 +640,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "시티주유소 정류장 걸어서 1분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "599236130",
-    note: "한라대학로 85. 카카오맵(2026-11-01): 12:00~23:00, 15:00~16:30 브레이크타임, 제주갈비한판(600g) 65,000원(2명 기준으로 1인 32,500원), 유아의자. 관광공사 무장애: 출입구까지·주출입구 턱 없음(자동문).",
+    note: "한라대학로 85. 카카오맵(2026-10-31): 12:00~23:00, 15:00~16:30 브레이크타임, 제주갈비한판(600g) 65,000원(2명 기준으로 1인 32,500원), 유아의자. 관광공사 무장애: 출입구까지·주출입구 턱 없음(자동문).",
     sources: ["관광공사 API 2870589","https://place.map.kakao.com/599236130"]
   },
   {
@@ -654,7 +654,7 @@ const PLACES = [
     dog: false, stroller: true, stepFree: null, solo: null,
     station: "도두봉 동쪽 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "373077516",
-    note: "도두봉6길 4. 카카오맵(2026-11-01): 08:00~20:00, 19:30 마지막 주문, 아메리카노 5,000원, 테라스, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-11-01 확인): 반려견 출입이 안 된다는 글 2건. 유모차 후기(블로그, 2026-11-01 확인): 엘리베이터가 있어 유모차로 갈 수 있다는 후기 여러 건.",
+    note: "도두봉6길 4. 카카오맵(2026-10-31): 08:00~20:00, 19:30 마지막 주문, 아메리카노 5,000원, 테라스, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려견 출입이 안 된다는 글 2건. 유모차 후기(블로그, 2026-10-31 확인): 엘리베이터가 있어 유모차로 갈 수 있다는 후기 여러 건.",
     sources: ["관광공사 API 2837068","https://place.map.kakao.com/373077516","https://blog.naver.com/0108973/224260483086","https://blog.naver.com/haeyumeee/223901589003","https://blog.naver.com/rhejeju/224300975980","https://blog.naver.com/my_zziyu/224295049027"]
   },
   {
@@ -666,7 +666,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "도두동 정류장 걸어서 2분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "18484278",
-    note: "도공로 53. 카카오맵(2026-11-01): 10:00~19:00(일 12:00~18:00), 임시 휴무 공지가 있어 전화 확인이 좋아요, 반려동물 동반, 장애인 시설, 무료 주차. 가격은 확인 못 했어요.",
+    note: "도공로 53. 카카오맵(2026-10-31): 10:00~19:00(일 12:00~18:00), 임시 휴무 공지가 있어 전화 확인이 좋아요, 반려동물 동반, 장애인 시설, 무료 주차. 가격은 확인 못 했어요.",
     sources: ["https://place.map.kakao.com/18484278"]
   },
   {
@@ -678,7 +678,7 @@ const PLACES = [
     dog: false, stroller: null, stepFree: null, solo: null,
     station: "탐라광장/제주여성가족연구원 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "1004933426",
-    note: "서부두남길 9-1. 카카오맵(2026-11-01): 12:00~19:00, 일·월 휴무, 무화과 크림라떼 6,000원, 테라스. 반려견 후기(블로그, 2026-11-01 확인): 고양이가 있어 강아지 입장이 안 된다는 후기 여러 건.",
+    note: "서부두남길 9-1. 카카오맵(2026-10-31): 12:00~19:00, 일·월 휴무, 무화과 크림라떼 6,000원, 테라스. 반려견 후기(블로그, 2026-10-31 확인): 고양이가 있어 강아지 입장이 안 된다는 후기 여러 건.",
     sources: ["https://place.map.kakao.com/1004933426","https://blog.naver.com/sarah_lee_/224440344872","https://blog.naver.com/qkrgkdms1993/224391297807"]
   },
   {
@@ -692,7 +692,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "제주해변공연장 정류장 걸어서 1분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "572274077",
-    note: "탑동로 17. 카카오맵(2026-11-01): 10:00~19:00, 시트러스 아이스크림 7,000원, 반려동물 동반, 무료 주차. 반려견 후기(블로그, 2026-11-01 확인): 후기 2건. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 다녀온 글 2건.",
+    note: "탑동로 17. 카카오맵(2026-10-31): 10:00~19:00, 시트러스 아이스크림 7,000원, 반려동물 동반, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 다녀온 글 2건.",
     sources: ["https://place.map.kakao.com/572274077","https://blog.naver.com/kimdamda/224345110969","https://blog.naver.com/nha1017/224404057372","https://blog.naver.com/egjyg_/224451778650","https://blog.naver.com/wptlzk4/223965074331"]
   },
   {
@@ -704,7 +704,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "종합어시장 정류장 걸어서 5분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "1505093037",
-    note: "서부두길 26. 카카오맵(2026-11-01): 10:00~19:00, 18:30 마지막 주문, 연중무휴, 스윗 아워 라떼 7,500원, 루프탑, 무료 주차.",
+    note: "서부두길 26. 카카오맵(2026-10-31): 10:00~19:00, 18:30 마지막 주문, 연중무휴, 스윗 아워 라떼 7,500원, 루프탑, 무료 주차.",
     sources: ["https://place.map.kakao.com/1505093037"]
   },
   {
@@ -716,7 +716,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "용두암현대1차아파트 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "915825806",
-    note: "서해안로 671. 카카오맵(2026-11-01): 08:00~19:30, 19:20 마지막 주문, 용두암 클라우드 8,400원, 테라스, 유아의자, 앞 주차(부족).",
+    note: "서해안로 671. 카카오맵(2026-10-31): 08:00~19:30, 19:20 마지막 주문, 용두암 클라우드 8,400원, 테라스, 유아의자, 앞 주차(부족).",
     sources: ["https://place.map.kakao.com/915825806"]
   },
   {
@@ -727,7 +727,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "공항초소 정류장 걸어서 2분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "1572291358",
-    note: "서해안로 386. 카카오맵(2026-11-01): 10:00~20:00, 노을라떼 6,000원.",
+    note: "서해안로 386. 카카오맵(2026-10-31): 10:00~20:00, 노을라떼 6,000원.",
     sources: ["https://place.map.kakao.com/1572291358"]
   },
   {
@@ -738,7 +738,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "주르레마을 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "263044374",
-    note: "1100로 2894-49. 카카오맵(2026-11-01): 08:30~20:00, 녹차새순한라봉아이스티 7,000원, 테라스, 유아의자, 반려동물 동반, 장애인 시설, 무료 주차.",
+    note: "1100로 2894-49. 카카오맵(2026-10-31): 08:30~20:00, 녹차새순한라봉아이스티 7,000원, 테라스, 유아의자, 반려동물 동반, 장애인 시설, 무료 주차.",
     sources: ["관광공사 API 2836873","https://place.map.kakao.com/263044374"]
   },
   {
@@ -749,7 +749,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "이도수선화아파트 정류장 걸어서 2분", bikeRack: null, evChargerMin: 0, parking: true,
     kakaoId: "1044769046",
-    note: "연북로 707. 카카오맵(2026-11-01): 10:00~19:00(입장 18:00까지), 위로 커피 6,000원, 유아의자, 무료 주차.",
+    note: "연북로 707. 카카오맵(2026-10-31): 10:00~19:00(입장 18:00까지), 위로 커피 6,000원, 유아의자, 무료 주차.",
     sources: ["https://place.map.kakao.com/1044769046"]
   },
   {
@@ -760,7 +760,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "제주해변공연장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "2086134863",
-    note: "관덕로7길 39. 카카오맵(2026-11-01): 08:00~16:00, 화·수 휴무, 아메리카노 4,500원, 테라스.",
+    note: "관덕로7길 39. 카카오맵(2026-10-31): 08:00~16:00, 화·수 휴무, 아메리카노 4,500원, 테라스.",
     sources: ["관광공사 API 2852457","https://place.map.kakao.com/2086134863"]
   },
   {
@@ -773,7 +773,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "오등동 정류장 걸어서 3분", bikeRack: null, evChargerMin: 0, parking: true,
     kakaoId: "843686446",
-    note: "아연로 444-1. 카카오맵(2026-11-01): 10:00~19:00, 18:30 마지막 주문, 클래식 크로와상 4,500원, 테라스, 루프탑, 유아의자. 관광공사 무장애: 출입구까지 경사로, 주출입구 턱 없음. 관광공사: 주차 가능. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 편하다는 후기 여러 건, 입구에서 대여 가능.",
+    note: "아연로 444-1. 카카오맵(2026-10-31): 10:00~19:00, 18:30 마지막 주문, 클래식 크로와상 4,500원, 테라스, 루프탑, 유아의자. 관광공사 무장애: 출입구까지 경사로, 주출입구 턱 없음. 관광공사: 주차 가능. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 편하다는 후기 여러 건, 입구에서 대여 가능.",
     sources: ["관광공사 API 2854335","https://place.map.kakao.com/843686446","https://blog.naver.com/lbhlsy/224204055366","https://blog.naver.com/mmmm1023/224401995524"]
   },
   {
@@ -784,7 +784,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "제주시청(아라방면) 정류장 걸어서 4분", bikeRack: null, evChargerMin: 4, parking: false,
     kakaoId: "2020231452",
-    note: "광양10길 20. 카카오맵(2026-11-01): 11:00~23:00, 목 휴무, 넛츠끄레마 6,500원. 관광공사(2025-06): 주차 불가.",
+    note: "광양10길 20. 카카오맵(2026-10-31): 11:00~23:00, 목 휴무, 넛츠끄레마 6,500원. 관광공사(2025-06): 주차 불가.",
     sources: ["관광공사 API 2853982","https://place.map.kakao.com/2020231452"]
   },
   {
@@ -795,7 +795,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: true, solo: null,
     station: "안국사 정류장 걸어서 2분", bikeRack: null, evChargerMin: 9, parking: null,
     kakaoId: "2009325066",
-    note: "봉개동. 카카오맵(2026-11-01): 10:00~18:00, 수 휴무, 호두식빵샌드위치 9,000원, 테라스, 반려동물 동반, 장애인 시설. 관광공사 무장애: 출입구까지·주출입구 턱 없음.",
+    note: "봉개동. 카카오맵(2026-10-31): 10:00~18:00, 수 휴무, 호두식빵샌드위치 9,000원, 테라스, 반려동물 동반, 장애인 시설. 관광공사 무장애: 출입구까지·주출입구 턱 없음.",
     sources: ["관광공사 API 2755895","https://place.map.kakao.com/2009325066"]
   }
 ];

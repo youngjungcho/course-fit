@@ -1,4 +1,4 @@
-// 장소끼리 이동 시간표 (분). 2026-11-01 OpenRouteService로 계산했어요.
+// 장소끼리 이동 시간표 (분). 2026-10-31 OpenRouteService로 계산했어요.
 // 길 데이터: © OpenStreetMap contributors (ODbL) · 계산: © openrouteservice.org by HeiGIT
 // 막히는 길(실시간 교통)은 반영되지 않아요.
 // 버스: 국토교통부 TAGO 노선·정류장 + 제주버스정보시스템 시간표로 계산한 평균이에요. 칸 설명은 regions/aewol/travel.js 맨 위를 보세요.
