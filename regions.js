@@ -5,5 +5,6 @@ const REGIONS = [
   { id: "hallim", name: "한림·협재", search: "한림" },
   { id: "jejusi", name: "제주시내", search: "제주시" },
   { id: "seogwipo", name: "서귀포·중문", search: "서귀포" },
-  { id: "east", name: "함덕·조천·구좌", search: "제주" }
+  { id: "east", name: "함덕·조천·구좌", search: "제주" },
+  { id: "seongsan", name: "성산·표선", search: "서귀포" }
 ];
