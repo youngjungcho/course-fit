@@ -187,11 +187,11 @@
   <main id="screen"></main>
 </div>
 
-<script src="regions.js?v=20261101i"></script>
+<script src="regions.js?v=20261101j"></script>
 <script id="regionLoader">
 // 고른 지역의 자료만 불러와요 (지역 없는 예전 링크는 애월)
 const REGION = REGIONS.find((r) => r.id === new URLSearchParams(location.search).get("region")) ?? REGIONS[0];
-document.write(`<script src="regions/${REGION.id}/places.js?v=20261101i"><\/script><script src="regions/${REGION.id}/travel.js?v=20261101i"><\/script>`);
+document.write(`<script src="regions/${REGION.id}/places.js?v=20261101j"><\/script><script src="regions/${REGION.id}/travel.js?v=20261101j"><\/script>`);
 </script>
 <script>
 // ----- 고를 수 있는 것들 -----
