@@ -218,10 +218,10 @@
   <main id="screen"></main>
 </div>
 
-<script src="regions.js?v=20261101r"></script>
+<script src="regions.js?v=20261101u"></script>
 <script id="regionLoader">
 // 고른 지역의 자료만 불러와요 (지역 없는 예전 링크는 애월)
-const REGION_VERSION = "20261101r";
+const REGION_VERSION = "20261101u";
 const REGION = REGIONS.find((r) => r.id === new URLSearchParams(location.search).get("region")) ?? REGIONS[0];
 document.write(`<script src="regions/${REGION.id}/places.js?v=${REGION_VERSION}"><\/script><script src="regions/${REGION.id}/travel.js?v=${REGION_VERSION}"><\/script>`);
 </script>
@@ -275,13 +275,15 @@ const back = document.getElementById("back");
 
 // ----- 주소(URL)에 고른 조건 담기: 새로고침해도 그대로, 링크로 보내면 같은 코스가 떠요 -----
 // "지금 내 위치"는 위치라서 주소에 넣지 않아요
-const URL_KEYS = { who: "who", how: "how", people: "people", date: "date", from: "from", depart: "time", hours: "hours", budget: "budget", end: "end", area: "area" };
+// 큰 도시는 코스를 짤 구역을 골라요 (REGION.zones, 장소마다 zone 칸이 있어요)
+const ZONES = REGION.zones ? [{ id: "all", label: "상관없어요" }, ...REGION.zones] : [];
+const URL_KEYS = { who: "who", how: "how", people: "people", date: "date", from: "from", depart: "time", hours: "hours", budget: "budget", end: "end", area: "area", zone: "zone" };
 function queryOf() {
   const q = new URLSearchParams();
   for (const [k, name] of Object.entries(URL_KEYS)) {
     const v = state[k];
     if (v === null || v === undefined || (k === "from" && v === "here")) continue;
-    if ((k === "end" && v === "start") || (k === "area" && v === "mix")) continue; // 기본값은 빼요
+    if ((k === "end" && v === "start") || (k === "area" && v === "mix") || (k === "zone" && v === "all")) continue; // 기본값은 빼요
     if (k === "people" && state.how !== "any") continue; // 인원은 택시비를 나눌 때만 써요
     q.set(name, v);
   }
@@ -309,6 +311,7 @@ function readQuery() {
   state.budget = num("budget", BUDGET);
   state.end = one("end", (v) => ENDS.some((e) => e.id === v)) ?? "start";
   state.area = one("area", (v) => AREAS.some((a) => a.id === v)) ?? "mix";
+  state.zone = one("zone", (v) => ZONES.some((z) => z.id === v)) ?? "all";
   state.skip = (q.get("skip") ?? "").split(",").filter((id) => PLACES.some((p) => p.id === id));
   state.alt = Math.max(0, Number(q.get("alt")) || 0);
   // 앞 단계를 다 골라야 다음 단계로 갈 수 있어요
@@ -441,6 +444,7 @@ function renderWhen() {
     </div>
     ${chipGroup("어디서 출발해요? (숙소가 있는 동네)", "from", froms.map((f) => f.id), (id) => { const f = froms.find((x) => x.id === id); return f.emoji === "🏠" ? f.label : `${em(f.emoji)} ${f.label}`; })}
     <p class="geo" id="geo" hidden></p>
+    ${ZONES.length ? chipGroup("어느 쪽으로 갈까요?", "zone", ZONES.map((z) => z.id), (id) => ZONES.find((z) => z.id === id).label) : ""}
     <details class="advanced"><summary><span id="advSummary"></span><b aria-hidden="true"></b></summary><div class="inner">
     ${chipGroup("몇 시에 출발해요?", "depart", DEPART, (v) => v, 5)}
     ${chipGroup("몇 시간 있어요?", "hours", HOURS, (v) => `${v}시간`, 4)}
@@ -497,7 +501,7 @@ function renderWhen() {
   screen.querySelectorAll(".chip").forEach((chip) => {
     chip.onclick = () => {
       const key = chip.dataset.key;
-      state[key] = (key === "depart" || key === "from" || key === "area" || key === "when" || key === "end") ? chip.dataset.v : Number(chip.dataset.v);
+      state[key] = (key === "depart" || key === "from" || key === "area" || key === "when" || key === "end" || key === "zone") ? chip.dataset.v : Number(chip.dataset.v);
       if (key === "when") {
         staleDate = null; screen.querySelector(".stale")?.remove();
         datePick.hidden = state.when !== "pick";
@@ -787,6 +791,7 @@ function makeCourse({ includeUnknown = false } = {}) {
   const pool = PLACES.filter((p) => {
     if (p.lat === null) { noLocation++; return false; }
     if (skip.includes(p.id)) return false;
+    if (state.zone && state.zone !== "all" && p.zone !== state.zone) return false;
     if (p.forDogs && state.who !== "dog") return false; // 애견카페는 반려견과 갈 때만
     // 실내 위주: 공원과 야외 볼거리는 빼요
     if (state.area === "indoor" && (p.type === "공원" || (p.type === "볼거리" && !p.indoor))) return false;
@@ -817,8 +822,10 @@ function whyEmpty() {
     Object.assign(state, saved); return ok;
   };
   if (state.skip.length && tryWith({ skip: [] })) return "skip";
+  if (state.zone && state.zone !== "all" && !tryWith({ zone: "all" })) return "other";
   if (tryWith({ budget: Infinity })) return "budget";
   if (tryWith({ hours: 12 })) return "hours";
+  if (state.zone && state.zone !== "all" && tryWith({ zone: "all" })) return "zone";
   if (makeCourse({ includeUnknown: true }).stops.length) return "unknown";
   return "other";
 }
@@ -979,8 +986,11 @@ function busSteps(plan) {
 
 function emptyMessage(why) {
   const wheelBus = state.who === "wheel" && state.how === "walk";
+  // 저상버스 자료가 없는 지역은 어떤 조건이어도 뚜벅이 코스를 못 짜요
+  if (wheelBus && REGION.subway) return `아직 저상버스와 지하철 엘리베이터 자료가 없어서 휠체어 뚜벅이 코스는 짤 수 없어요. 이동을 "렌터카"나 "상관없어요"(택시·차)로 바꿔 보세요.`;
   const call = REGION.area === "제주" ? `행복콜(<a href="tel:18996884">1899-6884</a>) 휠체어 차량도 있어요.` : "";
   return {
+    zone: `고른 구역에는 이 조건에 맞는 곳이 부족해요. "어느 쪽으로 갈까요?"를 다른 구역이나 "상관없어요"로 바꿔 보세요.`,
     skip: `뺀 곳을 빼고 나니 코스를 짤 수 없어요. 위의 "다시 넣기"를 눌러 보세요.`,
     budget: `예산이 모자라요. ${state.how === "any" ? "택시비까지 넣으면 " : ""}1명 ${manwon(state.budget)}으로는 다녀올 수 있는 곳이 없어요. 예산을 늘리거나${state.how === "any" ? ", 이동을 뚜벅이로 바꾸거나" : ""} 끝나는 곳을 "상관없어요"로 바꿔 보세요.`,
     hours: wheelBus
@@ -1020,7 +1030,7 @@ function renderResult() {
   screen.innerHTML = `
     <h1>이런 코스 어때요?</h1>
     <p class="sub">${em(who.emoji)} ${who.label} · ${em(how.emoji)} ${how.label}${state.how === "any" ? ` · ${state.people}명` : ""}</p>
-    <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
+    <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}${state.zone && state.zone !== "all" ? ` · ${esc(ZONES.find((z) => z.id === state.zone).label)}` : ""}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
     ${stops.length ? `
       <div class="summary">
         <div><b>${stops.length}곳</b><span>장소</span></div>
