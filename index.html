@@ -218,11 +218,12 @@
   <main id="screen"></main>
 </div>
 
-<script src="regions.js?v=20261101p"></script>
+<script src="regions.js?v=20261101r"></script>
 <script id="regionLoader">
 // 고른 지역의 자료만 불러와요 (지역 없는 예전 링크는 애월)
+const REGION_VERSION = "20261101r";
 const REGION = REGIONS.find((r) => r.id === new URLSearchParams(location.search).get("region")) ?? REGIONS[0];
-document.write(`<script src="regions/${REGION.id}/places.js?v=20261101p"><\/script><script src="regions/${REGION.id}/travel.js?v=20261101p"><\/script>`);
+document.write(`<script src="regions/${REGION.id}/places.js?v=${REGION_VERSION}"><\/script><script src="regions/${REGION.id}/travel.js?v=${REGION_VERSION}"><\/script>`);
 </script>
 <script>
 // ----- 고를 수 있는 것들 -----
@@ -241,7 +242,7 @@ const HOW = [
   { id: "any",  emoji: "🤷", label: "상관없어요", hint: "가까우면 걷고, 멀면 택시·차로" }
 ];
 // 버스 자료가 없는 지역은 뚜벅이를 빼요
-const HOW_HERE = REGION.noBus ? HOW.filter((h) => h.id !== "walk") : HOW;
+const HOW_HERE = REGION.noBus ? HOW.filter((h) => h.id !== "walk") : REGION.subway ? HOW.map((h) => h.id === "walk" ? { ...h, hint: "걷거나 지하철·버스" } : h) : HOW;
 const WHEN = [
   { id: "today",    label: () => `오늘 (${dayOf(kstToday())})`,              date: () => kstToday() },
   { id: "tomorrow", label: () => `내일 (${dayOf(addDays(kstToday(), 1))})`, date: () => addDays(kstToday(), 1) },
@@ -347,6 +348,27 @@ const dayOf = (iso) => DAYS[new Date(`${iso}T00:00:00Z`).getUTCDay()];
 const dateLabel = (iso) => `${Number(iso.slice(5, 7))}월 ${Number(iso.slice(8, 10))}일(${dayOf(iso)})`;
 
 // ----- 화면 그리기 -----
+// 대중교통 칸이 큰 지역(splitTransit)은 뚜벅이를 고를 때만 transit.js를 불러와요
+const needsTransit = () => REGION.splitTransit && state.how === "walk" && state.who !== "wheel" && !TRAVEL.bus;
+let transitLoading = null;
+function loadTransit() {
+  transitLoading ??= new Promise((ok, fail) => {
+    const s = document.createElement("script");
+    s.src = `regions/${REGION.id}/transit.js?v=${REGION_VERSION}`;
+    s.onload = ok;
+    s.onerror = () => { transitLoading = null; s.remove(); fail(); };
+    document.head.append(s);
+  });
+  return transitLoading;
+}
+function renderTransitWait() {
+  screen.innerHTML = `<h1 tabindex="-1">지하철·버스 정보를 불러오는 중이에요</h1><p class="sub">잠시만 기다려 주세요.</p>`;
+  loadTransit().then(render, () => {
+    screen.innerHTML = `<h1 tabindex="-1">지하철·버스 정보를 못 불러왔어요</h1><p class="sub">인터넷 연결을 확인하고 다시 시도해 주세요.</p><button class="choice" id="transitRetry">다시 시도</button>`;
+    document.getElementById("transitRetry").onclick = render;
+  });
+}
+
 function render() {
   bar.style.width = `${(state.step + 1) * 25}%`;
   const progress = document.getElementById("progress");
@@ -354,7 +376,7 @@ function render() {
   progress.setAttribute("aria-valuetext", `${state.step + 1}/4단계`);
   document.getElementById("stepText").textContent = `${state.step + 1}/4`;
   back.hidden = state.step === 0;
-  [renderWho, renderHow, renderWhen, renderResult][state.step]();
+  (state.step === 3 && needsTransit() ? renderTransitWait : [renderWho, renderHow, renderWhen, renderResult][state.step])();
   window.scrollTo(0, 0);
   // 화면이 바뀌면 제목으로 포커스를 옮겨서 화면낭독기가 새 화면을 읽게 해요 (처음 열 때는 빼고)
   const h1 = screen.querySelector("h1");
@@ -508,7 +530,10 @@ function distKm(a, b) {
 
 // 교통비 (성인 1명). 버스는 교통카드 기준이고, 40분 안에 갈아타면 환승 할인으로 따로 안 내요 (제주버스정보시스템 요금표)
 // 택시는 중형 기본요금(2km까지) + 거리요금. 요금은 regions.js에 지역별로 있어요. 막혀서 느릴 때 붙는 시간요금·심야 할증은 빼고 어림
-const busFare = (no) => /^1\d\d$/.test(no) ? 2000 : 1150; // 급행(1xx번)은 기본 2,000원
+const isRail = (no) => /호선|동해선|경전철/.test(no);
+const busFare = (no) => REGION.subway ? (isRail(no) ? REGION.subway.railFare : REGION.subway.busFare) : /^1\d\d$/.test(no) ? 2000 : 1150; // 제주 급행(1xx번)은 기본 2,000원
+// "102번", "2호선": 노선 이름을 화면에 쓰는 모양
+const lineName = (no) => isRail(no) ? no : `${no}번`;
 const taxiMeterFare = (km) => Math.max(0, Math.ceil((km - 2) * 1000 / REGION.taxiMeter)) * 100;
 // taxiFarKm을 넘은 거리는 거리요금이 2배예요 (강릉 6km 초과 할증 100%)
 const taxiFare = (km) => REGION.taxiBase + taxiMeterFare(km) + (REGION.taxiFarKm && km > REGION.taxiFarKm ? taxiMeterFare(km) - taxiMeterFare(REGION.taxiFarKm) : 0);
@@ -525,12 +550,13 @@ function travel(a, b, how) {
   if (how === "walk") {
     // 걸어서 20분 안이면 걷고, 멀면 버스 (기다리는 시간 포함 평균). 버스가 더 느리면 걸어요
     // 휠체어·어르신은 저상버스가 있는 노선만 타고, 30분 넘게는 걷지 않아요
-    const bus = (wheel ? TRAVEL.busWheel : TRAVEL.bus)[i][j], no = (wheel ? TRAVEL.busWheelNo : TRAVEL.busNo)[i][j];
-    const kind = wheel ? "저상버스" : "버스";
+    // 저상버스 자료가 없는 지역은 휠체어 칸이 없어요
+    const bus = (wheel ? TRAVEL.busWheel?.[i][j] ?? null : TRAVEL.bus[i][j]), no = (wheel ? TRAVEL.busWheelNo?.[i][j] : TRAVEL.busNo[i][j]);
+    const kind = wheel ? "저상버스" : REGION.subway ? "대중교통" : "버스";
     if (walk <= 20 || (bus !== null && walk <= bus && (!wheel || walk <= 30))) { min = walk; text = "걸어서"; }
     else if (bus === null) { min = Infinity; text = `${kind}로 못 가요`; }
     else {
-      min = bus; text = no === "갈아타기" ? `${kind}로(1번 갈아타기)` : `${no}번 ${kind}로`;
+      min = bus; text = no === "갈아타기" ? `${kind}으로(1번 갈아타기)`.replace("버스으로", "버스로") : isRail(no) ? `${no}으로` : `${no}번 ${wheel ? "저상버스" : "버스"}로`;
       fare = no === "갈아타기" ? busFare("") : busFare(no);
       plan = TRAVEL.busPlans[(wheel ? TRAVEL.busWheelPlan : TRAVEL.busPlan)[i][j]];
     }
@@ -945,15 +971,15 @@ function busSteps(plan) {
   const walk = (m) => (Number(m) > 1 ? `걸어서 ${m}분` : "바로");
   if (c.length === 5) {
     const [no, from, w1, to, w2] = c;
-    return `${walk(w1)} → ${esc(from)}에서 ${esc(no)}번 → ${esc(to)}에서 내려 ${walk(w2)}`;
+    return `${walk(w1)} → ${esc(from)}에서 ${esc(lineName(no))} → ${esc(to)}에서 내려 ${walk(w2)}`;
   }
   const [no, from, w1, mid, no2, from2, to, w2] = c;
-  return `${walk(w1)} → ${esc(from)}에서 ${esc(no)}번 → ${esc(mid)}에서 내려 ${esc(from2)}에서 ${esc(no2)}번 → ${esc(to)}에서 내려 ${walk(w2)}`;
+  return `${walk(w1)} → ${esc(from)}에서 ${esc(lineName(no))} → ${esc(mid)}에서 내려 ${esc(from2)}에서 ${esc(lineName(no2))} → ${esc(to)}에서 내려 ${walk(w2)}`;
 }
 
 function emptyMessage(why) {
   const wheelBus = state.who === "wheel" && state.how === "walk";
-  const call = `행복콜(<a href="tel:18996884">1899-6884</a>) 휠체어 차량도 있어요.`;
+  const call = REGION.area === "제주" ? `행복콜(<a href="tel:18996884">1899-6884</a>) 휠체어 차량도 있어요.` : "";
   return {
     skip: `뺀 곳을 빼고 나니 코스를 짤 수 없어요. 위의 "다시 넣기"를 눌러 보세요.`,
     budget: `예산이 모자라요. ${state.how === "any" ? "택시비까지 넣으면 " : ""}1명 ${manwon(state.budget)}으로는 다녀올 수 있는 곳이 없어요. 예산을 늘리거나${state.how === "any" ? ", 이동을 뚜벅이로 바꾸거나" : ""} 끝나는 곳을 "상관없어요"로 바꿔 보세요.`,
@@ -1016,11 +1042,11 @@ function renderResult() {
       <div class="empty">${emptyMessage(whyEmpty())}</div>`}
     <details class="notes"><summary>참고할 점 (자료 기준일·출처)</summary>
       <p>• 장소 정보는 2026년 10월까지의 인터넷 자료로 모았고, 직접 가 보거나 전화로 확인한 건 아니에요. 장소마다 "메모·출처 보기"에 출처가 있어요. 가기 전에 운영시간은 한 번 더 확인해 주세요.</p>
-      <p>• 이동 시간은 실제 길 기준이에요.${state.how !== "walk" ? " 막히는 길은 반영되지 않아요." : " 버스는 시간표의 평균 배차 간격으로 기다리는 시간까지 넣었어요(실시간 도착 정보는 아니에요)."}${state.how === "ev" ? " 충전 시간은 따로 넣지 않았어요. 충전소가 가까운 곳에서 오래 머물게 짰으니 그동안 충전해 두세요." : ""}${state.how === "car" || state.how === "ev" ? " 차로 다니는 시간에는 주차 5분을 넣었어요. 렌터카 요금·기름값(충전비)·주차비는 비용에 넣지 않았어요." : ""} ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}지도의 선은 순서만 보여 주는 직선이에요.
-        (길 데이터 © OpenStreetMap · ${REGION.router ?? "openrouteservice.org"}${state.how === "walk" ? ` · 버스 국토교통부 TAGO · 제주버스정보시스템${state.who === "wheel" ? " · 제주특별자치도 저상버스 운행노선 현황" : ""}` : ""})</p>
-      ${state.who === "wheel" && (state.how === "walk" || state.how === "any") ? `<p>• 걷는 시간은 보통보다 1.5배 넉넉히 잡았어요.${state.how === "walk" ? " 버스는 저상버스가 있는 노선만 넣었어요. 저상버스는 일부 차량만이라 기다리는 시간을 배차 간격만큼 잡았어요. 오는 버스가 저상버스인지는 그때그때 달라요." : ""} 휠체어를 쓰는 분은 제주 교통약자이동지원센터(행복콜, <a href="tel:18996884">1899-6884</a>, 24시간)의 휠체어 차량을 쓸 수 있어요. 미리 회원등록이 필요해요.</p>` : ""}
+      <p>• 이동 시간은 실제 길 기준이에요.${state.how !== "walk" ? " 막히는 길은 반영되지 않아요." : (REGION.subway ? " 지하철·버스는 평균 배차 간격으로 기다리는 시간까지 넣은 어림이에요(실시간 도착 정보는 아니에요). 버스는 막히면 더 걸릴 수 있어요." : " 버스는 시간표의 평균 배차 간격으로 기다리는 시간까지 넣었어요(실시간 도착 정보는 아니에요).")}${state.how === "ev" ? " 충전 시간은 따로 넣지 않았어요. 충전소가 가까운 곳에서 오래 머물게 짰으니 그동안 충전해 두세요." : ""}${state.how === "car" || state.how === "ev" ? " 차로 다니는 시간에는 주차 5분을 넣었어요. 렌터카 요금·기름값(충전비)·주차비는 비용에 넣지 않았어요." : ""} ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}지도의 선은 순서만 보여 주는 직선이에요.
+        (길 데이터 © OpenStreetMap · ${REGION.router ?? "openrouteservice.org"}${state.how === "walk" ? (REGION.subway ? " · 버스 국토교통부 TAGO · 지하철 부산교통공사" : ` · 버스 국토교통부 TAGO · 제주버스정보시스템${state.who === "wheel" ? " · 제주특별자치도 저상버스 운행노선 현황" : ""}`) : ""})</p>
+      ${state.who === "wheel" && (state.how === "walk" || state.how === "any") ? `<p>• 걷는 시간은 보통보다 1.5배 넉넉히 잡았어요.${state.how === "walk" ? (REGION.subway ? " 저상버스·지하철 엘리베이터 자료가 아직 없어 대중교통은 넣지 않았어요." : REGION.noBus ? "" : " 버스는 저상버스가 있는 노선만 넣었어요. 저상버스는 일부 차량만이라 기다리는 시간을 배차 간격만큼 잡았어요. 오는 버스가 저상버스인지는 그때그때 달라요.") : ""}${REGION.area === "제주" ? ` 휠체어를 쓰는 분은 제주 교통약자이동지원센터(행복콜, <a href="tel:18996884">1899-6884</a>, 24시간)의 휠체어 차량을 쓸 수 있어요. 미리 회원등록이 필요해요.` : ""}</p>` : ""}
       ${state.how === "bike" ? `<p>• 자전거 대여료는 비용에 넣지 않았어요.</p>` : ""}
-      ${fares ? `<p>• 교통비는 어른 1명 기준이에요. ${state.how === "walk" ? "버스는 교통카드 요금이고, 40분 안에 갈아타면 환승 할인으로 따로 내지 않아요. " : `택시비는 거리로 어림했고, ${state.people}명이 나눠 낸 1명 몫이에요(막힐 때 붙는 요금·밤 11시 이후 할증은 빠졌어요). 4명이 넘으면 택시가 2대 필요할 수 있어요. `}</p>` : ""}
+      ${fares ? `<p>• 교통비는 어른 1명 기준이에요. ${state.how === "walk" ? (REGION.subway ? "지하철·버스 교통카드 요금으로 어림했어요. 지하철은 1구간 요금 기준이라 멀리 가면 더 나오고, 갈아탈 때는 환승 할인을 받는 것으로 쳤어요. " : "버스는 교통카드 요금이고, 40분 안에 갈아타면 환승 할인으로 따로 내지 않아요. ") : `택시비는 거리로 어림했고, ${state.people}명이 나눠 낸 1명 몫이에요(막힐 때 붙는 요금·밤 11시 이후 할증은 빠졌어요). 4명이 넘으면 택시가 2대 필요할 수 있어요. `}</p>` : ""}
       ${costUnknown ? `<p>• 비용을 모르는 곳 ${costUnknown}곳은 비용 합계에 들어가지 않았어요.</p>` : ""}
       ${unknownSkipped ? `<p>• ${{ dog: "반려견", kid: "유모차", wheel: "계단" }[state.who]} 정보가 없는 곳 ${unknownSkipped}곳은 안전하게 뺐어요. 꼭 가고 싶은 곳이 있으면 전화로 확인해 보세요.</p>` : ""}
       ${noLocation ? `<p>• 위치를 아직 모르는 곳 ${noLocation}곳은 코스에서 뺐어요.</p>` : ""}

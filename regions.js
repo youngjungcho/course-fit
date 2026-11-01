@@ -6,6 +6,8 @@
 //   bounds   "지금 내 위치"를 쓸 수 있는 범위
 //   hub      타고 떠나는 곳 (STARTS의 id "airport"). buffer = 몇 분 일찍 도착할지, bufferLabel = 화면 문구
 //   taxiBase 택시 기본요금(원, 2km까지), taxiMeter 몇 m마다 100원인지, taxiFarKm 거리요금이 2배가 되는 거리(없으면 할증 없음)
+//   subway   지하철이 있는 곳: 지하철·버스 요금(교통카드, 원)
+//   splitTransit 대중교통 칸을 regions/<id>/transit.js로 나눠 뚜벅이를 고를 때만 불러와요
 //   noBus    버스 자료가 없는 지역: "뚜벅이"를 빼고 busNote를 보여 줘요
 //   noSeaSunset 바다로 해가 지지 않는 곳: 바닷가라고 노을 명소로 치지 않아요
 const JEJU_AREA = {
@@ -17,6 +19,12 @@ const GANGWON_EAST = {
   hub: { label: "강릉역 (기차)", emoji: "🚆", ride: "기차", place: "역", buffer: 30, bufferLabel: "30분" },
   taxiBase: 4600, taxiMeter: 131, taxiFarKm: 6 // 강릉시 2024-08-05 시행 요금 (파이낸셜뉴스 2024-07-29). 2026년 고시는 못 찾았어요
 };
+const BUSAN_AREA = {
+  area: "부산", sun: [35.16, 129.06], bounds: { latMin: 34.95, latMax: 35.42, lngMin: 128.75, lngMax: 129.35 },
+  hub: { label: "부산역 (기차)", emoji: "🚆", ride: "기차", place: "역", buffer: 30, bufferLabel: "30분" },
+  taxiBase: 4800, taxiMeter: 132, // 부산시 2023-06 시행 요금 (파이낸셜뉴스 2023-05-13). 2026년 고시는 못 찾았어요
+  subway: { busFare: 1550, railFare: 1600 } // 버스 2023-10, 지하철 1구간 2024-05 기사 기준. 2026년 요금표는 못 찾았어요
+};
 const REGIONS = [
   { ...JEJU_AREA, id: "aewol", name: "애월", search: "애월" },
   { ...JEJU_AREA, id: "hallim", name: "한림·협재", search: "한림" },
@@ -27,5 +35,7 @@ const REGIONS = [
   { ...JEJU_AREA, id: "southwest", router: "OSRM", name: "한경·대정·안덕", search: "제주" },
   { ...JEJU_AREA, id: "namwon", router: "OSRM", name: "남원", search: "서귀포 남원" },
   { ...GANGWON_EAST, id: "gangneung", router: "OSRM", name: "강릉", search: "강릉", noBus: true, noSeaSunset: true,
-    busNote: "강릉은 버스 정보를 아직 넣지 않았어요. 버스 시간표가 뜸한 곳이 많아 차나 택시로 다니는 코스로 짜요." }
+    busNote: "강릉은 버스 정보를 아직 넣지 않았어요. 버스 시간표가 뜸한 곳이 많아 차나 택시로 다니는 코스로 짜요." },
+  { ...BUSAN_AREA, id: "busan", router: "OSRM", name: "부산", search: "부산", noSeaSunset: true, splitTransit: true,
+    busNote: "뚜벅이는 지하철과 버스로 짜요. 배차 간격은 평균이고 실시간 도착 정보는 아니에요. 휠체어 코스는 저상버스·엘리베이터 자료가 아직 없어 걷기·차 기준으로 짜요." }
 ];
