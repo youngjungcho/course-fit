@@ -8,7 +8,7 @@
 //   taxiBase 택시 기본요금(원, 2km까지), taxiMeter 몇 m마다 100원인지, taxiFarKm 거리요금이 2배가 되는 거리(없으면 할증 없음)
 //   subway   지하철이 있는 곳: 지하철·버스 요금(교통카드, 원)
 //   splitTransit 대중교통 칸을 regions/<id>/transit.js로 나눠 뚜벅이를 고를 때만 불러와요
-//   zones    큰 도시에서 고르는 구역. 장소의 zone 칸과 맞춰요
+//   zones    큰 도시에서 고르는 구역. 장소의 zone 칸과 맞춰요. near = "옆 구역도 조금"에서 같이 쓰는 구역
 //   noBus    버스 자료가 없는 지역: "뚜벅이"를 빼고 busNote를 보여 줘요
 //   noSeaSunset 바다로 해가 지지 않는 곳: 바닷가라고 노을 명소로 치지 않아요
 const JEJU_AREA = {
@@ -38,6 +38,6 @@ const REGIONS = [
   { ...GANGWON_EAST, id: "gangneung", router: "OSRM", name: "강릉", search: "강릉", noBus: true, noSeaSunset: true,
     busNote: "강릉은 버스 정보를 아직 넣지 않았어요. 버스 시간표가 뜸한 곳이 많아 차나 택시로 다니는 코스로 짜요." },
   { ...BUSAN_AREA, id: "busan", router: "OSRM", name: "부산", search: "부산", noSeaSunset: true, splitTransit: true,
-    zones: [{ id: "east", label: "해운대·송정·기장" }, { id: "gwangan", label: "광안리·수영·남구" }, { id: "seomyeon", label: "서면·전포·동래" }, { id: "nampo", label: "남포동·영도·송도·다대포" }],
+    zones: [{ id: "east", label: "해운대·송정·기장", near: ["gwangan"] }, { id: "gwangan", label: "광안리·수영·남구", near: ["east", "seomyeon"] }, { id: "seomyeon", label: "서면·전포·동래", near: ["gwangan", "nampo"] }, { id: "nampo", label: "남포동·영도·송도·다대포", near: ["seomyeon"] }],
     busNote: "뚜벅이는 지하철과 버스로 짜요. 배차 간격은 평균이고 실시간 도착 정보는 아니에요. 휠체어 코스는 저상버스·엘리베이터 자료가 아직 없어 걷기·차 기준으로 짜요." }
 ];

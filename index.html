@@ -218,10 +218,10 @@
   <main id="screen"></main>
 </div>
 
-<script src="regions.js?v=20261101u"></script>
+<script src="regions.js?v=20261101v"></script>
 <script id="regionLoader">
 // 고른 지역의 자료만 불러와요 (지역 없는 예전 링크는 애월)
-const REGION_VERSION = "20261101u";
+const REGION_VERSION = "20261101v";
 const REGION = REGIONS.find((r) => r.id === new URLSearchParams(location.search).get("region")) ?? REGIONS[0];
 document.write(`<script src="regions/${REGION.id}/places.js?v=${REGION_VERSION}"><\/script><script src="regions/${REGION.id}/travel.js?v=${REGION_VERSION}"><\/script>`);
 </script>
@@ -277,13 +277,18 @@ const back = document.getElementById("back");
 // "지금 내 위치"는 위치라서 주소에 넣지 않아요
 // 큰 도시는 코스를 짤 구역을 골라요 (REGION.zones, 장소마다 zone 칸이 있어요)
 const ZONES = REGION.zones ? [{ id: "all", label: "상관없어요" }, ...REGION.zones] : [];
-const URL_KEYS = { who: "who", how: "how", people: "people", date: "date", from: "from", depart: "time", hours: "hours", budget: "budget", end: "end", area: "area", zone: "zone" };
+// 구역을 고른 뒤 옆 구역까지 조금 돌아다닐지 골라요
+const ROAMS = [{ id: "stay", label: "이 구역에서만" }, { id: "near", label: "옆 구역도 조금" }];
+const roaming = () => state.roam === "near" && state.zone && state.zone !== "all";
+const isOutside = (p) => roaming() && p.zone !== state.zone;
+const maxOutside = () => Math.max(1, Math.floor(maxStops() / 3)); // 코스의 3분의 1까지만 옆 구역으로 나가요
+const URL_KEYS = { who: "who", how: "how", people: "people", date: "date", from: "from", depart: "time", hours: "hours", budget: "budget", end: "end", area: "area", zone: "zone", roam: "roam" };
 function queryOf() {
   const q = new URLSearchParams();
   for (const [k, name] of Object.entries(URL_KEYS)) {
     const v = state[k];
     if (v === null || v === undefined || (k === "from" && v === "here")) continue;
-    if ((k === "end" && v === "start") || (k === "area" && v === "mix") || (k === "zone" && v === "all")) continue; // 기본값은 빼요
+    if ((k === "end" && v === "start") || (k === "area" && v === "mix") || (k === "zone" && v === "all") || (k === "roam" && (v === "stay" || state.zone === "all"))) continue; // 기본값은 빼요
     if (k === "people" && state.how !== "any") continue; // 인원은 택시비를 나눌 때만 써요
     q.set(name, v);
   }
@@ -312,6 +317,7 @@ function readQuery() {
   state.end = one("end", (v) => ENDS.some((e) => e.id === v)) ?? "start";
   state.area = one("area", (v) => AREAS.some((a) => a.id === v)) ?? "mix";
   state.zone = one("zone", (v) => ZONES.some((z) => z.id === v)) ?? "all";
+  state.roam = one("roam", (v) => ROAMS.some((r) => r.id === v)) ?? "stay";
   state.skip = (q.get("skip") ?? "").split(",").filter((id) => PLACES.some((p) => p.id === id));
   state.alt = Math.max(0, Number(q.get("alt")) || 0);
   // 앞 단계를 다 골라야 다음 단계로 갈 수 있어요
@@ -445,6 +451,7 @@ function renderWhen() {
     ${chipGroup("어디서 출발해요? (숙소가 있는 동네)", "from", froms.map((f) => f.id), (id) => { const f = froms.find((x) => x.id === id); return f.emoji === "🏠" ? f.label : `${em(f.emoji)} ${f.label}`; })}
     <p class="geo" id="geo" hidden></p>
     ${ZONES.length ? chipGroup("어느 쪽으로 갈까요?", "zone", ZONES.map((z) => z.id), (id) => ZONES.find((z) => z.id === id).label) : ""}
+    ${ZONES.length ? `<div id="roamWrap" ${state.zone === "all" ? "hidden" : ""}>${chipGroup("얼마나 돌아다닐까요?", "roam", ROAMS.map((r) => r.id), (id) => ROAMS.find((r) => r.id === id).label)}</div>` : ""}
     <details class="advanced"><summary><span id="advSummary"></span><b aria-hidden="true"></b></summary><div class="inner">
     ${chipGroup("몇 시에 출발해요?", "depart", DEPART, (v) => v, 5)}
     ${chipGroup("몇 시간 있어요?", "hours", HOURS, (v) => `${v}시간`, 4)}
@@ -501,7 +508,7 @@ function renderWhen() {
   screen.querySelectorAll(".chip").forEach((chip) => {
     chip.onclick = () => {
       const key = chip.dataset.key;
-      state[key] = (key === "depart" || key === "from" || key === "area" || key === "when" || key === "end" || key === "zone") ? chip.dataset.v : Number(chip.dataset.v);
+      state[key] = (key === "depart" || key === "from" || key === "area" || key === "when" || key === "end" || key === "zone" || key === "roam") ? chip.dataset.v : Number(chip.dataset.v);
       if (key === "when") {
         staleDate = null; screen.querySelector(".stale")?.remove();
         datePick.hidden = state.when !== "pick";
@@ -510,6 +517,7 @@ function renderWhen() {
       }
       screen.querySelectorAll(`.chip[data-key="${key}"]`).forEach((c) => c.setAttribute("aria-checked", c === chip));
       if (key === "when") syncDepart();
+      if (key === "zone") document.getElementById("roamWrap").hidden = state.zone === "all";
       if (key === "from") { if (chip.dataset.v === "here") askHere(); else say(""); }
       sync();
     };
@@ -655,6 +663,7 @@ function startCtx() {
 // 지금 자리에서 p로 가면 어떻게 되는지 (못 가면 null)
 function visit(ctx, p) {
   if (ctx.stops.some((s) => s.place === p)) return null;
+  if (isOutside(p) && ctx.stops.filter((s) => isOutside(s.place)).length >= maxOutside()) return null;
   if (p.closedDays && p.closedDays.includes(ctx.day)) return null;
   // 카페·식당은 연달아 넣지 않고, 카페는 4시간 이하면 1곳·그보다 길면 2곳까지
   if (p.type === ctx.lastType && (p.type === "카페" || p.type === "식당")) return null;
@@ -781,7 +790,10 @@ function courseScore(c) {
   const area = state.area === "indoor" ? 0 : state.area === "mix" ? (inland > 0 && inland < c.stops.length ? 40 : 0)
     : 30 * (state.area === "mountain" ? inland : c.stops.length - inland);
   const staying = c.stops.reduce((sum, s) => sum + s.place.stayMin, 0);
-  return staying + c.stops.length * 10 - moving + meal + area + sunsetOf(c) * 40;
+  // 옆 구역도 조금: 고른 구역이 중심이고 옆 구역이 한두 곳 섞이면 좋아요
+  const outside = c.stops.filter((s) => isOutside(s.place)).length;
+  const roam = !roaming() ? 0 : outside * 2 >= c.stops.length ? -300 : outside > 0 ? 80 : 0;
+  return staying + c.stops.length * 10 - moving + meal + area + roam + sunsetOf(c) * 40;
 }
 
 // includeUnknown: 정보가 없는 곳도 넣어 보기 (코스가 안 나올 때 이유를 찾으려고만 써요)
@@ -791,7 +803,7 @@ function makeCourse({ includeUnknown = false } = {}) {
   const pool = PLACES.filter((p) => {
     if (p.lat === null) { noLocation++; return false; }
     if (skip.includes(p.id)) return false;
-    if (state.zone && state.zone !== "all" && p.zone !== state.zone) return false;
+    if (state.zone && state.zone !== "all" && p.zone !== state.zone && !(roaming() && REGION.zones.find((z) => z.id === state.zone).near.includes(p.zone))) return false;
     if (p.forDogs && state.who !== "dog") return false; // 애견카페는 반려견과 갈 때만
     // 실내 위주: 공원과 야외 볼거리는 빼요
     if (state.area === "indoor" && (p.type === "공원" || (p.type === "볼거리" && !p.indoor))) return false;
@@ -1030,7 +1042,7 @@ function renderResult() {
   screen.innerHTML = `
     <h1>이런 코스 어때요?</h1>
     <p class="sub">${em(who.emoji)} ${who.label} · ${em(how.emoji)} ${how.label}${state.how === "any" ? ` · ${state.people}명` : ""}</p>
-    <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}${state.zone && state.zone !== "all" ? ` · ${esc(ZONES.find((z) => z.id === state.zone).label)}` : ""}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
+    <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}${state.zone && state.zone !== "all" ? ` · ${esc(ZONES.find((z) => z.id === state.zone).label)}${roaming() ? " + 옆 구역" : ""}` : ""}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
     ${stops.length ? `
       <div class="summary">
         <div><b>${stops.length}곳</b><span>장소</span></div>
