@@ -205,8 +205,7 @@
   .skipped { color: var(--muted); font-size: 15px; margin: 0 0 8px; }
   .map { height: 220px; border-radius: 14px; border: 1px solid var(--line); margin: 0 0 12px; z-index: 0; }
   .map[hidden] { display: none; }
-  .pin { width: auto !important; }
-  .pin span { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 30px; padding: 0 6px; border-radius: 15px; white-space: nowrap; transform: translate(-50%, 0); margin-left: 15px; background: var(--accent); color: #fff; font-weight: 700; font-size: 12px; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
+  .pin { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 30px; padding: 0 6px; border-radius: 15px; white-space: nowrap; background: var(--accent); color: #fff; font-weight: 700; font-size: 12px; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
   .more { margin-top: 4px; font-size: 14px; color: var(--muted); }
   .more summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; }
   .more p { margin: 6px 0; line-height: 1.6; }
@@ -243,10 +242,10 @@
   <main id="screen"></main>
 </div>
 
-<script src="regions.js?v=20261107c"></script>
+<script src="regions.js?v=20261107d"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261107c";
+const REGION_VERSION = "20261107d";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -1062,37 +1061,45 @@ async function shareCourse() {
   }
 }
 
-// 코스 지도: OpenStreetMap 지도 위에 순서대로 번호를 찍고 잇는 선을 그려요 (선은 직선이라 실제 길과 달라요)
-let leafletLoading = null;
-function loadLeaflet() {
-  leafletLoading ??= new Promise((ok, fail) => {
-    const css = document.createElement("link");
-    css.rel = "stylesheet"; css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-    document.head.append(css);
+// 코스 지도: 카카오 지도 위에 순서대로 번호를 찍고 잇는 선을 그려요 (선은 직선이라 실제 길과 달라요)
+// JavaScript 키는 웹 페이지에 들어가는 공개 키예요. 카카오 콘솔에 등록한 사이트 주소에서만 지도가 열려요
+const KAKAO_JS_KEY = "24a227a071d26f461b54920162fe52f0";
+let kakaoLoading = null;
+function loadKakaoMap() {
+  kakaoLoading ??= new Promise((ok, fail) => {
     const js = document.createElement("script");
-    js.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
-    js.onload = ok; js.onerror = fail;
+    js.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_JS_KEY}&autoload=false`;
+    js.onload = () => (window.kakao?.maps ? kakao.maps.load(ok) : fail());
+    js.onerror = () => { kakaoLoading = null; js.remove(); fail(); };
     document.head.append(js);
   });
-  return leafletLoading;
+  return kakaoLoading;
 }
 async function drawMap(points, n) {
   const box = document.getElementById("map");
-  try { await loadLeaflet(); } catch { box.hidden = true; return; }
+  try { await loadKakaoMap(); } catch { box.hidden = true; return; }
   if (!document.body.contains(box)) return; // 그새 다른 화면으로 넘어갔어요
-  const map = L.map(box, { scrollWheelZoom: false, attributionControl: true, dragging: !L.Browser.mobile }); // 폰에서는 지도 위를 밀어도 페이지가 내려가요 (두 손가락으로 확대)
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18, attribution: "© OpenStreetMap" }).addTo(map);
+  const at = (p) => new kakao.maps.LatLng(p.lat, p.lng);
+  const map = new kakao.maps.Map(box, { center: at(points[0]), level: 8 });
+  // 폰에서는 지도 위를 밀어도 페이지가 내려가게 지도 끌기를 막고, 확대·축소 버튼을 둬요
+  if (matchMedia("(pointer: coarse)").matches) map.setDraggable(false);
+  map.setZoomable(false);
+  map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
   // 출발한 곳으로 돌아오면 '출발·끝' 핀 하나로 합쳐요
   const loop = points.length > 2 && points[0] === points[points.length - 1];
-  const ll = points.map((p) => [p.lat, p.lng]);
-  L.polyline(ll, { color: getComputedStyle(document.documentElement).getPropertyValue("--accent").trim(), weight: 3, dashArray: "6 6" }).addTo(map);
+  const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+  new kakao.maps.Polyline({ map, path: points.map(at), strokeWeight: 3, strokeColor: accent, strokeOpacity: 0.9, strokeStyle: "shortdash" });
+  const bounds = new kakao.maps.LatLngBounds();
   points.forEach((p, i) => {
+    bounds.extend(at(p));
     if (loop && i === points.length - 1) return;
     const label = i === 0 ? (loop ? "출발·끝" : "출발") : i <= n ? String(i) : "끝";
-    L.marker([p.lat, p.lng], { icon: L.divIcon({ className: "pin", html: `<span>${label}</span>`, iconSize: [30, 30] }), alt: `${label} ${p.name}` })
-      .addTo(map).bindTooltip(p.name);
+    const pin = document.createElement("span");
+    pin.className = "pin"; pin.textContent = label; pin.title = p.name;
+    pin.setAttribute("aria-label", `${label} ${p.name}`);
+    new kakao.maps.CustomOverlay({ map, position: at(p), content: pin, yAnchor: 0.5, zIndex: i === 0 ? 1 : 2 });
   });
-  map.fitBounds(ll, { padding: [24, 24] });
+  map.setBounds(bounds, 32, 32, 32, 32);
 }
 
 // 메모·출처: 휠체어·유모차 이용자에게 쓸모 있는 이야기(예: 모래사장 안쪽은 어려워요)가 메모에 많아요
