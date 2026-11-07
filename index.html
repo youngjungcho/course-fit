@@ -231,6 +231,16 @@
     color: var(--text); text-decoration: none; font-size: 14px;
   }
   .endpoint { font-weight: 600; padding: 6px 0; }
+  .route { display: inline-flex; align-items: center; min-height: 32px; margin-left: 8px; padding: 0 10px; border: 1px solid var(--line); border-radius: 16px; color: var(--accent); font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; vertical-align: middle; }
+  .saved-btn { min-height: 40px; padding: 0 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--text); font: inherit; font-size: 14px; white-space: nowrap; cursor: pointer; }
+  .saved-btn[hidden] { display: none; }
+  .appbar .right { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .saved-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .saved-list li { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+  .saved-list .title { font-weight: 700; }
+  .saved-list .when { color: var(--muted); font-size: 14px; }
+  .saved-list .names { font-size: 15px; margin: 6px 0 10px; }
+  .saved-list .row { display: flex; gap: 8px; }
   .sub-line { display: block; font-weight: 400; color: var(--muted); font-size: 14px; }
   .notes { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
   .notes > summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; }
@@ -276,7 +286,7 @@
   <header class="appbar">
     <button class="region-btn" id="regionBtn" hidden><span aria-hidden="true">📍</span> <b id="regionName"></b> <small>바꾸기</small></button>
     <span class="brand" id="brand">쉼,표</span>
-    <span class="count" id="placeCount"></span>
+    <span class="right"><span class="count" id="placeCount"></span><button class="saved-btn" id="savedBtn" hidden></button></span>
   </header>
 
   <div class="top" id="topRow">
@@ -303,10 +313,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261108d"></script>
+<script src="regions.js?v=20261108e"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261108d";
+const REGION_VERSION = "20261108e";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -409,6 +419,7 @@ function queryOf() {
   if (state.skip.length) q.set("skip", state.skip.join(","));
   if (state.alt) q.set("alt", state.alt);
   if (state.step === PICK) q.set("pick", "1");
+  else if (state.step === SAVED) q.set("saved", "1");
   else if (state.step) q.set("step", state.step);
   return q.toString();
 }
@@ -440,18 +451,20 @@ function readQuery(search = location.search) {
   const ready = [true, !!state.who, !!state.how, !!(state.date && state.from && state.depart && state.hours && state.budget)];
   let step = Math.min(3, Math.max(0, Number(q.get("step")) || 0));
   while (step > 0 && !ready[step]) step--;
-  state.step = q.get("pick") || !REGION ? PICK : step;
+  state.step = q.get("saved") ? SAVED : q.get("pick") || !REGION ? PICK : step;
 }
 let staleDate = null;
 // depth = 이 사이트 안에서 앞으로 간 횟수. 0이면 뒤로가기는 사이트를 나가요
 // 지역 고르기 화면은 단계 앞(-1)이에요
 const PICK = -1;
+// 내 코스 화면은 -2
+const SAVED = -2;
 const syncUrl = (push) => history[push ? "pushState" : "replaceState"]({ step: state.step, depth: (history.state?.depth ?? 0) + (push ? 1 : 0) }, "", `${location.pathname}${queryOf() ? `?${queryOf()}` : ""}`);
 // 다음 단계로: 브라우저 기록에 남겨서 폰의 뒤로가기로 돌아올 수 있어요
 const goStep = (step) => { state.step = step; syncUrl(true); render(); };
 back.onclick = () => {
   if ((history.state?.depth ?? 0) > 0) history.back();
-  else { state.step = state.step === 0 ? PICK : Math.max(0, state.step - 1); syncUrl(false); render(); }
+  else { state.step = state.step === SAVED ? (REGION ? Math.max(0, stepBeforeSaved) : PICK) : state.step === 0 ? PICK : Math.max(0, state.step - 1); syncUrl(false); render(); }
 };
 // 뒤로·앞으로 가기: 단계만 옮기고 고른 값은 그대로 둬요 (돌아가도 고른 것이 표시돼요)
 window.addEventListener("popstate", async () => {
@@ -461,7 +474,7 @@ window.addEventListener("popstate", async () => {
   if (id && id !== REGION?.id && REGIONS.some((r) => r.id === id)) {
     try { applyRegion(REGIONS.find((r) => r.id === id), await loadRegionData(id)); readQuery(); } catch { return showLoadError(id); }
   }
-  state.step = q.get("pick") || !REGION ? PICK : Math.min(3, Math.max(0, Number(q.get("step")) || 0));
+  state.step = q.get("saved") ? SAVED : q.get("pick") || !REGION ? PICK : Math.min(3, Math.max(0, Number(q.get("step")) || 0));
   syncUrl(false); render();
 });
 
@@ -501,7 +514,7 @@ function renderTransitWait() {
 }
 
 function render() {
-  const picking = state.step === PICK;
+  const picking = state.step === PICK || state.step === SAVED;
   document.querySelector(".wrap").classList.toggle("is-wide", state.step === 3);
   document.getElementById("topRow").hidden = picking;
   regionBtn.hidden = picking || !REGION;
@@ -513,8 +526,12 @@ function render() {
   progress.setAttribute("aria-valuenow", state.step + 1);
   progress.setAttribute("aria-valuetext", `${state.step + 1}/4단계`);
   document.getElementById("stepText").textContent = `${state.step + 1}/4`;
-  back.hidden = picking;
-  (picking ? renderRegion : state.step === 3 && needsTransit() ? renderTransitWait : [renderWho, renderHow, renderWhen, renderResult][state.step])();
+  back.hidden = state.step === PICK;
+  document.getElementById("topRow").hidden = state.step === PICK;
+  if (state.step === SAVED) { document.getElementById("topRow").hidden = false; document.getElementById("progress").style.visibility = "hidden"; document.getElementById("stepText").textContent = ""; }
+  else document.getElementById("progress").style.visibility = "";
+  syncSavedBtn();
+  (state.step === SAVED ? renderSaved : picking ? renderRegion : state.step === 3 && needsTransit() ? renderTransitWait : [renderWho, renderHow, renderWhen, renderResult][state.step])();
   window.scrollTo(0, 0);
   // 화면이 바뀌면 제목으로 포커스를 옮겨서 화면낭독기가 새 화면을 읽게 해요 (처음 열 때는 빼고)
   const h1 = screen.querySelector("h1");
@@ -570,6 +587,45 @@ function renderRegion() {
   input.oninput = draw;
   draw();
 }
+// ----- 내 코스: 이 휴대폰(브라우저)에만 저장해요. 다시 열면 그때 자료로 코스를 다시 짜요 -----
+const SAVED_KEY = "swimpyo-saved";
+const loadSaved = () => { try { return JSON.parse(localStorage.getItem(SAVED_KEY)) ?? []; } catch { return []; } };
+const storeSaved = (list) => { try { localStorage.setItem(SAVED_KEY, JSON.stringify(list.slice(0, 30))); } catch {} };
+// 저장 열쇠: 단계·지역 고르기를 뺀 조건 주소
+const savedKey = () => { const q = new URLSearchParams(queryOf()); q.delete("step"); q.delete("pick"); q.delete("saved"); return q.toString(); };
+const isSaved = () => loadSaved().some((x) => x.q === savedKey());
+function toggleSaved(stops) {
+  const q = savedKey(), list = loadSaved();
+  if (list.some((x) => x.q === q)) { storeSaved(list.filter((x) => x.q !== q)); syncSavedBtn(); return false; }
+  const who = WHO.find((w) => w.id === state.who), how = HOW.find((h) => h.id === state.how);
+  list.unshift({ q, at: Date.now(), title: `${REGION.name} · ${who.label} · ${how.label}`, date: state.date, depart: state.depart, names: stops.map((s) => s.place.name) });
+  storeSaved(list); syncSavedBtn();
+  track("save_course", { region: REGION.id, stops: stops.length });
+  return true;
+}
+function syncSavedBtn() {
+  const n = loadSaved().length, btn = document.getElementById("savedBtn");
+  btn.hidden = n === 0 || state.step === SAVED;
+  btn.innerHTML = `${em("⭐")} 내 코스 ${n}`;
+}
+function renderSaved() {
+  const list = loadSaved();
+  screen.innerHTML = `<h1>내 코스</h1><p class="sub">이 휴대폰(브라우저)에 저장한 코스예요. 다른 기기에서는 보이지 않아요.</p>
+    ${list.length ? `<ul class="saved-list">${list.map((x, i) => `<li>
+      <div class="title">${esc(x.title)}</div>
+      <div class="when">${x.date ? `${dateLabel(x.date)} ` : ""}${x.depart ? `${x.depart} 출발` : ""}</div>
+      <div class="names">${x.names.map(esc).join(" → ")}</div>
+      <div class="row"><a class="ghost" style="display:flex;align-items:center;justify-content:center;text-decoration:none" href="?${x.q}&step=3" data-i="${i}">열기</a><button class="ghost" data-del="${i}">지우기</button></div>
+    </li>`).join("")}</ul>
+    <p class="caution" style="margin-top:12px">지난 날짜의 코스는 열 때 날짜를 다시 골라요. 장소 정보가 바뀌었으면 코스도 조금 달라질 수 있어요.</p>`
+    : `<p class="caution">아직 저장한 코스가 없어요. 결과 화면의 "☆ 저장"을 누르면 여기에 모여요.</p>`}`;
+  screen.querySelectorAll("a[data-i]").forEach((a) => a.addEventListener("click", () => track("saved_open")));
+  screen.querySelectorAll("button[data-del]").forEach((b) => { b.onclick = () => { const l = loadSaved(); l.splice(Number(b.dataset.del), 1); storeSaved(l); renderSaved(); syncSavedBtn(); }; });
+}
+let stepBeforeSaved = 0;
+const goSaved = () => { stepBeforeSaved = state.step; state.step = SAVED; syncUrl(true); render(); };
+document.getElementById("savedBtn").onclick = goSaved;
+
 // 홈 화면에 추가: 안드로이드 크롬은 설치 창을 띄우고, 아이폰 사파리는 방법을 알려 줘요 (이미 앱으로 열었으면 안 보여요)
 let installPrompt = null;
 window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installPrompt = e; drawInstall(); });
@@ -1317,9 +1373,17 @@ function movingTip(stops, back, used) {
   return `이동이 ${Math.floor(moving / 60) ? `${Math.floor(moving / 60)}시간 ` : ""}${moving % 60}분으로 전체 시간의 절반이 넘어요.${tips.length ? ` ${tips.join(", ")}까지 갈 수 있어요.` : " 출발지를 가까운 동네로 바꾸거나 다른 구역을 골라 보세요."}`;
 }
 
+// 카카오맵 길찾기: 앞 장소 → 이 장소. 걸어서면 도보, 뚜벅이는 대중교통, 차·택시는 자동차, 자전거는 자전거로 열어요
+function routeLink(from, to, m) {
+  if (!from || !to || from.lat == null || to.lat == null) return "";
+  const by = m.text === "걸어서" ? "walk" : state.how === "walk" ? "traffic" : state.how === "bike" ? "bicycle" : "car";
+  const pt = (p) => `${encodeURIComponent(String(p.name).replace(/,/g, " "))},${p.lat},${p.lng}`;
+  return `<a class="route" href="https://map.kakao.com/link/by/${by}/${pt(from)}/${pt(to)}" target="_blank" rel="noopener" data-map="route" aria-label="${esc(to.name)}까지 카카오맵 길찾기">길찾기</a>`;
+}
+
 function renderResult() {
   const { stops, spent, fares, back, finish, unknownSkipped, noLocation, count } = makeCourse();
-  const moveLine = (m) => `<li class="move">${m.text} 약 ${m.min}분${m.fare ? ` · ${m.text === "택시로" ? "약 " : ""}${won(m.fare)}` : ""}${m.plan ? `<small class="sub-line">${busSteps(m.plan)}</small>` : ""}</li>`;
+  const moveLine = (m, from, to) => `<li class="move">${m.text} 약 ${m.min}분${m.fare ? ` · ${m.text === "택시로" ? "약 " : ""}${won(m.fare)}` : ""}${routeLink(from, to, m)}${m.plan ? `<small class="sub-line">${busSteps(m.plan)}</small>` : ""}</li>`;
   const costUnknown = stops.filter((s) => s.place.cost === null).length;
   const who = WHO.find((w) => w.id === state.who), how = HOW.find((h) => h.id === state.how);
   const used = finish - toMin(state.depart);
@@ -1334,7 +1398,7 @@ function renderResult() {
   // 반려견과 버스·지하철을 타는 코스면 이동장 안내
   const dogBus = state.who === "dog" && state.how === "walk" && [...stops.map((s) => s.move), back].some((m) => m?.plan);
   const list = stops.map((s, i) => `
-    ${moveLine(s.move)}
+    ${moveLine(s.move, i === 0 ? start : stops[i - 1].place, s.place)}
     <li class="stop">
       <div class="time"><button class="no" data-stop="${i + 1}" aria-label="${i + 1}번 ${esc(s.place.name)} 지도에서 보기">${i + 1}</button>${toHHMM(s.begin)} – ${toHHMM(s.leave)}</div>
       <div class="name">${esc(s.place.name)}</div>
@@ -1366,7 +1430,7 @@ function renderResult() {
       <ul class="timeline">
         <li class="endpoint">${em("📍")} ${state.depart} ${esc(start.name)}에서 출발</li>
         ${list}
-        ${back ? moveLine(back) : ""}
+        ${back ? moveLine(back, stops[stops.length - 1].place, end) : ""}
         <li class="endpoint">${em("🏁")} ${toHHMM(finish)} ${end ? `${esc(end.name)} 도착` : "코스 끝"}${hubOf() ? `<small class="sub-line">${hubOf().ride} ${toHHMM(toMin(state.depart) + Math.round(state.hours * 60))} 출발에 맞춰 ${hubOf().bufferLabel} 일찍 도착해요</small>` : ""}</li>
       </ul>` : `
       <div class="empty">${emptyMessage(emptyWhy = whyEmpty())}</div></div><div class="r-rest">`}
@@ -1386,8 +1450,9 @@ function renderResult() {
     ${stops.length ? `<div class="dock">
       <p class="share-msg" id="shareMsg" role="status"></p>
       <div class="actions">
-        ${count > 1 ? `<button class="ghost" id="alt">${em("🔄")} 다른 코스 보기 (${(state.alt % count) + 1}/${count})</button>` : ""}
-        <button class="ghost" id="share">${em("🔗")} 코스 공유하기</button>
+        ${count > 1 ? `<button class="ghost" id="alt">${em("🔄")} 다른 코스 ${(state.alt % count) + 1}/${count}</button>` : ""}
+        <button class="ghost" id="save">${isSaved() ? `${em("⭐")} 저장됨` : `${em("☆")} 저장`}</button>
+        <button class="ghost" id="share">${em("🔗")} 공유</button>
       </div>
     </div>` : ""}</div>`;
   trackCourse(stops, emptyWhy);
@@ -1404,6 +1469,11 @@ function renderResult() {
   document.getElementById("unskip")?.addEventListener("click", () => { state.skip = []; state.alt = 0; redo(); });
   document.getElementById("alt")?.addEventListener("click", () => { state.alt = (state.alt + 1) % count; track("course_alt", { region: REGION.id }); redo(); });
   document.getElementById("share")?.addEventListener("click", shareCourse);
+  document.getElementById("save")?.addEventListener("click", (e) => {
+    const on = toggleSaved(stops);
+    e.currentTarget.innerHTML = on ? `${em("⭐")} 저장됨` : `${em("☆")} 저장`;
+    document.getElementById("shareMsg").textContent = on ? "이 휴대폰(브라우저)에 저장했어요. 위의 \"내 코스\"에서 다시 볼 수 있어요." : "저장을 지웠어요.";
+  });
   if (stops.length) drawMap([start, ...stops.map((s) => s.place), ...(end ? [end] : [])], stops.length);
   // 장소 카드의 번호를 누르면 지도가 그 장소로 가요
   screen.querySelectorAll("button.no").forEach((b) => { b.onclick = () => focusOnMap(Number(b.dataset.stop)); });
