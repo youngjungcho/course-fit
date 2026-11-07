@@ -5,6 +5,7 @@
 //   sun      일몰 계산 기준 위치 [위도, 경도]
 //   bounds   "지금 내 위치"를 쓸 수 있는 범위
 //   hub      타고 떠나는 곳 (STARTS의 id "airport"). buffer = 몇 분 일찍 도착할지, bufferLabel = 화면 문구
+//   extraHubs 더 있는 역·공항. start = STARTS의 id
 //   taxiBase 택시 기본요금(원, 2km까지), taxiMeter 몇 m마다 100원인지, taxiFarKm 거리요금이 2배가 되는 거리(없으면 할증 없음)
 //   subway   지하철이 있는 곳: 지하철·버스 요금(교통카드, 원)
 //   splitTransit 대중교통 칸을 regions/<id>/transit.js로 나눠 뚜벅이를 고를 때만 불러와요
@@ -24,6 +25,7 @@ const BUSAN_AREA = {
   area: "부산", sun: [35.16, 129.06], bounds: { latMin: 34.95, latMax: 35.42, lngMin: 128.75, lngMax: 129.35 },
   hub: { label: "부산역 (기차)", emoji: "🚆", ride: "기차", place: "역", buffer: 30, bufferLabel: "30분" },
   taxiBase: 4800, taxiMeter: 132, // 부산시 2023-06 시행 요금 (파이낸셜뉴스 2023-05-13). 2026년 고시는 못 찾았어요
+  extraHubs: [{ id: "gimhae", start: "gimhae", label: "김해공항 (비행기)", emoji: "✈️", ride: "비행기", place: "공항", buffer: 90, bufferLabel: "1시간 반" }],
   subway: { busFare: 1550, railFare: 1600 } // 버스 2023-10, 지하철 1구간 2024-05 기사 기준. 2026년 요금표는 못 찾았어요
 };
 const REGIONS = [

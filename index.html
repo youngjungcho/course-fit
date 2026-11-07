@@ -218,10 +218,10 @@
   <main id="screen"></main>
 </div>
 
-<script src="regions.js?v=20261101v"></script>
+<script src="regions.js?v=20261107b"></script>
 <script id="regionLoader">
 // 고른 지역의 자료만 불러와요 (지역 없는 예전 링크는 애월)
-const REGION_VERSION = "20261101v";
+const REGION_VERSION = "20261107b";
 const REGION = REGIONS.find((r) => r.id === new URLSearchParams(location.search).get("region")) ?? REGIONS[0];
 document.write(`<script src="regions/${REGION.id}/places.js?v=${REGION_VERSION}"><\/script><script src="regions/${REGION.id}/travel.js?v=${REGION_VERSION}"><\/script>`);
 </script>
@@ -242,7 +242,10 @@ const HOW = [
   { id: "any",  emoji: "🤷", label: "상관없어요", hint: "가까우면 걷고, 멀면 택시·차로" }
 ];
 // 버스 자료가 없는 지역은 뚜벅이를 빼요
-const HOW_HERE = REGION.noBus ? HOW.filter((h) => h.id !== "walk") : REGION.subway ? HOW.map((h) => h.id === "walk" ? { ...h, hint: "걷거나 지하철·버스" } : h) : HOW;
+// 버스 자료가 없는 지역은 뚜벅이를, 휠체어·어르신이면 자전거를 빼요
+const howHere = () => HOW
+  .filter((h) => !(REGION.noBus && h.id === "walk") && !(state.who === "wheel" && h.id === "bike"))
+  .map((h) => REGION.subway && h.id === "walk" ? { ...h, hint: "걷거나 지하철·버스" } : h);
 const WHEN = [
   { id: "today",    label: () => `오늘 (${dayOf(kstToday())})`,              date: () => kstToday() },
   { id: "tomorrow", label: () => `내일 (${dayOf(addDays(kstToday(), 1))})`, date: () => addDays(kstToday(), 1) },
@@ -250,14 +253,22 @@ const WHEN = [
 ];
 const DEPART = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
 const HOURS = [3, 4, 6, 8];
+// 역·공항에서 끝나면 시간 대신 기차·비행기가 떠나는 시각을 골라요 (그 전 정각)
+const LEAVES = ["11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
+const hoursText = (h) => Number.isInteger(h) ? `${h}시간` : `${Math.floor(h)}시간 ${Math.round((h % 1) * 60)}분`;
+// 떠나는 시각에서 쓸 수 있는 시간(시간 단위)을 다시 셈. 1시간도 안 되면 null
+const hoursFromLeave = () => { if (!state.leave || !state.depart) return null; const h = (toMin(state.leave) - toMin(state.depart)) / 60; return h >= 1 ? h : null; };
 const PEOPLE = [1, 2, 3, 4];
 // 아기랑·휠체어·친구는 함께 가는 사람이 있으니 기본 2명, 그 밖에는 1명
 const defaultPeople = () => (state.who === "kid" || state.who === "wheel" || state.who === "group" ? 2 : 1);
 const BUDGET = [30000, 50000, 100000, 150000];
 const HERE = { id: "here", emoji: "📍", label: "지금 내 위치" };
+// 타고 떠나는 곳: 지역의 기본(역·공항, STARTS id "airport")과 더 있는 곳(REGION.extraHubs)
+const HUBS = [{ id: "airport", start: "airport", ...REGION.hub }, ...(REGION.extraHubs ?? [])];
+const hubOf = () => HUBS.find((h) => h.id === state.end);
 const ENDS = [
   { id: "start",   emoji: "🔁", label: "출발한 곳으로" },
-  { id: "airport", emoji: REGION.hub.emoji, label: REGION.hub.label }, // 타고 떠나는 곳 (지역마다 달라요)
+  ...HUBS.map((h) => ({ id: h.id, emoji: h.emoji, label: h.label })),
   { id: "any",     emoji: "🤷", label: "상관없어요" }
 ];
 const AREAS = [
@@ -282,13 +293,13 @@ const ROAMS = [{ id: "stay", label: "이 구역에서만" }, { id: "near", label
 const roaming = () => state.roam === "near" && state.zone && state.zone !== "all";
 const isOutside = (p) => roaming() && p.zone !== state.zone;
 const maxOutside = () => Math.max(1, Math.floor(maxStops() / 3)); // 코스의 3분의 1까지만 옆 구역으로 나가요
-const URL_KEYS = { who: "who", how: "how", people: "people", date: "date", from: "from", depart: "time", hours: "hours", budget: "budget", end: "end", area: "area", zone: "zone", roam: "roam" };
+const URL_KEYS = { who: "who", how: "how", people: "people", date: "date", from: "from", depart: "time", hours: "hours", budget: "budget", end: "end", area: "area", zone: "zone", roam: "roam", leave: "leave" };
 function queryOf() {
   const q = new URLSearchParams();
   for (const [k, name] of Object.entries(URL_KEYS)) {
     const v = state[k];
     if (v === null || v === undefined || (k === "from" && v === "here")) continue;
-    if ((k === "end" && v === "start") || (k === "area" && v === "mix") || (k === "zone" && v === "all") || (k === "roam" && (v === "stay" || state.zone === "all"))) continue; // 기본값은 빼요
+    if ((k === "end" && v === "start") || (k === "area" && v === "mix") || (k === "zone" && v === "all") || (k === "roam" && (v === "stay" || state.zone === "all")) || (k === "leave" && !hubOf())) continue; // 기본값은 빼요
     if (k === "people" && state.how !== "any") continue; // 인원은 택시비를 나눌 때만 써요
     q.set(name, v);
   }
@@ -303,7 +314,7 @@ function readQuery() {
   const one = (name, ok) => { const v = q.get(name); return v !== null && ok(v) ? v : null; };
   const num = (name, list) => { const v = Number(q.get(name)); return list.includes(v) ? v : null; };
   state.who = one("who", (v) => WHO.some((w) => w.id === v));
-  state.how = one("how", (v) => HOW_HERE.some((h) => h.id === v));
+  state.how = one("how", (v) => howHere().some((h) => h.id === v));
   state.people = num("people", PEOPLE) ?? defaultPeople(); // 인원이 없는 예전 링크는 기본값으로
   state.date = one("date", (v) => /^\d{4}-\d\d-\d\d$/.test(v));
   // 공유받은 링크의 날짜가 지났으면 날짜를 다시 고르게 해요
@@ -317,6 +328,8 @@ function readQuery() {
   state.end = one("end", (v) => ENDS.some((e) => e.id === v)) ?? "start";
   state.area = one("area", (v) => AREAS.some((a) => a.id === v)) ?? "mix";
   state.zone = one("zone", (v) => ZONES.some((z) => z.id === v)) ?? "all";
+  state.leave = one("leave", (v) => LEAVES.includes(v));
+  if (hubOf() && state.leave && state.depart) state.hours = hoursFromLeave();
   state.roam = one("roam", (v) => ROAMS.some((r) => r.id === v)) ?? "stay";
   state.skip = (q.get("skip") ?? "").split(",").filter((id) => PLACES.some((p) => p.id === id));
   state.alt = Math.max(0, Number(q.get("alt")) || 0);
@@ -416,8 +429,10 @@ function renderWho() {
   bindChoices("who");
 }
 
+const DOG_TRANSIT = `버스·지하철은 보통 반려견을 이동장에 넣어야 탈 수 있어요. 이동장에 들어가지 않는 큰 개와 다닌다면 "렌터카"나 "상관없어요"(택시·차)를 골라 주세요.`;
 function renderHow() {
-  screen.innerHTML = `<h1>어떻게 다녀요?</h1><p class="sub">하나만 골라 주세요.</p>${REGION.busNote ? `<p class="caution">${esc(REGION.busNote)}</p>` : ""}${choiceList(HOW_HERE, "how")}`;
+  if (!howHere().some((h) => h.id === state.how)) state.how = null; // 누구랑을 바꿔 못 고르게 된 이동은 지워요
+  screen.innerHTML = `<h1>어떻게 다녀요?</h1><p class="sub">하나만 골라 주세요.</p>${REGION.busNote ? `<p class="caution">${esc(REGION.busNote)}</p>` : ""}${state.who === "dog" && !REGION.noBus ? `<p class="caution">${DOG_TRANSIT}</p>` : ""}${choiceList(howHere(), "how")}`;
   bindChoices("how");
 }
 
@@ -430,16 +445,16 @@ function chipGroup(title, key, values, label, cols = 2) {
 
 const startPoint = () => state.from === "here" ? state.here : STARTS.find((s) => s.id === state.from);
 // 공항·역에서 끝나면 비행기·기차를 타요: 고른 시간이 끝나기 전에 넉넉히 도착하게 짜요
-const AIRPORT_BUFFER = REGION.hub.buffer;
-const airportBuffer = () => (state.end === "airport" ? AIRPORT_BUFFER : 0);
+const airportBuffer = () => hubOf()?.buffer ?? 0;
 // 코스가 끝나고 돌아갈 곳 (상관없으면 null)
-const endPoint = () => state.end === "any" ? null : state.end === "airport" ? STARTS.find((s) => s.id === "airport") : startPoint();
+const endPoint = () => state.end === "any" ? null : hubOf() ? STARTS.find((s) => s.id === hubOf().start) : startPoint();
 
 function renderWhen() {
   state.people ??= defaultPeople();
   // 자주 고르는 값을 미리 골라 둬요. 언제·어디서만 고르면 바로 코스를 짤 수 있어요
   state.hours ??= 6; state.budget ??= 50000; state.depart ??= "10:00";
-  const froms = [HERE, ...STARTS];
+  // 숙소가 있는 동네를 먼저, 역·공항은 뒤에 보여 줘요
+  const froms = [HERE, ...STARTS.filter((s) => s.emoji === "🏠"), ...STARTS.filter((s) => s.emoji !== "🏠")];
   screen.innerHTML = `
     <h1>언제, 어디서 출발해요?</h1>
     ${staleDate ? `<p class="left-time stale" role="status">받은 링크의 날짜(${dateLabel(staleDate)})가 지났어요. 날짜를 다시 골라 주세요.</p>` : ""}
@@ -454,7 +469,8 @@ function renderWhen() {
     ${ZONES.length ? `<div id="roamWrap" ${state.zone === "all" ? "hidden" : ""}>${chipGroup("얼마나 돌아다닐까요?", "roam", ROAMS.map((r) => r.id), (id) => ROAMS.find((r) => r.id === id).label)}</div>` : ""}
     <details class="advanced"><summary><span id="advSummary"></span><b aria-hidden="true"></b></summary><div class="inner">
     ${chipGroup("몇 시에 출발해요?", "depart", DEPART, (v) => v, 5)}
-    ${chipGroup("몇 시간 있어요?", "hours", HOURS, (v) => `${v}시간`, 4)}
+    <div id="hoursWrap" ${hubOf() ? "hidden" : ""}>${chipGroup("몇 시간 있어요?", "hours", HOURS, (v) => `${v}시간`, 4)}</div>
+    <div id="leaveWrap" ${hubOf() ? "" : "hidden"}>${chipGroup("기차·비행기는 몇 시에 떠나요? (그 전 정각)", "leave", LEAVES, (v) => v, 4)}</div>
     ${chipGroup("1명 예산은요?", "budget", BUDGET, manwon, 4)}
     ${state.how === "any" ? chipGroup("몇 명이서 가요? (택시비를 나눠요)", "people", PEOPLE, (v) => v === 4 ? "4명+" : `${v}명`, 4) : ""}
     ${chipGroup("어디서 끝나요?", "end", ENDS.map((e) => e.id), (id) => { const e = ENDS.find((x) => x.id === id); return `${em(e.emoji)} ${e.label}`; })}
@@ -466,13 +482,14 @@ function renderWhen() {
   const say = (msg) => { geo.textContent = msg; geo.hidden = !msg; };
   // 접어 둔 조건을 한 줄로 보여 줘요
   const syncAdv = () => {
-    const parts = [state.depart ? `${state.depart} 출발` : "출발 시각 없음", `${state.hours}시간`, `1명 ${manwon(state.budget)}`];
+    const parts = [state.depart ? `${state.depart} 출발` : "출발 시각 없음", hubOf() ? (state.hours || !state.depart ? `${state.leave} ${hubOf().ride}` : "떠나는 시각이 출발보다 1시간 넘게 늦어야 해요") : hoursText(state.hours), `1명 ${manwon(state.budget)}`];
     if (state.how === "any") parts.push(state.people === 4 ? "4명 이상" : `${state.people}명`);
     if (state.end !== "start") parts.push(ENDS.find((e) => e.id === state.end).label);
     if (state.area !== "mix") parts.push(AREAS.find((a) => a.id === state.area).label);
     document.getElementById("advSummary").textContent = parts.join(" · ");
   };
-  const sync = () => { go.disabled = !(state.date && startPoint() && state.depart && state.hours && state.budget); syncAdv(); syncUrl(false); };
+  const sync = () => { if (hubOf() && state.leave) state.hours = hoursFromLeave(); // 출발 시각이 바뀌어도 다시 셈
+    go.disabled = !(state.date && startPoint() && state.depart && state.hours && state.budget); syncAdv(); syncUrl(false); };
   // 오늘이면 이미 지난 출발 시각은 고를 수 없어요
   const syncDepart = () => {
     const nowMin = Math.floor((Date.now() + 9 * 3600e3) / 60000) % 1440;
@@ -508,7 +525,7 @@ function renderWhen() {
   screen.querySelectorAll(".chip").forEach((chip) => {
     chip.onclick = () => {
       const key = chip.dataset.key;
-      state[key] = (key === "depart" || key === "from" || key === "area" || key === "when" || key === "end" || key === "zone" || key === "roam") ? chip.dataset.v : Number(chip.dataset.v);
+      state[key] = (key === "depart" || key === "from" || key === "area" || key === "when" || key === "end" || key === "zone" || key === "roam" || key === "leave") ? chip.dataset.v : Number(chip.dataset.v);
       if (key === "when") {
         staleDate = null; screen.querySelector(".stale")?.remove();
         datePick.hidden = state.when !== "pick";
@@ -518,6 +535,19 @@ function renderWhen() {
       screen.querySelectorAll(`.chip[data-key="${key}"]`).forEach((c) => c.setAttribute("aria-checked", c === chip));
       if (key === "when") syncDepart();
       if (key === "zone") document.getElementById("roamWrap").hidden = state.zone === "all";
+      if (key === "end") {
+        // 역·공항이면 떠나는 시각을, 아니면 시간을 골라요
+        document.getElementById("hoursWrap").hidden = !!hubOf();
+        document.getElementById("leaveWrap").hidden = !hubOf();
+        if (hubOf()) {
+          state.leave ??= LEAVES.find((v) => toMin(v) >= toMin(state.depart ?? "10:00") + (state.hours ?? 6) * 60) ?? LEAVES[LEAVES.length - 1];
+          screen.querySelectorAll('.chip[data-key="leave"]').forEach((c) => c.setAttribute("aria-checked", c.dataset.v === state.leave));
+        } else if (!HOURS.includes(state.hours)) {
+          state.hours = HOURS.reduce((a, b) => Math.abs(b - (state.hours ?? 6)) < Math.abs(a - (state.hours ?? 6)) ? b : a);
+          screen.querySelectorAll('.chip[data-key="hours"]').forEach((c) => c.setAttribute("aria-checked", Number(c.dataset.v) === state.hours));
+        }
+      }
+      if (hubOf() && (key === "end" || key === "leave" || key === "depart")) state.hours = hoursFromLeave();
       if (key === "from") { if (chip.dataset.v === "here") askHere(); else say(""); }
       sync();
     };
@@ -1006,13 +1036,36 @@ function emptyMessage(why) {
     skip: `뺀 곳을 빼고 나니 코스를 짤 수 없어요. 위의 "다시 넣기"를 눌러 보세요.`,
     budget: `예산이 모자라요. ${state.how === "any" ? "택시비까지 넣으면 " : ""}1명 ${manwon(state.budget)}으로는 다녀올 수 있는 곳이 없어요. 예산을 늘리거나${state.how === "any" ? ", 이동을 뚜벅이로 바꾸거나" : ""} 끝나는 곳을 "상관없어요"로 바꿔 보세요.`,
     hours: wheelBus
-      ? `저상버스와 걷기로는 ${state.hours}시간 안에 다녀올 수 있는 곳이 없어요. 시간을 늘리거나, 이동을 "상관없어요"(택시·차)로 바꿔 보세요. ${call}`
-      : state.end === "airport"
-      ? `${REGION.hub.ride} ${REGION.hub.bufferLabel} 전에 ${REGION.hub.place}에 도착하려면 ${state.hours}시간 중 ${state.hours * 60 - AIRPORT_BUFFER}분만 쓸 수 있어서, 다녀올 수 있는 곳이 없어요. 시간을 늘리거나 이동을 "렌터카"·"상관없어요"로 바꿔 보세요.`
-      : `${state.hours}시간 안에 다녀올 수 있는 곳이 없어요. 시간을 늘리거나 끝나는 곳을 "상관없어요"로 바꿔 보세요.`,
+      ? `저상버스와 걷기로는 ${hoursText(state.hours)} 안에 다녀올 수 있는 곳이 없어요. 시간을 늘리거나, 이동을 "상관없어요"(택시·차)로 바꿔 보세요. ${call}`
+      : hubOf()
+      ? `${hubOf().ride} ${hubOf().bufferLabel} 전에 ${hubOf().place}에 도착하려면 ${Math.round(state.hours * 60 - hubOf().buffer)}분만 쓸 수 있어서, 다녀올 수 있는 곳이 없어요. 더 일찍 출발하거나 이동을 "렌터카"·"상관없어요"로 바꿔 보세요.`
+      : `${hoursText(state.hours)} 안에 다녀올 수 있는 곳이 없어요. 시간을 늘리거나 끝나는 곳을 "상관없어요"로 바꿔 보세요.`,
     unknown: `아직 "${{ dog: "반려견 OK", kid: "유모차 OK", wheel: "계단 없음" }[state.who]}"이 확인된 장소가 부족해요. 장소 정보를 확인하면 코스가 나와요.`,
     other: `이 날짜·출발 시각에 문을 연 곳 중 조건에 맞는 곳이 없어요. 출발 시각이나 날짜를 바꿔 보세요.${wheelBus ? ` ${call}` : ""}`
   }[why];
+}
+
+// 이동이 전체 시간의 절반을 넘으면, 더 가까운 출발지나 택시로 바꿨을 때 몇 곳 갈 수 있는지 알려 줘요
+function movingTip(stops, back, used) {
+  const moving = stops.reduce((sum, s) => sum + s.move.min, 0) + (back?.min ?? 0);
+  if (moving * 2 <= used) return "";
+  const tryWith = (change) => {
+    const saved = { ...state }; Object.assign(state, change, { alt: 0 });
+    const c = makeCourse(); Object.assign(state, saved); return c.stops.length;
+  };
+  const tips = [];
+  if (state.how === "walk" || state.how === "bike") {
+    const n = tryWith({ how: "any" });
+    if (n > stops.length) tips.push(`이동을 "상관없어요"(택시·차)로 바꾸면 ${n}곳`);
+  }
+  // 코스 가운데에서 가까운 동네 셋만 출발지로 바꿔 봐요
+  const mid = { lat: stops.reduce((a, s) => a + s.place.lat, 0) / stops.length, lng: stops.reduce((a, s) => a + s.place.lng, 0) / stops.length };
+  const near = STARTS.filter((s) => s.emoji === "🏠" && s.id !== state.from)
+    .sort((a, b) => Math.hypot(a.lat - mid.lat, a.lng - mid.lng) - Math.hypot(b.lat - mid.lat, b.lng - mid.lng)).slice(0, 3);
+  let best = null;
+  for (const s of near) { const n = tryWith({ from: s.id }); if (n > stops.length && (!best || n > best.n)) best = { s, n }; }
+  if (best) tips.push(`${esc(best.s.label)}에서 출발하면 ${best.n}곳`);
+  return `이동이 ${Math.floor(moving / 60) ? `${Math.floor(moving / 60)}시간 ` : ""}${moving % 60}분으로 전체 시간의 절반이 넘어요.${tips.length ? ` ${tips.join(", ")}까지 갈 수 있어요.` : " 출발지를 가까운 동네로 바꾸거나 다른 구역을 골라 보세요."}`;
 }
 
 function renderResult() {
@@ -1027,6 +1080,9 @@ function renderResult() {
   const explain = stops.length ? explainCourse(stops, back) : [];
   // 반려견·유모차·휠체어는 전화 확인 안내가 중요해서 접지 않고 보여 줘요
   const caution = NEED[state.who] ? explain.shift() : null;
+  const longMove = stops.length ? movingTip(stops, back, used) : "";
+  // 반려견과 버스·지하철을 타는 코스면 이동장 안내
+  const dogBus = state.who === "dog" && state.how === "walk" && [...stops.map((s) => s.move), back].some((m) => m?.plan);
   const list = stops.map((s, i) => `
     ${moveLine(s.move)}
     <li class="stop">
@@ -1042,7 +1098,7 @@ function renderResult() {
   screen.innerHTML = `
     <h1>이런 코스 어때요?</h1>
     <p class="sub">${em(who.emoji)} ${who.label} · ${em(how.emoji)} ${how.label}${state.how === "any" ? ` · ${state.people}명` : ""}</p>
-    <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${state.hours}시간 · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}${state.zone && state.zone !== "all" ? ` · ${esc(ZONES.find((z) => z.id === state.zone).label)}${roaming() ? " + 옆 구역" : ""}` : ""}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
+    <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${hubOf() ? `${state.leave} ${hubOf().ride}` : hoursText(state.hours)} · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}${state.zone && state.zone !== "all" ? ` · ${esc(ZONES.find((z) => z.id === state.zone).label)}${roaming() ? " + 옆 구역" : ""}` : ""}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
     ${stops.length ? `
       <div class="summary">
         <div><b>${stops.length}곳</b><span>장소</span></div>
@@ -1051,6 +1107,8 @@ function renderResult() {
       </div>
       ${fares ? `<p class="fare-line">교통비 ${won(fares)} 포함${state.how === "any" && state.people > 1 ? ` (택시비는 ${state.people}명이 나눈 1명 몫)` : ""}</p>` : ""}
       ${left > 60 ? `<p class="left-time">시간이 ${Math.floor(left / 60) ? `${Math.floor(left / 60)}시간 ` : ""}${left % 60 ? `${left % 60}분 ` : ""}남아요. ${stops.length >= maxStops() ? `쉬엄쉬엄 다니도록 ${maxStops()}곳까지만 넣었어요. 마음에 드는 곳에서 더 머물러 보세요.` : `조건에 맞는 곳을 다 넣어서 일찍 끝나요. 시간을 줄이거나 "누구랑"·"어디 위주"를 바꿔 보세요.`}</p>` : ""}
+      ${longMove ? `<p class="caution">${longMove}</p>` : ""}
+      ${dogBus ? `<p class="caution">${DOG_TRANSIT}</p>` : ""}
       ${caution ? `<p class="caution">${caution}</p>` : ""}
       ${state.skip.length ? `<p class="skipped">뺀 곳: ${state.skip.map((id) => esc(PLACES.find((p) => p.id === id).name)).join(", ")} <button class="link" id="unskip">다시 넣기</button></p>` : ""}
       <div class="map" id="map" aria-label="코스 지도"></div>
@@ -1059,7 +1117,7 @@ function renderResult() {
         <li class="endpoint">${em("📍")} ${state.depart} ${esc(start.name)}에서 출발</li>
         ${list}
         ${back ? moveLine(back) : ""}
-        <li class="endpoint">${em("🏁")} ${toHHMM(finish)} ${end ? `${esc(end.name)} 도착` : "코스 끝"}${state.end === "airport" ? `<small class="sub-line">${REGION.hub.ride}는 ${toHHMM(toMin(state.depart) + state.hours * 60)}쯤으로 보고 ${REGION.hub.bufferLabel} 일찍 도착해요</small>` : ""}</li>
+        <li class="endpoint">${em("🏁")} ${toHHMM(finish)} ${end ? `${esc(end.name)} 도착` : "코스 끝"}${hubOf() ? `<small class="sub-line">${hubOf().ride} ${toHHMM(toMin(state.depart) + Math.round(state.hours * 60))} 출발에 맞춰 ${hubOf().bufferLabel} 일찍 도착해요</small>` : ""}</li>
       </ul>` : `
       <div class="empty">${emptyMessage(whyEmpty())}</div>`}
     <details class="notes"><summary>참고할 점 (자료 기준일·출처)</summary>
