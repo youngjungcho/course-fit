@@ -235,6 +235,39 @@
   .notes > summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; }
   .notes p { margin: 4px 0; }
   .empty { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+
+  /* ----- 태블릿·PC: 넓은 화면 ----- */
+  @media (hover: hover) {
+    .choice:hover, .chip:not(:disabled):hover { border-color: var(--accent); }
+    .region-btn:hover, .ghost:hover { border-color: var(--accent); }
+  }
+  @media (min-width: 720px) {
+    .wrap { max-width: 720px; }
+    h1 { font-size: 30px; margin-top: 18px; }
+    .choices { grid-template-columns: 1fr 1fr; }
+    .choices.regions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .choices .choice:only-child { grid-column: 1 / -1; }
+    .chips[style="--cols:2"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .map { height: 320px; }
+    .install .choices, .install { max-width: 420px; }
+  }
+  @media (min-width: 1024px) {
+    .wrap { max-width: 860px; padding-top: 16px; }
+    .wrap.is-wide { max-width: 1200px; }
+    .appbar { min-height: 60px; }
+    .choices.regions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .chips[style="--cols:2"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .cta { position: static; margin: 8px 0 0; padding: 0; background: none; }
+    .cta .primary { max-width: 360px; }
+    /* 결과: 왼쪽 일정, 오른쪽 지도(내려도 따라와요) */
+    .result.has-map { display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 46%); grid-template-areas: "head map" "dock map" "rest map"; column-gap: 32px; align-items: start; }
+    .result.has-map .r-head { grid-area: head; }
+    .result.has-map .r-rest { grid-area: rest; }
+    .result.has-map .r-map { grid-area: map; position: sticky; top: 16px; }
+    .result.has-map .map { height: calc(100vh - 120px); min-height: 420px; max-height: 760px; margin: 0; }
+    .result:not(.has-map) { max-width: 860px; }
+    .result.has-map .dock { grid-area: dock; position: static; margin: 0 0 16px; padding: 0; background: none; }
+  }
 </style>
 </head>
 <body>
@@ -254,10 +287,10 @@
   <main id="screen"></main>
 </div>
 
-<script src="regions.js?v=20261108a"></script>
+<script src="regions.js?v=20261108b"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261108a";
+const REGION_VERSION = "20261108b";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -453,6 +486,7 @@ function renderTransitWait() {
 
 function render() {
   const picking = state.step === PICK;
+  document.querySelector(".wrap").classList.toggle("is-wide", state.step === 3);
   document.getElementById("topRow").hidden = picking;
   regionBtn.hidden = picking || !REGION;
   document.getElementById("brand").hidden = !regionBtn.hidden;
@@ -1168,6 +1202,12 @@ async function drawMap(points, n) {
     }
   };
   kakao.maps.event.addListener(map, "zoom_changed", layout);
+  let lastW = box.clientWidth, lastH = box.clientHeight;
+  new ResizeObserver(() => {
+    if (box.clientWidth === lastW && box.clientHeight === lastH) return;
+    lastW = box.clientWidth; lastH = box.clientHeight;
+    map.relayout(); map.setBounds(bounds, 32, 32, 32, 32); layout();
+  }).observe(box);
   map.setBounds(bounds, 32, 32, 32, 32);
   layout();
   mapView = {
@@ -1274,7 +1314,7 @@ function renderResult() {
       ${moreInfo(s.place)}
     </li>`).join("");
 
-  screen.innerHTML = `
+  screen.innerHTML = `<div class="result${stops.length ? " has-map" : ""}"><div class="r-head">
     <h1>이런 코스 어때요?</h1>
     <p class="sub">${em(who.emoji)} ${who.label} · ${em(how.emoji)} ${how.label}${state.how === "any" ? ` · ${state.people}명` : ""}</p>
     <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${hubOf() ? `${state.leave} ${hubOf().ride}` : hoursText(state.hours)} · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}${state.zone && state.zone !== "all" ? ` · ${esc(ZONES.find((z) => z.id === state.zone).label)}${roaming() ? " + 옆 구역" : ""}` : ""}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
@@ -1290,7 +1330,7 @@ function renderResult() {
       ${dogBus ? `<p class="caution">${DOG_TRANSIT}</p>` : ""}
       ${caution ? `<p class="caution">${caution}</p>` : ""}
       ${state.skip.length ? `<p class="skipped">뺀 곳: ${state.skip.map((id) => esc(PLACES.find((p) => p.id === id).name)).join(", ")} <button class="link" id="unskip">다시 넣기</button></p>` : ""}
-      <div class="map" id="map" aria-label="코스 지도"></div>
+      </div><div class="r-map"><div class="map" id="map" aria-label="코스 지도"></div></div><div class="r-rest">
       ${explain.length ? `<details class="why"><summary>이 코스는요</summary><ul>${explain.map((t) => `<li>${t}</li>`).join("")}</ul></details>` : ""}
       <ul class="timeline">
         <li class="endpoint">${em("📍")} ${state.depart} ${esc(start.name)}에서 출발</li>
@@ -1298,7 +1338,7 @@ function renderResult() {
         ${back ? moveLine(back) : ""}
         <li class="endpoint">${em("🏁")} ${toHHMM(finish)} ${end ? `${esc(end.name)} 도착` : "코스 끝"}${hubOf() ? `<small class="sub-line">${hubOf().ride} ${toHHMM(toMin(state.depart) + Math.round(state.hours * 60))} 출발에 맞춰 ${hubOf().bufferLabel} 일찍 도착해요</small>` : ""}</li>
       </ul>` : `
-      <div class="empty">${emptyMessage(whyEmpty())}</div>`}
+      <div class="empty">${emptyMessage(whyEmpty())}</div></div><div class="r-rest">`}
     <details class="notes"><summary>참고할 점 (자료 기준일·출처)</summary>
       <p>• 장소 정보는 2026년 10월까지의 인터넷 자료로 모았고, 직접 가 보거나 전화로 확인한 건 아니에요. 장소마다 "메모·출처 보기"에 출처가 있어요. 가기 전에 운영시간은 한 번 더 확인해 주세요.</p>
       <p>• 이동 시간은 실제 길 기준이에요.${state.how !== "walk" ? " 막히는 길은 반영되지 않아요." : (REGION.subway ? " 지하철·버스는 평균 배차 간격으로 기다리는 시간까지 넣은 어림이에요(실시간 도착 정보는 아니에요). 버스는 막히면 더 걸릴 수 있어요." : " 버스는 시간표의 평균 배차 간격으로 기다리는 시간까지 넣었어요(실시간 도착 정보는 아니에요).")}${state.how === "ev" ? " 충전 시간은 따로 넣지 않았어요. 충전소가 가까운 곳에서 오래 머물게 짰으니 그동안 충전해 두세요." : ""}${state.how === "car" || state.how === "ev" ? " 차로 다니는 시간에는 주차 5분을 넣었어요. 렌터카 요금·기름값(충전비)·주차비는 비용에 넣지 않았어요." : ""} ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}지도의 선은 순서만 보여 주는 직선이에요.
@@ -1310,14 +1350,14 @@ function renderResult() {
       ${unknownSkipped ? `<p>• ${{ dog: "반려견", kid: "유모차", wheel: "계단" }[state.who]} 정보가 없는 곳 ${unknownSkipped}곳은 안전하게 뺐어요. 꼭 가고 싶은 곳이 있으면 전화로 확인해 보세요.</p>` : ""}
       ${noLocation ? `<p>• 위치를 아직 모르는 곳 ${noLocation}곳은 코스에서 뺐어요.</p>` : ""}
     </details>
-    <button class="${stops.length ? "ghost wide" : "primary"}" id="again">조건 바꾸기</button>
+    <button class="${stops.length ? "ghost wide" : "primary"}" id="again">조건 바꾸기</button></div>
     ${stops.length ? `<div class="dock">
       <p class="share-msg" id="shareMsg" role="status"></p>
       <div class="actions">
         ${count > 1 ? `<button class="ghost" id="alt">${em("🔄")} 다른 코스 보기 (${(state.alt % count) + 1}/${count})</button>` : ""}
         <button class="ghost" id="share">${em("🔗")} 코스 공유하기</button>
       </div>
-    </div>` : ""}`;
+    </div>` : ""}</div>`;
   document.getElementById("again").onclick = () => goStep(2);
   // 다시 그린 뒤 포커스를 같은 자리(다음 장소의 '이곳 빼기')나 제목으로 옮겨요
   const redo = (focusIndex = null) => {
