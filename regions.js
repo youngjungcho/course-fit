@@ -41,6 +41,6 @@ const REGIONS = [
   { ...GANGWON_EAST, id: "gangneung", count: 60, router: "OSRM", name: "강릉", search: "강릉", keywords: "경포 정동진 주문진 안목", note: "차로 다니는 곳", noBus: true, noSeaSunset: true,
     busNote: "강릉은 버스 정보를 아직 넣지 않았어요. 버스 시간표가 뜸한 곳이 많아 차나 택시로 다니는 코스로 짜요." },
   { ...BUSAN_AREA, id: "busan", count: 106, router: "OSRM", name: "부산", search: "부산", keywords: "해운대 광안리 서면 남포동 영도 기장 송도", note: "지하철·버스", noSeaSunset: true, splitTransit: true,
-    zones: [{ id: "east", label: "해운대·송정·기장", near: ["gwangan"] }, { id: "gwangan", label: "광안리·수영·남구", near: ["east", "seomyeon"] }, { id: "seomyeon", label: "서면·전포·동래", near: ["gwangan", "nampo"] }, { id: "nampo", label: "남포동·영도·송도·다대포", near: ["seomyeon"] }],
+    zones: [{ id: "east", count: 27, label: "해운대·송정·기장", near: ["gwangan"] }, { id: "gwangan", count: 20, label: "광안리·수영·남구", near: ["east", "seomyeon"] }, { id: "seomyeon", count: 19, label: "서면·전포·동래", near: ["gwangan", "nampo"] }, { id: "nampo", count: 40, label: "남포동·영도·송도·다대포", near: ["seomyeon"] }],
     busNote: "뚜벅이는 지하철과 버스로 짜요. 배차 간격은 평균이고 실시간 도착 정보는 아니에요. 휠체어 코스는 저상버스·엘리베이터 자료가 아직 없어 걷기·차 기준으로 짜요." }
 ];

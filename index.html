@@ -313,10 +313,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261108e"></script>
+<script src="regions.js?v=20261108f"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261108e";
+const REGION_VERSION = "20261108f";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -577,12 +577,17 @@ function renderRegion() {
   const input = document.getElementById("regionSearch"), box = document.getElementById("regionList");
   const draw = () => {
     const w = input.value.replace(/\s/g, "");
-    const rs = REGIONS.filter((r) => !w || (r.area + r.name + (r.keywords ?? "")).replace(/\s/g, "").includes(w));
+    const rs = REGIONS.filter((r) => !w || (r.area + r.name + (r.keywords ?? "") + (r.zones ?? []).map((z) => z.label).join("")).replace(/\s/g, "").includes(w));
     const areas = [...new Set(REGIONS.map((r) => r.area))];
-    box.innerHTML = rs.length ? areas.filter((a) => rs.some((r) => r.area === a)).map((a) => `<h2 class="area-title">${esc(a)}</h2><div class="choices regions">${rs.filter((r) => r.area === a).map((r) => `
-      <button class="choice${REGION === r ? " picked" : ""}" data-id="${r.id}"><span>${esc(r.name)}${REGION === r ? `<span class="sr"> (골랐던 것)</span>` : ""}<small>장소 ${r.count}곳${r.note ? ` · ${esc(r.note)}` : ""}</small></span></button>`).join("")}</div>`).join("")
+    // 구역이 있는 큰 도시는 구역마다 카드를 따로 보여 줘요 (제주처럼 바로 고르게)
+    const card = (r, z) => {
+      const on = REGION === r && (z ? state.zone === z.id : !state.zone || state.zone === "all");
+      return `<button class="choice${on ? " picked" : ""}" data-id="${r.id}"${z ? ` data-zone="${z.id}"` : ""}><span>${esc(z ? z.label : r.zones ? `${r.name} 전체` : r.name)}${on ? `<span class="sr"> (골랐던 것)</span>` : ""}<small>장소 ${z ? z.count : r.count}곳${r.note ? ` · ${esc(r.note)}` : ""}</small></span></button>`;
+    };
+    const cards = (r) => r.zones ? [...r.zones.map((z) => card(r, z)), card(r)].join("") : card(r);
+    box.innerHTML = rs.length ? areas.filter((a) => rs.some((r) => r.area === a)).map((a) => `<h2 class="area-title">${esc(a)}</h2><div class="choices regions">${rs.filter((r) => r.area === a).map(cards).join("")}</div>`).join("")
       : `<p class="caution">"${esc(input.value)}"에 맞는 지역이 아직 없어요. 지금은 ${areas.join("·")}만 있어요.</p>`;
-    box.querySelectorAll(".choice").forEach((b) => { b.onclick = () => pickRegion(b.dataset.id); });
+    box.querySelectorAll(".choice").forEach((b) => { b.onclick = () => pickRegion(b.dataset.id, b.dataset.zone ?? "all"); });
   };
   input.oninput = draw;
   draw();
@@ -647,16 +652,17 @@ function drawInstall() {
 }
 // 지역을 고르면 그 지역 자료를 불러오고, 고른 조건은 그 지역에 맞는 것만 남겨요
 let stepBeforePick = 0;
-async function pickRegion(id) {
-  track("region_select", { region: id });
+async function pickRegion(id, zone = "all") {
+  track("region_select", { region: id, zone });
   if (id !== REGION?.id) {
     const keep = new URLSearchParams(queryOf());
-    keep.set("region", id); keep.delete("skip"); keep.delete("alt"); keep.delete("pick"); keep.set("step", stepBeforePick);
+    keep.set("region", id); keep.delete("zone"); if (zone !== "all") keep.set("zone", zone); keep.delete("skip"); keep.delete("alt"); keep.delete("pick"); keep.set("step", stepBeforePick);
     screen.innerHTML = `<h1 tabindex="-1">${esc(REGIONS.find((r) => r.id === id).name)} 자료를 불러오는 중이에요</h1><p class="sub">잠시만 기다려 주세요.</p>`;
     try { applyRegion(REGIONS.find((r) => r.id === id), await loadRegionData(id)); } catch { return showLoadError(id); }
     readQuery(keep.toString()); // 새 지역에서 못 고르는 값이 지워지면, 고를 단계로 돌아가요
     return goStep(state.step);
   }
+  if (ZONES.length) state.zone = zone;
   goStep(stepBeforePick);
 }
 function showLoadError(id) {
