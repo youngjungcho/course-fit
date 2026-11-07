@@ -193,7 +193,8 @@
   button.no::after { content: ""; position: absolute; inset: -10px; } /* 누르는 자리를 넓혀요 */
   .pin.group { cursor: pointer; }
   .pin.on { background: var(--warn); transform: scale(1.15); }
-  .stop .name { font-size: 19px; font-weight: 700; margin: 2px 0; }
+  .stop .name { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 700; margin: 6px 0 2px; }
+  .stop .ticon { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); font-size: 22px; flex: none; }
   .stop .desc { font-size: 15px; margin: 0 0 2px; }
   .why { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 0 14px; margin: 0 0 12px; }
   .why > summary { min-height: 48px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-weight: 700; font-size: 16px; list-style: none; }
@@ -313,10 +314,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261108f"></script>
+<script src="regions.js?v=20261108h"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261108f";
+const REGION_VERSION = "20261108h";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -592,6 +593,9 @@ function renderRegion() {
   input.oninput = draw;
   draw();
 }
+// 코스를 한 번이라도 본 사람(이 브라우저)은 시간·예산 칸을 접어서 보여 줘요. 처음 온 사람은 다 펼쳐서 뭘 고를 수 있는지 보여 줘요
+const SEEN_KEY = "swimpyo-seen";
+const seenCourse = () => { try { return localStorage.getItem(SEEN_KEY) === "1"; } catch { return false; } };
 // ----- 내 코스: 이 휴대폰(브라우저)에만 저장해요. 다시 열면 그때 자료로 코스를 다시 짜요 -----
 const SAVED_KEY = "swimpyo-saved";
 const loadSaved = () => { try { return JSON.parse(localStorage.getItem(SAVED_KEY)) ?? []; } catch { return []; } };
@@ -710,7 +714,7 @@ function renderWhen() {
     <p class="geo" id="geo" hidden></p>
     ${ZONES.length ? chipGroup("어느 쪽으로 갈까요?", "zone", ZONES.map((z) => z.id), (id) => ZONES.find((z) => z.id === id).label) : ""}
     ${ZONES.length ? `<div id="roamWrap" ${state.zone === "all" ? "hidden" : ""}>${chipGroup("얼마나 돌아다닐까요?", "roam", ROAMS.map((r) => r.id), (id) => ROAMS.find((r) => r.id === id).label)}</div>` : ""}
-    <details class="advanced"><summary><span id="advSummary"></span><b aria-hidden="true"></b></summary><div class="inner">
+    <details class="advanced"${seenCourse() ? "" : " open"}><summary><span id="advSummary"></span><b aria-hidden="true"></b></summary><div class="inner">
     ${chipGroup("몇 시에 출발해요?", "depart", DEPART, (v) => v, 5)}
     <div id="hoursWrap" ${hubOf() ? "hidden" : ""}>${chipGroup("몇 시간 있어요?", "hours", HOURS, (v) => `${v}시간`, 4)}</div>
     <div id="leaveWrap" ${hubOf() ? "" : "hidden"}>${chipGroup("기차·비행기는 몇 시에 떠나요? (그 전 정각)", "leave", LEAVES, (v) => v, 4)}</div>
@@ -1114,11 +1118,13 @@ function whyEmpty() {
   return "other";
 }
 
-// 지도 바로가기: 카카오맵은 장소 번호로, 네이버지도는 이름 검색으로 열어요
+// 장소 종류 아이콘 (사진 대신 카드에 크게 보여 줘요)
+const TYPE_ICON = { 식당: "🍜", 카페: "☕", 볼거리: "🏛️", 공원: "🌳", 쇼핑: "🛍️" };
+// 지도 바로가기: 카카오맵은 장소 번호로(사진·후기가 있는 장소 페이지), 번호가 없으면 이름 검색, 네이버지도는 이름 검색으로 열어요
 function mapLinks(p) {
   const kakao = p.kakaoId ? `https://place.map.kakao.com/${p.kakaoId}` : `https://map.kakao.com/?q=${encodeURIComponent(p.name)}`;
   const naver = `https://map.naver.com/p/search/${encodeURIComponent(`${p.name} ${REGION.search}`)}`;
-  return `<a href="${kakao}" target="_blank" rel="noopener" data-map="kakao">카카오맵</a><a href="${naver}" target="_blank" rel="noopener" data-map="naver">네이버지도</a>`;
+  return `<a href="${kakao}" target="_blank" rel="noopener" data-map="kakao" aria-label="${esc(p.name)} 사진·후기 카카오맵에서 보기">${p.kakaoId ? "📷 사진·후기" : "카카오맵"}</a><a href="${naver}" target="_blank" rel="noopener" data-map="naver">네이버지도</a>`;
 }
 
 // 전부 정보가 없는 칸은 배지를 안 띄워요 (예: 자전거 거치대는 아직 60곳 모두 모름)
@@ -1218,6 +1224,7 @@ function trackCourse(stops, why) {
   if (courseTracked) return;
   courseTracked = true;
   track("course_view", { region: REGION.id, who: state.who, how: state.how, zone: state.zone ?? "all", hours: state.hours, stops: stops.length, empty_reason: stops.length ? "none" : why });
+  if (stops.length) { try { localStorage.setItem(SEEN_KEY, "1"); } catch {} }
 }
 
 // 코스 지도: 카카오 지도 위에 순서대로 번호를 찍고 잇는 선을 그려요 (선은 직선이라 실제 길과 달라요)
@@ -1407,7 +1414,7 @@ function renderResult() {
     ${moveLine(s.move, i === 0 ? start : stops[i - 1].place, s.place)}
     <li class="stop">
       <div class="time"><button class="no" data-stop="${i + 1}" aria-label="${i + 1}번 ${esc(s.place.name)} 지도에서 보기">${i + 1}</button>${toHHMM(s.begin)} – ${toHHMM(s.leave)}</div>
-      <div class="name">${esc(s.place.name)}</div>
+      <div class="name"><span class="ticon" aria-hidden="true">${TYPE_ICON[s.place.type] ?? "📍"}</span><span>${esc(s.place.name)}</span></div>
       ${s.place.desc ? `<div class="desc">${esc(s.place.desc)}</div>` : ""}
       <div class="meta">${s.place.type} · ${s.place.stayMin}분 · ${s.place.cost === null ? "비용 확인 필요" : won(s.place.cost)}${s.place.lastOrder && !s.place.hoursByDay ? ` · 마지막 주문 ${s.place.lastOrder}` : ""}</div>
       <div class="badges">${badgesFor(s)}</div>
