@@ -287,10 +287,25 @@
   <main id="screen"></main>
 </div>
 
-<script src="regions.js?v=20261108c"></script>
+<script>
+// 방문 통계: 구글 애널리틱스(GA4). 실제 주소에서만 켜요. 이름·위치 같은 개인정보는 보내지 않아요 (privacy.html)
+const GA_ID = "G-XVVHZGMMPQ";
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+if (location.hostname === "swimpyonote.com") {
+  const ga = document.createElement("script");
+  ga.async = true; ga.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+  document.head.append(ga);
+  gtag("js", new Date());
+  gtag("config", GA_ID);
+}
+// 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
+const track = (name, params = {}) => gtag("event", name, params);
+</script>
+<script src="regions.js?v=20261108d"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261108c";
+const REGION_VERSION = "20261108d";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -519,7 +534,9 @@ function bindChoices(key) {
   screen.querySelectorAll(".choice").forEach((btn) => {
     btn.onclick = () => {
       if (key === "who" && state.who !== btn.dataset.id) state.people = null; // 누구랑이 바뀌면 인원 기본값도 다시
-      state[key] = btn.dataset.id; goStep(state.step + 1);
+      state[key] = btn.dataset.id;
+      track(key === "who" ? "who_select" : "how_select", { region: REGION.id, [key]: btn.dataset.id });
+      goStep(state.step + 1);
     };
   });
 }
@@ -536,7 +553,8 @@ function renderRegion() {
     <input class="search" id="regionSearch" type="search" placeholder="지역 찾기 (예: 부산, 애월)" aria-label="지역 찾기" autocomplete="off" enterkeyhint="search">
     <div id="regionList" aria-live="polite"></div>
     ${navigator.onLine ? "" : `<p class="caution">인터넷이 연결되어 있지 않아요. 전에 열어 본 지역만 열 수 있어요.</p>`}
-    <div class="install" id="install"></div>`;
+    <div class="install" id="install"></div>
+    <p class="caution" style="margin-top:24px"><a href="privacy.html">개인정보처리방침</a></p>`;
   drawInstall();
   const input = document.getElementById("regionSearch"), box = document.getElementById("regionList");
   const draw = () => {
@@ -564,6 +582,7 @@ function drawInstall() {
     : installPrompt ? `<button class="choice" id="installBtn"><span class="emoji" aria-hidden="true">📲</span><span>홈 화면에 추가<small>앱처럼 열고, 인터넷이 약해도 전에 본 코스를 볼 수 있어요</small></span></button>`
     : ios ? `<p class="caution">아이폰은 사파리 아래쪽 공유 버튼 → "홈 화면에 추가"를 누르면 앱처럼 쓸 수 있어요.</p>` : "";
   document.getElementById("installBtn")?.addEventListener("click", async () => {
+    track("install_click");
     installPrompt.prompt();
     await installPrompt.userChoice;
     installPrompt = null; drawInstall();
@@ -572,6 +591,7 @@ function drawInstall() {
 // 지역을 고르면 그 지역 자료를 불러오고, 고른 조건은 그 지역에 맞는 것만 남겨요
 let stepBeforePick = 0;
 async function pickRegion(id) {
+  track("region_select", { region: id });
   if (id !== REGION?.id) {
     const keep = new URLSearchParams(queryOf());
     keep.set("region", id); keep.delete("skip"); keep.delete("alt"); keep.delete("pick"); keep.set("step", stepBeforePick);
@@ -712,7 +732,7 @@ function renderWhen() {
       sync();
     };
   });
-  go.onclick = () => { state.skip = []; state.alt = 0; goStep(3); };
+  go.onclick = () => { state.skip = []; state.alt = 0; courseTracked = false; goStep(3); };
   syncDepart();
   syncAdv();
   sync();
@@ -1035,7 +1055,7 @@ function whyEmpty() {
 function mapLinks(p) {
   const kakao = p.kakaoId ? `https://place.map.kakao.com/${p.kakaoId}` : `https://map.kakao.com/?q=${encodeURIComponent(p.name)}`;
   const naver = `https://map.naver.com/p/search/${encodeURIComponent(`${p.name} ${REGION.search}`)}`;
-  return `<a href="${kakao}" target="_blank" rel="noopener">카카오맵</a><a href="${naver}" target="_blank" rel="noopener">네이버지도</a>`;
+  return `<a href="${kakao}" target="_blank" rel="noopener" data-map="kakao">카카오맵</a><a href="${naver}" target="_blank" rel="noopener" data-map="naver">네이버지도</a>`;
 }
 
 // 전부 정보가 없는 칸은 배지를 안 띄워요 (예: 자전거 거치대는 아직 60곳 모두 모름)
@@ -1116,6 +1136,7 @@ function explainCourse(stops, back) {
 
 // 코스 공유: 폰이면 공유 창(카톡 등), 아니면 링크 복사
 async function shareCourse() {
+  track("share", { region: REGION.id, method: navigator.share ? "share_sheet" : "copy" });
   const msg = document.getElementById("shareMsg");
   const url = location.href;
   if (state.from === "here") msg.textContent = "\"지금 내 위치\"는 링크에 담기지 않아요. 받는 사람은 출발 장소를 다시 골라야 해요.";
@@ -1126,6 +1147,14 @@ async function shareCourse() {
   } catch (e) {
     if (e.name !== "AbortError") msg.textContent = `이 링크를 복사해 보내 주세요: ${url}`;
   }
+}
+
+// 결과 화면을 처음 그릴 때 한 번만 남겨요 (다른 코스 보기·이곳 빼기로 다시 그릴 때는 빼요)
+let courseTracked = false;
+function trackCourse(stops, why) {
+  if (courseTracked) return;
+  courseTracked = true;
+  track("course_view", { region: REGION.id, who: state.who, how: state.how, zone: state.zone ?? "all", hours: state.hours, stops: stops.length, empty_reason: stops.length ? "none" : why });
 }
 
 // 코스 지도: 카카오 지도 위에 순서대로 번호를 찍고 잇는 선을 그려요 (선은 직선이라 실제 길과 달라요)
@@ -1299,6 +1328,7 @@ function renderResult() {
   const explain = stops.length ? explainCourse(stops, back) : [];
   // 반려견·유모차·휠체어는 전화 확인 안내가 중요해서 접지 않고 보여 줘요
   const caution = NEED[state.who] ? explain.shift() : null;
+  let emptyWhy = null;
   const longMove = stops.length ? movingTip(stops, back, used) : "";
   // 반려견과 버스·지하철을 타는 코스면 이동장 안내
   const dogBus = state.who === "dog" && state.how === "walk" && [...stops.map((s) => s.move), back].some((m) => m?.plan);
@@ -1338,7 +1368,7 @@ function renderResult() {
         ${back ? moveLine(back) : ""}
         <li class="endpoint">${em("🏁")} ${toHHMM(finish)} ${end ? `${esc(end.name)} 도착` : "코스 끝"}${hubOf() ? `<small class="sub-line">${hubOf().ride} ${toHHMM(toMin(state.depart) + Math.round(state.hours * 60))} 출발에 맞춰 ${hubOf().bufferLabel} 일찍 도착해요</small>` : ""}</li>
       </ul>` : `
-      <div class="empty">${emptyMessage(whyEmpty())}</div></div><div class="r-rest">`}
+      <div class="empty">${emptyMessage(emptyWhy = whyEmpty())}</div></div><div class="r-rest">`}
     <details class="notes"><summary>참고할 점 (자료 기준일·출처)</summary>
       <p>• 장소 정보는 2026년 10월까지의 인터넷 자료로 모았고, 직접 가 보거나 전화로 확인한 건 아니에요. 장소마다 "메모·출처 보기"에 출처가 있어요. 가기 전에 운영시간은 한 번 더 확인해 주세요.</p>
       <p>• 이동 시간은 실제 길 기준이에요.${state.how !== "walk" ? " 막히는 길은 반영되지 않아요." : (REGION.subway ? " 지하철·버스는 평균 배차 간격으로 기다리는 시간까지 넣은 어림이에요(실시간 도착 정보는 아니에요). 버스는 막히면 더 걸릴 수 있어요." : " 버스는 시간표의 평균 배차 간격으로 기다리는 시간까지 넣었어요(실시간 도착 정보는 아니에요).")}${state.how === "ev" ? " 충전 시간은 따로 넣지 않았어요. 충전소가 가까운 곳에서 오래 머물게 짰으니 그동안 충전해 두세요." : ""}${state.how === "car" || state.how === "ev" ? " 차로 다니는 시간에는 주차 5분을 넣었어요. 렌터카 요금·기름값(충전비)·주차비는 비용에 넣지 않았어요." : ""} ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}지도의 선은 순서만 보여 주는 직선이에요.
@@ -1349,6 +1379,7 @@ function renderResult() {
       ${costUnknown ? `<p>• 비용을 모르는 곳 ${costUnknown}곳은 비용 합계에 들어가지 않았어요.</p>` : ""}
       ${unknownSkipped ? `<p>• ${{ dog: "반려견", kid: "유모차", wheel: "계단" }[state.who]} 정보가 없는 곳 ${unknownSkipped}곳은 안전하게 뺐어요. 꼭 가고 싶은 곳이 있으면 전화로 확인해 보세요.</p>` : ""}
       ${noLocation ? `<p>• 위치를 아직 모르는 곳 ${noLocation}곳은 코스에서 뺐어요.</p>` : ""}
+      <p>• 방문 통계를 위해 구글 애널리틱스를 써요. <a href="privacy.html">개인정보처리방침</a></p>
     </details>
     <button class="${stops.length ? "ghost wide" : "primary"}" id="again">조건 바꾸기</button></div>
     ${stops.length ? `<div class="dock">
@@ -1358,6 +1389,7 @@ function renderResult() {
         <button class="ghost" id="share">${em("🔗")} 코스 공유하기</button>
       </div>
     </div>` : ""}</div>`;
+  trackCourse(stops, emptyWhy);
   document.getElementById("again").onclick = () => goStep(2);
   // 다시 그린 뒤 포커스를 같은 자리(다음 장소의 '이곳 빼기')나 제목으로 옮겨요
   const redo = (focusIndex = null) => {
@@ -1369,11 +1401,12 @@ function renderResult() {
   };
   screen.querySelectorAll(".skip").forEach((b, i) => { b.onclick = () => { state.skip.push(b.dataset.id); state.alt = 0; redo(i); }; });
   document.getElementById("unskip")?.addEventListener("click", () => { state.skip = []; state.alt = 0; redo(); });
-  document.getElementById("alt")?.addEventListener("click", () => { state.alt = (state.alt + 1) % count; redo(); });
+  document.getElementById("alt")?.addEventListener("click", () => { state.alt = (state.alt + 1) % count; track("course_alt", { region: REGION.id }); redo(); });
   document.getElementById("share")?.addEventListener("click", shareCourse);
   if (stops.length) drawMap([start, ...stops.map((s) => s.place), ...(end ? [end] : [])], stops.length);
   // 장소 카드의 번호를 누르면 지도가 그 장소로 가요
   screen.querySelectorAll("button.no").forEach((b) => { b.onclick = () => focusOnMap(Number(b.dataset.stop)); });
+  screen.querySelectorAll("a[data-map]").forEach((a) => { a.addEventListener("click", () => track("map_open", { region: REGION.id, map: a.dataset.map })); });
 }
 
 // ----- 시작 -----
