@@ -15,6 +15,12 @@
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#1f7a5a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="여행 코스">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231f7a5a'/><circle cx='68' cy='36' r='16' fill='%23f2a541'/><path d='M0 66 Q25 56 50 66 T100 66 V100 H0Z' fill='%23e3f1ea'/></svg>">
 <style>
   :root {
@@ -61,7 +67,7 @@
   }
   button, a, select, summary, input { touch-action: manipulation; }
   button:focus-visible, a:focus-visible, select:focus-visible, summary:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-  .wrap { max-width: 560px; margin: 0 auto; padding: 8px max(16px, env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
+  .wrap { max-width: 560px; margin: 0 auto; padding: max(8px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
 
   .appbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; }
   .region { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 17px; min-width: 0; }
@@ -85,6 +91,8 @@
     width: 100%; min-height: 48px; padding: 0 14px; margin-bottom: 4px; border: 1px solid var(--line); border-radius: 12px;
     background: var(--card); color: var(--text); font: inherit; font-size: 16px;
   }
+  .install { margin: 20px 0 0; }
+  .install .choice { min-height: 56px; }
   .area-title { font-size: 15px; color: var(--muted); margin: 18px 0 8px; }
   .choices.regions { grid-template-columns: 1fr 1fr; }
   .choices.regions .choice { min-height: 64px; padding: 10px 14px; }
@@ -246,10 +254,10 @@
   <main id="screen"></main>
 </div>
 
-<script src="regions.js?v=20261107e"></script>
+<script src="regions.js?v=20261108a"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261107e";
+const REGION_VERSION = "20261108a";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -492,7 +500,10 @@ const DOG_TRANSIT = `버스·지하철은 보통 반려견을 이동장에 넣�
 function renderRegion() {
   screen.innerHTML = `<h1>어디로 가요?</h1><p class="sub">지역을 고르면 누구랑, 어떻게 가는지에 맞춰 하루 코스를 짜 드려요.</p>
     <input class="search" id="regionSearch" type="search" placeholder="지역 찾기 (예: 부산, 애월)" aria-label="지역 찾기" autocomplete="off" enterkeyhint="search">
-    <div id="regionList" aria-live="polite"></div>`;
+    <div id="regionList" aria-live="polite"></div>
+    ${navigator.onLine ? "" : `<p class="caution">인터넷이 연결되어 있지 않아요. 전에 열어 본 지역만 열 수 있어요.</p>`}
+    <div class="install" id="install"></div>`;
+  drawInstall();
   const input = document.getElementById("regionSearch"), box = document.getElementById("regionList");
   const draw = () => {
     const w = input.value.replace(/\s/g, "");
@@ -505,6 +516,24 @@ function renderRegion() {
   };
   input.oninput = draw;
   draw();
+}
+// 홈 화면에 추가: 안드로이드 크롬은 설치 창을 띄우고, 아이폰 사파리는 방법을 알려 줘요 (이미 앱으로 열었으면 안 보여요)
+let installPrompt = null;
+window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installPrompt = e; drawInstall(); });
+window.addEventListener("appinstalled", () => { installPrompt = null; drawInstall(); });
+function drawInstall() {
+  const box = document.getElementById("install");
+  if (!box) return;
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  box.innerHTML = standalone ? ""
+    : installPrompt ? `<button class="choice" id="installBtn"><span class="emoji" aria-hidden="true">📲</span><span>홈 화면에 추가<small>앱처럼 열고, 인터넷이 약해도 전에 본 코스를 볼 수 있어요</small></span></button>`
+    : ios ? `<p class="caution">아이폰은 사파리 아래쪽 공유 버튼 → "홈 화면에 추가"를 누르면 앱처럼 쓸 수 있어요.</p>` : "";
+  document.getElementById("installBtn")?.addEventListener("click", async () => {
+    installPrompt.prompt();
+    await installPrompt.userChoice;
+    installPrompt = null; drawInstall();
+  });
 }
 // 지역을 고르면 그 지역 자료를 불러오고, 고른 조건은 그 지역에 맞는 것만 남겨요
 let stepBeforePick = 0;
@@ -1334,6 +1363,8 @@ async function boot() {
   history.replaceState({ step: state.step, depth: 0 }, "", `${location.pathname}${queryOf() ? `?${queryOf()}` : ""}`);
   render();
   if (state.step === PICK) showSplash();
+  // 오프라인용 저장 (sw.js)
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
 }
 boot();
 </script>

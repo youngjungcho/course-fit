@@ -1,0 +1,16 @@
+{
+  "name": "여행 코스 · 내 조건에 맞춰",
+  "short_name": "여행 코스",
+  "description": "누구랑, 어떻게 가는지 고르면 하루 코스를 짜 드려요.",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#1f7a5a",
+  "theme_color": "#1f7a5a",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
