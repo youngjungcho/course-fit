@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>여행 코스 · 내 조건에 맞춰</title>
+<title>쉼,표 · 내 조건에 맞춘 하루 여행 코스</title>
 <meta name="description" content="반려견·유모차·휠체어·혼자, 뚜벅이·자전거·전기차. 누구랑 어떻게 다니는지 고르면 하루 코스를 짜 드려요. 운영시간·버스·교통비까지 따져요.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="여행 코스 · 내 조건에 맞춰">
-<meta property="og:description" content="누구랑, 어떻게, 몇 시간 — 고르면 하루 코스가 나와요.">
-<meta property="og:url" content="https://youngjungcho.github.io/course-fit/">
-<meta property="og:image" content="https://youngjungcho.github.io/course-fit/og.png">
+<meta property="og:title" content="쉼,표 · 내 조건에 맞춘 하루 여행 코스">
+<meta property="og:description" content="잠깐 멈춰가는 하루. 누구랑, 어떻게, 몇 시간 — 고르면 제주·강릉·부산 하루 코스가 나와요.">
+<meta property="og:url" content="https://swimpyonote.com/">
+<meta property="og:image" content="https://swimpyonote.com/og.png?v=2">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
@@ -19,7 +19,7 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="여행 코스">
+<meta name="apple-mobile-web-app-title" content="쉼,표">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231f7a5a'/><circle cx='68' cy='36' r='16' fill='%23f2a541'/><path d='M0 66 Q25 56 50 66 T100 66 V100 H0Z' fill='%23e3f1ea'/></svg>">
 <style>
@@ -274,7 +274,7 @@
 <div class="wrap">
   <header class="appbar">
     <button class="region-btn" id="regionBtn" hidden><span aria-hidden="true">📍</span> <b id="regionName"></b> <small>바꾸기</small></button>
-    <span class="brand" id="brand">여행 코스</span>
+    <span class="brand" id="brand">쉼,표</span>
     <span class="count" id="placeCount"></span>
   </header>
 
@@ -287,10 +287,10 @@
   <main id="screen"></main>
 </div>
 
-<script src="regions.js?v=20261108b"></script>
+<script src="regions.js?v=20261108c"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261108b";
+const REGION_VERSION = "20261108c";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -1120,7 +1120,7 @@ async function shareCourse() {
   const url = location.href;
   if (state.from === "here") msg.textContent = "\"지금 내 위치\"는 링크에 담기지 않아요. 받는 사람은 출발 장소를 다시 골라야 해요.";
   try {
-    if (navigator.share) { await navigator.share({ title: `${REGION.area} ${REGION.name} 여행 코스`, url }); return; }
+    if (navigator.share) { await navigator.share({ title: `쉼,표 · ${REGION.area === REGION.name ? REGION.name : `${REGION.area} ${REGION.name}`} 하루 코스`, url }); return; }
     await navigator.clipboard.writeText(url);
     msg.textContent = (msg.textContent ? msg.textContent + " " : "") + "링크를 복사했어요. 카톡에 붙여 넣어 보내 보세요.";
   } catch (e) {
@@ -1385,7 +1385,7 @@ function showSplash() {
   const s = document.createElement("div");
   s.className = "splash"; s.setAttribute("aria-hidden", "true");
   s.innerHTML = `<svg width="72" height="72" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#fff" fill-opacity=".15"/><circle cx="68" cy="36" r="16" fill="#f2a541"/><path d="M0 66 Q25 56 50 66 T100 66 V100 H0Z" fill="#e3f1ea"/></svg>
-    <b>여행 코스</b><p>누구랑, 어떻게 가는지 고르면<br>하루 코스를 짜 드려요</p>`;
+    <b>쉼,표</b><p>잠깐 멈춰가는 하루<br>누구랑, 어떻게 가는지 고르면 코스를 짜 드려요</p>`;
   document.body.append(s);
   const hide = () => { s.classList.add("hide"); setTimeout(() => s.remove(), 450); };
   s.onclick = hide;
