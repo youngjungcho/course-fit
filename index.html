@@ -72,6 +72,30 @@
     background-position: right 17px center, right 12px center; background-size: 5px 5px; background-repeat: no-repeat;
   }
   .count { color: var(--muted); font-size: 14px; white-space: nowrap; }
+  .brand { font-weight: 700; font-size: 17px; }
+  .region-btn {
+    display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; min-width: 0;
+    border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--text);
+    font: inherit; font-size: 17px; cursor: pointer;
+  }
+  .region-btn b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .region-btn small { color: var(--accent); font-size: 14px; font-weight: 600; white-space: nowrap; }
+  .region-btn[hidden], .brand[hidden], .top[hidden] { display: none; }
+  .search {
+    width: 100%; min-height: 48px; padding: 0 14px; margin-bottom: 4px; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--card); color: var(--text); font: inherit; font-size: 16px;
+  }
+  .area-title { font-size: 15px; color: var(--muted); margin: 18px 0 8px; }
+  .choices.regions { grid-template-columns: 1fr 1fr; }
+  .choices.regions .choice { min-height: 64px; padding: 10px 14px; }
+  .splash {
+    position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; padding: 24px; background: #1f7a5a; color: #fff; text-align: center; transition: opacity .4s;
+  }
+  .splash.hide { opacity: 0; pointer-events: none; }
+  .splash b { font-size: 28px; }
+  .splash p { margin: 0; font-size: 17px; opacity: .9; line-height: 1.5; }
+  @media (prefers-reduced-motion: reduce) { .splash { transition: none; } }
   .top { display: flex; align-items: center; gap: 8px; min-height: 44px; margin-bottom: 4px; }
   .back {
     border: 0; background: none; color: var(--muted); font-size: 16px;
@@ -205,11 +229,12 @@
 <body>
 <div class="wrap">
   <header class="appbar">
-    <label class="region"><span id="regionArea"></span> <select id="regionPick" aria-label="지역 고르기"></select></label>
-    <span class="count"><span id="placeCount"></span>곳</span>
+    <button class="region-btn" id="regionBtn" hidden><span aria-hidden="true">📍</span> <b id="regionName"></b> <small>바꾸기</small></button>
+    <span class="brand" id="brand">여행 코스</span>
+    <span class="count" id="placeCount"></span>
   </header>
 
-  <div class="top">
+  <div class="top" id="topRow">
     <button class="back" id="back" hidden>← 이전</button>
     <div class="progress" id="progress" role="progressbar" aria-label="진행" aria-valuemin="1" aria-valuemax="4"><div id="bar"></div></div>
     <span class="step-text" id="stepText" aria-hidden="true"></span>
@@ -218,14 +243,40 @@
   <main id="screen"></main>
 </div>
 
-<script src="regions.js?v=20261107b"></script>
-<script id="regionLoader">
-// 고른 지역의 자료만 불러와요 (지역 없는 예전 링크는 애월)
-const REGION_VERSION = "20261107b";
-const REGION = REGIONS.find((r) => r.id === new URLSearchParams(location.search).get("region")) ?? REGIONS[0];
-document.write(`<script src="regions/${REGION.id}/places.js?v=${REGION_VERSION}"><\/script><script src="regions/${REGION.id}/travel.js?v=${REGION_VERSION}"><\/script>`);
-</script>
+<script src="regions.js?v=20261107c"></script>
 <script>
+// ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
+const REGION_VERSION = "20261107c";
+let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
+// 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
+let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
+const regionCache = {};
+async function loadRegionData(id) {
+  if (regionCache[id]) return regionCache[id];
+  const get = async (f) => { const r = await fetch(`regions/${id}/${f}?v=${REGION_VERSION}`); if (!r.ok) throw new Error(f); return r.text(); };
+  const [places, travel] = await Promise.all([get("places.js"), get("travel.js")]);
+  const data = new Function(places + "\n" + travel + "\n;return { PLACES, STARTS, COASTLINE, TRAVEL, INLAND_NORTH: typeof INLAND_NORTH !== 'undefined' && INLAND_NORTH };")();
+  return (regionCache[id] = data);
+}
+function applyRegion(region, data) {
+  REGION = region;
+  ({ PLACES, STARTS, COASTLINE, TRAVEL, INLAND_NORTH } = data);
+  // 타고 떠나는 곳: 지역의 기본(역·공항, STARTS id "airport")과 더 있는 곳(REGION.extraHubs)
+  HUBS = [{ id: "airport", start: "airport", ...REGION.hub }, ...(REGION.extraHubs ?? [])];
+  ENDS = [
+    { id: "start",   emoji: "🔁", label: "출발한 곳으로" },
+    ...HUBS.map((h) => ({ id: h.id, emoji: h.emoji, label: h.label })),
+    { id: "any",     emoji: "🤷", label: "상관없어요" }
+  ];
+  // 큰 도시는 코스를 짤 구역을 골라요 (REGION.zones, 장소마다 zone 칸이 있어요)
+  ZONES = REGION.zones ? [{ id: "all", label: "상관없어요" }, ...REGION.zones] : [];
+  TRAVEL_INDEX = Object.fromEntries(TRAVEL.ids.map((id, i) => [id, i]));
+  // 아직 자료를 못 모은 칸 (전부 비어 있으면 화면 문구를 낮춰요)
+  NO_DATA_YET = { bikeRack: PLACES.every((p) => p.bikeRack === null) };
+  sunsetSpots.clear();
+  transitLoading = null;
+}
+
 // ----- 고를 수 있는 것들 -----
 const WHO = [
   { id: "group",  emoji: "👫", label: "친구·연인·가족",    hint: "특별한 조건 없이 좋은 곳으로" },
@@ -244,8 +295,8 @@ const HOW = [
 // 버스 자료가 없는 지역은 뚜벅이를 빼요
 // 버스 자료가 없는 지역은 뚜벅이를, 휠체어·어르신이면 자전거를 빼요
 const howHere = () => HOW
-  .filter((h) => !(REGION.noBus && h.id === "walk") && !(state.who === "wheel" && h.id === "bike"))
-  .map((h) => REGION.subway && h.id === "walk" ? { ...h, hint: "걷거나 지하철·버스" } : h);
+  .filter((h) => !(REGION?.noBus && h.id === "walk") && !(state.who === "wheel" && h.id === "bike"))
+  .map((h) => REGION?.subway && h.id === "walk" ? { ...h, hint: "걷거나 지하철·버스" } : h);
 const WHEN = [
   { id: "today",    label: () => `오늘 (${dayOf(kstToday())})`,              date: () => kstToday() },
   { id: "tomorrow", label: () => `내일 (${dayOf(addDays(kstToday(), 1))})`, date: () => addDays(kstToday(), 1) },
@@ -263,14 +314,7 @@ const PEOPLE = [1, 2, 3, 4];
 const defaultPeople = () => (state.who === "kid" || state.who === "wheel" || state.who === "group" ? 2 : 1);
 const BUDGET = [30000, 50000, 100000, 150000];
 const HERE = { id: "here", emoji: "📍", label: "지금 내 위치" };
-// 타고 떠나는 곳: 지역의 기본(역·공항, STARTS id "airport")과 더 있는 곳(REGION.extraHubs)
-const HUBS = [{ id: "airport", start: "airport", ...REGION.hub }, ...(REGION.extraHubs ?? [])];
 const hubOf = () => HUBS.find((h) => h.id === state.end);
-const ENDS = [
-  { id: "start",   emoji: "🔁", label: "출발한 곳으로" },
-  ...HUBS.map((h) => ({ id: h.id, emoji: h.emoji, label: h.label })),
-  { id: "any",     emoji: "🤷", label: "상관없어요" }
-];
 const AREAS = [
   { id: "mix",      emoji: "🤷", label: "골고루" },
   { id: "sea",      emoji: "🌊", label: "바닷가 위주" },
@@ -286,8 +330,6 @@ const back = document.getElementById("back");
 
 // ----- 주소(URL)에 고른 조건 담기: 새로고침해도 그대로, 링크로 보내면 같은 코스가 떠요 -----
 // "지금 내 위치"는 위치라서 주소에 넣지 않아요
-// 큰 도시는 코스를 짤 구역을 골라요 (REGION.zones, 장소마다 zone 칸이 있어요)
-const ZONES = REGION.zones ? [{ id: "all", label: "상관없어요" }, ...REGION.zones] : [];
 // 구역을 고른 뒤 옆 구역까지 조금 돌아다닐지 골라요
 const ROAMS = [{ id: "stay", label: "이 구역에서만" }, { id: "near", label: "옆 구역도 조금" }];
 const roaming = () => state.roam === "near" && state.zone && state.zone !== "all";
@@ -303,14 +345,15 @@ function queryOf() {
     if (k === "people" && state.how !== "any") continue; // 인원은 택시비를 나눌 때만 써요
     q.set(name, v);
   }
-  if (REGION !== REGIONS[0]) q.set("region", REGION.id);
+  if (REGION) q.set("region", REGION.id);
   if (state.skip.length) q.set("skip", state.skip.join(","));
   if (state.alt) q.set("alt", state.alt);
-  if (state.step) q.set("step", state.step);
+  if (state.step === PICK) q.set("pick", "1");
+  else if (state.step) q.set("step", state.step);
   return q.toString();
 }
-function readQuery() {
-  const q = new URLSearchParams(location.search);
+function readQuery(search = location.search) {
+  const q = new URLSearchParams(search);
   const one = (name, ok) => { const v = q.get(name); return v !== null && ok(v) ? v : null; };
   const num = (name, list) => { const v = Number(q.get(name)); return list.includes(v) ? v : null; };
   state.who = one("who", (v) => WHO.some((w) => w.id === v));
@@ -337,20 +380,28 @@ function readQuery() {
   const ready = [true, !!state.who, !!state.how, !!(state.date && state.from && state.depart && state.hours && state.budget)];
   let step = Math.min(3, Math.max(0, Number(q.get("step")) || 0));
   while (step > 0 && !ready[step]) step--;
-  state.step = step;
+  state.step = q.get("pick") || !REGION ? PICK : step;
 }
 let staleDate = null;
 // depth = 이 사이트 안에서 앞으로 간 횟수. 0이면 뒤로가기는 사이트를 나가요
+// 지역 고르기 화면은 단계 앞(-1)이에요
+const PICK = -1;
 const syncUrl = (push) => history[push ? "pushState" : "replaceState"]({ step: state.step, depth: (history.state?.depth ?? 0) + (push ? 1 : 0) }, "", `${location.pathname}${queryOf() ? `?${queryOf()}` : ""}`);
 // 다음 단계로: 브라우저 기록에 남겨서 폰의 뒤로가기로 돌아올 수 있어요
 const goStep = (step) => { state.step = step; syncUrl(true); render(); };
 back.onclick = () => {
   if ((history.state?.depth ?? 0) > 0) history.back();
-  else { state.step = Math.max(0, state.step - 1); syncUrl(false); render(); }
+  else { state.step = state.step === 0 ? PICK : Math.max(0, state.step - 1); syncUrl(false); render(); }
 };
 // 뒤로·앞으로 가기: 단계만 옮기고 고른 값은 그대로 둬요 (돌아가도 고른 것이 표시돼요)
-window.addEventListener("popstate", () => {
-  state.step = Math.min(3, Math.max(0, Number(new URLSearchParams(location.search).get("step")) || 0));
+window.addEventListener("popstate", async () => {
+  const q = new URLSearchParams(location.search);
+  // 지역을 바꾼 뒤 뒤로 가면 그 전 지역 자료로 돌아가요
+  const id = q.get("region");
+  if (id && id !== REGION?.id && REGIONS.some((r) => r.id === id)) {
+    try { applyRegion(REGIONS.find((r) => r.id === id), await loadRegionData(id)); readQuery(); } catch { return showLoadError(id); }
+  }
+  state.step = q.get("pick") || !REGION ? PICK : Math.min(3, Math.max(0, Number(q.get("step")) || 0));
   syncUrl(false); render();
 });
 
@@ -374,13 +425,11 @@ const dateLabel = (iso) => `${Number(iso.slice(5, 7))}월 ${Number(iso.slice(8, 
 const needsTransit = () => REGION.splitTransit && state.how === "walk" && state.who !== "wheel" && !TRAVEL.bus;
 let transitLoading = null;
 function loadTransit() {
-  transitLoading ??= new Promise((ok, fail) => {
-    const s = document.createElement("script");
-    s.src = `regions/${REGION.id}/transit.js?v=${REGION_VERSION}`;
-    s.onload = ok;
-    s.onerror = () => { transitLoading = null; s.remove(); fail(); };
-    document.head.append(s);
-  });
+  const travel = TRAVEL;
+  transitLoading ??= fetch(`regions/${REGION.id}/transit.js?v=${REGION_VERSION}`)
+    .then((r) => { if (!r.ok) throw new Error("transit"); return r.text(); })
+    .then((text) => new Function("TRAVEL", text)(travel))
+    .catch((e) => { transitLoading = null; throw e; });
   return transitLoading;
 }
 function renderTransitWait() {
@@ -392,13 +441,19 @@ function renderTransitWait() {
 }
 
 function render() {
+  const picking = state.step === PICK;
+  document.getElementById("topRow").hidden = picking;
+  regionBtn.hidden = picking || !REGION;
+  document.getElementById("brand").hidden = !regionBtn.hidden;
+  if (REGION) document.getElementById("regionName").textContent = REGION.name;
+  document.getElementById("placeCount").textContent = REGION && !picking ? `장소 ${PLACES.length}곳 중에서` : "";
   bar.style.width = `${(state.step + 1) * 25}%`;
   const progress = document.getElementById("progress");
   progress.setAttribute("aria-valuenow", state.step + 1);
   progress.setAttribute("aria-valuetext", `${state.step + 1}/4단계`);
   document.getElementById("stepText").textContent = `${state.step + 1}/4`;
-  back.hidden = state.step === 0;
-  (state.step === 3 && needsTransit() ? renderTransitWait : [renderWho, renderHow, renderWhen, renderResult][state.step])();
+  back.hidden = picking;
+  (picking ? renderRegion : state.step === 3 && needsTransit() ? renderTransitWait : [renderWho, renderHow, renderWhen, renderResult][state.step])();
   window.scrollTo(0, 0);
   // 화면이 바뀌면 제목으로 포커스를 옮겨서 화면낭독기가 새 화면을 읽게 해요 (처음 열 때는 빼고)
   const h1 = screen.querySelector("h1");
@@ -430,6 +485,45 @@ function renderWho() {
 }
 
 const DOG_TRANSIT = `버스·지하철은 보통 반려견을 이동장에 넣어야 탈 수 있어요. 이동장에 들어가지 않는 큰 개와 다닌다면 "렌터카"나 "상관없어요"(택시·차)를 골라 주세요.`;
+// 지역 고르기: 이름으로 찾고, 시·도별로 묶어 보여 줘요
+function renderRegion() {
+  screen.innerHTML = `<h1>어디로 가요?</h1><p class="sub">지역을 고르면 누구랑, 어떻게 가는지에 맞춰 하루 코스를 짜 드려요.</p>
+    <input class="search" id="regionSearch" type="search" placeholder="지역 찾기 (예: 부산, 애월)" aria-label="지역 찾기" autocomplete="off" enterkeyhint="search">
+    <div id="regionList" aria-live="polite"></div>`;
+  const input = document.getElementById("regionSearch"), box = document.getElementById("regionList");
+  const draw = () => {
+    const w = input.value.replace(/\s/g, "");
+    const rs = REGIONS.filter((r) => !w || (r.area + r.name + (r.keywords ?? "")).replace(/\s/g, "").includes(w));
+    const areas = [...new Set(REGIONS.map((r) => r.area))];
+    box.innerHTML = rs.length ? areas.filter((a) => rs.some((r) => r.area === a)).map((a) => `<h2 class="area-title">${esc(a)}</h2><div class="choices regions">${rs.filter((r) => r.area === a).map((r) => `
+      <button class="choice${REGION === r ? " picked" : ""}" data-id="${r.id}"><span>${esc(r.name)}${REGION === r ? `<span class="sr"> (골랐던 것)</span>` : ""}<small>장소 ${r.count}곳${r.note ? ` · ${esc(r.note)}` : ""}</small></span></button>`).join("")}</div>`).join("")
+      : `<p class="caution">"${esc(input.value)}"에 맞는 지역이 아직 없어요. 지금은 ${areas.join("·")}만 있어요.</p>`;
+    box.querySelectorAll(".choice").forEach((b) => { b.onclick = () => pickRegion(b.dataset.id); });
+  };
+  input.oninput = draw;
+  draw();
+}
+// 지역을 고르면 그 지역 자료를 불러오고, 고른 조건은 그 지역에 맞는 것만 남겨요
+let stepBeforePick = 0;
+async function pickRegion(id) {
+  if (id !== REGION?.id) {
+    const keep = new URLSearchParams(queryOf());
+    keep.set("region", id); keep.delete("skip"); keep.delete("alt"); keep.delete("pick"); keep.set("step", stepBeforePick);
+    screen.innerHTML = `<h1 tabindex="-1">${esc(REGIONS.find((r) => r.id === id).name)} 자료를 불러오는 중이에요</h1><p class="sub">잠시만 기다려 주세요.</p>`;
+    try { applyRegion(REGIONS.find((r) => r.id === id), await loadRegionData(id)); } catch { return showLoadError(id); }
+    readQuery(keep.toString()); // 새 지역에서 못 고르는 값이 지워지면, 고를 단계로 돌아가요
+    return goStep(state.step);
+  }
+  goStep(stepBeforePick);
+}
+function showLoadError(id) {
+  screen.innerHTML = `<h1 tabindex="-1">지역 자료를 못 불러왔어요</h1><p class="sub">인터넷 연결을 확인하고 다시 시도해 주세요.</p><button class="choice" id="loadRetry">다시 시도</button>`;
+  document.getElementById("loadRetry").onclick = () => pickRegion(id);
+}
+const goPick = () => { stepBeforePick = Math.max(0, state.step); state.step = PICK; syncUrl(true); render(); };
+const regionBtn = document.getElementById("regionBtn");
+regionBtn.onclick = goPick;
+
 function renderHow() {
   if (!howHere().some((h) => h.id === state.how)) state.how = null; // 누구랑을 바꿔 못 고르게 된 이동은 지워요
   screen.innerHTML = `<h1>어떻게 다녀요?</h1><p class="sub">하나만 골라 주세요.</p>${REGION.busNote ? `<p class="caution">${esc(REGION.busNote)}</p>` : ""}${state.who === "dog" && !REGION.noBus ? `<p class="caution">${DOG_TRANSIT}</p>` : ""}${choiceList(howHere(), "how")}`;
@@ -560,7 +654,6 @@ function renderWhen() {
 
 // ----- 이동 시간 -----
 // 장소끼리는 travel.js의 길 기준 시간표를 쓰고, 표에 없으면(지금 내 위치 등) 직선거리로 어림해요
-const TRAVEL_INDEX = Object.fromEntries(TRAVEL.ids.map((id, i) => [id, i]));
 const travelIndex = (p) => TRAVEL_INDEX[p.id] ?? TRAVEL_INDEX[`start:${p.id}`];
 
 function distKm(a, b) {
@@ -673,7 +766,7 @@ function isInland(p) {
   const coastLat = a.lat + (p.lng - a.lng) / (b.lng - a.lng) * (b.lat - a.lat);
   // 서귀포처럼 바다가 남쪽인 지역은 북쪽이 산 쪽이에요
   const south = (coastLat - p.lat) * 111;
-  return (typeof INLAND_NORTH !== "undefined" ? -south : south) > 2.5;
+  return (INLAND_NORTH ? -south : south) > 2.5;
 }
 
 // 쉬엄쉬엄 다니게: 3시간 3곳, 4시간 3곳, 6시간 5곳, 8시간 6곳까지
@@ -880,7 +973,6 @@ function mapLinks(p) {
 }
 
 // 전부 정보가 없는 칸은 배지를 안 띄워요 (예: 자전거 거치대는 아직 60곳 모두 모름)
-const NO_DATA_YET = { bikeRack: PLACES.every((p) => p.bikeRack === null) };
 
 function badgesFor(s) {
   const p = s.place, out = [];
@@ -1155,22 +1247,35 @@ function renderResult() {
   if (stops.length) drawMap([start, ...stops.map((s) => s.place), ...(end ? [end] : [])], stops.length);
 }
 
+// ----- 시작 -----
 // 처음 열 때: 주소에 담긴 조건을 읽어요. 공유 링크로 바로 결과가 열려도 기록은 하나만 둬요
 // (카톡에서 연 사람이 뒤로가기 한 번에 카톡으로 돌아가요. 앞 단계는 '← 이전' 버튼으로)
-document.getElementById("placeCount").textContent = PLACES.length;
-document.getElementById("regionArea").textContent = REGION.area;
-// 지역 바꾸기: 고른 조건은 그대로 두고 그 지역 자료로 다시 열어요 (없는 출발 장소·뺀 장소는 읽을 때 걸러져요)
-const regionPick = document.getElementById("regionPick");
-regionPick.innerHTML = [...new Set(REGIONS.map((r) => r.area))].map((a) => `<optgroup label="${esc(a)}">${REGIONS.filter((r) => r.area === a).map((r) => `<option value="${r.id}">${esc(r.name)}</option>`).join("")}</optgroup>`).join("");
-regionPick.value = REGION.id;
-regionPick.onchange = () => {
-  const q = new URLSearchParams(queryOf());
-  q.set("region", regionPick.value); q.delete("skip"); q.delete("alt");
-  location.search = q.toString();
-};
-readQuery();
-history.replaceState({ step: state.step, depth: 0 }, "", `${location.pathname}${queryOf() ? `?${queryOf()}` : ""}`);
-render();
+// 짧은 오프닝: 처음 들어온 사람에게 한 번만 보여 줘요 (공유 링크로 바로 들어오면 건너뛰어요)
+function showSplash() {
+  try { if (sessionStorage.getItem("splash")) return; sessionStorage.setItem("splash", "1"); } catch {}
+  const s = document.createElement("div");
+  s.className = "splash"; s.setAttribute("aria-hidden", "true");
+  s.innerHTML = `<svg width="72" height="72" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#fff" fill-opacity=".15"/><circle cx="68" cy="36" r="16" fill="#f2a541"/><path d="M0 66 Q25 56 50 66 T100 66 V100 H0Z" fill="#e3f1ea"/></svg>
+    <b>여행 코스</b><p>누구랑, 어떻게 가는지 고르면<br>하루 코스를 짜 드려요</p>`;
+  document.body.append(s);
+  const hide = () => { s.classList.add("hide"); setTimeout(() => s.remove(), 450); };
+  s.onclick = hide;
+  setTimeout(hide, 1300);
+}
+async function boot() {
+  const q = new URLSearchParams(location.search);
+  // 지역이 없는데 조건이 들어 있는 예전 링크는 애월로 열어요
+  const old = !q.get("region") && [...q.keys()].some((k) => Object.values(URL_KEYS).includes(k) || k === "step");
+  const id = REGIONS.some((r) => r.id === q.get("region")) ? q.get("region") : old ? REGIONS[0].id : null;
+  if (id) {
+    try { applyRegion(REGIONS.find((r) => r.id === id), await loadRegionData(id)); } catch { return showLoadError(id); }
+  }
+  readQuery();
+  history.replaceState({ step: state.step, depth: 0 }, "", `${location.pathname}${queryOf() ? `?${queryOf()}` : ""}`);
+  render();
+  if (state.step === PICK) showSplash();
+}
+boot();
 </script>
 </body>
 </html>

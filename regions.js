@@ -1,5 +1,6 @@
 // 지역 목록. 지역마다 regions/<id>/places.js 와 travel.js 를 따로 둬요 (이동 시간표는 장소 수의 제곱으로 커져서 한 파일에 못 담아요)
 // name = 화면에 보여 줄 이름, search = 네이버지도에서 장소를 찾을 때 이름 뒤에 붙이는 말
+// count = 장소 수(지역 고르기 화면에 보여 줘요. 장소를 더하면 같이 고쳐요), note = 지역 고르기 화면의 한 줄 설명, keywords = 지역 찾기에서 더 찾을 동네 이름
 // area = 시·도 이름(지역 목록 묶음), router = 이동 시간 계산 출처(없으면 openrouteservice.org)
 // 아래 칸은 시·도마다 달라요
 //   sun      일몰 계산 기준 위치 [위도, 경도]
@@ -29,17 +30,17 @@ const BUSAN_AREA = {
   subway: { busFare: 1550, railFare: 1600 } // 버스 2023-10, 지하철 1구간 2024-05 기사 기준. 2026년 요금표는 못 찾았어요
 };
 const REGIONS = [
-  { ...JEJU_AREA, id: "aewol", name: "애월", search: "애월" },
-  { ...JEJU_AREA, id: "hallim", name: "한림·협재", search: "한림" },
-  { ...JEJU_AREA, id: "jejusi", name: "제주시내", search: "제주시" },
-  { ...JEJU_AREA, id: "seogwipo", router: "OSRM", name: "서귀포·중문", search: "서귀포" },
-  { ...JEJU_AREA, id: "east", router: "OSRM", name: "함덕·조천·구좌", search: "제주" },
-  { ...JEJU_AREA, id: "seongsan", router: "OSRM", name: "성산·표선", search: "서귀포" },
-  { ...JEJU_AREA, id: "southwest", router: "OSRM", name: "한경·대정·안덕", search: "제주" },
-  { ...JEJU_AREA, id: "namwon", router: "OSRM", name: "남원", search: "서귀포 남원" },
-  { ...GANGWON_EAST, id: "gangneung", router: "OSRM", name: "강릉", search: "강릉", noBus: true, noSeaSunset: true,
+  { ...JEJU_AREA, id: "aewol", count: 65, name: "애월", search: "애월" },
+  { ...JEJU_AREA, id: "hallim", count: 57, name: "한림·협재", keywords: "협재 금능", search: "한림" },
+  { ...JEJU_AREA, id: "jejusi", count: 66, name: "제주시내", search: "제주시" },
+  { ...JEJU_AREA, id: "seogwipo", count: 61, router: "OSRM", name: "서귀포·중문", keywords: "중문 서귀포", search: "서귀포" },
+  { ...JEJU_AREA, id: "east", count: 56, router: "OSRM", name: "함덕·조천·구좌", keywords: "김녕 월정리 세화", search: "제주" },
+  { ...JEJU_AREA, id: "seongsan", count: 55, router: "OSRM", name: "성산·표선", search: "서귀포" },
+  { ...JEJU_AREA, id: "southwest", count: 53, router: "OSRM", name: "한경·대정·안덕", keywords: "모슬포 산방산 사계", search: "제주" },
+  { ...JEJU_AREA, id: "namwon", count: 37, router: "OSRM", name: "남원", search: "서귀포 남원" },
+  { ...GANGWON_EAST, id: "gangneung", count: 60, router: "OSRM", name: "강릉", search: "강릉", keywords: "경포 정동진 주문진 안목", note: "차로 다니는 곳", noBus: true, noSeaSunset: true,
     busNote: "강릉은 버스 정보를 아직 넣지 않았어요. 버스 시간표가 뜸한 곳이 많아 차나 택시로 다니는 코스로 짜요." },
-  { ...BUSAN_AREA, id: "busan", router: "OSRM", name: "부산", search: "부산", noSeaSunset: true, splitTransit: true,
+  { ...BUSAN_AREA, id: "busan", count: 106, router: "OSRM", name: "부산", search: "부산", keywords: "해운대 광안리 서면 남포동 영도 기장 송도", note: "지하철·버스", noSeaSunset: true, splitTransit: true,
     zones: [{ id: "east", label: "해운대·송정·기장", near: ["gwangan"] }, { id: "gwangan", label: "광안리·수영·남구", near: ["east", "seomyeon"] }, { id: "seomyeon", label: "서면·전포·동래", near: ["gwangan", "nampo"] }, { id: "nampo", label: "남포동·영도·송도·다대포", near: ["seomyeon"] }],
     busNote: "뚜벅이는 지하철과 버스로 짜요. 배차 간격은 평균이고 실시간 도착 정보는 아니에요. 휠체어 코스는 저상버스·엘리베이터 자료가 아직 없어 걷기·차 기준으로 짜요." }
 ];
