@@ -1,6 +1,6 @@
 // 오프라인용: 한 번 연 화면과 지역 자료를 휴대폰에 저장해 두고, 인터넷이 없으면 저장한 것을 보여 줘요
 // 사이트를 고칠 때마다 VERSION을 index.html의 REGION_VERSION과 같게 올려요 (예전 저장분을 지워요)
-const VERSION = "20261108h";
+const VERSION = "20261111b";
 const CACHE = `course-fit-${VERSION}`;
 const SHELL = ["./", `./regions.js?v=${VERSION}`, "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png"];
 

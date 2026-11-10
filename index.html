@@ -177,6 +177,11 @@
   @media (max-width: 400px) { .summary b { font-size: 17px; } }
   .summary span { color: var(--muted); font-size: 14px; }
   .fare-line { color: var(--muted); font-size: 13px; margin: -6px 0 12px; text-align: right; }
+  .go-hint { margin: 0 0 8px; text-align: center; color: var(--warn); font-size: 14px; font-weight: 600; }
+  .primary.dim { opacity: .55; }
+  .group.need { animation: need 1.6s ease; border-radius: 12px; }
+  @keyframes need { 0%, 60% { box-shadow: 0 0 0 3px var(--warn); background: var(--warn-soft); } 100% { box-shadow: 0 0 0 3px transparent; } }
+  @media (prefers-reduced-motion: reduce) { .group.need { animation: none; box-shadow: 0 0 0 3px var(--warn); } }
   .left-time { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 8px 12px; font-size: 14px; line-height: 1.45; margin: 0 0 10px; }
   .tags { color: var(--muted); font-size: 14px; margin: -12px 0 14px; line-height: 1.5; }
   .caution { color: var(--muted); font-size: 14px; margin: 0 0 12px; }
@@ -314,10 +319,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261108h"></script>
+<script src="regions.js?v=20261111b"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261108h";
+const REGION_VERSION = "20261111b";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -490,6 +495,9 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 // 날짜는 "2026-10-31" 글자로 다뤄요. 기기 시간대와 상관없이 한국 시간 기준이에요
 const kstToday = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+// "하루 코스"는 밤 9시 안에 끝나게 기본값을 맞춰요 (사용자가 직접 고르면 그대로)
+const DAY_END = 21 * 60;
+const firstDepartToday = () => { const now = Math.floor((Date.now() + 9 * 3600e3) / 60000) % 1440; return DEPART.find((d) => toMin(d) > now) ?? null; };
 const addDays = (iso, n) => new Date(Date.parse(iso) + n * 864e5).toISOString().slice(0, 10);
 const dayOf = (iso) => DAYS[new Date(`${iso}T00:00:00Z`).getUTCDay()];
 const dateLabel = (iso) => `${Number(iso.slice(5, 7))}월 ${Number(iso.slice(8, 10))}일(${dayOf(iso)})`;
@@ -699,13 +707,24 @@ const endPoint = () => state.end === "any" ? null : hubOf() ? STARTS.find((s) =>
 function renderWhen() {
   state.people ??= defaultPeople();
   // 자주 고르는 값을 미리 골라 둬요. 언제·어디서만 고르면 바로 코스를 짤 수 있어요
+  // 시간을 링크·이전 화면에서 이미 골랐으면 건드리지 않아요. 아니면 오늘 남은 시간에 맞춰 줄여 줘요
+  let hoursTouched = state.hours != null, departTouched = state.depart != null;
   state.hours ??= 6; state.budget ??= 50000; state.depart ??= "10:00";
+  // 날짜도 미리 골라 둬요: 오늘 밤 9시 전까지 4시간 넘게 남았으면 오늘, 아니면 내일 (지난 링크 날짜는 다시 고르게 둬요)
+  let lateNote = false;
+  if (!state.date && !staleDate) {
+    const first = firstDepartToday();
+    state.when = first && toMin(first) + 4 * 60 <= DAY_END ? "today" : "tomorrow";
+    lateNote = state.when === "tomorrow" && !!first; // 오늘 출발할 수는 있지만 짧아서 내일로 골라 둔 경우
+    state.date = WHEN.find((w) => w.id === state.when).date();
+  }
   // 숙소가 있는 동네를 먼저, 역·공항은 뒤에 보여 줘요
   const froms = [HERE, ...STARTS.filter((s) => s.emoji === "🏠"), ...STARTS.filter((s) => s.emoji !== "🏠")];
   screen.innerHTML = `
     <h1>언제, 어디서 출발해요?</h1>
     ${staleDate ? `<p class="left-time stale" role="status">받은 링크의 날짜(${dateLabel(staleDate)})가 지났어요. 날짜를 다시 골라 주세요.</p>` : ""}
     <p class="sub">시간과 예산은 미리 골라 뒀어요.</p>
+    ${lateNote ? `<p class="left-time" id="lateNote" role="status">오늘은 남은 시간이 짧아서 내일로 골라 뒀어요. 오늘 저녁 짧은 코스를 원하면 "오늘"을 눌러 주세요.</p>` : ""}
     <div class="group"><h2 id="g-when">언제 가요?</h2><div class="chips" style="--cols:3" role="radiogroup" aria-labelledby="g-when">${WHEN.map((w) =>
       `<button class="chip" role="radio" data-key="when" data-v="${w.id}" aria-checked="${state.when === w.id}">${w.label()}</button>`).join("")}</div>
       <input type="date" class="date-pick" id="datePick" aria-label="여행 날짜" min="${kstToday()}" value="${state.when === "pick" ? state.date : ""}" ${state.when === "pick" ? "" : "hidden"}>
@@ -723,7 +742,7 @@ function renderWhen() {
     ${chipGroup("어디서 끝나요?", "end", ENDS.map((e) => e.id), (id) => { const e = ENDS.find((x) => x.id === id); return `${em(e.emoji)} ${e.label}`; })}
     ${chipGroup("어디 위주로 볼까요?", "area", AREAS.map((a) => a.id), (id) => { const a = AREAS.find((x) => x.id === id); return `${em(a.emoji)} ${a.label}`; })}
     </div></details>
-    <div class="cta"><button class="primary" id="go">코스 짜기</button></div>`;
+    <div class="cta"><p class="go-hint" id="goHint" role="status" hidden></p><button class="primary" id="go">코스 짜기</button></div>`;
   const go = document.getElementById("go");
   const geo = document.getElementById("geo");
   const say = (msg) => { geo.textContent = msg; geo.hidden = !msg; };
@@ -736,7 +755,30 @@ function renderWhen() {
     document.getElementById("advSummary").textContent = parts.join(" · ");
   };
   const sync = () => { if (hubOf() && state.leave) state.hours = hoursFromLeave(); // 출발 시각이 바뀌어도 다시 셈
-    go.disabled = !(state.date && startPoint() && state.depart && state.hours && state.budget); syncAdv(); syncUrl(false); };
+    const miss = missing();
+    go.classList.toggle("dim", miss.length > 0);
+    hint.hidden = !miss.length;
+    const words = miss.map((m) => m.label).join(", "), last = words.charCodeAt(words.length - 1) - 0xac00;
+    hint.textContent = miss.length ? `${words}${last >= 0 && last % 28 ? "을" : "를"} 골라 주세요` : ""; // 받침이 있으면 "을"
+    syncAdv(); syncUrl(false); };
+  // 빠진 항목: 버튼을 누르면 첫 번째 빠진 곳으로 옮겨 가서 잠깐 표시해요
+  const hint = document.getElementById("goHint");
+  const missing = () => [
+    !state.date && { key: "when", label: "날짜" },
+    !startPoint() && { key: "from", label: "출발 장소" },
+    !state.depart && { key: "depart", label: "출발 시각" },
+    !state.hours && { key: "hours", label: "시간" },
+    !state.budget && { key: "budget", label: "예산" }
+  ].filter(Boolean);
+  const showMissing = (m) => {
+    const box = document.getElementById(`g-${m.key}`)?.closest(".group");
+    if (!box) return;
+    const adv = box.closest("details.advanced");
+    if (adv) adv.open = true;
+    box.scrollIntoView({ behavior: "smooth", block: "center" });
+    box.classList.remove("need"); void box.offsetWidth; box.classList.add("need");
+    (m.key === "when" && state.when === "pick" ? datePick : box.querySelector(".chip:not([disabled])"))?.focus({ preventScroll: true });
+  };
   // 오늘이면 이미 지난 출발 시각은 고를 수 없어요
   const syncDepart = () => {
     const nowMin = Math.floor((Date.now() + 9 * 3600e3) / 60000) % 1440;
@@ -750,6 +792,21 @@ function renderWhen() {
       chips.forEach((c) => c.setAttribute("aria-checked", c === next));
     }
     if (today && !chips.some((c) => !c.disabled)) say("오늘은 고를 수 있는 출발 시각이 지났어요. 내일이나 다른 날짜를 골라 주세요.");
+    // 오늘이라 늦은 시각으로 밀렸던 출발은, 다른 날로 바꾸면 10시로 돌려요 (직접 고른 시각은 그대로)
+    if (!today && !departTouched && state.depart !== "10:00") {
+      state.depart = "10:00";
+      chips.forEach((c) => c.setAttribute("aria-checked", c.dataset.v === state.depart));
+    }
+    fitHours();
+  };
+  // 시간을 직접 고르지 않았으면, 오늘은 밤 9시 안에 끝나는 길이로 줄이고 다른 날은 6시간으로 둬요
+  const fitHours = () => {
+    if (hoursTouched || hubOf() || !state.depart) return;
+    const room = DAY_END - toMin(state.depart);
+    const want = state.date === kstToday() ? [...HOURS].reverse().find((h) => h * 60 <= room && h <= 6) ?? HOURS[0] : 6;
+    if (want === state.hours) return;
+    state.hours = want;
+    screen.querySelectorAll('.chip[data-key="hours"]').forEach((c) => c.setAttribute("aria-checked", Number(c.dataset.v) === state.hours));
   };
   const datePick = document.getElementById("datePick");
   datePick.onchange = () => { state.date = datePick.value || null; staleDate = null; screen.querySelector(".stale")?.remove(); syncDepart(); sync(); };
@@ -780,7 +837,9 @@ function renderWhen() {
         if (state.when === "pick" && !datePick.value) datePick.focus();
       }
       screen.querySelectorAll(`.chip[data-key="${key}"]`).forEach((c) => c.setAttribute("aria-checked", c === chip));
-      if (key === "when") syncDepart();
+      if (key === "hours") hoursTouched = true;
+      if (key === "when") { document.getElementById("lateNote")?.remove(); syncDepart(); }
+      if (key === "depart") { departTouched = true; fitHours(); }
       if (key === "zone") document.getElementById("roamWrap").hidden = state.zone === "all";
       if (key === "end") {
         // 역·공항이면 떠나는 시각을, 아니면 시간을 골라요
@@ -799,7 +858,11 @@ function renderWhen() {
       sync();
     };
   });
-  go.onclick = () => { state.skip = []; state.alt = 0; courseTracked = false; goStep(3); };
+  go.onclick = () => {
+    const miss = missing();
+    if (miss.length) { track("go_blocked", { region: REGION.id, missing: miss.map((m) => m.key).join(",") }); return showMissing(miss[0]); }
+    state.skip = []; state.alt = 0; courseTracked = false; goStep(3);
+  };
   syncDepart();
   syncAdv();
   sync();
