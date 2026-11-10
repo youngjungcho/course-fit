@@ -1,6 +1,6 @@
 // 오프라인용: 한 번 연 화면과 지역 자료를 휴대폰에 저장해 두고, 인터넷이 없으면 저장한 것을 보여 줘요
 // 사이트를 고칠 때마다 VERSION을 index.html의 REGION_VERSION과 같게 올려요 (예전 저장분을 지워요)
-const VERSION = "20261111c";
+const VERSION = "20261111d";
 const CACHE = `course-fit-${VERSION}`;
 const SHELL = ["./", `./regions.js?v=${VERSION}`, "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png"];
 
@@ -19,6 +19,8 @@ self.addEventListener("fetch", (e) => {
   // 카카오 지도처럼 다른 곳의 자료는 건드리지 않아요
   if (req.method !== "GET" || url.origin !== location.origin) return;
   // 화면: 인터넷이 되면 새로 받아 저장하고, 안 되면 저장해 둔 화면을 보여 줘요
+  // 지역 안내 페이지(course/…)·개인정보처리방침 같은 다른 페이지는 그대로 받아요 (앱 화면 저장분과 섞이지 않게)
+  if (req.mode === "navigate" && url.pathname !== "/" && url.pathname !== "/index.html") return;
   if (req.mode === "navigate") {
     e.respondWith(fetch(req)
       .then((res) => { const copy = res.clone(); caches.open(CACHE).then((c) => c.put("./", copy)); return res; })

@@ -10,6 +10,7 @@
 | `lint-places.js` | 장소 자료가 칸 규칙을 지키는지, regions.js·travel.js와 맞는지 검사 |
 | `check.js` | 조건을 바꿔 가며 코스를 짜 보고 규칙(운영시간·쉬는 날·조건·예산·시간)을 어긴 코스가 있는지 검사 |
 | `places-template.js` | 새 지역 places.js 틀 |
+| `build-pages.js` | 검색용 지역 안내 페이지(`course/<지역>/`)와 `sitemap.xml`을 새로 써요 (장소·지역을 바꾸면 다시) |
 
 지도 자료는 `tools/osrm-data/`에 두고 git에는 올리지 않아요 (받은 지도 290MB + 만든 자료 합쳐 약 8GB).
 
@@ -51,7 +52,11 @@ bash tools/osrm-setup.sh
    REGION=<지역 id> node tools/check.js
    ```
 6. **화면 확인** — `index.html`의 `REGION_VERSION`과 `sw.js`의 `VERSION`을 같은 값으로 올리고, 로컬에서 지역 고르기 → 결과 화면까지 눌러 봐요.
-7. 커밋하고 올려요. `sitemap.xml`은 지역별 페이지를 만들면 그때 더해요.
+7. **검색용 페이지** — 지역 안내 페이지와 sitemap을 다시 만들어요. 새 지역이면 `index.html`의 `courseSlug`와 `build-pages.js`의 `slugOf`가 같은 주소를 만드는지 봐요.
+   ```bash
+   node tools/build-pages.js
+   ```
+8. 커밋하고 올려요.
 
 ## 대중교통
 
