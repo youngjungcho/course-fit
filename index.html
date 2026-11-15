@@ -46,6 +46,8 @@
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#1f7a5a">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -64,6 +66,11 @@
     --accent-soft: #e3f1ea;
     --warn: #9a5b00;
     --warn-soft: #fff1d6;
+    --sun: #f2a541;
+    --sea: #2b7bb0;
+    --sea-soft: #e4f0f8;
+    --shadow: 0 1px 2px rgba(31, 52, 42, .05), 0 6px 18px rgba(31, 52, 42, .07);
+    --hero: linear-gradient(160deg, #e9f5ef 0%, #e3eff7 55%, #fdf1dc 100%);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -76,12 +83,18 @@
       --accent-soft: #1d3329;
       --warn: #f2c26b;
       --warn-soft: #3a2d14;
+      --sea: #7cbbe6; --sea-soft: #1a2c38;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3);
+      --hero: linear-gradient(160deg, #1b2c25 0%, #1a2833 60%, #2c2618 100%);
     }
   }
   :root[data-theme="dark"] {
     --bg: #161917; --card: #20241f; --text: #eceee9; --muted: #a2a8a3;
     --line: #343a35; --accent: #5fc79d; --accent-soft: #1d3329;
     --warn: #f2c26b; --warn-soft: #3a2d14;
+    --sea: #7cbbe6; --sea-soft: #1a2c38;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3);
+    --hero: linear-gradient(160deg, #1b2c25 0%, #1a2833 60%, #2c2618 100%);
   }
 
   * { box-sizing: border-box; }
@@ -93,7 +106,7 @@
     margin: 0;
     background: var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
     font-size: 17px;
     line-height: 1.55;
     word-break: keep-all;
@@ -113,7 +126,8 @@
     background-position: right 17px center, right 12px center; background-size: 5px 5px; background-repeat: no-repeat;
   }
   .count { color: var(--muted); font-size: 14px; white-space: nowrap; }
-  .brand { font-weight: 700; font-size: 17px; }
+  .brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 20px; letter-spacing: -.02em; }
+  .brand i { font-style: normal; color: var(--sun); margin: 0 1px; }
   .region-btn {
     display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; min-width: 0;
     border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--text);
@@ -326,6 +340,33 @@
   .notes p { margin: 4px 0; }
   .empty { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
 
+
+  /* ----- 꾸밈: 첫 화면 머리, 그림자 카드, 버튼 ----- */
+  h1 { font-weight: 800; letter-spacing: -.025em; }
+  .hero { position: relative; margin: 0 -16px 18px; padding: 18px 16px 40px; background: var(--hero); overflow: hidden; }
+  .hero h1 { font-size: 30px; margin: 2px 0 6px; }
+  .hero .sub { margin: 0; color: var(--text); opacity: .75; }
+  .hero-kicker { display: inline-block; margin: 0; padding: 3px 10px; border-radius: 999px; background: var(--card); color: var(--accent); font-size: 13px; font-weight: 700; box-shadow: var(--shadow); }
+  .hero::before { content: ""; position: absolute; right: -18px; top: -22px; width: 110px; height: 110px; border-radius: 50%; background: var(--sun); opacity: .22; }
+  .hero-wave { position: absolute; left: 0; right: 0; bottom: -1px; width: 100%; height: 28px; fill: var(--bg); }
+  .area-title { color: var(--text); font-weight: 700; font-size: 16px; }
+  .area-title span { margin-right: 4px; }
+  .choice, .chip, .date-pick { border-color: transparent; box-shadow: var(--shadow); }
+  .choice.picked, .chip[aria-checked="true"] { border-color: var(--accent); }
+  .example, .stop, .summary div, .weather, .why, .advanced, .saved-list li, .empty, .search, .region-btn, .ghost, .saved-btn, .map { border-color: transparent; box-shadow: var(--shadow); }
+  .example { background: linear-gradient(180deg, var(--accent-soft), var(--card) 90px); }
+  .summary b { color: var(--accent); }
+  .stop { border-radius: 18px; }
+  .stop .no { background: linear-gradient(135deg, var(--accent), var(--sea)); color: #fff; }
+  .primary { background: var(--accent); background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, var(--sea))); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 30%, transparent); }
+  .primary:disabled { box-shadow: none; }
+  .progress > div { background: linear-gradient(90deg, var(--accent), var(--sea)); }
+  .badge { font-weight: 600; }
+  @media (min-width: 720px) {
+    .hero { margin: 4px 0 22px; padding: 28px 28px 48px; border-radius: 24px; }
+    .hero h1 { font-size: 36px; }
+  }
+
   /* ----- 태블릿·PC: 넓은 화면 ----- */
   @media (hover: hover) {
     .choice:hover, .chip:not(:disabled):hover { border-color: var(--accent); }
@@ -366,7 +407,7 @@
 <div class="wrap">
   <header class="appbar">
     <button class="region-btn" id="regionBtn" hidden><span aria-hidden="true">📍</span> <b id="regionName"></b> <small>바꾸기</small></button>
-    <span class="brand" id="brand">쉼,표</span>
+    <span class="brand" id="brand"><svg width="28" height="28" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#1f7a5a"/><circle cx="68" cy="36" r="16" fill="#f2a541"/><path d="M0 66 Q25 56 50 66 T100 66 V100 H0Z" fill="#e3f1ea"/></svg><span>쉼<i>,</i>표</span></span>
     <span class="right"><span class="count" id="placeCount"></span><button class="saved-btn" id="savedBtn" hidden></button></span>
   </header>
 
@@ -394,10 +435,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261115k"></script>
+<script src="regions.js?v=20261115l"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261115k";
+const REGION_VERSION = "20261115l";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -685,8 +726,9 @@ function nextSaturday() {
 // 지역 안내 페이지 주소 (tools/build-pages.js의 slugOf와 같게)
 const courseSlug = (r) => r.area === "제주" ? `jeju-${r.id === "jejusi" ? "city" : r.id}` : r.id;
 // 지역 고르기: 이름으로 찾고, 시·도별로 묶어 보여 줘요
+const AREA_ICON = { 제주: "🍊", 강원: "🌊", 부산: "🌉" };
 function renderRegion() {
-  screen.innerHTML = `<h1>어디로 가요?</h1><p class="sub">지역을 고르면 누구랑, 어떻게 가는지에 맞춰 하루 코스를 짜 드려요.</p>
+  screen.innerHTML = `<section class="hero"><p class="hero-kicker">잠깐 멈춰 가는 하루</p><h1>어디로 가요?</h1><p class="sub">지역을 고르면 누구랑, 어떻게 가는지에 맞춰 하루 코스를 짜 드려요.</p><svg class="hero-wave" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 22 Q50 8 100 22 T200 22 T300 22 T400 22 V40 H0Z"/></svg></section>
     ${seenCourse() ? "" : exampleCard()}
     <input class="search" id="regionSearch" type="search" placeholder="지역 찾기 (예: 부산, 애월)" aria-label="지역 찾기" autocomplete="off" enterkeyhint="search">
     <div id="regionList" aria-live="polite"></div>
@@ -707,7 +749,7 @@ function renderRegion() {
       return `<button class="choice${on ? " picked" : ""}" data-id="${r.id}"${z ? ` data-zone="${z.id}"` : ""}><span>${esc(z ? z.label : r.zones ? `${r.name} 전체` : r.name)}${on ? `<span class="sr"> (골랐던 것)</span>` : ""}<small>장소 ${z ? z.count : r.count}곳${r.note ? ` · ${esc(r.note)}` : ""}</small></span></button>`;
     };
     const cards = (r) => r.zones ? [...r.zones.map((z) => card(r, z)), card(r)].join("") : card(r);
-    box.innerHTML = rs.length ? areas.filter((a) => rs.some((r) => r.area === a)).map((a) => `<h2 class="area-title">${esc(a)}</h2><div class="choices regions">${rs.filter((r) => r.area === a).map(cards).join("")}</div>`).join("")
+    box.innerHTML = rs.length ? areas.filter((a) => rs.some((r) => r.area === a)).map((a) => `<h2 class="area-title"><span aria-hidden="true">${AREA_ICON[a] ?? "📍"}</span> ${esc(a)}</h2><div class="choices regions">${rs.filter((r) => r.area === a).map(cards).join("")}</div>`).join("")
       : `<p class="caution">"${esc(input.value)}"에 맞는 지역이 아직 없어요. 지금은 ${areas.join("·")}만 있어요.</p>`;
     box.querySelectorAll(".choice").forEach((b) => { b.onclick = () => pickRegion(b.dataset.id, b.dataset.zone ?? "all"); });
   };
