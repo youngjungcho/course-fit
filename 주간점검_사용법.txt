@@ -89,6 +89,7 @@
   LIST=1 node marketing/insta/make.js gyeongju kid car 10:00 6        코스 후보 보기
   ALT=3 node marketing/insta/make.js gyeongju kid car 10:00 6 "" hwangnidan   그중 하나로 만들기
   (순서: 지역 id, 누구랑 group·dog·kid·wheel·solo, 이동 walk·bike·car·ev, 출발, 시간, 날짜, 출발지)
+  node marketing/insta/intro.js       쉼,표 소개 카드뉴스 (지역·장소 수가 바뀌면 다시 만들기)
 
 카드뉴스가 하지 않는 일
   · 인스타에 직접 올리기, 다른 계정에 메시지 보내기
