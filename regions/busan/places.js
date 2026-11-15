@@ -258,9 +258,9 @@ const PLACES = [
     zone: "seomyeon",
     lat: 35.16836, lng: 129.05740,
     dog: true, stroller: true, stepFree: true, solo: null,
-    station: "부전(동해선)역 걸어서 9분", bikeRack: null, evChargerMin: 6, parking: null,
+    station: "부전(동해선)역 걸어서 9분", bikeRack: null, evChargerMin: 6, parking: true,
     kakaoId: "11585715",
-    note: "부산진구 시민공원로 73. 카카오맵(2026-11-01): 05:00~24:00, 무료입장, 휠체어 접근, 유모차 가능, 카페·식당, 반려동물 동반. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
+    note: "부산진구 시민공원로 73. 카카오맵(2026-11-01): 05:00~24:00, 무료입장, 휠체어 접근, 유모차 가능, 카페·식당, 반려동물 동반. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 카카오맵 시설정보(2026-11-15): 지하·임시 주차장(유료).",
     sources: ["https://place.map.kakao.com/11585715"]
   },
   {
@@ -637,9 +637,9 @@ const PLACES = [
     zone: "nampo",
     lat: 35.10132, lng: 129.02819,
     dog: true, stroller: null, stepFree: true, solo: null,
-    station: "자갈치역 걸어서 9분", bikeRack: null, evChargerMin: 4, parking: null,
+    station: "자갈치역 걸어서 9분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "20543715",
-    note: "중구 신창동4가 56-4. 카카오맵(2026-11-01): 09:00~20:00, 일 휴무, 반려동물 동반. 관광공사 무장애: 출입구까지 경사로, 단차 없음. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
+    note: "중구 신창동4가 56-4. 카카오맵(2026-11-01): 09:00~20:00, 일 휴무, 반려동물 동반. 관광공사 무장애: 출입구까지 경사로, 단차 없음. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 카카오맵 시설정보(2026-11-15): 주차 가능.",
     sources: ["관광공사 API 1018702","https://place.map.kakao.com/20543715"]
   },
   {
@@ -649,9 +649,9 @@ const PLACES = [
     zone: "nampo",
     lat: 35.10183, lng: 129.02586,
     dog: true, stroller: null, stepFree: null, solo: null,
-    station: "자갈치역 걸어서 9분", bikeRack: null, evChargerMin: 2, parking: null,
+    station: "자갈치역 걸어서 9분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "837490557",
-    note: "중구 부평동2가 82. 카카오맵(2026-11-01): 연중무휴, 반려동물 동반, 장애인 시설. 표시된 19:30~24:00은 야시장 시간이고 낮 영업시간은 확인 못 했어요. 물건값은 빼고 0원으로 넣었어요.",
+    note: "중구 부평동2가 82. 카카오맵(2026-11-01): 연중무휴, 반려동물 동반, 장애인 시설. 표시된 19:30~24:00은 야시장 시간이고 낮 영업시간은 확인 못 했어요. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 야시장 19:30~24:00 연중무휴 같음, 시설정보에 유료 주차.",
     sources: ["https://place.map.kakao.com/837490557"]
   },
   {
@@ -701,7 +701,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "남포역 걸어서 7분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "8672654",
-    note: "중구 광복동2가 49. 카카오맵(2026-11-01): 무료입장, 카페·식당. 관광공사 무장애: 무단차 거리. 물건값은 빼고 0원으로 넣었어요.",
+    note: "중구 광복동2가 49. 카카오맵(2026-11-01): 무료입장, 카페·식당. 관광공사 무장애: 무단차 거리. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 영업시간 표시 없음(그대로 비워 둠).",
     sources: ["관광공사 API 126857","https://place.map.kakao.com/8672654"]
   },
   {
@@ -1065,7 +1065,7 @@ const PLACES = [
     dog: null, stroller: false, stepFree: null, solo: null,
     station: "서면역 걸어서 4분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "12807299",
-    note: "부산진구 서전로10번길 41. 카카오맵(2026-11-01): 09:00~22:00, 에스프레소 5,300원, 루프탑. 유모차 후기(블로그, 2026-11-01 확인): 엘리베이터가 없어 유모차가 어렵다는 글 2건.",
+    note: "부산진구 서전로10번길 41. 카카오맵(2026-11-01): 09:00~22:00, 에스프레소 5,300원, 루프탑. 유모차 후기(블로그, 2026-11-01 확인): 엘리베이터가 없어 유모차가 어렵다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/12807299","https://blog.naver.com/eleveneleven1111/224414561957","https://blog.naver.com/zzang2mama/224347836093"]
   },
   {
@@ -1128,7 +1128,7 @@ const PLACES = [
     dog: null, stroller: false, stepFree: null, solo: null,
     station: "부산역 걸어서 4분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "27400942",
-    note: "동구 중앙대로209번길 16. 카카오맵(2026-11-01): 10:00~21:30, 21:20 마지막 주문, 아메리카노 5,800원. 유모차 후기(블로그, 2026-11-01 확인): 입구 계단으로 유모차가 어렵다는 글 2건.",
+    note: "동구 중앙대로209번길 16. 카카오맵(2026-11-01): 10:00~21:30, 21:20 마지막 주문, 아메리카노 5,800원. 유모차 후기(블로그, 2026-11-01 확인): 입구 계단으로 유모차가 어렵다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날·마지막 주문 같음.",
     sources: ["https://place.map.kakao.com/27400942","https://blog.naver.com/kpop1030/224379466589","https://blog.naver.com/k-teamin-1013/224399262561"]
   },
   {
@@ -1321,9 +1321,9 @@ const PLACES = [
     zone: "seomyeon",
     lat: 35.16276, lng: 129.06135,
     dog: null, stroller: null, stepFree: null, solo: null,
-    station: "부전역 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: null,
+    station: "부전역 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "13178878",
-    note: "부산진구 중앙대로783번길 23. 카카오맵(2026-11-01): 04:00~19:00, 장애인 시설. 물건값은 빼고 0원으로 넣었어요.",
+    note: "부산진구 중앙대로783번길 23. 카카오맵(2026-11-01): 04:00~19:00, 장애인 시설. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음, 시설정보에 유료 주차.",
     sources: ["https://place.map.kakao.com/13178878"]
   },
   {
