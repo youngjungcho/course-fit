@@ -57,7 +57,7 @@ function page(r, places, date) {
   const appUrl = `/?region=${r.id}`;
   const count = (f) => places.filter(f).length;
   const dog = count((p) => p.dog === true), stroller = count((p) => p.stroller === true), stepFree = count((p) => p.stepFree === true);
-  const moves = r.noBus ? "자전거·렌터카·택시" : r.subway ? "뚜벅이(지하철·버스)·자전거·렌터카·택시" : "뚜벅이(버스)·자전거·렌터카·택시";
+  const moves = r.noBus ? "자전거·자차·렌터카·택시" : r.subway ? "뚜벅이(지하철·버스)·자전거·자차·렌터카·택시" : "뚜벅이(버스)·자전거·자차·렌터카·택시";
   const title = `${name} 하루 여행 코스 · 반려견·아이·휠체어 맞춤 | 쉼,표`;
   const desc = `${name} 장소 ${places.length}곳으로 짜는 하루 코스. 반려견 동반 ${dog}곳, 유모차 ${stroller}곳, 계단 없는 곳 ${stepFree}곳. 누구랑(반려견·아이·휠체어·혼자), 어떻게(${moves}) 다니는지 고르면 운영시간과 이동 시간을 따져 코스를 짜 드려요.`;
 
