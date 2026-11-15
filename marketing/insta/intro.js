@@ -115,7 +115,7 @@ const caption = `여행 코스, 이제 '어디'보다 '누구랑'부터 골라 �
 
 👉 가입 없이 바로 써 보기 → 프로필 링크
 
-#여행코스 #여행코스추천 #국내여행 #제주여행 #부산여행 #강릉여행 #경주여행 #강아지랑여행 #반려견동반 #아기랑여행 #유모차여행 #무장애여행 #혼자여행 #뚜벅이여행 #주말여행
+#여행코스추천 #국내여행 #강아지랑여행 #아기랑여행 #혼자여행
 `;
 fs.writeFileSync(path.join(out, "caption.txt"), caption);
 console.log(JSON.stringify({ out: path.relative(ROOT, out), cards: slides.length, placeCount, jeju, others }));

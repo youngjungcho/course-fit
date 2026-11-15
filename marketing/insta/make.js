@@ -167,7 +167,7 @@ ${tips.length ? `\n📌 알아 두면 좋아요\n${[...new Set(tips)].slice(0, 4
 👉 누구랑·어떻게·몇 시간만 고르면 내 조건으로 다시 짜 줘요 → 프로필 링크
 💾 저장해 두고 여행 갈 때 꺼내 보세요
 
-${[...base, ...tags, ...howTag, "국내여행", "주말여행", "여행코스추천"].map((t) => "#" + t.replace(/\s/g, "")).join(" ")}
+${[base[0], base[1], tags[0], howTag[0], "여행코스추천"].map((t) => "#" + t.replace(/\s/g, "")).join(" ")}
 `;
 fs.writeFileSync(path.join(out, "caption.txt"), caption);
 console.log(JSON.stringify({ out: path.relative(ROOT, out), cards: slides.length, date, from, stops: stops.map((s) => `${hm(s.begin)} ${s.place.name}`) }, null, 1));
