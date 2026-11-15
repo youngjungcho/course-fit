@@ -40,12 +40,15 @@ function badges(p) {
   return out;
 }
 
-function placeItem(p) {
+function placeItem(p, r) {
   const kakao = p.kakaoId ? `https://place.map.kakao.com/${p.kakaoId}` : null;
+  // 이곳을 꼭 갈 곳으로 넣고 코스 짜기 (구역이 있는 지역은 그 구역으로)
+  const mustUrl = `/?region=${r.id}${p.zone ? `&zone=${p.zone}` : ""}&must=${p.id}`;
   return `<li class="place"><span class="ticon" aria-hidden="true">${TYPE_ICON[p.type] ?? "📍"}</span><div>
       <div class="pname">${kakao ? `<a href="${kakao}" target="_blank" rel="noopener">${esc(p.name)}</a>` : esc(p.name)}</div>
       ${p.desc ? `<div class="pdesc">${esc(p.desc)}</div>` : ""}
       ${badges(p).length ? `<div class="pbadges">${badges(p).map((b) => `<span>${esc(b)}</span>`).join("")}</div>` : ""}
+      <a class="pmust" href="${mustUrl}">📌 이곳 넣어 코스 짜기</a>
     </div></li>`;
 }
 
@@ -152,6 +155,7 @@ ${JSON.stringify(ld, null, 1).replace(/</g, "\\u003c")}
   .pdesc { font-size: 15px; color: var(--muted); }
   .pbadges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
   .pbadges span { font-size: 12px; padding: 2px 8px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); }
+  .pmust { display: inline-flex; align-items: center; min-height: 36px; margin-top: 4px; font-size: 14px; font-weight: 600; text-decoration: none; }
   .others { display: flex; flex-wrap: wrap; gap: 8px; }
   .others a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; text-decoration: none; color: var(--text); }
   .muted { color: var(--muted); font-size: 14px; }
@@ -171,7 +175,7 @@ ${JSON.stringify(ld, null, 1).replace(/</g, "\\u003c")}
   <a class="cta" href="${appUrl}">내 조건으로 ${esc(r.name)} 코스 짜기</a>
   ${sections.map((s) => `<h2>${esc(s.title)} <span class="muted">${s.items.length}곳</span></h2>
   ${s.cta ? `<a class="zone-cta" href="${s.cta}">${esc(s.title)} 코스 짜기 →</a>` : ""}
-  <ul class="places">${[...s.items].sort(sortByType).map(placeItem).join("")}</ul>`).join("\n  ")}
+  <ul class="places">${[...s.items].sort(sortByType).map((p) => placeItem(p, r)).join("")}</ul>`).join("\n  ")}
   <h2>다른 지역</h2>
   <div class="others">${others.map((x) => `<a href="/course/${slugOf(x)}/">${esc(fullName(x))}</a>`).join("")}</div>
   <p class="muted" style="margin-top:28px">장소 정보는 ${date ? `${date}에 ` : ""}카카오맵 장소 페이지·한국관광공사 자료 등을 보고 정리했어요. 운영시간·쉬는 날은 바뀔 수 있어서, 코스 화면에서 날짜에 맞춰 확인해 드려요. "(후기)"는 서로 다른 후기 2건 이상으로 확인한 정보예요.<br><a href="/privacy.html">개인정보처리방침</a></p>

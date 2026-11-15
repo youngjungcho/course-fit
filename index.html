@@ -256,6 +256,18 @@
   .share-msg { color: var(--muted); font-size: 14px; margin: 0 0 4px; overflow-wrap: anywhere; background: var(--bg); }
   .share-msg:empty { display: none; }
   .skipped { color: var(--muted); font-size: 15px; margin: 0 0 8px; }
+  .must-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 12px; }
+  .must-title { font-size: 14px; font-weight: 700; }
+  .must-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 4px 4px 10px; border-radius: 16px; background: var(--accent-soft); color: var(--text); font-size: 14px; }
+  .must-del { min-width: 32px; min-height: 32px; border: 0; background: none; color: var(--muted); font-size: 14px; cursor: pointer; }
+  .must-add { flex: 0 0 auto; min-height: 40px; padding: 0 12px; font-size: 14px; }
+  .must-panel { flex-basis: 100%; }
+  .must-list { list-style: none; padding: 0; margin: 6px 0 0; max-height: 320px; overflow-y: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  .must-list li + li { border-top: 1px solid var(--line); }
+  .must-pick { display: flex; gap: 10px; align-items: center; width: 100%; min-height: 52px; padding: 8px 12px; border: 0; background: none; color: var(--text); font: inherit; font-size: 15px; text-align: left; cursor: pointer; }
+  .must-pick small { display: block; color: var(--muted); font-size: 13px; }
+  .must-pick:disabled { opacity: .45; cursor: default; }
+  .badge.must { background: var(--accent); color: var(--bg); }
   .map { position: relative; height: 220px; border-radius: 14px; border: 1px solid var(--line); margin: 0 0 12px; z-index: 0; background: var(--card); }
   /* 지도 바탕을 불러오는 동안 빈 화면 대신 안내를 보여 줘요 */
   .map.loading::after { content: "지도를 불러오는 중…"; position: absolute; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center; background: var(--card); color: var(--muted); font-size: 14px; pointer-events: none; }
@@ -360,10 +372,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261115c"></script>
+<script src="regions.js?v=20261115d"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261115c";
+const REGION_VERSION = "20261115d";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -439,7 +451,7 @@ const AREAS = [
   { id: "indoor",   emoji: "☔", label: "실내 위주" }
 ];
 
-const state = { step: 0, who: null, how: null, people: null, when: null, date: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix", end: "start", skip: [], alt: 0 };
+const state = { step: 0, who: null, how: null, people: null, when: null, date: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix", end: "start", skip: [], must: [], alt: 0 };
 
 const screen = document.getElementById("screen");
 const bar = document.getElementById("bar");
@@ -464,6 +476,7 @@ function queryOf() {
   }
   if (REGION) q.set("region", REGION.id);
   if (state.skip.length) q.set("skip", state.skip.join(","));
+  if (state.must.length) q.set("must", state.must.join(","));
   if (state.alt) q.set("alt", state.alt);
   if (state.step === PICK) q.set("pick", "1");
   else if (state.step === SAVED) q.set("saved", "1");
@@ -493,6 +506,8 @@ function readQuery(search = location.search) {
   if (hubOf() && state.leave && state.depart) state.hours = hoursFromLeave();
   state.roam = one("roam", (v) => ROAMS.some((r) => r.id === v)) ?? "stay";
   state.skip = (q.get("skip") ?? "").split(",").filter((id) => PLACES.some((p) => p.id === id));
+  // 꼭 갈 곳: 위치가 있는 그 지역 장소만, 3곳까지
+  state.must = [...new Set((q.get("must") ?? "").split(","))].filter((id) => PLACES.some((p) => p.id === id && p.lat !== null)).slice(0, MUST_MAX);
   state.alt = Math.max(0, Number(q.get("alt")) || 0);
   // 앞 단계를 다 골라야 다음 단계로 갈 수 있어요
   const ready = [true, !!state.who, !!state.how, !!(state.date && state.from && state.depart && state.hours && state.budget)];
@@ -719,7 +734,7 @@ async function pickRegion(id, zone = "all") {
   track("region_select", { region: id, zone });
   if (id !== REGION?.id) {
     const keep = new URLSearchParams(queryOf());
-    keep.set("region", id); keep.delete("zone"); if (zone !== "all") keep.set("zone", zone); keep.delete("skip"); keep.delete("alt"); keep.delete("pick"); keep.set("step", stepBeforePick);
+    keep.set("region", id); keep.delete("zone"); if (zone !== "all") keep.set("zone", zone); keep.delete("skip"); keep.delete("must"); keep.delete("alt"); keep.delete("pick"); keep.set("step", stepBeforePick);
     screen.innerHTML = `<h1 tabindex="-1">${esc(REGIONS.find((r) => r.id === id).name)} 자료를 불러오는 중이에요</h1><p class="sub">잠시만 기다려 주세요.</p>`;
     try { applyRegion(REGIONS.find((r) => r.id === id), await loadRegionData(id)); } catch { return showLoadError(id); }
     readQuery(keep.toString()); // 새 지역에서 못 고르는 값이 지워지면, 고를 단계로 돌아가요
@@ -1077,7 +1092,10 @@ function startCtx() {
   return {
     stops: [], here: startPoint(), now: startMin, spent: 0, fares: 0, lastType: null, lastMeal: -999, lastCafe: -999, cafes: 0, shops: 0,
     // 고른 시간을 꽉 채우지 않게 15분 여유를 둬요. 카페·쇼핑은 8시간 미만이면 1곳, 8시간이면 2곳까지 (종류가 고르게 섞이게)
-    endMin: startMin + state.hours * 60 - PACE_BUFFER, maxCafes: state.hours >= 8 ? 2 : 1, maxShops: state.hours >= 8 ? 2 : 1, day: tripDay()
+    endMin: startMin + state.hours * 60 - PACE_BUFFER, day: tripDay(),
+    // 꼭 갈 곳에 카페·쇼핑이 여럿이면 그만큼은 허락해요
+    maxCafes: Math.max(state.hours >= 8 ? 2 : 1, [...MUST].filter((p) => p.type === "카페").length),
+    maxShops: Math.max(state.hours >= 8 ? 2 : 1, [...MUST].filter((p) => p.type === "쇼핑").length)
   };
 }
 
@@ -1127,6 +1145,7 @@ function visit(ctx, p) {
   if (state.how === "bike" && p.bikeRack) score += 10;
   if ((state.how === "ev" || state.how === "car") && p.parking) score += 10;
   if (state.how === "ev" && chargesHere(p)) score += 20;
+  if (MUST.has(p)) score += 1000; // 꼭 갈 곳은 갈 수 있게 되면 바로 넣어요
   if (seesSunset(p, begin, leave)) score += 40;
   // 노을 명소는 해 지기 1시간 안에 도착하면 조금 더, 이름이 노을 명소인데 한낮(해 지기 2시간도 더 전)이면 빼는 쪽으로
   else if (isSunsetSpot(p) && begin >= sunsetToday() - 60 && begin <= sunsetToday()) score += 20;
@@ -1148,7 +1167,11 @@ function add(ctx, stop) {
 function extend(ctx, pool, limit = maxStops()) {
   while (ctx.stops.length < limit) {
     let best = null;
+    // 아직 못 넣은 꼭 갈 곳만큼은 자리를 남겨 둬요
+    const mustLeft = [...MUST].filter((p) => !ctx.stops.some((s) => s.place === p)).length;
+    const onlyMust = mustLeft > 0 && limit - ctx.stops.length <= mustLeft;
     for (const p of pool) {
+      if (onlyMust && !MUST.has(p)) continue;
       const v = visit(ctx, p);
       if (v && (!best || v.score > best.score)) best = v;
     }
@@ -1245,13 +1268,68 @@ function courseScore(c) {
   return staying + c.stops.length * 10 - moving + meal + area + roam + sunsetOf(c) * 40 - (detourOf(c) - 1) * 150 - daySunset * 80;
 }
 
+// 꼭 갈 곳 (사용자가 골라 반드시 넣는 곳, 3곳까지)
+const MUST_MAX = 3;
+let MUST = new Set();
+// 결과 화면 위쪽: 꼭 갈 곳 목록(✕로 빼기)과 "꼭 갈 곳 넣기" 찾기 창
+function mustBar() {
+  const chips = state.must.map((id) => PLACES.find((p) => p.id === id)).filter(Boolean)
+    .map((p) => `<span class="must-chip">${em(TYPE_ICON[p.type] ?? "📍")} ${esc(p.name)}<button class="must-del" data-id="${p.id}" aria-label="${esc(p.name)} 꼭 갈 곳에서 빼기">✕</button></span>`).join("");
+  return `<div class="must-bar">${chips ? `<span class="must-title">${em("📌")} 꼭 갈 곳</span>${chips}` : ""}
+    ${state.must.length < MUST_MAX ? `<button class="ghost must-add" id="mustAdd" aria-expanded="false" aria-controls="mustPanel">${em("📌")} ${chips ? "더 넣기" : "꼭 갈 곳 넣기"}</button>` : ""}
+    <div class="must-panel" id="mustPanel" hidden>
+      <input class="search" id="mustSearch" type="search" placeholder="장소 이름 찾기 (예: 카페, 시장)" aria-label="꼭 갈 곳 찾기" autocomplete="off">
+      <ul class="must-list" id="mustList"></ul>
+    </div></div>`;
+}
+function bindMust(redo) {
+  screen.querySelectorAll(".must-del").forEach((b) => { b.onclick = () => { state.must = state.must.filter((id) => id !== b.dataset.id); state.alt = 0; redo(); }; });
+  const btn = document.getElementById("mustAdd"), panel = document.getElementById("mustPanel");
+  if (!btn) return;
+  const input = document.getElementById("mustSearch"), list = document.getElementById("mustList");
+  const need = NEED[state.who];
+  const draw = () => {
+    const w = input.value.replace(/\s/g, "");
+    const hits = PLACES.filter((p) => p.lat !== null && !state.must.includes(p.id) && (!w || (p.name + p.type + (p.desc ?? "")).replace(/\s/g, "").includes(w)))
+      .sort((a, b) => a.name.localeCompare(b.name, "ko")).slice(0, w ? 30 : 12);
+    list.innerHTML = hits.length ? hits.map((p) => {
+      const no = need && p[need] === false;
+      const unknown = need && p[need] === null;
+      return `<li><button class="must-pick" data-id="${p.id}" ${no ? "disabled" : ""}>${em(TYPE_ICON[p.type] ?? "📍")} <span>${esc(p.name)}<small>${p.type}${p.desc ? ` · ${esc(p.desc)}` : ""}${no ? ` · ${{ dog: "반려견 안 돼요", kid: "유모차 안 돼요", wheel: "계단 있어요" }[state.who]}` : unknown ? ` · ${{ dog: "반려견", kid: "유모차", wheel: "계단" }[state.who]} 정보 없음` : ""}</small></span></button></li>`;
+    }).join("") : `<li class="caution">"${esc(input.value)}"에 맞는 장소가 이 지역 자료에 없어요.</li>`;
+    list.querySelectorAll(".must-pick").forEach((b) => { b.onclick = () => {
+      state.must = [...state.must, b.dataset.id].slice(0, MUST_MAX);
+      state.skip = state.skip.filter((id) => id !== b.dataset.id); state.alt = 0;
+      track("must_add", { region: REGION.id, place: b.dataset.id }); redo();
+    }; });
+  };
+  btn.onclick = () => { panel.hidden = !panel.hidden; btn.setAttribute("aria-expanded", String(!panel.hidden)); if (!panel.hidden) { draw(); input.focus(); } };
+  input.oninput = draw;
+}
+// 꼭 갈 곳을 못 넣을 때 그곳 때문인 이유를 하나씩 찾아요
+function whyMust() {
+  const startMin = toMin(state.depart), endMin = startMin + state.hours * 60 - airportBuffer();
+  return state.must.map((id) => PLACES.find((p) => p.id === id)).filter(Boolean).map((p) => {
+    const [open, close] = hoursOf(p), name = esc(p.name);
+    if (p.closedDays?.includes(tripDay())) return `${name}${josa(p.name, "은", "는")} ${tripDay()}요일에 쉬어요.`;
+    if (close && toMin(close) - p.stayMin < startMin) return `${name}${josa(p.name, "은", "는")} ${close}에 닫아서 ${state.depart} 출발로는 못 들러요.`;
+    if (open && toMin(open) + p.stayMin > endMin) return `${name}${josa(p.name, "은", "는")} ${open}에 열어서 이 시간 안에 못 들러요.`;
+    if (travel(startPoint(), p, state.how).min === Infinity) return `${name}${josa(p.name, "은", "는")} ${state.how === "walk" ? "버스·지하철로" : "이 이동 방법으로"} 갈 수 없어요.`;
+    if (costOf(p) > state.budget) return `${name}${josa(p.name, "은", "는")} 1명 ${won(costOf(p))}이라 예산을 넘어요.`;
+    if (p.type === "식당") return `${name}${josa(p.name, "은", "는")} 식당이라 밥때(점심 11~14시, 저녁 17~20시)에 들러야 하는데, 이 시간에는 맞추기 어려워요.`;
+    return `${name}까지 가서 머물 시간이 모자라요.`;
+  });
+}
+
 // includeUnknown: 정보가 없는 곳도 넣어 보기 (코스가 안 나올 때 이유를 찾으려고만 써요)
 function makeCourse({ includeUnknown = false } = {}) {
   const need = NEED[state.who], skip = state.skip ?? [];
   let unknownSkipped = 0, noLocation = 0;
+  MUST = new Set((state.must ?? []).filter((id) => !skip.includes(id)).map((id) => PLACES.find((p) => p.id === id)).filter((p) => p && p.lat !== null));
   const pool = PLACES.filter((p) => {
     if (p.lat === null) { noLocation++; return false; }
     if (skip.includes(p.id)) return false;
+    if (MUST.has(p)) return true; // 사용자가 고른 곳은 구역·실내·동행 정보와 상관없이 넣어 봐요 (정보 없음은 배지로 알려요)
     if (state.zone && state.zone !== "all" && p.zone !== state.zone && !(roaming() && REGION.zones.find((z) => z.id === state.zone).near.includes(p.zone))) return false;
     if (p.forDogs && state.who !== "dog") return false; // 애견카페는 반려견과 갈 때만
     // 실내 위주: 공원과 야외 볼거리는 빼요
@@ -1268,6 +1346,7 @@ function makeCourse({ includeUnknown = false } = {}) {
     const c = buildCourse(pool, first);
     const key = c.stops.map((s) => s.place.id).sort().join();
     if (!c.stops.length || seen.has(key)) continue;
+    if ([...MUST].some((p) => !c.stops.some((s) => s.place === p))) continue; // 꼭 갈 곳이 빠진 코스는 버려요
     seen.add(key); courses.push(c);
   }
   courses.sort((a, b) => courseScore(b) - courseScore(a));
@@ -1282,6 +1361,7 @@ function whyEmpty() {
     const ok = makeCourse().stops.length > 0;
     Object.assign(state, saved); return ok;
   };
+  if (state.must.length && tryWith({ must: [] })) return "must";
   if (state.skip.length && tryWith({ skip: [] })) return "skip";
   if (state.zone && state.zone !== "all" && !tryWith({ zone: "all" })) return "other";
   if (tryWith({ budget: Infinity })) return "budget";
@@ -1553,6 +1633,7 @@ function emptyMessage(why) {
   return {
     zone: `고른 구역에는 이 조건에 맞는 곳이 부족해요. "어느 쪽으로 갈까요?"를 다른 구역이나 "상관없어요"로 바꿔 보세요.`,
     skip: `뺀 곳을 빼고 나니 코스를 짤 수 없어요. 위의 "다시 넣기"를 눌러 보세요.`,
+    must: `꼭 갈 곳을 넣으면 코스를 짤 수 없어요. ${whyMust().join(" ")} 출발 시각·시간·날짜를 바꾸거나 꼭 갈 곳을 빼 보세요.`,
     budget: `예산이 모자라요. ${state.how === "any" ? "택시비까지 넣으면 " : ""}1명 ${manwon(state.budget)}으로는 다녀올 수 있는 곳이 없어요. 예산을 늘리거나${state.how === "any" ? ", 이동을 뚜벅이로 바꾸거나" : ""} 끝나는 곳을 "상관없어요"로 바꿔 보세요.`,
     hours: wheelBus
       ? `저상버스와 걷기로는 ${hoursText(state.hours)} 안에 다녀올 수 있는 곳이 없어요. 시간을 늘리거나, 이동을 "상관없어요"(택시·차)로 바꿔 보세요. ${call}`
@@ -1621,7 +1702,7 @@ function renderResult() {
       <div class="name"><span class="ticon" aria-hidden="true">${TYPE_ICON[s.place.type] ?? "📍"}</span><span>${esc(s.place.name)}</span></div>
       ${s.place.desc ? `<div class="desc">${esc(s.place.desc)}</div>` : ""}
       <div class="meta">${s.place.type} · ${s.place.stayMin}분 · ${s.place.cost !== null ? won(s.place.cost) : costOf(s.place) ? `약 ${won(costOf(s.place))}(추정)` : "비용 확인 필요"}${s.place.lastOrder && !s.place.hoursByDay ? ` · ${isFood(s.place) ? "마지막 주문" : "입장 마감"} ${s.place.lastOrder}` : ""}</div>
-      <div class="badges">${badgesFor(s)}</div>
+      <div class="badges">${MUST.has(s.place) ? `<span class="badge must">${em("📌")} 꼭 갈 곳</span>` : ""}${badgesFor(s)}</div>
       <div class="links">${mapLinks(s.place)}<button class="skip" data-id="${s.place.id}" aria-label="${esc(s.place.name)} 빼기">이곳 빼기</button></div>
       ${moreInfo(s.place)}
     </li>`).join("");
@@ -1630,6 +1711,7 @@ function renderResult() {
     <h1>이런 코스 어때요?</h1>
     <p class="sub">${em(who.emoji)} ${who.label} · ${em(how.emoji)} ${how.label}${state.how === "any" ? ` · ${state.people}명` : ""}</p>
     <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${hubOf() ? `${state.leave} ${hubOf().ride}` : hoursText(state.hours)} · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}${state.zone && state.zone !== "all" ? ` · ${esc(ZONES.find((z) => z.id === state.zone).label)}${roaming() ? " + 옆 구역" : ""}` : ""}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
+    ${mustBar()}
     ${stops.length ? `
       <div class="summary">
         <div><b>${stops.length}곳</b><span>장소</span></div>
@@ -1683,7 +1765,9 @@ function renderResult() {
     if (target === screen.querySelector("h1")) { target.tabIndex = -1; window.scrollTo(0, 0); }
     target.focus();
   };
-  screen.querySelectorAll(".skip").forEach((b, i) => { b.onclick = () => { state.skip.push(b.dataset.id); state.alt = 0; redo(i); }; });
+  // 꼭 갈 곳을 "이곳 빼기"하면 꼭 갈 곳에서도 빼요
+  screen.querySelectorAll(".skip").forEach((b, i) => { b.onclick = () => { state.must = state.must.filter((id) => id !== b.dataset.id); state.skip.push(b.dataset.id); state.alt = 0; redo(i); }; });
+  bindMust(redo);
   document.getElementById("unskip")?.addEventListener("click", () => { state.skip = []; state.alt = 0; redo(); });
   document.getElementById("alt")?.addEventListener("click", () => { state.alt = (state.alt + 1) % count; track("course_alt", { region: REGION.id }); redo(); });
   document.getElementById("share")?.addEventListener("click", shareCourse);

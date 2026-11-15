@@ -23,7 +23,7 @@ const history = { pushState() {}, replaceState() {}, state: null }; const locati
 `;
 const DATA = new Function(read(`regions/${RG}/places.js`) + read(`regions/${RG}/travel.js`) + read(`regions/${RG}/transit.js`) + ";return { PLACES, STARTS, COASTLINE, TRAVEL, INLAND_NORTH: typeof INLAND_NORTH !== \"undefined\" && INLAND_NORTH };")();
 const T = new Function("DATA", read("regions.js") + stub + main +
-  `;applyRegion(REGIONS.find((r) => r.id === ${JSON.stringify(RG)}), DATA);return { makeCourse, state, DEPART, toMin, airportBuffer, sunsetMin, startPoint, STARTS, PLACES };`)(DATA);
+  `;applyRegion(REGIONS.find((r) => r.id === ${JSON.stringify(RG)}), DATA);return { makeCourse, whyMust, state, DEPART, toMin, airportBuffer, sunsetMin, startPoint, STARTS, PLACES };`)(DATA);
 
 const km = (a, b) => Math.hypot((a.lat - b.lat) * 111, (a.lng - b.lng) * 111 * Math.cos(a.lat * Math.PI / 180));
 const pathLen = (start, pts) => pts.reduce((sum, p, i) => sum + km(i ? pts[i - 1] : start, p), 0);
@@ -63,9 +63,28 @@ function measure(r, s) {
 
 function setState(s) {
   Object.assign(T.state, { people: s.who === "solo" ? 1 : 2, skip: [], alt: s.alt ?? 0, date: s.date, area: s.area ?? "mix", from: s.from, who: s.who, how: s.how,
-    depart: s.depart, hours: s.hours, budget: s.budget, end: s.end ?? "start", zone: s.zone ?? "all", roam: "stay", leave: null });
+    depart: s.depart, hours: s.hours, budget: s.budget, end: s.end ?? "start", zone: s.zone ?? "all", roam: "stay", leave: null, must: [] });
 }
 
+// 꼭 갈 곳 검사: 장소마다 꼭 갈 곳으로 넣어 보고, 들어가는지·안 들어가면 이유가 나오는지 봐요
+//   REGION=aewol MUSTALL=1 node tools/quality.js
+if (process.env.MUSTALL) {
+  const noBus = new Function(read("regions.js") + `;return REGIONS.find((r) => r.id === ${JSON.stringify(RG)}).noBus;`)();
+  const conds = [["group", "car", "10:00", 6], ["dog", noBus ? "bike" : "walk", "10:00", 6], ["kid", "car", "13:00", 4]];
+  let ok = 0, empty = 0, missing = 0, total = 0;
+  const why = {};
+  for (const p of T.PLACES.filter((x) => x.lat !== null)) for (const [who, how, depart, hours] of conds) {
+    const s = { who, how, from: T.STARTS[1]?.id ?? T.STARTS[0].id, date: "2026-11-17", depart, hours, budget: 100000 };
+    setState(s); T.state.must = [p.id]; total++;
+    const r = T.makeCourse();
+    if (!r.stops.length) { empty++; const w = T.whyMust()[0].replace(/^[^ ]+ /, "").slice(0, 14); why[w] = (why[w] ?? 0) + 1; }
+    else if (r.stops.some((x) => x.place.id === p.id)) ok++;
+    else missing++;
+  }
+  console.log(`${RG} 꼭 갈 곳 ${total}번: 들어감 ${ok}, 코스 안 나옴 ${empty}, 빠진 채 나옴 ${missing} (0이어야 해요)`);
+  Object.entries(why).sort((a, b) => b[1] - a[1]).slice(0, 6).forEach(([w, n]) => console.log(`   ${n}× ${w}…`));
+  process.exit(0);
+}
 if (process.env.SHOW) {
   const [who, how, from, date, depart, hours, budget] = process.env.SHOW.split(",");
   const s = { who, how, from, date, depart, hours: +hours, budget: +budget, alt: +(process.env.ALT ?? 0) };
