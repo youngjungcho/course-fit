@@ -7,7 +7,7 @@
 //   bounds   "지금 내 위치"를 쓸 수 있는 범위
 //   hub      타고 떠나는 곳 (STARTS의 id "airport"). buffer = 몇 분 일찍 도착할지, bufferLabel = 화면 문구
 //   extraHubs 더 있는 역·공항. start = STARTS의 id
-//   taxiBase 택시 기본요금(원, 2km까지), taxiMeter 몇 m마다 100원인지,
+//   taxiBase 택시 기본요금(원), taxiBaseKm 기본요금 거리(없으면 2km), taxiMeter 몇 m마다 100원인지,
 //   taxiFarKm 장거리 할증이 붙는 거리(없으면 할증 없음), taxiFarRate 그 뒤 거리요금 배수(없으면 2배)
 //   subway   지하철이 있는 곳: 지하철·버스 요금(교통카드, 원)
 //   splitTransit 대중교통 칸을 regions/<id>/transit.js로 나눠 뚜벅이를 고를 때만 불러와요
@@ -31,6 +31,11 @@ const BUSAN_AREA = {
   extraHubs: [{ id: "gimhae", start: "gimhae", label: "김해공항 (비행기)", emoji: "✈️", ride: "비행기", place: "공항", buffer: 90, bufferLabel: "1시간 반" }],
   subway: { busFare: 1550, railFare: 1600 } // 교통카드 성인: 버스 2023-10-06, 지하철 1구간 2024-05-03 시행 (부산시 보도). 2026-11-11 검색에서 그 뒤 인상 없음
 };
+const GYEONGBUK_GYEONGJU = {
+  area: "경북", sun: [35.84, 129.21], bounds: { latMin: 35.65, latMax: 36.05, lngMin: 128.95, lngMax: 129.55 },
+  hub: { label: "신경주역 (기차)", emoji: "🚆", ride: "기차", place: "역", buffer: 30, bufferLabel: "30분" },
+  taxiBase: 4500, taxiBaseKm: 1.7, taxiMeter: 128 // 경주시 2026-02-01 시행 요금 (트위그24 2026-01-26 보도: 기본 1.7km 4,500원, 128m당 100원). 2026-11-15 검색
+};
 const REGIONS = [
   { ...JEJU_AREA, id: "aewol", count: 65, name: "애월", search: "애월" },
   { ...JEJU_AREA, id: "hallim", count: 57, name: "한림·협재", keywords: "협재 금능", search: "한림" },
@@ -44,5 +49,7 @@ const REGIONS = [
     busNote: "강릉은 버스 정보를 아직 넣지 않았어요. 버스 시간표가 뜸한 곳이 많아 차나 택시로 다니는 코스로 짜요." },
   { ...BUSAN_AREA, id: "busan", count: 106, router: "OSRM", name: "부산", search: "부산", keywords: "해운대 광안리 서면 남포동 영도 기장 송도", note: "지하철·버스", noSeaSunset: true, splitTransit: true,
     zones: [{ id: "east", count: 27, label: "해운대·송정·기장", near: ["gwangan"] }, { id: "gwangan", count: 20, label: "광안리·수영·남구", near: ["east", "seomyeon"] }, { id: "seomyeon", count: 19, label: "서면·전포·동래", near: ["gwangan", "nampo"] }, { id: "nampo", count: 40, label: "남포동·영도·송도·다대포", near: ["seomyeon"] }],
-    busNote: "뚜벅이는 지하철과 버스로 짜요. 배차 간격은 평균이고 실시간 도착 정보는 아니에요. 휠체어 코스는 저상버스·엘리베이터 자료가 아직 없어 걷기·차 기준으로 짜요." }
+    busNote: "뚜벅이는 지하철과 버스로 짜요. 배차 간격은 평균이고 실시간 도착 정보는 아니에요. 휠체어 코스는 저상버스·엘리베이터 자료가 아직 없어 걷기·차 기준으로 짜요." },
+  { ...GYEONGBUK_GYEONGJU, id: "gyeongju", count: 61, router: "OSRM", name: "경주", search: "경주", keywords: "황리단길 대릉원 보문 불국사 감포 양남", note: "차로 다니는 곳", noBus: true, noSeaSunset: true,
+    busNote: "경주는 버스 정보를 아직 넣지 않았어요. 볼거리가 넓게 흩어져 있어 차나 택시로 다니는 코스로 짜요." }
 ];

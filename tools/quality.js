@@ -100,7 +100,8 @@ if (process.env.SHOW) {
 
 const FROMS = (process.env.FROMS || T.STARTS.map((x) => x.id).slice(0, 2).join(",")).split(",");
 const WHOS = (process.env.WHO || "group,dog,kid,solo").split(",");
-const HOWS = (process.env.HOWS || "walk,car").split(",").filter((h) => !(h === "walk" && require("vm") && false));
+const NOBUS = new Function(read("regions.js") + `;return REGIONS.find((r) => r.id === ${JSON.stringify(RG)}).noBus;`)();
+const HOWS = (process.env.HOWS || (NOBUS ? "bike,car" : "walk,car")).split(",");
 const DATES = (process.env.DATE || "2026-11-14,2026-11-17").split(",");
 const ms = [];
 let empty = 0;
