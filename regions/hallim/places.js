@@ -51,8 +51,8 @@ const PLACES = [
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "금오름 정류장 걸어서 10분", bikeRack: null, evChargerMin: 10, parking: true,
     kakaoId: "25189061",
-    note: "금악리. 관광공사 반려동물(2025-10 수정): 일부 구역 동반, 전 견종, 목줄, 맹견 입마개, 배변봉투. 관광공사: 상시 개방, 연중무휴, 주차 가능. 카카오맵(2026-10-31): 무료입장. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 올랐다는 후기 여러 건. 경사가 가팔라서 힘들다는 말도 있어요.",
-    sources: ["관광공사 API 129699","https://place.map.kakao.com/25189061","https://blog.naver.com/joyneer/224448243430","https://blog.naver.com/pigdrangoncow/224143594573"]
+    note: "금악리. 관광공사 반려동물(2025-10 수정): 일부 구역 동반, 전 견종, 목줄, 맹견 입마개, 배변봉투. 관광공사: 상시 개방, 연중무휴, 주차 가능. 카카오맵(2026-10-31): 무료입장. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 올랐다는 후기 여러 건. 경사가 가팔라서 힘들다는 말도 있어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "관광공사 API 129699","https://place.map.kakao.com/25189061","https://blog.naver.com/joyneer/224448243430","https://blog.naver.com/pigdrangoncow/224143594573"]
   },
   {
     id: "jeongmul-oreum", name: "정물오름", type: "공원",
@@ -95,11 +95,12 @@ const PLACES = [
     stayMin: 90, cost: 15000, open: "09:00", close: "17:30", closedDays: [], seasonalHours: true,
     strollerReview: true,
     lat: 33.39023, lng: 126.23969,
+    dogRule: "7kg 이하만, 식당은 이동장",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "한림공원 정류장 걸어서 4분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "10941032",
-    note: "한림로 300. 카카오맵(2026-10-31): 09:00~18:00, 일반 15,000원·청소년 10,000원·어린이 9,000원, 반려동물 동반, 장애인 시설. 유모차 후기(블로그, 2026-10-31 확인): 유모차 이동이 편했다는 후기 여러 건. 유모차 대여 1,000원, 동굴은 유모차가 못 들어가요. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 09:00~17:30으로 바뀜(겨울 시간으로 보여요, 10-31엔 18:00).",
-    sources: ["https://place.map.kakao.com/10941032","https://blog.naver.com/habbu-/224124665079","https://blog.naver.com/06jin/224256818634"]
+    note: "한림로 300. 카카오맵(2026-10-31): 09:00~18:00, 일반 15,000원·청소년 10,000원·어린이 9,000원, 반려동물 동반, 장애인 시설. 유모차 후기(블로그, 2026-10-31 확인): 유모차 이동이 편했다는 후기 여러 건. 유모차 대여 1,000원, 동굴은 유모차가 못 들어가요. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 09:00~17:30으로 바뀜(겨울 시간으로 보여요, 10-31엔 18:00). 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 7kg 이하 동반 가능 / 필요: 목줄 착용 / 식당이용시 이동장 이용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/10941032","https://blog.naver.com/habbu-/224124665079","https://blog.naver.com/06jin/224256818634"]
   },
   {
     id: "geumneung-stone", name: "금능석물원", type: "볼거리",

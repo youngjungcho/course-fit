@@ -110,24 +110,25 @@ const PLACES = [
     desc: "부드러운 능선과 초원 산책",
     stayMin: 60, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.45988, lng: 126.83268,
+    dogRule: "목줄 필수",
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "용눈이오름 정류장 걸어서 7분", bikeRack: null, evChargerMin: 12, parking: true,
     kakaoId: "10626439",
-    note: "구좌읍 종달리 산 28. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반, 무료 공영주차장.",
-    sources: ["https://place.map.kakao.com/10626439"]
+    note: "구좌읍 종달리 산 28. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반, 무료 공영주차장. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/10626439"]
   },
   {
     id: "darangshi", name: "다랑쉬오름", type: "공원",
     desc: "웅장한 제주 오름",
     stayMin: 90, cost: 0, open: null, close: null, closedDays: [],
-    dogReview: true,
     strollerReview: true,
     lat: 33.47769, lng: 126.82154,
+    dogRule: "목줄 필수",
     dog: true, stroller: false, stepFree: null, solo: null,
     station: "다랑쉬오름 입구(북) 정류장 걸어서 21분", bikeRack: null, evChargerMin: 24, parking: true,
     kakaoId: "25200772",
-    note: "구좌읍 세화리 산 6. 카카오맵(2026-10-31): 무료입장, 공용 주차장. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 오른 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 어렵다는 글 2건.",
-    sources: ["https://place.map.kakao.com/25200772","https://blog.naver.com/senmayong/224236079254","https://blog.naver.com/freetfilm/224145527811","https://blog.naver.com/jejudo_official/224449829902","https://blog.naver.com/baptist01/224312910220"]
+    note: "구좌읍 세화리 산 6. 카카오맵(2026-10-31): 무료입장, 공용 주차장. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 오른 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 어렵다는 글 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/25200772","https://blog.naver.com/senmayong/224236079254","https://blog.naver.com/freetfilm/224145527811","https://blog.naver.com/jejudo_official/224449829902","https://blog.naver.com/baptist01/224312910220"]
   },
   {
     id: "abu-oreum", name: "아부오름", type: "공원",
@@ -171,11 +172,12 @@ const PLACES = [
     desc: "동화 속 편백숲 산책",
     stayMin: 60, cost: 5000, open: "09:00", close: "18:00", closedDays: [],
     lat: 33.45362, lng: 126.75493,
+    dogRule: "목줄 필수",
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "거슨새미오름, 안돌오름 정류장 걸어서 17분", bikeRack: null, evChargerMin: 29, parking: null,
     kakaoId: "82389937",
-    note: "구좌읍 송당리 2173. 카카오맵(2026-10-31): 09:00~18:00(입장 17:30까지), 5,000원, 유모차 가능, 카페·식당, 반려동물 동반.",
-    sources: ["https://place.map.kakao.com/82389937"]
+    note: "구좌읍 송당리 2173. 카카오맵(2026-10-31): 09:00~18:00(입장 17:30까지), 5,000원, 유모차 가능, 카페·식당, 반려동물 동반. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/82389937"]
   },
   {
     id: "sangumburi", name: "산굼부리", type: "볼거리",
@@ -207,15 +209,14 @@ const PLACES = [
     id: "snoopy-garden", name: "스누피가든", type: "볼거리",
     desc: "자연과 어우러진 스누피 정원",
     stayMin: 90, cost: 19000, open: "09:00", close: "18:00", closedDays: [],
-    dogRule: "수요일만, 야외 가든 중심",
-    dogReview: true,
+    dogRule: "수요일만, 실내는 이동장",
     strollerReview: true,
     lat: 33.44413, lng: 126.77817,
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "아부오름 정류장 걸어서 5분", bikeRack: null, evChargerMin: 0, parking: true,
     kakaoId: "852041742",
-    note: "구좌읍 금백조로 930. 카카오맵(2026-10-31): 09:00~18:00, 입장권 19,000원, 장애인 시설, 무료 주차. 매주 수요일은 반려동물데이. 반려견 후기(블로그, 2026-10-31 확인): 반려견 입장은 수요일만 된다는 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 다녀온 후기 여러 건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
-    sources: ["https://place.map.kakao.com/852041742","https://blog.naver.com/homin622/224165408887","https://blog.naver.com/ilmare_story_/224420886031","https://blog.naver.com/findjeju/224263652005","https://blog.naver.com/from_nori/224438056482"]
+    note: "구좌읍 금백조로 930. 카카오맵(2026-10-31): 09:00~18:00, 입장권 19,000원, 장애인 시설, 무료 주차. 매주 수요일은 반려동물데이. 반려견 후기(블로그, 2026-10-31 확인): 반려견 입장은 수요일만 된다는 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 다녀온 후기 여러 건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용,반려동물 유모차 탑승 / 매주 수요일만 반려동물 동반 데이로 동반 가능 실내의 경우 이동장 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/852041742","https://blog.naver.com/homin622/224165408887","https://blog.naver.com/ilmare_story_/224420886031","https://blog.naver.com/findjeju/224263652005","https://blog.naver.com/from_nori/224438056482"]
   },
   {
     id: "ecoland", name: "에코랜드 테마파크", type: "볼거리",
@@ -234,11 +235,12 @@ const PLACES = [
     desc: "제주 풍경을 보는 레일 여행",
     stayMin: 70, cost: 17000, open: "09:00", close: "17:30", closedDays: [],
     lat: 33.46427, lng: 126.83652,
+    dogRule: "10kg 이하만, 이동장 필요",
     dog: true, stroller: null, stepFree: true, solo: null,
     station: "제주레일바이크 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "21777957",
-    note: "구좌읍 용눈이오름로 641. 카카오맵(2026-10-31): 09:00~17:30, 17,000원(인당), 휠체어 접근, 반려동물 동반, 전용 주차장.",
-    sources: ["https://place.map.kakao.com/21777957"]
+    note: "구좌읍 용눈이오름로 641. 카카오맵(2026-10-31): 09:00~17:30, 17,000원(인당), 휠체어 접근, 반려동물 동반, 전용 주차장. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 10kg 이하 동반 가능 / 필요: 목줄 착용,이동장(켄넬)사용,기타 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/21777957"]
   },
   {
     id: "seonnyeo-park", name: "선녀와나무꾼 테마공원", type: "볼거리",
@@ -269,11 +271,12 @@ const PLACES = [
     desc: "바람과 돌의 미로",
     stayMin: 70, cost: null, open: "09:00", close: "18:00", closedDays: [],
     lat: 33.48826, lng: 126.80087,
+    dogRule: "15kg 미만만, 케이지나 유모차에 넣어서",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "메이즈랜드 정류장 걸어서 5분", bikeRack: null, evChargerMin: 16, parking: true,
     kakaoId: "13095815",
-    note: "구좌읍 비자림로 2134-47. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유료입장, 유모차 가능, 반려동물 동반, 무료 주차. 입장료는 확인 못 했어요. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
-    sources: ["https://place.map.kakao.com/13095815"]
+    note: "구좌읍 비자림로 2134-47. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유료입장, 유모차 가능, 반려동물 동반, 무료 주차. 입장료는 확인 못 했어요. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 대형견 제외 15kg 미만의 중, 소형견 입장 가능케이지나 반려견 유모차 이용배변봉투 지참 및 배변처리 필수시각장애인 안내견, 청각장애인 도우미견 입장 가능.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/13095815"]
   },
   {
     id: "haenyeo-museum", name: "해녀박물관", type: "볼거리",

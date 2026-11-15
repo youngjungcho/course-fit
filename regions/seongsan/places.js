@@ -33,13 +33,13 @@ const PLACES = [
     id: "seopjikoji", name: "섭지코지", type: "공원",
     desc: "붉은 언덕과 푸른 바다의 산책길",
     stayMin: 70, cost: 0, open: "09:00", close: "18:00", closedDays: [],
-    dogReview: true,
     lat: 33.42394, lng: 126.93061,
+    dogRule: "목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "신양항 정류장 걸어서 25분", bikeRack: null, evChargerMin: 8, parking: true,
     kakaoId: "8413659",
-    note: "성산읍 섭지코지로 107. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 무료입장, 유모차 가능, 카페·식당, 유료 주차장. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책한 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
-    sources: ["https://place.map.kakao.com/8413659","https://blog.naver.com/kimsuravita/224416380620","https://blog.naver.com/yeartist/224320809513"]
+    note: "성산읍 섭지코지로 107. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 무료입장, 유모차 가능, 카페·식당, 유료 주차장. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책한 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/8413659","https://blog.naver.com/kimsuravita/224416380620","https://blog.naver.com/yeartist/224320809513"]
   },
   {
     id: "pyoseon-beach", name: "표선해수욕장", type: "공원",
@@ -58,11 +58,12 @@ const PLACES = [
     desc: "성산일출봉이 보이는 바다 풍경",
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.45252, lng: 126.92419,
+    dogRule: "목줄 필수",
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "광치기해변 정류장 걸어서 1분", bikeRack: null, evChargerMin: 6, parking: null,
     kakaoId: "13723499",
-    note: "성산읍 고성리 224-1. 카카오맵(2026-10-31): 무료입장, 반려동물 동반.",
-    sources: ["https://place.map.kakao.com/13723499"]
+    note: "성산읍 고성리 224-1. 카카오맵(2026-10-31): 무료입장, 반려동물 동반. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/13723499"]
   },
   {
     id: "sinyang-beach", name: "신양섭지해수욕장", type: "공원",
@@ -154,11 +155,12 @@ const PLACES = [
     desc: "제주의 옛 정취가 있는 마을",
     stayMin: 90, cost: 15000, open: "09:30", close: "18:00", closedDays: [],
     lat: 33.32240, lng: 126.84230,
+    dogRule: "9kg 이하만, 이동장 필요",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "제주민속촌(종점) 정류장 걸어서 5분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "8063566",
-    note: "표선면 민속해안로 631-34. 카카오맵(2026-10-31): 09:30~18:00, 성인 15,000원, 휠체어 접근, 유모차 가능, 반려동물 동반, 전용 주차장. 관광공사 무장애: 출입구까지 경사로, 휠체어 무료 대여.",
-    sources: ["관광공사 API 130474","https://place.map.kakao.com/8063566"]
+    note: "표선면 민속해안로 631-34. 카카오맵(2026-10-31): 09:30~18:00, 성인 15,000원, 휠체어 접근, 유모차 가능, 반려동물 동반, 전용 주차장. 관광공사 무장애: 출입구까지 경사로, 휠체어 무료 대여. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 9kg 이하 동반 가능 / 필요: 목줄 착용,이동장(켄넬)사용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "관광공사 API 130474","https://place.map.kakao.com/8063566"]
   },
   {
     id: "seongeup-village", name: "제주성읍마을", type: "볼거리",
@@ -176,22 +178,24 @@ const PLACES = [
     desc: "핑크빛 물결의 정원",
     stayMin: 70, cost: null, open: "09:00", close: "22:00", closedDays: [],
     lat: 33.33039, lng: 126.81519,
+    dogRule: "목줄 필수, 족욕장은 안 돼요",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "표선허브동산 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "23397740",
-    note: "표선면 돈오름로 170. 카카오맵(2026-10-31): 09:00~22:00, 연중무휴, 유료입장, 휠체어 접근, 유모차 가능, 반려동물 동반, 주차. 입장료는 확인 못 했어요.",
-    sources: ["https://place.map.kakao.com/23397740"]
+    note: "표선면 돈오름로 170. 카카오맵(2026-10-31): 09:00~22:00, 연중무휴, 유료입장, 휠체어 접근, 유모차 가능, 반려동물 동반, 주차. 입장료는 확인 못 했어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 입마개 착용,목줄 착용 / 목줄착용시 카페 입장 가능, 족욕장은 불가 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/23397740"]
   },
   {
     id: "ilchul-land", name: "일출랜드", type: "볼거리",
     desc: "미천굴과 정원 산책",
     stayMin: 80, cost: null, open: "09:00", close: "18:00", closedDays: [],
     lat: 33.38340, lng: 126.84158,
+    dogRule: "맹견 제외, 유모차나 이동장",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "일출랜드입구 정류장 걸어서 8분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "10399499",
-    note: "성산읍 중산간동로 4150-30. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유료입장, 휠체어 접근, 유모차 가능, 반려동물 동반, 무료 주차. 관광공사 무장애: 휠체어·유모차 무료 대여. 입장료는 확인 못 했어요.",
-    sources: ["관광공사 API 127857","https://place.map.kakao.com/10399499"]
+    note: "성산읍 중산간동로 4150-30. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유료입장, 휠체어 접근, 유모차 가능, 반려동물 동반, 무료 주차. 관광공사 무장애: 휠체어·유모차 무료 대여. 입장료는 확인 못 했어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 맹견 제외 예방 접종 완료한 전 견종 동반 가능 / 필요: 목줄 착용,반려동물 유모차 탑승,이동장(켄넬)사용 / 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "관광공사 API 127857","https://place.map.kakao.com/10399499"]
   },
   {
     id: "venice-land", name: "물의도시 베니스랜드", type: "볼거리",
@@ -310,8 +314,8 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "성산일출봉입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "767322313",
-    note: "성산읍 일출로 270-1. 카카오맵(2026-10-31): 09:00~20:00, 연중무휴, 반려동물 동반, 무료 주차. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
-    sources: ["https://place.map.kakao.com/767322313"]
+    note: "성산읍 일출로 270-1. 카카오맵(2026-10-31): 09:00~20:00, 연중무휴, 반려동물 동반, 무료 주차. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/767322313"]
   },
   {
     id: "dal-mujigae", name: "달무지개", type: "쇼핑",

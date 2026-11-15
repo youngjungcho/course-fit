@@ -26,11 +26,12 @@ const PLACES = [
     strollerReview: true,
     zone: "east",
     lat: 35.15852, lng: 129.15985,
-    dog: null, stroller: true, stepFree: null, solo: null,
+    dogRule: "목줄 필수",
+    dog: true, stroller: true, stepFree: null, solo: null,
     station: "해운대역 걸어서 10분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "7913306",
-    note: "해운대구 우동. 카카오맵(2026-11-01): 무료입장, 물품보관소, 휴게공간. 유모차 후기(블로그, 2026-11-01 확인): 산책로는 되지만 모래사장은 어렵다는 글 2건.",
-    sources: ["https://place.map.kakao.com/7913306","https://blog.naver.com/cheumistory/224430364609","https://blog.naver.com/elwiin/224379281320"]
+    note: "해운대구 우동. 카카오맵(2026-11-01): 무료입장, 물품보관소, 휴게공간. 유모차 후기(블로그, 2026-11-01 확인): 산책로는 되지만 모래사장은 어렵다는 글 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/7913306","https://blog.naver.com/cheumistory/224430364609","https://blog.naver.com/elwiin/224379281320"]
   },
   {
     id: "gwangalli-beach", name: "광안리해수욕장", type: "공원",
@@ -39,11 +40,12 @@ const PLACES = [
     strollerReview: true,
     zone: "gwangan",
     lat: 35.15319, lng: 129.11898,
-    dog: null, stroller: true, stepFree: true, solo: null,
+    dogRule: "목줄 필수",
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "광안역 걸어서 13분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "8202423",
-    note: "수영구 광안해변로 219. 카카오맵(2026-11-01): 무료입장, 휴게공간. 관광공사 무장애: 출입구까지·주출입구 턱 없음. 유모차 후기(블로그, 2026-11-01 확인): 바깥 산책로는 유모차가 된다는 글 2건.",
-    sources: ["관광공사 API 127925","https://place.map.kakao.com/8202423","https://blog.naver.com/ehj8719/224435733181","https://blog.naver.com/lapin22/224425841407"]
+    note: "수영구 광안해변로 219. 카카오맵(2026-11-01): 무료입장, 휴게공간. 관광공사 무장애: 출입구까지·주출입구 턱 없음. 유모차 후기(블로그, 2026-11-01 확인): 바깥 산책로는 유모차가 된다는 글 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "관광공사 API 127925","https://place.map.kakao.com/8202423","https://blog.naver.com/ehj8719/224435733181","https://blog.naver.com/lapin22/224425841407"]
   },
   {
     id: "songjeong-beach", name: "송정해수욕장", type: "공원",
@@ -51,11 +53,12 @@ const PLACES = [
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     zone: "east",
     lat: 35.17859, lng: 129.19971,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dogRule: "목줄 필수",
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: "광어골입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 5, parking: null,
     kakaoId: "20541735",
-    note: "해운대구 송정동. 카카오맵(2026-11-01): 무료입장, 물품보관소, 휴게공간.",
-    sources: ["https://place.map.kakao.com/20541735"]
+    note: "해운대구 송정동. 카카오맵(2026-11-01): 무료입장, 물품보관소, 휴게공간. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 입수도 가능, 샤워도 가능 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/20541735"]
   },
   {
     id: "songdo-beach", name: "송도해수욕장", type: "공원",
@@ -63,11 +66,12 @@ const PLACES = [
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     zone: "nampo",
     lat: 35.07595, lng: 129.01695,
+    dogRule: "목줄 필수",
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "송도해수욕장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "25041637",
-    note: "서구 암남동 135-5. 카카오맵(2026-11-01): 무료입장, 물품보관소, 휴게공간, 반려동물 동반.",
-    sources: ["https://place.map.kakao.com/25041637"]
+    note: "서구 암남동 135-5. 카카오맵(2026-11-01): 무료입장, 물품보관소, 휴게공간, 반려동물 동반. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/25041637"]
   },
   {
     id: "dadaepo-beach", name: "다대포해수욕장", type: "공원",
@@ -75,11 +79,12 @@ const PLACES = [
     stayMin: 60, cost: 0, open: null, close: null, closedDays: [],
     zone: "nampo",
     lat: 35.04653, lng: 128.96274,
+    dogRule: "목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "다대포해수욕장역 걸어서 6분", bikeRack: null, evChargerMin: 5, parking: null,
     kakaoId: "8214103",
-    note: "사하구 다대동. 카카오맵(2026-11-01): 무료입장, 유모차 가능, 반려동물 동반. 노을 명소. 관광공사 무장애: 출입구까지·주출입구 단차 없음.",
-    sources: ["관광공사 API 769761","https://place.map.kakao.com/8214103"]
+    note: "사하구 다대동. 카카오맵(2026-11-01): 무료입장, 유모차 가능, 반려동물 동반. 노을 명소. 관광공사 무장애: 출입구까지·주출입구 단차 없음. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "관광공사 API 769761","https://place.map.kakao.com/8214103"]
   },
   {
     id: "ilgwang-beach", name: "일광해수욕장", type: "공원",
@@ -99,11 +104,12 @@ const PLACES = [
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     zone: "east",
     lat: 35.15394, lng: 129.15229,
+    dogRule: "목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "동백역 걸어서 16분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "8257954",
-    note: "해운대구 우동 708-3. 카카오맵(2026-11-01): 연중무휴, 무료입장, 휠체어 접근, 유모차 가능, 반려동물 동반.",
-    sources: ["https://place.map.kakao.com/8257954"]
+    note: "해운대구 우동 708-3. 카카오맵(2026-11-01): 연중무휴, 무료입장, 휠체어 접근, 유모차 가능, 반려동물 동반. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/8257954"]
   },
   {
     id: "igidae", name: "이기대해안산책로", type: "공원",
@@ -160,11 +166,12 @@ const PLACES = [
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     zone: "nampo",
     lat: 35.08137, lng: 129.04119,
+    dogRule: "목줄 필수",
     dog: true, stroller: null, stepFree: true, solo: null,
     station: "부산보건고등학교 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "11841600",
-    note: "영도구 영선동4가 186-47. 카카오맵(2026-11-01): 연중무휴, 무료입장, 휠체어 접근, 반려동물 동반. 관광공사 무장애: 출입구까지 경사로, 단차 없음.",
-    sources: ["관광공사 API 252561","https://place.map.kakao.com/11841600"]
+    note: "영도구 영선동4가 186-47. 카카오맵(2026-11-01): 연중무휴, 무료입장, 휠체어 접근, 반려동물 동반. 관광공사 무장애: 출입구까지 경사로, 단차 없음. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "관광공사 API 252561","https://place.map.kakao.com/11841600"]
   },
   {
     id: "amnam-park", name: "암남공원", type: "공원",
@@ -172,11 +179,12 @@ const PLACES = [
     stayMin: 60, cost: 0, open: null, close: null, closedDays: [],
     zone: "nampo",
     lat: 35.05859, lng: 129.01568,
+    dogRule: "목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "수산가공선진화단지입구 정류장 걸어서 6분", bikeRack: null, evChargerMin: 7, parking: null,
     kakaoId: "8497179",
-    note: "서구 암남동 산 193-4. 카카오맵(2026-11-01): 연중무휴, 무료입장, 휠체어 접근, 유모차 가능, 반려동물 동반. 일부 주차 요금은 확인 필요.",
-    sources: ["https://place.map.kakao.com/8497179"]
+    note: "서구 암남동 산 193-4. 카카오맵(2026-11-01): 연중무휴, 무료입장, 휠체어 접근, 유모차 가능, 반려동물 동반. 일부 주차 요금은 확인 필요. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/8497179"]
   },
   {
     id: "yongdusan", name: "용두산공원", type: "공원",
@@ -234,14 +242,14 @@ const PLACES = [
     id: "childrens-park", name: "부산어린이대공원", type: "공원",
     desc: "숲과 호수가 있는 쉼터",
     stayMin: 70, cost: 0, open: null, close: null, closedDays: [],
-    dogReview: true,
     zone: "seomyeon",
     lat: 35.18491, lng: 129.04158,
+    dogRule: "목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "부산학생교육문화회관 정류장 걸어서 10분", bikeRack: null, evChargerMin: 8, parking: null,
     kakaoId: "12572854",
-    note: "부산진구 새싹로 295. 카카오맵(2026-11-01): 24시간, 연중무휴, 무료입장, 휠체어 접근, 유모차 가능. 반려견 후기(블로그, 2026-11-01 확인): 반려견과 산책한 글 2건.",
-    sources: ["https://place.map.kakao.com/12572854","https://blog.naver.com/nolalog/223819755257","https://blog.naver.com/wlsdlsid_/223764107426"]
+    note: "부산진구 새싹로 295. 카카오맵(2026-11-01): 24시간, 연중무휴, 무료입장, 휠체어 접근, 유모차 가능. 반려견 후기(블로그, 2026-11-01 확인): 반려견과 산책한 글 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 입마개 착용,목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/12572854","https://blog.naver.com/nolalog/223819755257","https://blog.naver.com/wlsdlsid_/223764107426"]
   },
   {
     id: "citizens-park", name: "부산시민공원", type: "공원",
@@ -334,14 +342,14 @@ const PLACES = [
     id: "cloud-walk", name: "송도구름산책로", type: "공원",
     desc: "바다 위 구름 산책길",
     stayMin: 30, cost: 0, open: null, close: null, closedDays: [],
-    dogReview: true,
     zone: "nampo",
     lat: 35.07518, lng: 129.02305,
+    dogRule: "목줄 필수",
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "암남동행정복지센터 정류장 걸어서 9분", bikeRack: null, evChargerMin: 6, parking: null,
     kakaoId: "1038801092",
-    note: "서구 암남동 129-4. 카카오맵(2026-11-01): 운영 정보 표시 없음. 반려견 후기(블로그, 2026-11-01 확인): 반려견과 다녀온 글 2건.",
-    sources: ["https://place.map.kakao.com/1038801092","https://blog.naver.com/worizip_mong9/224423910777","https://blog.naver.com/hakueiii/224377409320"]
+    note: "서구 암남동 129-4. 카카오맵(2026-11-01): 운영 정보 표시 없음. 반려견 후기(블로그, 2026-11-01 확인): 반려견과 다녀온 글 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/1038801092","https://blog.naver.com/worizip_mong9/224423910777","https://blog.naver.com/hakueiii/224377409320"]
   },
   {
     id: "haewol", name: "해월전망대", type: "공원",
@@ -362,11 +370,12 @@ const PLACES = [
     strollerReview: true,
     zone: "nampo",
     lat: 35.09741, lng: 129.01056,
-    dog: null, stroller: false, stepFree: null, solo: null,
+    dogRule: "목줄 필수",
+    dog: true, stroller: false, stepFree: null, solo: null,
     station: "토성역 걸어서 16분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "21362956",
-    note: "사하구 감천동 1-17. 카카오맵(2026-11-01): 09:00~17:00, 무료입장, 물품보관소, 카페·식당, 기념품샵. 언덕과 계단이 많아요. 유모차 후기(블로그, 2026-11-01 확인): 계단과 경사로 유모차가 어렵다는 글 2건.",
-    sources: ["https://place.map.kakao.com/21362956","https://blog.naver.com/withawarmheart/224459416015","https://blog.naver.com/jeil007-/224459327129"]
+    note: "사하구 감천동 1-17. 카카오맵(2026-11-01): 09:00~17:00, 무료입장, 물품보관소, 카페·식당, 기념품샵. 언덕과 계단이 많아요. 유모차 후기(블로그, 2026-11-01 확인): 계단과 경사로 유모차가 어렵다는 글 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 입마개 착용,목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/21362956","https://blog.naver.com/withawarmheart/224459416015","https://blog.naver.com/jeil007-/224459327129"]
   },
   {
     id: "huinnyeoul", name: "흰여울문화마을", type: "볼거리",
@@ -387,14 +396,13 @@ const PLACES = [
     desc: "바닷가 절벽의 절",
     stayMin: 60, cost: 0, open: "04:30", close: "19:20", closedDays: [],
     dogRule: "안거나 이동장 권장",
-    dogReview: true,
     zone: "east",
     lat: 35.18840, lng: 129.22314,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "용궁사.국립수산과학원 정류장 걸어서 12분", bikeRack: null, evChargerMin: 6, parking: null,
     kakaoId: "8606230",
-    note: "기장군 기장읍 용궁길 86. 카카오맵(2026-11-01): 04:30~19:20. 반려견 후기(블로그, 2026-11-01 확인): 반려견 동반 글 2건.",
-    sources: ["https://place.map.kakao.com/8606230","https://blog.naver.com/qooqoo15/224290344880","https://blog.naver.com/owner5252/224396643115"]
+    note: "기장군 기장읍 용궁길 86. 카카오맵(2026-11-01): 04:30~19:20. 반려견 후기(블로그, 2026-11-01 확인): 반려견 동반 글 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/8606230","https://blog.naver.com/qooqoo15/224290344880","https://blog.naver.com/owner5252/224396643115"]
   },
   {
     id: "busan-art", name: "부산시립미술관", type: "볼거리",
@@ -481,16 +489,15 @@ const PLACES = [
     id: "songdo-cable", name: "송도해상케이블카", type: "볼거리",
     desc: "바다 위를 지나는 케이블카",
     stayMin: 60, cost: 19000, open: "09:00", close: "21:00", closedDays: [],
-    dogRule: "이동장 필요",
-    dogReview: true,
+    dogRule: "이동장에 몸 전체가 들어가는 크기만",
     strollerReview: true,
     zone: "nampo",
     lat: 35.07664, lng: 129.02340,
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "암남동행정복지센터 정류장 걸어서 7분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "1878852238",
-    note: "서구 송도해변로 171. 카카오맵(2026-11-01): 09:00~21:00, 에어크루즈 왕복 대인 19,000원, 장애인 시설. 반려견 후기(블로그, 2026-11-01 확인): 이동장으로 탈 수 있다는 글 2건. 유모차 후기(블로그, 2026-11-01 확인): 유모차 반입이 된다는 글 2건.",
-    sources: ["https://place.map.kakao.com/1878852238","https://blog.naver.com/s2neverfails/223945379068","https://blog.naver.com/momo_salon-/224382331030","https://blog.naver.com/msmom104/224426331419","https://blog.naver.com/gkdlel1029/224442897858"]
+    note: "서구 송도해변로 171. 카카오맵(2026-11-01): 09:00~21:00, 에어크루즈 왕복 대인 19,000원, 장애인 시설. 반려견 후기(블로그, 2026-11-01 확인): 이동장으로 탈 수 있다는 글 2건. 유모차 후기(블로그, 2026-11-01 확인): 유모차 반입이 된다는 글 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 이동장(켄넬)에 들어가는 전 견종 동반 가능 / 필요: 이동장(켄넬)사용 / 이동장(켄넬) 안에 반려동물 몸 전체가 모두 들어가야 동반 가능.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/1878852238","https://blog.naver.com/s2neverfails/223945379068","https://blog.naver.com/momo_salon-/224382331030","https://blog.naver.com/msmom104/224426331419","https://blog.naver.com/gkdlel1029/224442897858"]
   },
   {
     id: "x-the-sky", name: "부산엑스더스카이", type: "볼거리",
@@ -558,8 +565,8 @@ const PLACES = [
     dog: null, stroller: true, stepFree: null, solo: null,
     station: "오시리아역 걸어서 18분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "26923074",
-    note: "기장군 기장읍 동부산관광6로 59. 카카오맵(2026-11-01): 09:30~17:30, 월 휴무, 장애인 시설. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 다니기 넓다는 글 2건.",
-    sources: ["https://place.map.kakao.com/26923074","https://blog.naver.com/jolieminji/224407662501","https://blog.naver.com/ting2141/224437245095"]
+    note: "기장군 기장읍 동부산관광6로 59. 카카오맵(2026-11-01): 09:30~17:30, 월 휴무, 장애인 시설. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 다니기 넓다는 글 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 야외 공간만 동반 가능 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/26923074","https://blog.naver.com/jolieminji/224407662501","https://blog.naver.com/ting2141/224437245095"]
   },
   {
     id: "arte", name: "아르떼뮤지엄 부산", type: "볼거리",
@@ -1173,15 +1180,14 @@ const PLACES = [
     stayMin: 60, cost: 6000, open: "09:30", close: "21:30", closedDays: [],
     lastOrder: "21:00",
     dogRule: "바깥 자리만",
-    dogReview: true,
     strollerReview: true,
     zone: "east",
     lat: 35.18187, lng: 129.21133,
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "공수.양경마을 정류장 걸어서 4분", bikeRack: null, evChargerMin: 11, parking: null,
     kakaoId: "760104114",
-    note: "기장군 기장읍 기장해안로 34-16. 카카오맵(2026-11-01): 09:30~21:30, 21:00 마지막 주문, 허브티 6,000원, 장애인 시설. 반려견 후기(블로그, 2026-11-01 확인): 야외 동반 글 2건. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 편하다는 글 2건 이상.",
-    sources: ["https://place.map.kakao.com/760104114","https://blog.naver.com/yunnie0831_/224411774447","https://blog.naver.com/juuyg/224343327950","https://blog.naver.com/shirleyej/224386805824","https://blog.naver.com/zznanai/224367544123"]
+    note: "기장군 기장읍 기장해안로 34-16. 카카오맵(2026-11-01): 09:30~21:30, 21:00 마지막 주문, 허브티 6,000원, 장애인 시설. 반려견 후기(블로그, 2026-11-01 확인): 야외 동반 글 2건. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 편하다는 글 2건 이상. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 1층 야외석만 가능.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/760104114","https://blog.naver.com/yunnie0831_/224411774447","https://blog.naver.com/juuyg/224343327950","https://blog.naver.com/shirleyej/224386805824","https://blog.naver.com/zznanai/224367544123"]
   },
   {
     id: "ogeunam", name: "오그남", type: "카페",
@@ -1240,11 +1246,12 @@ const PLACES = [
     indoor: true,
     zone: "gwangan",
     lat: 35.15428, lng: 129.12700,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dogRule: "15kg 이하만, 유모차나 이동장",
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: "민락공영주차장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "852075435",
-    note: "수영구 민락수변로17번길 56. 카카오맵(2026-11-01): 10:00~24:00, 장애인 시설. 물건값은 빼고 0원으로 넣었어요.",
-    sources: ["https://place.map.kakao.com/852075435"]
+    note: "수영구 민락수변로17번길 56. 카카오맵(2026-11-01): 10:00~24:00, 장애인 시설. 물건값은 빼고 0원으로 넣었어요. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 15kg 이하 동반 가능 / 필요: 반려동물 유모차 탑승,이동장(켄넬)사용 / 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/852075435"]
   },
   {
     id: "millak-park", name: "민락수변공원", type: "공원",
@@ -1252,11 +1259,12 @@ const PLACES = [
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     zone: "gwangan",
     lat: 35.15494, lng: 129.13400,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dogRule: "목줄 필수",
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: "민락수변공원 정류장 걸어서 4분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "7887457",
-    note: "수영구 민락동 110-19. 카카오맵(2026-11-01): 무료입장, 휴게공간.",
-    sources: ["https://place.map.kakao.com/7887457"]
+    note: "수영구 민락동 110-19. 카카오맵(2026-11-01): 무료입장, 휴게공간. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/7887457"]
   },
   {
     id: "suyeong-park", name: "수영사적공원", type: "공원",

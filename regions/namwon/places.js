@@ -66,11 +66,12 @@ const PLACES = [
     stayMin: 60, cost: 6000, open: "09:00", close: "17:30", closedDays: [],
     strollerReview: true,
     lat: 33.30031, lng: 126.63620,
+    dogRule: "15kg 이하만, 실내 카페는 안 돼요",
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "상산모루 정류장 걸어서 9분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "317349030",
-    note: "생기악로 53-38. 카카오맵(2026-10-31): 09:00~17:30, 일반 6,000원, 반려동물 동반, 장애인 시설. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 갈 수 있다는 후기 2건.",
-    sources: ["https://place.map.kakao.com/317349030","https://blog.naver.com/miza_dailylife/224117086233","https://blog.naver.com/jjorong_ee/224130705264"]
+    note: "생기악로 53-38. 카카오맵(2026-10-31): 09:00~17:30, 일반 6,000원, 반려동물 동반, 장애인 시설. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 갈 수 있다는 후기 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 15kg 이하 동반 가능 / 필요: 목줄 착용,기타 / 실내카페 동반불가 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/317349030","https://blog.naver.com/miza_dailylife/224117086233","https://blog.naver.com/jjorong_ee/224130705264"]
   },
   {
     id: "dolnang-art", name: "돌낭예술원", type: "볼거리",
@@ -103,11 +104,12 @@ const PLACES = [
     desc: "열대과일 농장 체험",
     stayMin: 70, cost: 9500, open: "10:00", close: "18:00", closedDays: [],
     lat: 33.33992, lng: 126.74252,
+    dogRule: "목줄 필수, 동물팡에선 안고 다니기",
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "고수동회관 정류장 걸어서 31분", bikeRack: null, evChargerMin: 37, parking: true,
     kakaoId: "1605931589",
-    note: "원님로399번길 31-7. 카카오맵(2026-10-31): 10:00~18:00(입장 16:30까지), 농장 체험 9,500원, 반려동물 동반, 장애인 시설, 아이놀이방, 무료 주차.",
-    sources: ["https://place.map.kakao.com/1605931589"]
+    note: "원님로399번길 31-7. 카카오맵(2026-10-31): 10:00~18:00(입장 16:30까지), 농장 체험 9,500원, 반려동물 동반, 장애인 시설, 아이놀이방, 무료 주차. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용,기타 / 동물이있는 동물팡은 반드시 안고 있어야함 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/1605931589"]
   },
   {
     id: "citrus-farm", name: "최남단체험감귤농장", type: "볼거리",
@@ -127,11 +129,12 @@ const PLACES = [
     stayMin: 80, cost: 13000, open: "09:00", close: "18:00", closedDays: [],
     lastOrder: "16:30",
     lat: 33.30941, lng: 126.63541,
+    dogRule: "7kg 이하만, 유모차나 이동장",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "휴애리 자연생활공원 정류장 걸어서 5분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "27581976",
-    note: "신례동로 256. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 성인 13,000원, 휠체어 접근, 유모차 가능, 반려동물 동반. 카카오맵 다시 확인(2026-11-15): 09:00~18:00 같음, 입장 마감 16:30.",
-    sources: ["https://place.map.kakao.com/27581976"]
+    note: "신례동로 256. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 성인 13,000원, 휠체어 접근, 유모차 가능, 반려동물 동반. 카카오맵 다시 확인(2026-11-15): 09:00~18:00 같음, 입장 마감 16:30. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 7kg 이하 동반 가능 / 필요: 목줄 착용,반려동물 유모차 탑승,이동장(켄넬)사용 / 카페 야외테이블 이용가능 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/27581976"]
   },
   {
     id: "petit-camellia", name: "쁘띠동백", type: "쇼핑",

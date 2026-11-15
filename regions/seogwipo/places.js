@@ -115,13 +115,13 @@ const PLACES = [
     desc: "세계 정원을 보는 큰 식물원",
     stayMin: 90, cost: 12000, open: "09:00", close: "18:00", closedDays: [],
     indoor: true,
-    dogReview: true,
     lat: 33.25261, lng: 126.41426,
+    dogRule: "목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "중문관광단지 정류장 걸어서 3분", bikeRack: null, evChargerMin: 6, parking: true,
     kakaoId: "8004227",
-    note: "중문관광로 93. 카카오맵(2026-10-31): 09:00~18:00(17:30 입장 마감), 연중무휴, 성인 12,000원, 휠체어 접근, 유모차 가능, 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
-    sources: ["https://place.map.kakao.com/8004227","https://blog.naver.com/1vdnjemzlv1/224075177803","https://blog.naver.com/ilmare_story_/224431157419"]
+    note: "중문관광로 93. 카카오맵(2026-10-31): 09:00~18:00(17:30 입장 마감), 연중무휴, 성인 12,000원, 휠체어 접근, 유모차 가능, 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/8004227","https://blog.naver.com/1vdnjemzlv1/224075177803","https://blog.naver.com/ilmare_story_/224431157419"]
   },
   {
     id: "beke-garden", name: "베케", type: "볼거리",
@@ -311,11 +311,12 @@ const PLACES = [
     desc: "숲과 바다가 만나는 물길",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.25252, lng: 126.62344,
+    dogRule: "목줄 필수, 시설물 안은 안 돼요",
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "쇠소깍 입구 정류장 걸어서 9분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "7962003",
-    note: "하효동 1459. 카카오맵(2026-10-31): 유모차 가능, 휴게공간, 반려동물 동반, 공영주차장(제2·3 무료). 체험은 온라인 예매.",
-    sources: ["https://place.map.kakao.com/7962003"]
+    note: "하효동 1459. 카카오맵(2026-10-31): 유모차 가능, 휴게공간, 반려동물 동반, 공영주차장(제2·3 무료). 체험은 온라인 예매. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 시설물은 동반 불가 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/7962003"]
   },
   {
     id: "seogwipo-astronomy", name: "서귀포천문과학문화관", type: "볼거리",

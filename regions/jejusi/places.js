@@ -21,13 +21,12 @@ const PLACES = [
     desc: "바다 산책길과 노을",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     dogRule: "물에는 못 들어가요",
-    dogReview: true,
     lat: 33.49738, lng: 126.45269,
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "이호테우해수욕장 정류장 걸어서 5분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "8552559",
-    note: "이호일동. 카카오맵(2026-10-31): 무료입장, 유모차 가능, 휴게공간, 전용 주차장. 개장 기간은 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책할 수 있다는 후기 여러 건.",
-    sources: ["https://place.map.kakao.com/8552559","https://blog.naver.com/satyr334/224369863603","https://blog.naver.com/ssoyeon_yoon/224315361881"]
+    note: "이호일동. 카카오맵(2026-10-31): 무료입장, 유모차 가능, 휴게공간, 전용 주차장. 개장 기간은 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책할 수 있다는 후기 여러 건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 해수욕장 입수는 불가 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/8552559","https://blog.naver.com/satyr334/224369863603","https://blog.naver.com/ssoyeon_yoon/224315361881"]
   },
   {
     id: "samyang-beach", name: "삼양해수욕장", type: "공원",
@@ -46,11 +45,12 @@ const PLACES = [
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     strollerReview: true,
     lat: 33.50791, lng: 126.46837,
+    dogRule: "목줄 필수, 맹견은 입마개",
     dog: true, stroller: false, stepFree: null, solo: null,
     station: "오래물광장 정류장 걸어서 6분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "7834621",
-    note: "도두일동. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반, 공영주차장(협소). 유모차 후기(블로그, 2026-10-31 확인): 계단이 있어 유모차를 권하지 않는다는 글 여러 건.",
-    sources: ["https://place.map.kakao.com/7834621","https://aurora-1.tistory.com/2","https://blog.naver.com/ssoyeon_yoon/224378209580"]
+    note: "도두일동. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반, 공영주차장(협소). 유모차 후기(블로그, 2026-10-31 확인): 계단이 있어 유모차를 권하지 않는다는 글 여러 건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 입마개 착용,목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/7834621","https://aurora-1.tistory.com/2","https://blog.naver.com/ssoyeon_yoon/224378209580"]
   },
   {
     id: "halla-arboretum", name: "한라수목원", type: "공원",
@@ -169,8 +169,8 @@ const PLACES = [
     dog: null, stroller: true, stepFree: null, solo: null,
     station: "민속자연사박물관 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "8067497",
-    note: "삼성로 40. 카카오맵(2026-10-31): 09:00~18:00, 월 휴무, 장애인 시설, 유료 주차, 수유실. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 경사로·엘리베이터로 유모차 이동이 편했다는 후기 2건.",
-    sources: ["https://place.map.kakao.com/8067497","https://blog.naver.com/managemm/224422028733","https://blog.naver.com/wjsqhfka73/224356463686"]
+    note: "삼성로 40. 카카오맵(2026-10-31): 09:00~18:00, 월 휴무, 장애인 시설, 유료 주차, 수유실. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 경사로·엘리베이터로 유모차 이동이 편했다는 후기 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 박물관 내부는 동반 불가 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/8067497","https://blog.naver.com/managemm/224422028733","https://blog.naver.com/wjsqhfka73/224356463686"]
   },
   {
     id: "jeju-art-museum", name: "제주도립미술관", type: "볼거리",

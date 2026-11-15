@@ -22,11 +22,12 @@ const PLACES = [
     desc: "화산 지형과 노을이 어우러진 해변",
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.22866, lng: 126.30860,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dogRule: "물에는 못 들어가요",
+    dog: true, stroller: null, stepFree: null, solo: null,
     station: "사계용해경로당 정류장 걸어서 5분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "11055702",
-    note: "안덕면 사계리. 카카오맵(2026-10-31): 무료입장, 주차(소형 무료).",
-    sources: ["https://place.map.kakao.com/11055702"]
+    note: "안덕면 사계리. 카카오맵(2026-10-31): 무료입장, 주차(소형 무료). 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 해수욕장 산책은 가능하지만, 바다 입수는 불가 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/11055702"]
   },
   {
     id: "suwolbong", name: "수월봉", type: "공원",
@@ -115,11 +116,12 @@ const PLACES = [
     desc: "동화 속 숲길과 기찻길",
     stayMin: 70, cost: 8000, open: "09:30", close: "18:00", closedDays: [],
     lat: 33.29092, lng: 126.25063,
+    dogRule: "목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "산양 큰엉곶 입구 정류장 걸어서 1분", bikeRack: null, evChargerMin: 18, parking: null,
     kakaoId: "1901034660",
-    note: "한경면 청수리 956-6. 카카오맵(2026-10-31): 09:30~18:00, 입장료 8,000원, 휠체어 접근, 유모차 가능, 반려동물 동반. 관광공사 무장애: 출입구까지·주출입구 턱 없음.",
-    sources: ["관광공사 API 2948051","https://place.map.kakao.com/1901034660"]
+    note: "한경면 청수리 956-6. 카카오맵(2026-10-31): 09:30~18:00, 입장료 8,000원, 휠체어 접근, 유모차 가능, 반려동물 동반. 관광공사 무장애: 출입구까지·주출입구 턱 없음. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "관광공사 API 2948051","https://place.map.kakao.com/1901034660"]
   },
   {
     id: "hwansang-forest", name: "환상숲곶자왈공원", type: "공원",
@@ -138,14 +140,14 @@ const PLACES = [
     desc: "계절마다 변하는 동백 정원",
     stayMin: 80, cost: null, open: "08:30", close: "18:00", closedDays: [],
     hoursByDay: {"토":["08:30","18:30"]},
-    dogReview: true,
     strollerReview: true,
     lat: 33.29034, lng: 126.36819,
+    dogRule: "8kg 이하만, 목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "동백동산 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "9461977",
-    note: "안덕면 병악로 166. 카카오맵(2026-10-31): 08:30~18:00(토 18:30, 마감 1시간 전 입장 마감), 연중무휴. 입장료는 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견 동반이 된다는 글 2건. 유모차 후기(블로그, 2026-10-31 확인): 유모차 무료 대여가 된다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
-    sources: ["https://place.map.kakao.com/9461977","https://blog.naver.com/tndus251/224447015457","https://blog.naver.com/smart_paeng/224443126623","https://blog.naver.com/tndus251/224447015457","https://blog.naver.com/ddaomingsuk/224452558592"]
+    note: "안덕면 병악로 166. 카카오맵(2026-10-31): 08:30~18:00(토 18:30, 마감 1시간 전 입장 마감), 연중무휴. 입장료는 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견 동반이 된다는 글 2건. 유모차 후기(블로그, 2026-10-31 확인): 유모차 무료 대여가 된다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 8kg 이하 동반 가능 / 필요: 목줄 착용 / 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/9461977","https://blog.naver.com/tndus251/224447015457","https://blog.naver.com/smart_paeng/224443126623","https://blog.naver.com/tndus251/224447015457","https://blog.naver.com/ddaomingsuk/224452558592"]
   },
   {
     id: "spirited-garden", name: "생각하는정원", type: "볼거리",
@@ -290,11 +292,12 @@ const PLACES = [
     desc: "자연과 감성의 산책길",
     stayMin: 70, cost: 9000, open: "09:00", close: "18:00", closedDays: [],
     lat: 33.28311, lng: 126.28734,
+    dogRule: "목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "노리매 정류장 걸어서 4분", bikeRack: null, evChargerMin: 7, parking: true,
     kakaoId: "19265298",
-    note: "대정읍 중산간서로 2260-15. 카카오맵(2026-10-31): 09:00~18:00(계절마다 달라요), 성인 9,000원, 휠체어 접근, 유모차 가능, 반려동물 동반, 주차. 관광공사 무장애: 출입구까지·주출입구 턱 없음, 휠체어 대여.",
-    sources: ["관광공사 API 2704456","https://place.map.kakao.com/19265298"]
+    note: "대정읍 중산간서로 2260-15. 카카오맵(2026-10-31): 09:00~18:00(계절마다 달라요), 성인 9,000원, 휠체어 접근, 유모차 가능, 반려동물 동반, 주차. 관광공사 무장애: 출입구까지·주출입구 턱 없음, 휠체어 대여. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "관광공사 API 2704456","https://place.map.kakao.com/19265298"]
   },
   {
     id: "jeju-moca", name: "제주현대미술관", type: "볼거리",
@@ -545,15 +548,14 @@ const PLACES = [
     desc: "녹차밭 품은 말차 카페",
     stayMin: 70, cost: 5800, open: "09:00", close: "18:00", closedDays: [],
     lastOrder: "17:30",
-    dogRule: "목줄 필수",
-    dogReview: true,
+    dogRule: "실내 전시관은 안 돼요, 카페는 바깥 자리",
     strollerReview: true,
     lat: 33.30592, lng: 126.28949,
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "오설록 정류장 걸어서 2분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "11332661",
-    note: "안덕면 신화역사로 15. 카카오맵(2026-10-31): 09:00~18:00, 17:30 마지막 주문, 말차아이스크림 5,800원, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 경사로와 평탄한 길로 유모차가 된다는 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
-    sources: ["https://place.map.kakao.com/11332661","https://blog.naver.com/deokhodong/224380133441","https://blog.naver.com/daeun_93/224266716269","https://blog.naver.com/you_need_more/224414152342","https://blog.naver.com/jini0320/224439058792"]
+    note: "안덕면 신화역사로 15. 카카오맵(2026-10-31): 09:00~18:00, 17:30 마지막 주문, 말차아이스크림 5,800원, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 경사로와 평탄한 길로 유모차가 된다는 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 입마개 착용,목줄 착용 / 카페 외부좌석 이용가능 실내 전시관은 동반 불가 맹견 및 대형견의 경우, 입마개 착용 필수.",
+    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/11332661","https://blog.naver.com/deokhodong/224380133441","https://blog.naver.com/daeun_93/224266716269","https://blog.naver.com/you_need_more/224414152342","https://blog.naver.com/jini0320/224439058792"]
   },
   {
     id: "suaegi-bakery", name: "수애기베이커리카페", type: "카페",
