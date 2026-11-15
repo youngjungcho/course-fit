@@ -190,6 +190,7 @@ const PLACES = [
     id: "aerospace-museum", name: "제주항공우주박물관", type: "볼거리",
     desc: "우주와 항공 전시관",
     stayMin: 90, cost: null, open: "09:00", close: "18:00", closedDays: [], closedMonthly: [{ week: 3, day: "월" }],
+    holidayShift: "weekday",
     lastOrder: "17:00",
     indoor: true,
     strollerReview: true,

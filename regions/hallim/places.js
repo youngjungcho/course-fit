@@ -624,6 +624,7 @@ const PLACES = [
     id: "uyubudan", name: "우유부단", type: "카페",
     desc: "성이시돌 목장 우유 아이스크림",
     stayMin: 30, cost: 5000, open: "10:00", close: "18:00", closedDays: [],
+    closedHolidays: ["공휴일"],
     dogRule: "바깥 자리만",
     dogReview: true,
     lat: 33.34764, lng: 126.32808,

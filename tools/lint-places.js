@@ -13,7 +13,7 @@ const TYPES = ["식당", "카페", "볼거리", "공원", "쇼핑"];
 const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 const REQUIRED = ["id", "name", "type", "desc", "stayMin", "cost", "open", "close", "closedDays", "lat", "lng", "dog", "stroller", "stepFree", "solo", "station", "bikeRack", "evChargerMin", "parking", "kakaoId", "note", "sources"];
 const TRI = ["dog", "stroller", "stepFree", "solo", "bikeRack", "parking"]; // true / false / null
-const OPTIONAL = ["lastOrder", "closedMonthly", "babyChair", "hoursByDay", "beachSeason", "seasonalHours", "breaks", "dogRule", "forDogs", "dogReview", "strollerReview", "indoor", "zone"];
+const OPTIONAL = ["lastOrder", "closedMonthly", "closedHolidays", "holidayShift", "holidayOpen", "babyChair", "hoursByDay", "beachSeason", "seasonalHours", "breaks", "dogRule", "forDogs", "dogReview", "strollerReview", "indoor", "zone"];
 const isTime = (v) => typeof v === "string" && /^([01]\d|2[0-4]):[0-5]\d$/.test(v);
 const toMin = (t) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3));
 
@@ -63,6 +63,9 @@ function lint(r) {
     // lastOrder: 식당·카페는 마지막 주문, 볼거리·공원·쇼핑은 입장 마감
     if (!(p.closedDays === null || (Array.isArray(p.closedDays) && p.closedDays.every((d) => DAYS.includes(d))))) E(p, `closedDays ${JSON.stringify(p.closedDays)}는 ["월"] 같은 요일 목록, 없으면 [], 모르면 null`);
     if ("babyChair" in p && p.babyChair !== true) E(p, "babyChair는 유아의자가 있을 때만 true로 써요 (없거나 모르면 칸을 안 써요)");
+    for (const h of p.closedHolidays ?? []) if (!["신정", "설날", "설연휴", "추석", "추석연휴", "공휴일"].includes(h)) E(p, `closedHolidays ${h}는 신정·설날·설연휴·추석·추석연휴·공휴일 중 하나`);
+    if ("holidayShift" in p && !["day", "weekday"].includes(p.holidayShift)) E(p, 'holidayShift는 "day"(다음 날) 또는 "weekday"(다음 평일)');
+    if ("holidayOpen" in p && p.holidayOpen !== true) E(p, "holidayOpen은 true만 써요");
     for (const r of p.closedMonthly ?? []) if (!(r && DAYS.includes(r.day) && [1, 2, 3, 4, 5, -1].includes(r.week) && (r.except ?? []).every((m) => Number.isInteger(m) && m >= 1 && m <= 12))) E(p, `closedMonthly ${JSON.stringify(r)}는 { week: 1~5 또는 -1(마지막), day: "월", except: [7, 8] } 모양`);
     for (const [d, v] of Object.entries(p.hoursByDay ?? {})) if (!DAYS.includes(d) || !(v === null || (Array.isArray(v) && v.length === 2 && v.every(isTime)))) E(p, `hoursByDay ${d}가 이상해요`);
     for (const br of p.breaks ?? []) if (!(Array.isArray(br) && br.length === 2 && br.every(isTime) && toMin(br[0]) < toMin(br[1]))) E(p, `breaks ${JSON.stringify(br)}가 이상해요`);

@@ -21,6 +21,7 @@ const PLACES = [
     id: "seongsan-ilchul", name: "성산일출봉", type: "공원",
     desc: "제주를 대표하는 해돋이 봉우리",
     stayMin: 70, cost: null, open: "06:00", close: "18:00", closedDays: ["월"],
+    holidayShift: "day",
     hoursByDay: {"토":["05:00","19:00"]},
     lat: 33.45913, lng: 126.94054,
     dog: null, stroller: null, stepFree: null, solo: null,

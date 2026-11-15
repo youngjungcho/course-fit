@@ -11,6 +11,7 @@ description: 주간 점검 — 제주·강릉·부산·경주 안내원(과 새 
 ## 순서
 1. `tools/AGENT_RULES.md`를 읽어요. 오늘 날짜(한국 시각)를 정해요.
 2. main이 깨끗한지(`git status`) 확인하고, 아니면 사용자에게 먼저 물어봐요.
+   - 11월 이후인데 `index.html`의 `HOLIDAYS`에 다음 해 공휴일이 없으면, 요약에 "다음 해 공휴일을 넣어야 해요"를 적어요 (한국천문연구원 "국경일과 공휴일" 기준).
 3. 안내원을 **하나씩 차례로** 불러요 (크롬을 같이 쓰면 서로 방해돼서 동시에 돌리지 않아요):
    `busan-guide` → `gangneung-guide` → `gyeongju-guide` → `jeju-guide` (→ 새 지역이 있으면 `new-region-guide`)
    - 새 지역 담당에게는 지역 이름(예: 경주)도 전해요. 새 지역 담당은 worktree를 쓰지 않고 `region/<지역 id>` 가지에서 이어서 일하도록, worktree 안에서 그 가지로 바꿔 달라고 전해요.
