@@ -1,0 +1,186 @@
+// 인스타 카드뉴스 만들기: 사이트의 코스 엔진으로 실제 코스를 짜서 1080×1350 카드와 본문 글을 만들어요.
+//   node marketing/insta/make.js <지역 id> <who> <how> [출발 10:00] [시간 6] [날짜 YYYY-MM-DD, 기본: 다가오는 토요일] [출발지 id]
+//   예) node marketing/insta/make.js gyeongju kid car 10:00 6
+//   LIST=1 …  출발지·다른 코스별 장소 목록만 보기 / ALT=2 …  그중 3번째 코스로 만들기
+// 결과: marketing/insta/<오늘>/<지역>-<who>-<how>/01.png … caption.txt
+// 크롬(헤드리스)으로 카드를 찍어요. 인스타에 올리는 건 사람이 해요.
+const fs = require("fs");
+const path = require("path");
+const { execFileSync } = require("child_process");
+const ROOT = path.join(__dirname, "..", "..");
+const read = (f) => fs.existsSync(`${ROOT}/${f}`) ? fs.readFileSync(`${ROOT}/${f}`, "utf8") : "";
+const [RG, WHO_ID = "group", HOW_ID = "car", DEPART = "10:00", HOURS = "6", DATE_ARG, FROM_ARG] = process.argv.slice(2);
+if (!RG) { console.error("사용법: node marketing/insta/make.js <지역 id> <who> <how> [출발] [시간] [날짜] [출발지]"); process.exit(1); }
+
+// ----- 코스 엔진 불러오기 (tools/top-places.js와 같은 방식) -----
+const html = read("index.html");
+const main = html.split("<script>").find((b) => b.includes("function applyRegion")).split("// ----- 시작 -----")[0];
+const stub = `
+const el = () => ({ style: {}, setAttribute() {}, querySelectorAll: () => [], addEventListener() {}, set onclick(v) {}, set textContent(v) {}, set innerHTML(v) {}, hidden: false });
+const document = { getElementById: el, querySelector: el, querySelectorAll: () => [], createElement: el, head: { append() {} }, body: el() };
+const window = { scrollTo() {}, addEventListener() {} }; const track = () => {}; const gtag = () => {}; const navigator = {};
+const history = { pushState() {}, replaceState() {}, state: null }; const location = { search: "", pathname: "/" };
+`;
+const DATA = new Function(read(`regions/${RG}/places.js`) + read(`regions/${RG}/travel.js`) + read(`regions/${RG}/transit.js`) + ";return { PLACES, STARTS, COASTLINE, TRAVEL, INLAND_NORTH: typeof INLAND_NORTH !== \"undefined\" && INLAND_NORTH };")();
+const T = new Function("DATA", read("regions.js") + stub + main +
+  `;applyRegion(REGIONS.find((r) => r.id === ${JSON.stringify(RG)}), DATA);return { makeCourse, state, STARTS, REGION, WHO, HOW, TYPE_ICON, costOf, won, babyChairOnly, sunsetToday };`)(DATA);
+
+const kst = new Date(Date.now() + 9 * 3600e3);
+const today = kst.toISOString().slice(0, 10);
+let date = DATE_ARG;
+if (!date) { const d = new Date(kst); do d.setUTCDate(d.getUTCDate() + 1); while (d.getUTCDay() !== 6); date = d.toISOString().slice(0, 10); }
+const from = FROM_ARG || T.STARTS.find((s) => s.id !== "airport")?.id || T.STARTS[0].id;
+Object.assign(T.state, { people: WHO_ID === "solo" ? 1 : 2, skip: [], must: [], alt: 0, date, area: "mix", from, who: WHO_ID, how: HOW_ID,
+  depart: DEPART, hours: Number(HOURS), budget: 100000, end: "start", zone: "all", roam: "stay", leave: null });
+// LIST=1 이면 출발지·다른 코스(alt)별로 장소만 늘어놓고 끝나요 (어떤 코스로 만들지 고를 때)
+if (process.env.LIST) {
+  for (const st of T.STARTS) for (let alt = 0; alt < 4; alt++) {
+    Object.assign(T.state, { from: st.id, alt });
+    const c = T.makeCourse();
+    if (c.stops.length) console.log(`${st.id} alt=${alt}: ${c.stops.map((x) => x.place.name).join(" → ")}`);
+  }
+  process.exit(0);
+}
+T.state.alt = Number(process.env.ALT || 0);
+const r = T.makeCourse();
+if (!r.stops.length) { console.error("코스가 비었어요. 조건을 바꿔 보세요."); process.exit(1); }
+
+// ----- 글자 -----
+const hm = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const R = T.REGION, regionName = R.area === "제주" && R.name !== "제주시내" ? `제주 ${R.name}` : R.name;
+const who = T.WHO.find((w) => w.id === WHO_ID), how = T.HOW.find((h) => h.id === HOW_ID);
+const WHO_SHORT = { group: "", dog: "강아지랑", kid: "아기랑", wheel: "휠체어로", solo: "혼자" }[WHO_ID];
+const HOW_SHORT = { walk: "뚜벅이", bike: "자전거", car: "", ev: "전기차" }[HOW_ID];
+const PROMISE = {
+  dog: "반려견이 들어갈 수 있다고\n확인된 곳만 골랐어요", kid: "유모차가 다닐 수 있는 곳 위주로\n골랐어요",
+  wheel: "계단 없이 들어갈 수 있다고\n확인된 곳만 골랐어요", solo: "혼자 가기 좋은 곳을 먼저\n골랐어요", group: "운영시간·쉬는 날·이동 시간까지\n맞춰서 짰어요"
+}[WHO_ID];
+const total = r.finish - T.state.hours * 0 - Number(DEPART.slice(0, 2)) * 60 - Number(DEPART.slice(3));
+const cost = r.stops.reduce((a, s) => a + T.costOf(s.place), 0) + r.fares;
+const title = [regionName, WHO_SHORT, HOW_SHORT].filter(Boolean).join(" ");
+const badgesOf = (p) => {
+  const out = [];
+  if (WHO_ID === "kid") out.push(T.babyChairOnly(p) ? ["warn", "유아의자 있음 · 유모차는 확인 필요"] : ["ok", p.strollerReview ? "유모차 OK(후기 기준)" : "유모차 OK"]);
+  if (WHO_ID === "dog") out.push(p.dogRule ? ["warn", `반려견${p.dogReview ? "(후기 기준)" : ""}: ${p.dogRule}`] : ["ok", p.dogReview ? "반려견 OK(후기 기준)" : "반려견 OK"]);
+  if (WHO_ID === "wheel") out.push(["ok", "계단 없음"]);
+  if (p.lastOrder) out.push(["info", `${p.type === "식당" || p.type === "카페" ? "마지막 주문" : "입장 마감"} ${p.lastOrder}`]);
+  if (p.seasonalHours) out.push(["warn", "계절마다 시간이 달라요"]);
+  return out.slice(0, 2);
+};
+const moveText = (m) => m ? `${m.text} 약 ${m.min}분` : "";
+
+// ----- 카드 -----
+const css = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+*{box-sizing:border-box;margin:0}
+body{width:1080px;height:1350px;overflow:hidden;font-family:"Pretendard Variable",Pretendard,sans-serif;color:#1f2421;word-break:keep-all;background:#f6f4ef;position:relative}
+.hero{position:absolute;inset:0;background:linear-gradient(160deg,#e9f5ef 0%,#e3eff7 55%,#fdf1dc 100%)}
+.sun{position:absolute;right:-140px;top:-160px;width:560px;height:560px;border-radius:50%;background:#f2a541;opacity:.2}
+.wave{position:absolute;left:0;right:0;bottom:0;width:100%;height:220px}
+.pad{position:relative;padding:90px 84px;height:100%;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:14px;font-weight:800;font-size:34px;letter-spacing:-.02em}
+.brand i{font-style:normal;color:#f2a541}
+.kicker{display:inline-block;align-self:flex-start;padding:10px 22px;border-radius:999px;background:#fff;color:#1f7a5a;font-weight:700;font-size:30px;box-shadow:0 6px 18px rgba(31,52,42,.08)}
+h1{font-size:92px;line-height:1.18;font-weight:800;letter-spacing:-.035em}
+h1 em{font-style:normal;color:#1f7a5a}
+.promise{font-size:40px;line-height:1.5;color:#3d4641;white-space:pre-line}
+.chips{display:flex;gap:16px;flex-wrap:wrap}
+.chip{background:#fff;border-radius:22px;padding:22px 28px;box-shadow:0 8px 22px rgba(31,52,42,.08);text-align:center;min-width:220px}
+.chip b{display:block;font-size:44px;color:#1f7a5a;font-weight:800}
+.chip span{font-size:26px;color:#6b716d}
+.swipe{font-size:30px;color:#6b716d;font-weight:600}
+.page{position:absolute;right:84px;bottom:70px;font-size:28px;color:#9aa19c;font-weight:600}
+.stop{background:#fff;border-radius:36px;padding:44px 46px;box-shadow:0 10px 30px rgba(31,52,42,.08)}
+.time{display:flex;align-items:center;gap:16px;color:#1f7a5a;font-weight:800;font-size:36px}
+.no{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#1f7a5a,#2b7bb0);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:32px}
+.name{display:flex;align-items:center;gap:18px;font-size:56px;font-weight:800;letter-spacing:-.03em;margin:22px 0 10px}
+.ic{width:84px;height:84px;border-radius:24px;background:#f6f4ef;display:inline-flex;align-items:center;justify-content:center;font-size:48px;flex:none}
+.desc{font-size:36px;line-height:1.45;color:#2f3632}
+.meta{font-size:30px;color:#6b716d;margin-top:10px}
+.badges{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.badge{font-size:27px;font-weight:700;padding:10px 18px;border-radius:16px;background:#e3f1ea;color:#1f7a5a}
+.badge.warn{background:#fff1d6;color:#9a5b00}
+.badge.info{background:#e4f0f8;color:#2b6a94}
+.move{font-size:32px;color:#6b716d;padding:22px 0 22px 34px;border-left:4px dashed #cfd6d1;margin:6px 0 6px 28px}
+.list{display:grid;gap:18px;font-size:38px}
+.list div{display:flex;gap:20px;align-items:center}
+.list b{color:#1f7a5a;font-variant-numeric:tabular-nums;width:120px}
+.cta{background:#1f7a5a;color:#fff;border-radius:36px;padding:48px 50px}
+.cta h2{font-size:56px;font-weight:800;letter-spacing:-.03em;margin-bottom:18px}
+.cta p{font-size:34px;line-height:1.5;opacity:.92}
+.cta .url{display:inline-block;margin-top:26px;background:#fff;color:#1f7a5a;font-weight:800;font-size:38px;padding:14px 26px;border-radius:18px}
+.foot{font-size:26px;color:#7d847f;line-height:1.5}
+</style>`;
+const logo = `<div class="brand"><svg width="56" height="56" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#1f7a5a"/><circle cx="68" cy="36" r="16" fill="#f2a541"/><path d="M0 66 Q25 56 50 66 T100 66 V100 H0Z" fill="#e3f1ea"/></svg><span>쉼<i>,</i>표</span></div>`;
+const deco = `<div class="hero"></div><div class="sun"></div><svg class="wave" viewBox="0 0 1080 220" preserveAspectRatio="none"><path d="M0 110 Q135 50 270 110 T540 110 T810 110 T1080 110 V220 H0Z" fill="#fff" opacity=".6"/></svg>`;
+const doc = (body) => `<!doctype html><html><head><meta charset="utf-8">${css}</head><body>${body}</body></html>`;
+
+const stops = r.stops;
+const perCard = stops.length <= 4 ? 2 : stops.length <= 6 ? 2 : 3;
+const groups = [];
+for (let i = 0; i < stops.length; i += perCard) groups.push(stops.slice(i, i + perCard));
+const N = 1 + groups.length + 1;
+const dayLabel = (iso) => `${Number(iso.slice(5, 7))}월 ${Number(iso.slice(8, 10))}일(${"일월화수목금토"[new Date(iso + "T00:00:00Z").getUTCDay()]})`;
+const slides = [];
+slides.push(doc(`${deco}<div class="pad">${logo}
+  <div style="margin-top:120px"><span class="kicker">${esc(regionName)} 하루 코스</span></div>
+  <h1 style="margin-top:34px">${esc(title)}<br><em>${HOURS}시간</em> 코스</h1>
+  <p class="promise" style="margin-top:34px">${esc(PROMISE)}</p>
+  <div class="chips" style="margin-top:56px"><div class="chip"><b>${stops.length}곳</b><span>장소</span></div><div class="chip"><b>${how.emoji} ${esc(how.label.split("·")[0])}</b><span>이동</span></div><div class="chip"><b>약 ${(Math.round(cost / 1000) * 1000).toLocaleString("ko-KR")}원</b><span>1명 비용</span></div></div>
+  <p class="swipe" style="margin-top:auto">옆으로 넘겨 보세요 →</p></div><div class="page">1/${N}</div>`));
+groups.forEach((g, gi) => {
+  const blocks = g.map((s, k) => {
+    const idx = gi * perCard + k, p = s.place, next = stops[idx + 1];
+    const meta = [p.type, `${p.stayMin}분`, p.cost === null ? "비용 확인 필요" : T.won(p.cost)].join(" · ");
+    return `<div class="stop"><div class="time"><span class="no">${idx + 1}</span>${hm(s.begin)} – ${hm(s.leave)}</div>
+      <div class="name"><span class="ic">${T.TYPE_ICON[p.type] ?? "📍"}</span>${esc(p.name)}</div>
+      <p class="desc">${esc(p.desc)}</p><p class="meta">${esc(meta)}</p>
+      <div class="badges">${badgesOf(p).map(([c, t]) => `<span class="badge ${c === "ok" ? "" : c}">${esc(t)}</span>`).join("")}</div></div>
+      ${next ? `<div class="move">${esc(moveText(next.move))}</div>` : ""}`;
+  }).join("");
+  slides.push(doc(`<div class="pad" style="padding-top:80px">${logo}<div style="margin-top:44px;display:flex;flex-direction:column">${blocks}</div></div><div class="page">${gi + 2}/${N}</div>`));
+});
+slides.push(doc(`${deco}<div class="pad">${logo}
+  <h1 style="margin-top:70px;font-size:70px">한눈에 보기</h1>
+  <div class="list" style="margin-top:34px">${stops.map((s) => `<div><b>${hm(s.begin)}</b><span>${T.TYPE_ICON[s.place.type] ?? "📍"} ${esc(s.place.name)}</span></div>`).join("")}</div>
+  <div class="cta" style="margin-top:56px"><h2>내 조건으로 다시 짜 보기</h2><p>누구랑 · 어떻게 · 몇 시간만 고르면<br>운영시간 맞춘 하루 코스가 나와요</p><span class="url">프로필 링크 → swimpyonote.com</span></div>
+  <p class="foot" style="margin-top:auto">${dayLabel(date)} ${DEPART} 출발 기준 · 운영시간은 카카오맵·관광공사 자료예요.<br>가기 전에 한 번 더 확인해 주세요. 💾 저장해 두면 여행 때 편해요</p></div><div class="page">${N}/${N}</div>`));
+
+// ----- 저장·찍기 -----
+const slug = `${RG}-${WHO_ID}-${HOW_ID}`;
+fs.rmSync(path.join(__dirname, today, slug), { recursive: true, force: true });
+const out = path.join(__dirname, today, slug);
+fs.mkdirSync(path.join(out, "src"), { recursive: true });
+const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const profile = fs.mkdtempSync(path.join(require("os").tmpdir(), "insta-"));
+slides.forEach((h, i) => {
+  const n = String(i + 1).padStart(2, "0");
+  const src = path.join(out, "src", `${n}.html`);
+  fs.writeFileSync(src, h);
+  execFileSync(CHROME, ["--headless=new", "--disable-gpu", "--hide-scrollbars", `--user-data-dir=${profile}`, "--window-size=1080,1350",
+    "--virtual-time-budget=6000", `--screenshot=${path.join(out, `${n}.png`)}`, `file://${src}`], { stdio: "ignore" });
+});
+
+// ----- 본문 글 -----
+const tags = {
+  group: ["여행코스", "당일치기"], dog: ["강아지랑여행", "반려견동반", "애견동반여행"], kid: ["아기랑여행", "아이랑가볼만한곳", "유모차여행"],
+  wheel: ["무장애여행", "휠체어여행"], solo: ["혼자여행", "혼행"]
+}[WHO_ID];
+const base = R.area === "제주" ? ["제주여행", `${R.name.split("·")[0]}여행`, "제주도여행"] : [`${R.name}여행`, `${R.name}가볼만한곳`, `${R.name}여행코스`];
+const howTag = { walk: ["뚜벅이여행"], bike: ["자전거여행"], car: ["렌트카여행"], ev: ["전기차여행"] }[HOW_ID];
+const caption = `${title} ${HOURS}시간 코스 ✨
+${PROMISE.replace("\n", " ")}
+
+${stops.map((s, i) => `${i + 1}. ${hm(s.begin)} ${s.place.name}${s.place.type === "식당" ? " (식사)" : ""}`).join("\n")}
+
+📍 ${dayLabel(date)} ${DEPART} 출발 · ${how.label} · 1명 약 ${cost.toLocaleString("ko-KR")}원
+운영시간·쉬는 날·이동 시간을 맞춰 짠 코스예요. 가기 전에 한 번 더 확인해 주세요!
+
+👉 내 조건(누구랑·어떻게·몇 시간)으로 다시 짜 보기: 프로필 링크 (swimpyonote.com)
+💾 저장해 두고 여행 때 꺼내 보세요
+
+${[...base, ...tags, ...howTag, "국내여행", "주말여행", "여행코스추천"].map((t) => "#" + t.replace(/\s/g, "")).join(" ")}
+`;
+fs.writeFileSync(path.join(out, "caption.txt"), caption);
+console.log(JSON.stringify({ out: path.relative(ROOT, out), cards: slides.length, date, from, stops: stops.map((s) => `${hm(s.begin)} ${s.place.name}`) }, null, 1));
