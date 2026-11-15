@@ -331,20 +331,21 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "함덕리 3구 정류장 걸어서 2분", bikeRack: null, evChargerMin: 5, parking: null,
     kakaoId: "1466963148",
-    note: "조천읍 조함해안로 496. 카카오맵(2026-10-31): 10:00~24:00. 물건값은 빼고 0원으로 넣었어요.",
+    note: "조천읍 조함해안로 496. 카카오맵(2026-10-31): 10:00~24:00. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/1466963148"]
   },
   {
     id: "gojip-hamdeok", name: "고집돌우럭 함덕점", type: "식당",
     desc: "제주 전복우럭 한상",
     stayMin: 70, cost: 29000, open: "10:00", close: "21:30", closedDays: [],
+    lastOrder: "20:20",
     breaks: [["15:00","17:00"]],
     strollerReview: true,
     lat: 33.54381, lng: 126.66310,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "함덕비석거리 정류장 걸어서 2분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "28082185",
-    note: "조천읍 신북로 491-9. 카카오맵(2026-10-31): 10:00~21:30, 15:00~17:00 브레이크타임, 메뉴 29,000원(2인부터), 테라스, 유아의자, 장애인 시설, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 갔다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "조천읍 신북로 491-9. 카카오맵(2026-10-31): 10:00~21:30, 15:00~17:00 브레이크타임, 메뉴 29,000원(2인부터), 테라스, 유아의자, 장애인 시설, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 갔다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 10:00~21:30, 브레이크 15:00~17:00 같음. 점심 마지막 주문 14:50, 저녁 주문 20:20까지(메뉴판).",
     sources: ["https://place.map.kakao.com/28082185","https://blog.naver.com/yj__choi/224219577184","https://blog.naver.com/zzangzzanglife/224443722245"]
   },
   {
@@ -405,7 +406,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "함덕리(4구) 정류장 걸어서 8분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "1946524083",
-    note: "조천읍 조함해안로 586. 카카오맵(2026-10-31): 08:30~21:00, 세트 39,600원(2명 기준으로 1인 19,800원), 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건.",
+    note: "조천읍 조함해안로 586. 카카오맵(2026-10-31): 08:30~21:00, 세트 39,600원(2명 기준으로 1인 19,800원), 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/1946524083","https://blog.naver.com/bbolife_/223971267073","https://blog.naver.com/samv425/223875600081"]
   },
   {
@@ -564,7 +565,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "함덕리 3구 정류장 걸어서 6분", bikeRack: null, evChargerMin: 7, parking: null,
     kakaoId: "26867476",
-    note: "조천읍 조함해안로 519-10. 카카오맵(2026-10-31): 06:00~24:00, 아메리카노 7,000원. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 있었다는 후기 2건.",
+    note: "조천읍 조함해안로 519-10. 카카오맵(2026-10-31): 06:00~24:00, 아메리카노 7,000원. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 있었다는 후기 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/26867476","https://blog.naver.com/cherry3559/224081308054","https://blog.naver.com/yknight21/224430336638","https://blog.naver.com/gusdk5936/224441860644","https://blog.naver.com/janebak416/224431191720"]
   },
   {
@@ -599,7 +600,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "함덕농협지소 정류장 걸어서 2분", bikeRack: null, evChargerMin: 5, parking: null,
     kakaoId: "488158041",
-    note: "조천읍 조함해안로 490. 카카오맵(2026-10-31): 08:00~20:00, 연중무휴, 멜츠 브리오쉬 토스트 11,800원. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건.",
+    note: "조천읍 조함해안로 490. 카카오맵(2026-10-31): 08:00~20:00, 연중무휴, 멜츠 브리오쉬 토스트 11,800원. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/488158041","https://blog.naver.com/vvo8ovv/223849308976","https://blog.naver.com/sunsol1010/223905782343"]
   },
   {

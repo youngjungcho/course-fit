@@ -120,7 +120,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "중문관광단지 정류장 걸어서 3분", bikeRack: null, evChargerMin: 6, parking: true,
     kakaoId: "8004227",
-    note: "중문관광로 93. 카카오맵(2026-10-31): 09:00~18:00(17:30 입장 마감), 연중무휴, 성인 12,000원, 휠체어 접근, 유모차 가능, 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건.",
+    note: "중문관광로 93. 카카오맵(2026-10-31): 09:00~18:00(17:30 입장 마감), 연중무휴, 성인 12,000원, 휠체어 접근, 유모차 가능, 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/8004227","https://blog.naver.com/1vdnjemzlv1/224075177803","https://blog.naver.com/ilmare_story_/224431157419"]
   },
   {
@@ -180,7 +180,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "리틀프린스뮤지엄 정류장 걸어서 3분", bikeRack: null, evChargerMin: 5, parking: true,
     kakaoId: "8559375",
-    note: "중문관광로110번길 31. 카카오맵(2026-10-31): 09:00~18:00(입장 17:30까지), 연중무휴, 반려동물 동반, 장애인 시설, 주차. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 관람한 후기 2건.",
+    note: "중문관광로110번길 31. 카카오맵(2026-10-31): 09:00~18:00(입장 17:30까지), 연중무휴, 반려동물 동반, 장애인 시설, 주차. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 관람한 후기 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/8559375","https://blog.naver.com/phe0921/224144916398","https://blog.naver.com/jjh376/223697825938"]
   },
   {
@@ -326,7 +326,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "서귀포천문 과학문화관 정류장 걸어서 5분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "7938334",
-    note: "1100로 506-1. 카카오맵(2026-10-31): 14:00~22:00, 월 휴무, 사전예약, 휠체어 접근, 유모차 가능, 전용 주차장. 관광공사: 어른 2,000원, 무장애 출입구 턱 없음(자동문).",
+    note: "1100로 506-1. 카카오맵(2026-10-31): 14:00~22:00, 월 휴무, 사전예약, 휠체어 접근, 유모차 가능, 전용 주차장. 관광공사: 어른 2,000원, 무장애 출입구 턱 없음(자동문). 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["관광공사 API 988207","https://place.map.kakao.com/7938334"]
   },
   {
@@ -397,7 +397,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "관광단지 입구 정류장 걸어서 4분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "8517699",
-    note: "천제연로 99. 카카오맵(2026-10-31): 09:30~21:30, 15:30~16:00 브레이크타임, 실속갈치세트(2인) 58,000원(1인 29,000원). 관광공사: 주차 가능. 반려견 후기(블로그, 2026-10-31 확인): 반려동물 동반이 된다는 후기 여러 건.",
+    note: "천제연로 99. 카카오맵(2026-10-31): 09:30~21:30, 15:30~16:00 브레이크타임, 실속갈치세트(2인) 58,000원(1인 29,000원). 관광공사: 주차 가능. 반려견 후기(블로그, 2026-10-31 확인): 반려동물 동반이 된다는 후기 여러 건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["관광공사 API 687563","https://place.map.kakao.com/8517699","https://blog.naver.com/beinsorrow/224422146794","https://blog.naver.com/ljy8302/224126641077"]
   },
   {
@@ -654,7 +654,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "중문색달해수욕장 입구 정류장 걸어서 7분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "1378746048",
-    note: "중문관광로 154-17. 카카오맵(2026-10-31): 10:00~24:00, 테라스, 라이브밴드, 부분 노키즈존, 무료 주차. 가격은 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 야외·테라스에 유모차로 갔다는 글 2건.",
+    note: "중문관광로 154-17. 카카오맵(2026-10-31): 10:00~24:00, 테라스, 라이브밴드, 부분 노키즈존, 무료 주차. 가격은 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 야외·테라스에 유모차로 갔다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/1378746048","https://blog.naver.com/wonderful_ym/224424258577","https://blog.naver.com/juliet_4/224437858334","https://blog.naver.com/olivelee_/224318356233","https://blog.naver.com/giselesj0414/224414243753"]
   },
   {

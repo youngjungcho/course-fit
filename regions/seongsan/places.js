@@ -274,7 +274,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "섭지코지 정류장 걸어서 12분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "23150855",
-    note: "성산읍 섭지코지로 95. 카카오맵(2026-10-31): 09:30~18:00, 연중무휴, 유료입장, 휠체어 접근, 유모차 가능, 수유실, 아이놀이방, 무료 주차. 입장료는 확인 못 했어요.",
+    note: "성산읍 섭지코지로 95. 카카오맵(2026-10-31): 09:30~18:00, 연중무휴, 유료입장, 휠체어 접근, 유모차 가능, 수유실, 아이놀이방, 무료 주차. 입장료는 확인 못 했어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/23150855"]
   },
   {
@@ -310,7 +310,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "성산일출봉입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "767322313",
-    note: "성산읍 일출로 270-1. 카카오맵(2026-10-31): 09:00~20:00, 연중무휴, 반려동물 동반, 무료 주차. 물건값은 빼고 0원으로 넣었어요.",
+    note: "성산읍 일출로 270-1. 카카오맵(2026-10-31): 09:00~20:00, 연중무휴, 반려동물 동반, 무료 주차. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/767322313"]
   },
   {
@@ -487,7 +487,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "고성오일시장 정류장 걸어서 1분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "2054470601",
-    note: "성산읍 고성오조로 96. 카카오맵(2026-10-31): 09:00~20:30, 메뉴 45,000원(2명 기준으로 1인 22,500원), 반려동물 동반.",
+    note: "성산읍 고성오조로 96. 카카오맵(2026-10-31): 09:00~20:30, 메뉴 45,000원(2명 기준으로 1인 22,500원), 반려동물 동반. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/2054470601"]
   },
   {
@@ -522,7 +522,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "성산일출봉입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "983132283",
-    note: "성산읍 일출로 267. 카카오맵(2026-10-31): 08:00~23:00, 고등어구이 15,000원, 단체석, 앞 주차. 관광공사 무장애: 출입구까지·주출입구 경사로.",
+    note: "성산읍 일출로 267. 카카오맵(2026-10-31): 08:00~23:00, 고등어구이 15,000원, 단체석, 앞 주차. 관광공사 무장애: 출입구까지·주출입구 경사로. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["관광공사 API 2871879","https://place.map.kakao.com/983132283"]
   },
   {
@@ -592,7 +592,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "성산리입구 정류장 걸어서 4분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "1403064814",
-    note: "성산읍 일출로 222. 카카오맵(2026-10-31): 08:00~19:00, 아메리카노 5,700원, 반려동물 동반, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 글 1건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 온 손님이 있다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "성산읍 일출로 222. 카카오맵(2026-10-31): 08:00~19:00, 아메리카노 5,700원, 반려동물 동반, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 글 1건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 온 손님이 있다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/1403064814","https://blog.naver.com/orbyun/224423832893","https://blog.naver.com/kkyskk01/224451370909","https://blog.naver.com/alice-220/224367162667"]
   },
   {

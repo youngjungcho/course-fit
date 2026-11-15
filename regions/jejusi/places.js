@@ -194,7 +194,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "제주해변공연장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "25811890",
-    note: "탑동로 14. 카카오맵(2026-10-31): 10:00~19:00, 월 휴무, 유료입장, 휠체어 접근, 앞 공영주차장. 입장료는 확인 못 했어요.",
+    note: "탑동로 14. 카카오맵(2026-10-31): 10:00~19:00, 월 휴무, 유료입장, 휠체어 접근, 앞 공영주차장. 입장료는 확인 못 했어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/25811890"]
   },
   {
@@ -276,7 +276,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "한라도서관입구/제주문학관 정류장 걸어서 3분", bikeRack: null, evChargerMin: 0, parking: true,
     kakaoId: "882483584",
-    note: "연북로 339. 카카오맵(2026-10-31): 09:00~18:00(입장 17:30까지), 월 휴무, 무료입장, 휠체어 접근, 유모차 가능, 수유실, 주차장. 관광공사 무장애: 휠체어·유모차 대여, 장애인 화장실.",
+    note: "연북로 339. 카카오맵(2026-10-31): 09:00~18:00(입장 17:30까지), 월 휴무, 무료입장, 휠체어 접근, 유모차 가능, 수유실, 주차장. 관광공사 무장애: 휠체어·유모차 대여, 장애인 화장실. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["관광공사 API 2949573","https://place.map.kakao.com/882483584"]
   },
   {
@@ -310,7 +310,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "동문로터리, 동문시장 정류장 걸어서 1분", bikeRack: null, evChargerMin: 6, parking: true,
     kakaoId: "1262338999",
-    note: "동문로 16. 카카오맵(2026-10-31): 08:00~21:00, 반려동물 동반, 장애인 시설, 유료 주차. 물건값은 빼고 0원으로 넣었어요.",
+    note: "동문로 16. 카카오맵(2026-10-31): 08:00~21:00, 반려동물 동반, 장애인 시설, 유료 주차. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/1262338999"]
   },
   {
@@ -321,7 +321,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "탐라광장/제주여성가족연구원 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "1185434720",
-    note: "중앙로7길 25. 카카오맵(2026-10-31): 11:00~19:00, 연중무휴(휴무는 인스타 공지), 반려동물 동반, 장애인 시설, 공영주차장. 물건값은 빼고 0원으로 넣었어요.",
+    note: "중앙로7길 25. 카카오맵(2026-10-31): 11:00~19:00, 연중무휴(휴무는 인스타 공지), 반려동물 동반, 장애인 시설, 공영주차장. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/1185434720"]
   },
   {
@@ -692,7 +692,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "제주해변공연장 정류장 걸어서 1분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "572274077",
-    note: "탑동로 17. 카카오맵(2026-10-31): 10:00~19:00, 시트러스 아이스크림 7,000원, 반려동물 동반, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 다녀온 글 2건.",
+    note: "탑동로 17. 카카오맵(2026-10-31): 10:00~19:00, 시트러스 아이스크림 7,000원, 반려동물 동반, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 다녀온 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/572274077","https://blog.naver.com/kimdamda/224345110969","https://blog.naver.com/nha1017/224404057372","https://blog.naver.com/egjyg_/224451778650","https://blog.naver.com/wptlzk4/223965074331"]
   },
   {

@@ -92,13 +92,13 @@ const PLACES = [
   {
     id: "hallim-park", name: "한림공원", type: "볼거리",
     desc: "계절마다 물드는 정원 산책",
-    stayMin: 90, cost: 15000, open: "09:00", close: "18:00", closedDays: [],
+    stayMin: 90, cost: 15000, open: "09:00", close: "17:30", closedDays: [], seasonalHours: true,
     strollerReview: true,
     lat: 33.39023, lng: 126.23969,
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "한림공원 정류장 걸어서 4분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "10941032",
-    note: "한림로 300. 카카오맵(2026-10-31): 09:00~18:00, 일반 15,000원·청소년 10,000원·어린이 9,000원, 반려동물 동반, 장애인 시설. 유모차 후기(블로그, 2026-10-31 확인): 유모차 이동이 편했다는 후기 여러 건. 유모차 대여 1,000원, 동굴은 유모차가 못 들어가요. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "한림로 300. 카카오맵(2026-10-31): 09:00~18:00, 일반 15,000원·청소년 10,000원·어린이 9,000원, 반려동물 동반, 장애인 시설. 유모차 후기(블로그, 2026-10-31 확인): 유모차 이동이 편했다는 후기 여러 건. 유모차 대여 1,000원, 동굴은 유모차가 못 들어가요. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 09:00~17:30으로 바뀜(겨울 시간으로 보여요, 10-31엔 18:00).",
     sources: ["https://place.map.kakao.com/10941032","https://blog.naver.com/habbu-/224124665079","https://blog.naver.com/06jin/224256818634"]
   },
   {
@@ -501,13 +501,13 @@ const PLACES = [
   {
     id: "original-romance", name: "오리지날로맨스 협재", type: "카페",
     desc: "바다 앞 카페와 소금빵 아이스크림",
-    stayMin: 50, cost: 12000, open: "11:00", close: "17:00", closedDays: ["금"],
+    stayMin: 50, cost: 12000, open: "11:00", close: "17:00", closedDays: ["금", "토"],
     strollerReview: true,
     lat: 33.40081, lng: 126.25045,
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "옹포리 정류장 걸어서 5분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "1130369934",
-    note: "옹포2길 1. 카카오맵(2026-10-31): 11:00~17:00, 금 휴무, 카라멜 소금빵 아이스크림 12,000원, 테라스, 반려동물 동반, 장애인 시설, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 앉았다는 글과 경사로가 있다는 후기. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "옹포2길 1. 카카오맵(2026-10-31): 11:00~17:00, 금 휴무, 카라멜 소금빵 아이스크림 12,000원, 테라스, 반려동물 동반, 장애인 시설, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 앉았다는 글과 경사로가 있다는 후기. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 11:00~17:00, 금·토 휴무로 바뀜.",
     sources: ["https://place.map.kakao.com/1130369934","https://blog.naver.com/jjuya_st/223717574764","https://wecan-cafe.tistory.com/86"]
   },
   {
@@ -598,7 +598,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "협재해수욕장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "555396252",
-    note: "한림로 354. 카카오맵(2026-10-31): 10:00~21:00, 크림바닐라 6,500원, 단체석, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 2건.",
+    note: "한림로 354. 카카오맵(2026-10-31): 10:00~21:00, 크림바닐라 6,500원, 단체석, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/555396252","https://blog.naver.com/everyday_080919/224173158750","https://blog.naver.com/kimcooee/224046224607"]
   },
   {
@@ -681,7 +681,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "협재해수욕장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 0, parking: null,
     kakaoId: "801041363",
-    note: "한림로 336. 카카오맵(2026-10-31): 10:00~20:00. 물건값은 빼고 0원으로 넣었어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 2건.",
+    note: "한림로 336. 카카오맵(2026-10-31): 10:00~20:00. 물건값은 빼고 0원으로 넣었어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/801041363","https://blog.naver.com/rara63_/224410009561","https://blog.naver.com/bokchi_/223820774944"]
   },
   {
@@ -693,7 +693,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "협재해수욕장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "1273891084",
-    note: "한림로 335. 카카오맵(2026-10-31): 11:00~21:00. 물건값은 빼고 0원으로 넣었어요. 반려견 후기(블로그, 2026-10-31 확인): 반려동물 동반이 된다는 글 2건.",
+    note: "한림로 335. 카카오맵(2026-10-31): 11:00~21:00. 물건값은 빼고 0원으로 넣었어요. 반려견 후기(블로그, 2026-10-31 확인): 반려동물 동반이 된다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/1273891084","https://bosiri.tistory.com/1","https://blog.naver.com/colorlesss/224248812711"]
   }
 ];

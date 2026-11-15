@@ -57,7 +57,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "동백수목원 정류장 걸어서 1분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "236028555",
-    note: "위미리 929-2. 카카오맵(2026-10-31): 09:00~17:00, 성인 8,000원, 휠체어 접근, 반려동물 동반, 무료 주차. 카카오맵에는 반려동물 동반으로 나오지만 금지라는 후기도 있어 정보 없음으로 뒀어요.",
+    note: "위미리 929-2. 카카오맵(2026-10-31): 09:00~17:00, 성인 8,000원, 휠체어 접근, 반려동물 동반, 무료 주차. 카카오맵에는 반려동물 동반으로 나오지만 금지라는 후기도 있어 정보 없음으로 뒀어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/236028555","https://blog.naver.com/kimmk74/224165388774"]
   },
   {
@@ -125,11 +125,12 @@ const PLACES = [
     id: "hueree", name: "휴애리자연생활공원", type: "볼거리",
     desc: "분홍빛 자연 산책길",
     stayMin: 80, cost: 13000, open: "09:00", close: "18:00", closedDays: [],
+    lastOrder: "16:30",
     lat: 33.30941, lng: 126.63541,
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "휴애리 자연생활공원 정류장 걸어서 5분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "27581976",
-    note: "신례동로 256. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 성인 13,000원, 휠체어 접근, 유모차 가능, 반려동물 동반.",
+    note: "신례동로 256. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 성인 13,000원, 휠체어 접근, 유모차 가능, 반려동물 동반. 카카오맵 다시 확인(2026-11-15): 09:00~18:00 같음, 입장 마감 16:30.",
     sources: ["https://place.map.kakao.com/27581976"]
   },
   {
@@ -140,7 +141,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "동백수목원 정류장 걸어서 2분", bikeRack: null, evChargerMin: 6, parking: null,
     kakaoId: "1627183484",
-    note: "태위로 278. 카카오맵(2026-10-31): 10:00~19:00. 물건값은 빼고 0원으로 넣었어요.",
+    note: "태위로 278. 카카오맵(2026-10-31): 10:00~19:00. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/1627183484"]
   },
   {
@@ -280,7 +281,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "위미감협 정류장 걸어서 5분", bikeRack: null, evChargerMin: 12, parking: null,
     kakaoId: "2065544005",
-    note: "위미대성로 58. 카카오맵(2026-10-31): 12:30~22:00, 2인 66,000원(1인 33,000원), 반려동물 동반, 장애인 시설.",
+    note: "위미대성로 58. 카카오맵(2026-10-31): 12:30~22:00, 2인 66,000원(1인 33,000원), 반려동물 동반, 장애인 시설. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/2065544005"]
   },
   {
@@ -369,14 +370,14 @@ const PLACES = [
   {
     id: "oasis-garden", name: "오아시스가든 제주", type: "카페",
     desc: "한라산과 오리가 있는 정원 카페",
-    stayMin: 60, cost: 6500, open: "10:00", close: "19:00", closedDays: [],
+    stayMin: 60, cost: 6500, open: "10:00", close: "20:00", closedDays: [],
     dogReview: true,
     strollerReview: true,
     lat: 33.29028, lng: 126.60855,
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "하례2리 정류장 걸어서 5분", bikeRack: null, evChargerMin: 5, parking: null,
     kakaoId: "59281417",
-    note: "중산간동로 7373. 카카오맵(2026-10-31): 10:00~19:00, 연중무휴, 딸기라떼 6,500원. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 온 손님이 있다는 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 매장이 넓어 유모차가 된다는 후기 2건.",
+    note: "중산간동로 7373. 카카오맵(2026-10-31): 10:00~19:00, 연중무휴, 딸기라떼 6,500원. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 온 손님이 있다는 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 매장이 넓어 유모차가 된다는 후기 2건. 카카오맵 다시 확인(2026-11-15): 10:00~20:00으로 바뀜.",
     sources: ["https://place.map.kakao.com/59281417","https://blog.naver.com/hiel_joon/224441794107","https://blog.naver.com/porori4611/224438351705","https://blog.naver.com/jadore_yoon/224353375652","https://blog.naver.com/haloveyun/224426249030"]
   },
   {

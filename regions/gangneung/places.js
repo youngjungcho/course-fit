@@ -226,7 +226,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "18525909",
-    note: "금성로 21. 카카오맵(2026-11-01): 연중무휴, 장애인 시설. 관광공사 무장애: 출입구 턱 없음. 물건값은 빼고 0원으로 넣었어요. 영업시간은 확인 못 했어요.",
+    note: "금성로 21. 카카오맵(2026-11-01): 연중무휴, 장애인 시설. 관광공사 무장애: 출입구 턱 없음. 물건값은 빼고 0원으로 넣었어요. 영업시간은 확인 못 했어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["관광공사 API 3537206","https://place.map.kakao.com/18525909"]
   },
   {
@@ -238,7 +238,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "2031053833",
-    note: "창해로350번길 23. 카카오맵(2026-11-01): 10:00~21:00. 물건값은 빼고 0원으로 넣었어요. 반려견 후기(블로그, 2026-11-01 확인): 반려동물 동반 가능이라는 글 2건.",
+    note: "창해로350번길 23. 카카오맵(2026-11-01): 10:00~21:00. 물건값은 빼고 0원으로 넣었어요. 반려견 후기(블로그, 2026-11-01 확인): 반려동물 동반 가능이라는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/2031053833","https://blog.naver.com/malcong1004/224423697595","https://blog.naver.com/dk0714/224408671014"]
   },
   {
@@ -357,7 +357,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "21345639",
-    note: "창해로 491. 카카오맵(2026-11-01): 11:00~23:00(금·토 24:00), 회 80,000~100,000원(몇 인분인지는 확인 못 했어요). 관광공사 무장애: 출입구까지 경사로, 턱 없음. 반려견 후기(블로그, 2026-11-01 확인): 애견가방이 있으면 된다는 글 2건. 유모차 후기(블로그, 2026-11-01 확인): 유모차를 둘 공간이 된다는 글 2건 이상.",
+    note: "창해로 491. 카카오맵(2026-11-01): 11:00~23:00(금·토 24:00), 회 80,000~100,000원(몇 인분인지는 확인 못 했어요). 관광공사 무장애: 출입구까지 경사로, 턱 없음. 반려견 후기(블로그, 2026-11-01 확인): 애견가방이 있으면 된다는 글 2건. 유모차 후기(블로그, 2026-11-01 확인): 유모차를 둘 공간이 된다는 글 2건 이상. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["관광공사 API 3536121","https://place.map.kakao.com/21345639","https://blog.naver.com/ff_club/224325445164","https://blog.naver.com/hyj093/224214314007","https://blog.naver.com/00tanky/224402081481","https://blog.naver.com/yoonsoul730/224325588896"]
   },
   {
@@ -428,7 +428,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "1948334065",
-    note: "죽헌길 167. 카카오맵(2026-11-01): 10:00~21:00(화 18:00), 매달 마지막 화 휴무(7~9월은 무휴), 인절미 크림 라떼 6,000원, 무료 주차. 관광공사 무장애: 출입구까지 경사로, 턱 없음, 자동문. 유모차 후기(블로그, 2026-11-01 확인): 엘리베이터가 있어 유모차가 된다는 글 2건.",
+    note: "죽헌길 167. 카카오맵(2026-11-01): 10:00~21:00(화 18:00), 매달 마지막 화 휴무(7~9월은 무휴), 인절미 크림 라떼 6,000원, 무료 주차. 관광공사 무장애: 출입구까지 경사로, 턱 없음, 자동문. 유모차 후기(블로그, 2026-11-01 확인): 엘리베이터가 있어 유모차가 된다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간 같음. 매월 마지막 주 화요일 휴무(7~9월은 무휴).",
     sources: ["관광공사 API 3359671","https://place.map.kakao.com/1948334065","https://blog.naver.com/1513vv/223971821863","https://blog.naver.com/carismaysj/224043313253"]
   },
   {
@@ -693,7 +693,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "2047293961",
-    note: "초당순두부길 2. 카카오맵(2026-11-01): 10:00~20:30, 15:00~17:00 쉬는 시간, 19:30 마지막 주문, 불고기 20,000원부터, 넓은 전용 주차장, 유아의자. 관광공사 무장애: 출입구 턱 없음.",
+    note: "초당순두부길 2. 카카오맵(2026-11-01): 10:00~20:30, 15:00~17:00 쉬는 시간, 19:30 마지막 주문, 불고기 20,000원부터, 넓은 전용 주차장, 유아의자. 관광공사 무장애: 출입구 턱 없음. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["관광공사 API 2845593","https://place.map.kakao.com/2047293961"]
   },
   {

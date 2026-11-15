@@ -60,7 +60,7 @@ function lint(r) {
     if ((p.open == null) !== (p.close == null)) E(p, "open과 close는 둘 다 있거나 둘 다 null");
     if (isTime(p.open) && isTime(p.close) && toMin(p.close) <= toMin(p.open)) W(p, `close ${p.close}가 open ${p.open}보다 빨라요 (자정 넘김이면 "24:00"으로)`);
     if (isTime(p.lastOrder) && isTime(p.close) && toMin(p.lastOrder) > toMin(p.close)) E(p, "lastOrder가 close보다 늦어요");
-    if (p.lastOrder && !["식당", "카페"].includes(p.type)) W(p, "lastOrder는 식당·카페에만 써요");
+    // lastOrder: 식당·카페는 마지막 주문, 볼거리·공원·쇼핑은 입장 마감
     if (!(p.closedDays === null || (Array.isArray(p.closedDays) && p.closedDays.every((d) => DAYS.includes(d))))) E(p, `closedDays ${JSON.stringify(p.closedDays)}는 ["월"] 같은 요일 목록, 없으면 [], 모르면 null`);
     for (const [d, v] of Object.entries(p.hoursByDay ?? {})) if (!DAYS.includes(d) || !(v === null || (Array.isArray(v) && v.length === 2 && v.every(isTime)))) E(p, `hoursByDay ${d}가 이상해요`);
     for (const br of p.breaks ?? []) if (!(Array.isArray(br) && br.length === 2 && br.every(isTime) && toMin(br[0]) < toMin(br[1]))) E(p, `breaks ${JSON.stringify(br)}가 이상해요`);

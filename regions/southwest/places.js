@@ -188,13 +188,14 @@ const PLACES = [
     id: "aerospace-museum", name: "제주항공우주박물관", type: "볼거리",
     desc: "우주와 항공 전시관",
     stayMin: 90, cost: null, open: "09:00", close: "18:00", closedDays: [],
+    lastOrder: "17:00",
     indoor: true,
     strollerReview: true,
     lat: 33.30435, lng: 126.29979,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "제주항공우주박물관 정류장 걸어서 3분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "19585161",
-    note: "안덕면 항공우주로 83. 카카오맵(2026-10-31): 09:00~18:00(매표 17:00까지), 장애인 시설, 무료 주차. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 편하다는 후기 2건, 36개월까지 대여. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "안덕면 항공우주로 83. 카카오맵(2026-10-31): 09:00~18:00(매표 17:00까지), 장애인 시설, 무료 주차. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 편하다는 후기 2건, 36개월까지 대여. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 09:00~18:00, 매표 마감 17:00. 공식 누리집(jdc-jam.com, 2026-11-15): 매월 셋째 월요일 휴관(공휴일이면 다음 평일).",
     sources: ["https://place.map.kakao.com/19585161","https://blog.naver.com/jky675/224409045818","https://blog.naver.com/awefth565/224040167886"]
   },
   {
@@ -245,7 +246,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "세계자동차 피아노박물관 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "7952882",
-    note: "안덕면 중산간서로 1610. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유모차 가능, 반려동물 동반, 주차. 입장료는 확인 못 했어요.",
+    note: "안덕면 중산간서로 1610. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유모차 가능, 반려동물 동반, 주차. 입장료는 확인 못 했어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/7952882"]
   },
   {
@@ -467,7 +468,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: null, solo: null,
     station: "화순리 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "11143153",
-    note: "안덕면 산방로 7. 카카오맵(2026-10-31): 10:00~21:00, 15:00~17:00 브레이크타임, 화 휴무, 전복돌솥밥 15,000원, 유아의자, 전용 주차. 유모차 후기(블로그, 2026-10-31 확인): 2층까지 경사로라 유모차가 된다는 글 2건.",
+    note: "안덕면 산방로 7. 카카오맵(2026-10-31): 10:00~21:00, 15:00~17:00 브레이크타임, 화 휴무, 전복돌솥밥 15,000원, 유아의자, 전용 주차. 유모차 후기(블로그, 2026-10-31 확인): 2층까지 경사로라 유모차가 된다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/11143153","https://blog.naver.com/jeoungs2/223851788500","https://blog.naver.com/alkong_yun/223846217873"]
   },
   {
@@ -551,7 +552,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "오설록 정류장 걸어서 2분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "11332661",
-    note: "안덕면 신화역사로 15. 카카오맵(2026-10-31): 09:00~18:00, 17:30 마지막 주문, 말차아이스크림 5,800원, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 경사로와 평탄한 길로 유모차가 된다는 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "안덕면 신화역사로 15. 카카오맵(2026-10-31): 09:00~18:00, 17:30 마지막 주문, 말차아이스크림 5,800원, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 경사로와 평탄한 길로 유모차가 된다는 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/11332661","https://blog.naver.com/deokhodong/224380133441","https://blog.naver.com/daeun_93/224266716269","https://blog.naver.com/you_need_more/224414152342","https://blog.naver.com/jini0320/224439058792"]
   },
   {
@@ -562,7 +563,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "짐개동산 정류장 걸어서 7분", bikeRack: null, evChargerMin: 7, parking: true,
     kakaoId: "336756812",
-    note: "대정읍 동일하모로98번길 48-59. 카카오맵(2026-10-31): 10:00~20:00, 목 휴무, 아메리카노 6,500원, 테라스, 반려동물 동반, 장애인 시설, 무료 주차.",
+    note: "대정읍 동일하모로98번길 48-59. 카카오맵(2026-10-31): 10:00~20:00, 목 휴무, 아메리카노 6,500원, 테라스, 반려동물 동반, 장애인 시설, 무료 주차. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/336756812"]
   },
   {

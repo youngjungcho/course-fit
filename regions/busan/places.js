@@ -252,7 +252,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "부전(동해선)역 걸어서 9분", bikeRack: null, evChargerMin: 6, parking: null,
     kakaoId: "11585715",
-    note: "부산진구 시민공원로 73. 카카오맵(2026-11-01): 05:00~24:00, 무료입장, 휠체어 접근, 유모차 가능, 카페·식당, 반려동물 동반.",
+    note: "부산진구 시민공원로 73. 카카오맵(2026-11-01): 05:00~24:00, 무료입장, 휠체어 접근, 유모차 가능, 카페·식당, 반려동물 동반. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/11585715"]
   },
   {
@@ -462,7 +462,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "중앙역 걸어서 8분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "999813771",
-    note: "중구 대청로 112. 카카오맵(2026-11-01): 09:00~18:00, 월 휴무, 무료입장, 사전예약 가능, 휠체어 접근, 유모차 가능.",
+    note: "중구 대청로 112. 카카오맵(2026-11-01): 09:00~18:00, 월 휴무, 무료입장, 사전예약 가능, 휠체어 접근, 유모차 가능. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/999813771"]
   },
   {
@@ -632,7 +632,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: true, solo: null,
     station: "자갈치역 걸어서 9분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "20543715",
-    note: "중구 신창동4가 56-4. 카카오맵(2026-11-01): 09:00~20:00, 일 휴무, 반려동물 동반. 관광공사 무장애: 출입구까지 경사로, 단차 없음. 물건값은 빼고 0원으로 넣었어요.",
+    note: "중구 신창동4가 56-4. 카카오맵(2026-11-01): 09:00~20:00, 일 휴무, 반려동물 동반. 관광공사 무장애: 출입구까지 경사로, 단차 없음. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["관광공사 API 1018702","https://place.map.kakao.com/20543715"]
   },
   {
@@ -749,7 +749,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "남포역 걸어서 10분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "8190288",
-    note: "중구 중구로30번길 21-1. 카카오맵(2026-11-01): 11:00~21:00, 20:30 마지막 주문, 낙곱새볶음 15,000원. 반려견 후기(블로그, 2026-11-01 확인): 애견동반 글 2건.",
+    note: "중구 중구로30번길 21-1. 카카오맵(2026-11-01): 11:00~21:00, 20:30 마지막 주문, 낙곱새볶음 15,000원. 반려견 후기(블로그, 2026-11-01 확인): 애견동반 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/8190288","https://blog.naver.com/julie9513/223907910375","https://blog.naver.com/lmk5276/224257923336"]
   },
   {
@@ -1008,7 +1008,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "서면역 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "535075572",
-    note: "부산진구 중앙대로 714. 카카오맵(2026-11-01): 11:00~21:00, 15:00~17:00 쉬는 시간, 닭칼국수 9,000원, 반려동물 동반, 유아의자, 키즈프렌들리. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 편하다는 글 2건.",
+    note: "부산진구 중앙대로 714. 카카오맵(2026-11-01): 11:00~21:00, 15:00~17:00 쉬는 시간, 닭칼국수 9,000원, 반려동물 동반, 유아의자, 키즈프렌들리. 유모차 후기(블로그, 2026-11-01 확인): 유모차로 편하다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
     sources: ["https://place.map.kakao.com/535075572","https://blog.naver.com/alik1982/224114073076","https://blog.naver.com/jeonglog1004/223929533131"]
   },
   {
