@@ -435,10 +435,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261115m"></script>
+<script src="regions.js?v=20261115n"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261115m";
+const REGION_VERSION = "20261115n";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -1177,6 +1177,8 @@ const inBeachSeason = (p) => p.beachSeason ? state.date.slice(5) >= p.beachSeaso
 // 해안선(COASTLINE)에서 남쪽으로 2.5km 넘게 떨어지면 산 쪽(중산간)
 function isInland(p) {
   const [a, b] = COASTLINE;
+  // 경주처럼 해안선이 남북으로 길게 뻗고 바다가 동쪽이면, 해안선에서 서쪽으로 2.5km 넘게 떨어진 곳이 산 쪽이에요
+  if (REGION.coastEast) return (a.lng + (p.lat - a.lat) / (b.lat - a.lat) * (b.lng - a.lng) - p.lng) * 90 > 2.5;
   const coastLat = a.lat + (p.lng - a.lng) / (b.lng - a.lng) * (b.lat - a.lat);
   // 서귀포처럼 바다가 남쪽인 지역은 북쪽이 산 쪽이에요
   const south = (coastLat - p.lat) * 111;
@@ -1548,7 +1550,7 @@ function explainCourse(stops, back) {
   // 바닷가·산 쪽
   const inland = stops.filter((s) => isInland(s.place)).length, sea = stops.length - inland;
   if (state.area === "indoor") out.push("비가 와도 괜찮게 공원과 야외 볼거리는 뺐어요.");
-  else out.push(inland && sea ? `바닷가 ${sea}곳, 산 쪽 ${inland}곳을 섞었어요.` : inland ? `모두 산 쪽(중산간)이에요.` : `모두 바닷가 쪽이에요.`);
+  else out.push(inland && sea ? `바닷가 ${sea}곳, 산 쪽 ${inland}곳을 섞었어요.` : inland ? `모두 ${REGION.area === "제주" ? "산 쪽(중산간)" : "바다에서 떨어진 안쪽"}이에요.` : `모두 바닷가 쪽이에요.`);
   // 이동
   const moves = [...stops.map((s) => s.move), ...(back ? [back] : [])];
   const total = moves.reduce((m, x) => m + x.min, 0);

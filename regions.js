@@ -14,6 +14,7 @@
 //   zones    큰 도시에서 고르는 구역. 장소의 zone 칸과 맞춰요. near = "옆 구역도 조금"에서 같이 쓰는 구역
 //   noBus    버스 자료가 없는 지역: "뚜벅이"를 빼고 busNote를 보여 줘요
 //   noSeaSunset 바다로 해가 지지 않는 곳: 바닷가라고 노을 명소로 치지 않아요
+//   coastEast 해안선이 남북으로 뻗고 바다가 동쪽인 곳: 해안선 서쪽 2.5km 넘으면 산 쪽으로 봐요
 const JEJU_AREA = {
   area: "제주", sun: [33.46, 126.33], bounds: { latMin: 33.1, latMax: 33.6, lngMin: 126.1, lngMax: 127.0 },
   hub: { label: "제주공항 (비행기)", emoji: "✈️", ride: "비행기", place: "공항", buffer: 90, bufferLabel: "1시간 반" },
@@ -50,6 +51,6 @@ const REGIONS = [
   { ...BUSAN_AREA, id: "busan", count: 106, router: "OSRM", name: "부산", search: "부산", keywords: "해운대 광안리 서면 남포동 영도 기장 송도", note: "지하철·버스", noSeaSunset: true, splitTransit: true,
     zones: [{ id: "east", count: 27, label: "해운대·송정·기장", near: ["gwangan"] }, { id: "gwangan", count: 20, label: "광안리·수영·남구", near: ["east", "seomyeon"] }, { id: "seomyeon", count: 19, label: "서면·전포·동래", near: ["gwangan", "nampo"] }, { id: "nampo", count: 40, label: "남포동·영도·송도·다대포", near: ["seomyeon"] }],
     busNote: "뚜벅이는 지하철과 버스로 짜요. 배차 간격은 평균이고 실시간 도착 정보는 아니에요. 휠체어 코스는 저상버스·엘리베이터 자료가 아직 없어 걷기·차 기준으로 짜요." },
-  { ...GYEONGBUK_GYEONGJU, id: "gyeongju", count: 61, router: "OSRM", name: "경주", search: "경주", keywords: "황리단길 대릉원 보문 불국사 감포 양남", note: "차로 다니는 곳", noBus: true, noSeaSunset: true,
+  { ...GYEONGBUK_GYEONGJU, id: "gyeongju", count: 61, router: "OSRM", name: "경주", search: "경주", keywords: "황리단길 대릉원 보문 불국사 감포 양남", note: "차로 다니는 곳", noBus: true, noSeaSunset: true, coastEast: true,
     busNote: "경주는 버스 정보를 아직 넣지 않았어요. 볼거리가 넓게 흩어져 있어 차나 택시로 다니는 코스로 짜요." }
 ];
