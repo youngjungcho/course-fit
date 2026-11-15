@@ -36,8 +36,10 @@ window.readPlace = async (id) => {
   const s = head.indexOf("영업정보");
   const ends = ["수정제안", "URL", "주소"].map((k) => head.indexOf(k, s + 4)).filter((x) => x > 0);
   const hours = s < 0 ? "" : head.slice(s + 4, ends.length ? Math.min(...ends) : s + 600).split("\n").join(" ").replace(/\(\d+\/\d+\)/g, "").replace(/접기|펼치기/g, "").replace(/\s+/g, " ").trim();
-  const i = head.indexOf("시설정보"), j = head.indexOf("kanana", i);
-  const fac = i < 0 ? "" : head.slice(i + 4, j > i ? j : i + 120).split("\n").filter(Boolean).join("|");
+  // 시설정보 칸은 뒤에 붙는 방문자 그래프·통계 글자 앞에서 잘라요
+  const i = head.indexOf("시설정보");
+  const facEnds = ["kanana", "방문자", "데이터", "통계", "그래프", "수정제안"].map((k) => head.indexOf(k, i + 4)).filter((x) => x > i);
+  const fac = i < 0 ? "" : head.slice(i + 4, facEnds.length ? Math.min(...facEnds, i + 160) : i + 120).split("\n").filter(Boolean).join("|");
   const pet = head.split("\n").filter((l) => /반려|애견|펫|강아지/.test(l)).slice(0, 3).join(" / ").slice(0, 160);
   const closed = (head.slice(0, 800).match(/[^\n]*(폐업|휴업|영업종료|임시휴무)[^\n]*/) ?? [""])[0];
   return { id, ok: head.includes("장소 기본 정보"), closed, hours, fac, pet };
