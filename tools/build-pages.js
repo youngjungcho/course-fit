@@ -58,8 +58,12 @@ function page(r, places, date) {
   const count = (f) => places.filter(f).length;
   const dog = count((p) => p.dog === true), stroller = count((p) => p.stroller === true), stepFree = count((p) => p.stepFree === true);
   const moves = r.noBus ? "자전거·자차·렌터카·택시" : r.subway ? "뚜벅이(지하철·버스)·자전거·자차·렌터카·택시" : "뚜벅이(버스)·자전거·자차·렌터카·택시";
-  const title = `${name} 하루 여행 코스 · 반려견·아이·휠체어 맞춤 | 쉼,표`;
-  const desc = `${name} 장소 ${places.length}곳으로 짜는 하루 코스. 반려견 동반 ${dog}곳, 유모차 ${stroller}곳, 계단 없는 곳 ${stepFree}곳. 누구랑(반려견·아이·휠체어·혼자), 어떻게(${moves}) 다니는지 고르면 운영시간과 이동 시간을 따져 코스를 짜 드려요.`;
+  // 휠체어는 index.html의 wheelReady와 같은 기준(계단 없음 15곳 이상, 그중 식당 3곳 이상)일 때만 내세워요
+  const wheel = places.filter((p) => p.stepFree === true && p.lat !== null);
+  const wheelOk = wheel.length >= 15 && wheel.filter((p) => p.type === "식당").length >= 3;
+  const whoList = wheelOk ? "반려견·아이·휠체어·혼자" : "반려견·아이·혼자";
+  const title = `${name} 하루 여행 코스 · ${wheelOk ? "반려견·아이·휠체어" : "반려견·아이"} 맞춤 | 쉼,표`;
+  const desc = `${name} 장소 ${places.length}곳으로 짜는 하루 코스. 반려견 동반 ${dog}곳, 유모차 ${stroller}곳${wheelOk ? `, 계단 없는 곳 ${stepFree}곳` : ""}. 누구랑(${whoList}), 어떻게(${moves}) 다니는지 고르면 운영시간과 이동 시간을 따져 코스를 짜 드려요.`;
 
   // 장소 묶음: 구역이 있으면 구역별, 없으면 종류별
   const sections = r.zones
@@ -166,7 +170,7 @@ ${JSON.stringify(ld, null, 1).replace(/</g, "\\u003c")}
 <div class="wrap">
   <div class="top"><a href="/">쉼,표</a><a href="${appUrl}">코스 짜기 →</a></div>
   <h1>${esc(name)} 하루 여행 코스</h1>
-  <p class="lead">${esc(name)} 장소 ${places.length}곳 중에서, 누구랑(반려견·아이·휠체어·혼자) 어떻게(${esc(moves)}) 다니는지에 맞춰 운영시간과 이동 시간을 따진 하루 코스를 짜 드려요.</p>
+  <p class="lead">${esc(name)} 장소 ${places.length}곳 중에서, 누구랑(${whoList}) 어떻게(${esc(moves)}) 다니는지에 맞춰 운영시간과 이동 시간을 따진 하루 코스를 짜 드려요.</p>
   <div class="facts">
     <div><b>${places.length}</b><span>장소</span></div>
     <div><b>${dog}</b><span>반려견 동반</span></div>
