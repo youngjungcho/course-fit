@@ -36,6 +36,7 @@
 }
 </script>
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="쉼,표">
 <meta property="og:title" content="쉼,표 · 내 조건에 맞춘 하루 여행 코스">
 <meta property="og:description" content="잠깐 멈춰가는 하루. 누구랑, 어떻게, 몇 시간 — 고르면 제주·강릉·부산 하루 코스가 나와요.">
 <meta property="og:url" content="https://swimpyonote.com/">
@@ -264,6 +265,11 @@
   .link { border: 0; background: none; color: var(--accent); font-size: 15px; text-decoration: underline; cursor: pointer; padding: 4px; }
   .share-msg { color: var(--muted); font-size: 14px; margin: 0 0 4px; overflow-wrap: anywhere; background: var(--bg); }
   .share-msg:empty { display: none; }
+  .weather { margin: 0 0 12px; padding: 10px 12px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); font-size: 15px; }
+  .wx-line { margin: 0; }
+  .wx-line small { color: var(--muted); font-size: 13px; }
+  .wx-tip { margin: 8px 0 0; color: var(--warn); font-size: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .wx-tip .ghost { flex: 0 0 auto; min-height: 40px; padding: 0 12px; font-size: 14px; color: var(--text); }
   .share-choice { display: flex; gap: 8px; margin: 0 0 8px; }
   .share-choice .kakao { background: #fee500; color: #191919; border-color: #fee500; }
   .skipped { color: var(--muted); font-size: 15px; margin: 0 0 8px; }
@@ -388,10 +394,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261115h"></script>
+<script src="regions.js?v=20261115i"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261115h";
+const REGION_VERSION = "20261115i";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -1500,6 +1506,66 @@ function explainCourse(stops, back) {
 }
 
 // 코스 공유: 폰이면 공유 창(카톡 등), 아니면 링크 복사
+// ----- 날씨: 노르웨이 기상청(MET Norway) 예보를 지역 한가운데(REGION.sun) 기준으로 받아요 (열쇠 없음, 9일 뒤까지) -----
+// 지역 좌표만 보내요 (사용자 위치는 보내지 않아요). 같은 지역은 1시간 동안 다시 받지 않아요
+const weatherCache = {};
+async function loadForecast() {
+  const [lat, lng] = REGION.sun.map((v) => v.toFixed(2));
+  const key = `wx-${lat},${lng}`;
+  const now = Date.now();
+  if (weatherCache[key] && now - weatherCache[key].at < 3600e3) return weatherCache[key].data;
+  try { const c = JSON.parse(sessionStorage.getItem(key)); if (c && now - c.at < 3600e3) { weatherCache[key] = c; return c.data; } } catch {}
+  const r = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${lat}&lon=${lng}`);
+  if (!r.ok) throw new Error(r.status);
+  const data = (await r.json()).properties.timeseries;
+  weatherCache[key] = { at: now, data };
+  try { sessionStorage.setItem(key, JSON.stringify(weatherCache[key])); } catch {}
+  return data;
+}
+const WX_LABEL = [[/thunder/, "뇌우", "⛈️"], [/snow/, "눈", "🌨️"], [/sleet/, "진눈깨비", "🌨️"], [/heavyrain/, "많은 비", "🌧️"], [/rainshowers/, "소나기", "🌦️"], [/lightrain/, "약한 비", "🌦️"], [/rain/, "비", "🌧️"],
+  [/fog/, "안개", "🌫️"], [/cloudy/, "흐림", "☁️"], [/partlycloudy/, "구름 조금", "⛅"], [/fair/, "대체로 맑음", "🌤️"], [/clearsky/, "맑음", "☀️"]];
+const wxOf = (code) => WX_LABEL.find(([re]) => re.test(code)) ?? [null, "", "🌤️"];
+const WX_RANK = (code) => /thunder|snow|sleet|heavyrain/.test(code) ? 4 : /rain/.test(code) ? 3 : /fog/.test(code) ? 2 : /cloudy/.test(code) && !/partly/.test(code) ? 1 : 0;
+// 코스 시간(출발~끝, 한국 시각)에 걸치는 예보만 모아요. 처음 2~3일은 1시간, 그 뒤는 6시간 단위예요
+function weatherFor(series, date, fromMin, toMin) {
+  const t0 = Date.parse(`${date}T00:00:00+09:00`) + fromMin * 60e3, t1 = Date.parse(`${date}T00:00:00+09:00`) + toMin * 60e3;
+  let worst = null, rain = 0, wind = 0, temps = [], any = false;
+  for (const e of series) {
+    const t = Date.parse(e.time);
+    const block = e.data.next_1_hours ? 1 : e.data.next_6_hours ? 6 : 0;
+    if (!block || t + block * 3600e3 <= t0 || t >= t1) continue;
+    any = true;
+    const d = e.data[block === 1 ? "next_1_hours" : "next_6_hours"];
+    const code = d.summary.symbol_code;
+    if (!worst || WX_RANK(code) > WX_RANK(worst)) worst = code;
+    rain += d.details?.precipitation_amount ?? 0;
+    wind = Math.max(wind, e.data.instant.details.wind_speed ?? 0);
+    temps.push(e.data.instant.details.air_temperature);
+  }
+  if (!any) return null;
+  return { code: worst, rain: Math.round(rain * 10) / 10, wind: Math.round(wind), tmin: Math.round(Math.min(...temps)), tmax: Math.round(Math.max(...temps)) };
+}
+async function drawWeather(stops, finish, redo) {
+  const box = document.getElementById("weather");
+  if (!box) return;
+  const date = state.date, region = REGION;
+  let series;
+  try { series = await loadForecast(); } catch { return; } // 날씨를 못 받아도 코스는 그대로 보여요
+  if (state.date !== date || REGION !== region || !document.body.contains(box)) return; // 그새 조건이 바뀌었어요
+  const w = weatherFor(series, date, toMin(state.depart), finish);
+  if (!w) return; // 예보 범위(9일) 밖이에요
+  const [, label, icon] = wxOf(w.code);
+  const wet = WX_RANK(w.code) >= 3 || w.rain >= 1;
+  const outdoor = stops.filter((s) => s.place.type === "공원" || (s.place.type === "볼거리" && !s.place.indoor)).length;
+  const coast = stops.some((s) => (s.place.type === "공원" || s.place.type === "볼거리") && !isInland(s.place) && /바다|해안|해변|해수욕|포구|코지|산책로/.test(s.place.name + s.place.note));
+  box.innerHTML = `<p class="wx-line">${em(icon)} <b>${label}</b> · ${w.tmin === w.tmax ? `${w.tmin}℃` : `${w.tmin}~${w.tmax}℃`}${w.rain ? ` · 비 ${w.rain}mm` : ""} · 바람 ${w.wind}m/s <small>(코스 시간 예보)</small></p>
+    ${wet && outdoor && state.area !== "indoor" ? `<p class="wx-tip">비 소식이 있어요. 야외 장소가 ${outdoor}곳 있어요. <button class="ghost" id="wxIndoor">${em("☔")} 실내 위주로 다시 짜기</button></p>` : ""}
+    ${w.wind >= 9 && coast ? `<p class="wx-tip">바람이 세요(${w.wind}m/s). 바닷가 산책로·해안 절벽에서는 조심하세요.</p>` : ""}`;
+  box.hidden = false;
+  track("weather_show", { region: REGION.id, wet: wet ? 1 : 0 });
+  document.getElementById("wxIndoor")?.addEventListener("click", () => { state.area = "indoor"; state.alt = 0; track("weather_indoor", { region: REGION.id }); redo(); });
+}
+
 // 공유: 카카오톡 카드로 보내기 / 링크 복사·다른 앱 중에서 골라요
 let lastCourse = null;
 function shareCourse() {
@@ -1792,6 +1858,7 @@ function renderResult() {
     <h1>이런 코스 어때요?</h1>
     <p class="sub">${em(who.emoji)} ${who.label} · ${em(how.emoji)} ${how.label}${state.how === "any" ? ` · ${state.people}명` : ""}</p>
     <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${hubOf() ? `${state.leave} ${hubOf().ride}` : hoursText(state.hours)} · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}${state.zone && state.zone !== "all" ? ` · ${esc(ZONES.find((z) => z.id === state.zone).label)}${roaming() ? " + 옆 구역" : ""}` : ""}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
+    <div class="weather" id="weather" role="status" hidden></div>
     ${mustBar()}
     ${stops.length ? `
       <div class="summary">
@@ -1825,6 +1892,7 @@ function renderResult() {
       ${costUnknown ? `<p>• 비용을 모르는 곳 ${costUnknown}곳은 이 지역 같은 종류 장소의 가운데 값으로 어림했어요. 실제와 다를 수 있어요.</p>` : ""}
       ${unknownSkipped ? `<p>• ${{ dog: "반려견", kid: "유모차", wheel: "계단" }[state.who]} 정보가 없는 곳 ${unknownSkipped}곳은 안전하게 뺐어요. 꼭 가고 싶은 곳이 있으면 전화로 확인해 보세요.</p>` : ""}
       ${noLocation ? `<p>• 위치를 아직 모르는 곳 ${noLocation}곳은 코스에서 뺐어요.</p>` : ""}
+      <p>• 날씨는 노르웨이 기상청(MET Norway) 예보로, 지역 한가운데 기준이에요(CC BY 4.0). 산 쪽·바닷가는 다를 수 있어요.</p>
       <p>• 방문 통계를 위해 구글 애널리틱스를 써요. <a href="privacy.html">개인정보처리방침</a></p>
     </details>
     <button class="${stops.length ? "ghost wide" : "primary"}" id="again">조건 바꾸기</button></div>
@@ -1859,6 +1927,7 @@ function renderResult() {
   document.getElementById("shareKakao")?.addEventListener("click", shareKakao);
   document.getElementById("shareLink")?.addEventListener("click", shareLink);
   lastCourse = { stops, spent, used, costUnknown };
+  if (stops.length) drawWeather(stops, finish, redo);
   document.getElementById("save")?.addEventListener("click", (e) => {
     const on = toggleSaved(stops);
     e.currentTarget.innerHTML = on ? `${em("⭐")} 저장됨` : `${em("☆")} 저장`;

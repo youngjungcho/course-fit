@@ -113,6 +113,7 @@ function page(r, places, date) {
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${url}">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="쉼,표">
 <meta property="og:title" content="${esc(`${name} 하루 여행 코스 · 쉼,표`)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${url}">
