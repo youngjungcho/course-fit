@@ -1,0 +1,15 @@
+# 올릴 때마다 자동 검사 (tools/ci-check.sh). 실패하면 GitHub 저장소의 Actions 탭과 메일로 알려 줘요
+name: 자료·코스 검사
+on:
+  push:
+    branches: [main, "guide/**"]
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bash tools/ci-check.sh

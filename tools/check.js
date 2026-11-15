@@ -23,15 +23,19 @@ const DATA = new Function(read(`regions/${RG}/places.js`) + read(`regions/${RG}/
 const T = new Function("DATA", read("regions.js") + stub + main +
   `;applyRegion(REGIONS.find((r) => r.id === ${JSON.stringify(RG)}), DATA);return { makeCourse, explainCourse, state, DEPART, HOURS, BUDGET, toMin, hoursOf, airportBuffer, NEED, tripDay, lastOrderMin, STARTS };`)(DATA);
 
+// QUICK=1: 자동 검사(GitHub Actions)용 빠른 모드. 출발 2개·시간 2개·예산 1개·바다/실내만 봐요 (전체는 지역당 15분 넘게 걸려요)
+const QUICK = !!process.env.QUICK;
 const DATES = (process.env.DATE || "2026-11-07").split(",");
-const WHOS = (process.env.WHO || "group,dog,kid,wheel,solo").split(",");
+const WHOS = (process.env.WHO || (QUICK ? "group,dog,kid" : "group,dog,kid,wheel,solo")).split(",");
 const REG = new Function(read("regions.js") + `;return REGIONS.find((r) => r.id === ${JSON.stringify(RG)});`)();
 const FROMS = (process.env.FROMS || T.STARTS.map((s) => s.id).slice(0, 2).join(",")).split(",");
 const HOWS = REG.noBus ? ["bike", "car", "ev", "any"] : ["walk", "bike", "car", "ev", "any"];
 let n = 0, empty = 0, bad = 0;
 const firstBad = [], lines = [];
-for (const date of DATES) for (const area of ["mix", "sea", "mountain", "indoor"]) for (const from of FROMS) for (const who of WHOS) for (const how of HOWS)
-for (const depart of T.DEPART) for (const hours of T.HOURS) for (const budget of T.BUDGET) {
+const AREAS_ = QUICK ? ["mix", "indoor"] : ["mix", "sea", "mountain", "indoor"];
+const DEPART_ = QUICK ? ["10:00", "14:00"] : T.DEPART, HOURS_ = QUICK ? [4, 8] : T.HOURS, BUDGET_ = QUICK ? [T.BUDGET[Math.floor(T.BUDGET.length / 2)]] : T.BUDGET;
+for (const date of DATES) for (const area of AREAS_) for (const from of FROMS) for (const who of WHOS) for (const how of HOWS)
+for (const depart of DEPART_) for (const hours of HOURS_) for (const budget of BUDGET_) {
   const end = process.env.END || "start";
   Object.assign(T.state, { people: who === "solo" ? 1 : 2, skip: [], alt: 0, date, area, from, who, how, depart, hours, budget, end,
     zone: process.env.ZONE || "all", roam: process.env.ROAM || "stay", leave: process.env.LEAVE || null });
@@ -61,3 +65,4 @@ for (const depart of T.DEPART) for (const hours of T.HOURS) for (const budget of
 if (outFile) fs.writeFileSync(outFile, lines.join("\n"));
 console.log(`${RG} 전체 ${n}가지, 빈 코스 ${empty}, 규칙 위반 ${bad}`);
 firstBad.forEach((t) => console.log("  " + t));
+if (bad) process.exitCode = 1;

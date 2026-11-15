@@ -1,4 +1,7 @@
-.claude/
+# .claude 안에서 안내원 설명서·명령만 올려요 (실행 설정은 이 컴퓨터에만)
+.claude/*
+!.claude/agents/
+!.claude/commands/
 .DS_Store
 .env
 tools/osrm-data/

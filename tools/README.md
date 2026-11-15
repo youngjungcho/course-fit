@@ -10,6 +10,11 @@
 | `lint-places.js` | 장소 자료가 칸 규칙을 지키는지, regions.js·travel.js와 맞는지 검사 |
 | `check.js` | 조건을 바꿔 가며 코스를 짜 보고 규칙(운영시간·쉬는 날·조건·예산·시간)을 어긴 코스가 있는지 검사 |
 | `places-template.js` | 새 지역 places.js 틀 |
+| `top-places.js` | 코스에 자주 나오는 장소 목록 (안내원 주간 점검용). `node tools/top-places.js busan 20` |
+| `kakao-read.js` | 크롬에서 카카오맵 장소 페이지의 영업정보·시설정보·폐업 표시를 읽는 코드 (안내원용) |
+| `quality.js` | 코스 품질 재기(되돌아가기·남는 시간·카페 겹침 등), `MUSTALL=1`이면 꼭 갈 곳 검사 |
+| `ci-check.sh` | 올리기 전 검사 묶음. GitHub Actions가 올릴 때마다 돌려요 (`.github/workflows/check.yml`) |
+| `AGENT_RULES.md` | 지역 안내원 공통 규칙 |
 | `build-pages.js` | 검색용 지역 안내 페이지(`course/<지역>/`)와 `sitemap.xml`을 새로 써요 (장소·지역을 바꾸면 다시) |
 
 지도 자료는 `tools/osrm-data/`에 두고 git에는 올리지 않아요 (받은 지도 290MB + 만든 자료 합쳐 약 8GB).
@@ -64,3 +69,11 @@ bash tools/osrm-setup.sh
 - 그래서 `travel.js`는 대중교통 표가 있는 지역(제주 8곳·부산)은 덮어쓰지 않고 멈춰요. 그 지역 장소를 바꾸려면 대중교통 표까지 다시 계산하는 도구를 먼저 만들어야 해요.
   비교만 하려면 `--out` 으로 다른 곳에 써요.
 - 새 지역은 처음엔 강릉처럼 `noBus: true`(차·택시로 다니는 곳)로 시작하는 걸 권해요.
+
+## 지역 안내원 (주간 점검)
+
+- 안내원: `.claude/agents/`의 제주(jeju-guide)·강릉(gangneung-guide)·부산(busan-guide). 규칙은 `tools/AGENT_RULES.md`.
+- 돌리는 법: 이 폴더에서 Claude Code를 열고 `/weekly`(세 지역) 또는 `/weekly 부산`(한 지역).
+- 안내원은 `guide/<지역>-<날짜>` 가지에만 커밋하고 보고서를 `reports/weekly/<날짜>/`에 써요. 사이트 반영은 사용자가 "반영해"라고 해야 해요.
+- 크롬(Claude in Chrome)과 지메일 연결이 켜져 있어야 카카오맵 점검·제보 확인이 돼요.
+
