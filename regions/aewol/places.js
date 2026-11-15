@@ -78,10 +78,10 @@ const PLACES = [
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     beachSeason: ["06-24", "08-31"], // 2025년 개장 기간(10~19시). 2026년 날짜는 아직 확인 못 했어요
     lat: 33.45596, lng: 126.30650,
-    dog: null, stroller: true, stepFree: true, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "곽지모우물 정류장 걸어서 6분", bikeRack: null, evChargerMin: 8, parking: true,
     kakaoId: "25022153",
-    note: "해수욕장 개장 기간(2025년 6/24~8/31, 10~19시) 말고는 운영시간 확인 필요. 관광공사 무장애 여행 정보(2025-07 수정): 경사로 있음, 장애인 전용 주차구역·화장실 있음. 모래사장 안쪽은 휠체어·유모차가 어려울 수 있어요.",
+    note: "해수욕장 개장 기간(2025년 6/24~8/31, 10~19시) 말고는 운영시간 확인 필요. 관광공사 무장애 여행 정보(2025-07 수정): 경사로 있음, 장애인 전용 주차구역·화장실 있음. 모래사장 안쪽은 휠체어·유모차가 어려울 수 있어요. 카카오맵 다시 확인(2026-11-15): 시설정보에 반려동물 동반.",
     sources: ["관광공사 무장애 여행 정보 API 127870"]
   },
   {
@@ -609,10 +609,10 @@ const PLACES = [
     desc: "일본 가정식 (텐동)",
     stayMin: 60, cost: 18000, open: "11:00", close: "20:50", lastOrder: "20:20", closedDays: [],
     lat: 33.47707, lng: 126.37024,
-    dog: null, stroller: true, stepFree: true, solo: true,
+    dog: true, stroller: true, stepFree: true, solo: true,
     station: "중엄새물 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "1365667514",
-    note: "신엄안2길 54-1. 일본 가정식. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 11:00~20:50(주문 20:20까지), 텐동정식 18,000원, 태그 #이동약자접근 #혼밥, 유아의자·키즈메뉴, 무료 주차. 064-713-5450 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
+    note: "신엄안2길 54-1. 일본 가정식. 카카오맵(2026-10-24, 사업자 인증 매장): 매일 11:00~20:50(주문 20:20까지), 텐동정식 18,000원, 태그 #이동약자접근 #혼밥, 유아의자·키즈메뉴, 무료 주차. 064-713-5450 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 카카오맵 다시 확인(2026-11-15): 시설정보에 반려동물 동반.",
     sources: ["https://place.map.kakao.com/1365667514"]
   },
   {

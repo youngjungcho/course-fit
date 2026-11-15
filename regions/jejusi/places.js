@@ -770,10 +770,10 @@ const PLACES = [
     lastOrder: "18:30",
     strollerReview: true,
     lat: 33.47388, lng: 126.52877,
-    dog: null, stroller: true, stepFree: true, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "오등동 정류장 걸어서 3분", bikeRack: null, evChargerMin: 0, parking: true,
     kakaoId: "843686446",
-    note: "아연로 444-1. 카카오맵(2026-10-31): 10:00~19:00, 18:30 마지막 주문, 클래식 크로와상 4,500원, 테라스, 루프탑, 유아의자. 관광공사 무장애: 출입구까지 경사로, 주출입구 턱 없음. 관광공사: 주차 가능. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 편하다는 후기 여러 건, 입구에서 대여 가능.",
+    note: "아연로 444-1. 카카오맵(2026-10-31): 10:00~19:00, 18:30 마지막 주문, 클래식 크로와상 4,500원, 테라스, 루프탑, 유아의자. 관광공사 무장애: 출입구까지 경사로, 주출입구 턱 없음. 관광공사: 주차 가능. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 편하다는 후기 여러 건, 입구에서 대여 가능. 카카오맵 다시 확인(2026-11-15): 장소 태그에 #애견동반카페.",
     sources: ["관광공사 API 2854335","https://place.map.kakao.com/843686446","https://blog.naver.com/lbhlsy/224204055366","https://blog.naver.com/mmmm1023/224401995524"]
   },
   {
