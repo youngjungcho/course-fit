@@ -23,7 +23,7 @@ const history = { pushState() {}, replaceState() {}, state: null }; const locati
 `;
 const DATA = new Function(read(`regions/${RG}/places.js`) + read(`regions/${RG}/travel.js`) + read(`regions/${RG}/transit.js`) + ";return { PLACES, STARTS, COASTLINE, TRAVEL, INLAND_NORTH: typeof INLAND_NORTH !== \"undefined\" && INLAND_NORTH };")();
 const T = new Function("DATA", read("regions.js") + stub + main +
-  `;applyRegion(REGIONS.find((r) => r.id === ${JSON.stringify(RG)}), DATA);return { makeCourse, state, STARTS, REGION, WHO, HOW, TYPE_ICON, costOf, won, babyChairOnly, sunsetToday };`)(DATA);
+  `;applyRegion(REGIONS.find((r) => r.id === ${JSON.stringify(RG)}), DATA);return { makeCourse, state, STARTS, REGION, WHO, HOW, TYPE_ICON, costOf, won, babyChairOnly, sunsetToday, josa };`)(DATA);
 
 const kst = new Date(Date.now() + 9 * 3600e3);
 const today = kst.toISOString().slice(0, 10);
@@ -169,16 +169,46 @@ const tags = {
 }[WHO_ID];
 const base = R.area === "제주" ? ["제주여행", `${R.name.split("·")[0]}여행`, "제주도여행"] : [`${R.name}여행`, `${R.name}가볼만한곳`, `${R.name}여행코스`];
 const howTag = { walk: ["뚜벅이여행"], bike: ["자전거여행"], car: ["렌트카여행"], ev: ["전기차여행"] }[HOW_ID];
-const caption = `${title} ${HOURS}시간 코스 ✨
-${PROMISE.replace("\n", " ")}
+// 본문 글(멘트): 첫 줄 후킹 → 짧은 소개 → 코스 → 꿀팁 → 안내 → 해시태그. 자료에 있는 사실만 써요.
+const HOOK = {
+  group: `${regionName} 하루, 뭐부터 갈지 고민이면 이대로 따라가 보세요 ✨`,
+  dog: `강아지랑 ${regionName}${HOW_ID === "walk" ? ", 차 없이 버스로도 충분해요" : " 하루 코스"} 🐶`,
+  kid: `아기랑 ${regionName}, 유모차 끌고 어디까지 갈 수 있을까요? 👶`,
+  wheel: `휠체어로 ${regionName} 하루, 계단 걱정 덜고 다녀요 ♿`,
+  solo: `혼자 ${regionName}, 눈치 안 보고 하루 채우기 🙋`
+}[WHO_ID];
+const INTRO = {
+  group: "운영시간이랑 쉬는 날, 이동 시간까지 맞춰서 짠 코스예요.",
+  dog: "반려견이 들어갈 수 있다고 확인된 곳만 골랐고, 운영시간·이동 시간까지 맞췄어요.",
+  kid: "유모차가 다닐 수 있다고 나온 곳 위주로 골랐고, 밥때에 맞춰 식당도 넣었어요.",
+  wheel: "계단 없이 들어갈 수 있다고 확인된 곳만 골랐어요.",
+  solo: "혼자 가기 좋은 곳을 먼저 넣고, 운영시간·이동 시간까지 맞췄어요."
+}[WHO_ID];
+const NUM = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣"];
+const lines = stops.map((s, i) => `${NUM[i] ?? i + 1 + "."} ${hm(s.begin)} ${s.place.name}${s.place.type === "식당" ? " 🍚" : ""}\n   ${s.place.desc}`);
+const tips = [];
+for (const s of stops) {
+  const p = s.place;
+  if (WHO_ID === "kid" && T.babyChairOnly(p)) tips.push(`${p.name}${T.josa(p.name, "은", "는")} 유아의자는 있지만 유모차 자리는 미리 전화로 물어보면 좋아요`);
+  if (WHO_ID === "dog" && p.dogRule) tips.push(`${p.name}: ${p.dogRule}${p.dogReview ? " (후기 기준)" : ""}`);
+  if (p.lastOrder && (p.type === "식당" || p.type === "카페")) tips.push(`${p.name} 마지막 주문은 ${p.lastOrder}`);
+  else if (p.lastOrder) tips.push(`${p.name} 입장 마감은 ${p.lastOrder}`);
+}
+const seasonal = stops.filter((s) => s.place.seasonalHours).map((s) => s.place.name);
+if (seasonal.length) tips.push(`${seasonal.join("·")}${T.josa(seasonal[seasonal.length - 1], "은", "는")} 계절마다 운영시간이 달라요`);
+const bus = stops.map((s) => s.move?.text).find((t) => /번 버스/.test(t ?? ""));
+if (bus) tips.push(`이동은 ${bus.replace("로", "")}처럼 버스로 이어져요. 배차는 미리 한 번 확인!`);
+const caption = `${HOOK}
 
-${stops.map((s, i) => `${i + 1}. ${hm(s.begin)} ${s.place.name}${s.place.type === "식당" ? " (식사)" : ""}`).join("\n")}
+${INTRO}
+${dayLabel(date)} ${DEPART} 출발 · ${how.label} · ${HOURS}시간 · 1명 약 ${cost.toLocaleString("ko-KR")}원
 
-📍 ${dayLabel(date)} ${DEPART} 출발 · ${how.label} · 1명 약 ${cost.toLocaleString("ko-KR")}원
-운영시간·쉬는 날·이동 시간을 맞춰 짠 코스예요. 가기 전에 한 번 더 확인해 주세요!
+${lines.join("\n")}
+${tips.length ? `\n📌 알아 두면 좋아요\n${[...new Set(tips)].slice(0, 4).map((t) => "· " + t).join("\n")}\n` : ""}
+운영시간은 카카오맵·관광공사 자료 기준이라, 가기 전에 한 번 더 확인해 주세요 🙏
 
-👉 내 조건(누구랑·어떻게·몇 시간)으로 다시 짜 보기: 프로필 링크 (swimpyonote.com)
-💾 저장해 두고 여행 때 꺼내 보세요
+👉 누구랑·어떻게·몇 시간만 고르면 내 조건으로 다시 짜 줘요 → 프로필 링크
+💾 저장해 두고 여행 갈 때 꺼내 보세요
 
 ${[...base, ...tags, ...howTag, "국내여행", "주말여행", "여행코스추천"].map((t) => "#" + t.replace(/\s/g, "")).join(" ")}
 `;

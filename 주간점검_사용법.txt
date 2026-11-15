@@ -76,7 +76,7 @@
 
 결과
   marketing/insta/<날짜>/<지역-누구랑-이동>/01.png …  카드 (순서대로 한 게시물에)
-  marketing/insta/<날짜>/<…>/caption.txt             본문 글 + 해시태그 (복사해서 붙이기)
+  marketing/insta/<날짜>/<…>/caption.txt             게시글 멘트 (후킹 첫 줄·코스·꿀팁·해시태그, 복사해서 붙이기)
   marketing/insta/log.md                             만든 기록 (올렸으면 "올림" 칸에 표시)
 
 올리는 요령
