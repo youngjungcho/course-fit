@@ -21,7 +21,7 @@ const history = { pushState() {}, replaceState() {}, state: null }; const locati
 `;
 const DATA = new Function(read(`regions/${RG}/places.js`) + read(`regions/${RG}/travel.js`) + read(`regions/${RG}/transit.js`) + ";return { PLACES, STARTS, COASTLINE, TRAVEL, INLAND_NORTH: typeof INLAND_NORTH !== \"undefined\" && INLAND_NORTH };")();
 const T = new Function("DATA", read("regions.js") + stub + main +
-  `;applyRegion(REGIONS.find((r) => r.id === ${JSON.stringify(RG)}), DATA);return { makeCourse, explainCourse, state, DEPART, HOURS, BUDGET, toMin, hoursOf, airportBuffer, NEED, tripDay, lastOrderMin, STARTS };`)(DATA);
+  `;applyRegion(REGIONS.find((r) => r.id === ${JSON.stringify(RG)}), DATA);return { makeCourse, explainCourse, state, closedOn, DEPART, HOURS, BUDGET, toMin, hoursOf, airportBuffer, NEED, tripDay, lastOrderMin, STARTS };`)(DATA);
 
 // QUICK=1: 자동 검사(GitHub Actions)용 빠른 모드. 출발 2개·시간 2개·예산 1개·바다/실내만 봐요 (전체는 지역당 15분 넘게 걸려요)
 const QUICK = !!process.env.QUICK;
@@ -47,7 +47,7 @@ for (const depart of DEPART_) for (const hours of HOURS_) for (const budget of B
   const limit = T.toMin(depart) + hours * 60 - T.airportBuffer();
   r.stops.forEach((s, i) => {
     const p = s.place, [open, close] = T.hoursOf(p);
-    if (p.closedDays && p.closedDays.includes(day)) why.push(`${p.name} 쉬는 날`);
+    if (T.closedOn(p, date)) why.push(`${p.name} 쉬는 날`);
     if (open && s.begin < T.toMin(open)) why.push(`${p.name} 문 열기 전`);
     if (close && s.leave > T.toMin(close)) why.push(`${p.name} 문 닫은 뒤`);
     if (close && s.begin > T.lastOrderMin(p, close)) why.push(`${p.name} 마지막 주문 뒤`);

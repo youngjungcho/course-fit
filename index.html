@@ -394,10 +394,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261115j"></script>
+<script src="regions.js?v=20261115k"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261115j";
+const REGION_VERSION = "20261115k";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -1070,6 +1070,17 @@ const NEED = { dog: "dog", kid: "stroller", wheel: "stepFree" };
 
 // 가는 날 요일에 따로 정한 운영시간이 있으면 그걸 써요 (예: 주말엔 더 일찍 열어요)
 const tripDay = () => dayOf(state.date);
+// 매월 ○째 ○요일 쉬는 곳: closedMonthly [{ week: 3, day: "월" }] (week -1은 마지막 주, except는 그 달엔 안 쉬어요)
+// 공휴일과 겹쳐 날이 바뀌는 건 모르니, 적힌 날에는 쉰다고 봐요
+const ORDINAL = { 1: "첫째", 2: "둘째", 3: "셋째", 4: "넷째", 5: "다섯째", "-1": "마지막" };
+function monthlyClosed(p, iso = state.date) {
+  if (!p.closedMonthly) return null;
+  const d = new Date(`${iso}T00:00:00Z`), date = d.getUTCDate(), month = d.getUTCMonth() + 1;
+  const last = new Date(Date.UTC(d.getUTCFullYear(), month, 0)).getUTCDate();
+  const week = Math.ceil(date / 7), isLast = date + 7 > last;
+  return p.closedMonthly.find((r) => r.day === dayOf(iso) && !(r.except ?? []).includes(month) && (r.week === week || (r.week === -1 && isLast))) ?? null;
+}
+const closedOn = (p, iso = state.date) => Boolean(p.closedDays?.includes(dayOf(iso)) || monthlyClosed(p, iso));
 const hoursOf = (p) => (p.hoursByDay && p.hoursByDay[tripDay()]) || [p.open, p.close];
 // 식당·카페는 마지막 주문 전에, 볼거리는 입장 마감(lastOrder 칸) 전에 들어가야 해요.
 // 모르면 식당은 닫기 1시간 전, 카페는 30분 전으로 어림하고, 볼거리·공원·쇼핑은 닫기 전에 나오기만 하면 돼요
@@ -1150,7 +1161,7 @@ function startCtx() {
 function visit(ctx, p) {
   if (ctx.stops.some((s) => s.place === p)) return null;
   if (isOutside(p) && ctx.stops.filter((s) => isOutside(s.place)).length >= maxOutside()) return null;
-  if (p.closedDays && p.closedDays.includes(ctx.day)) return null;
+  if (closedOn(p)) return null;
   // 카페·식당은 연달아 넣지 않고, 카페·쇼핑은 개수를 정해 둬요
   if (p.type === ctx.lastType && (p.type === "카페" || p.type === "식당")) return null;
   if (p.type === "카페" && ctx.cafes >= ctx.maxCafes) return null;
@@ -1361,6 +1372,8 @@ function whyMust() {
   return state.must.map((id) => PLACES.find((p) => p.id === id)).filter(Boolean).map((p) => {
     const [open, close] = hoursOf(p), name = esc(p.name);
     if (p.closedDays?.includes(tripDay())) return `${name}${josa(p.name, "은", "는")} ${tripDay()}요일에 쉬어요.`;
+    const mc = monthlyClosed(p);
+    if (mc) return `${name}${josa(p.name, "은", "는")} 매월 ${ORDINAL[mc.week]} ${mc.day}요일에 쉬는데, 고른 날이 그날이에요.`;
     if (close && toMin(close) - p.stayMin < startMin) return `${name}${josa(p.name, "은", "는")} ${close}에 닫아서 ${state.depart} 출발로는 못 들러요.`;
     if (open && toMin(open) + p.stayMin > endMin) return `${name}${josa(p.name, "은", "는")} ${open}에 열어서 이 시간 안에 못 들러요.`;
     if (travel(startPoint(), p, state.how).min === Infinity) return `${name}${josa(p.name, "은", "는")} ${state.how === "walk" ? "버스·지하철로" : "이 이동 방법으로"} 갈 수 없어요.`;

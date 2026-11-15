@@ -426,7 +426,7 @@ const PLACES = [
   {
     id: "seowon-coffee", name: "서원커피랩", type: "카페",
     desc: "넓고 여유로운 인절미 라떼",
-    stayMin: 50, cost: 6000, open: "10:00", close: "21:00", closedDays: [],
+    stayMin: 50, cost: 6000, open: "10:00", close: "21:00", closedDays: [], closedMonthly: [{ week: -1, day: "화", except: [7, 8, 9] }],
     hoursByDay: {"화":["10:00","18:00"]},
     strollerReview: true,
     lat: 37.77965, lng: 128.88267,

@@ -532,7 +532,7 @@ const PLACES = [
   {
     id: "sambo-sikdang", name: "삼보식당", type: "식당",
     desc: "정겨운 노포 해물 백반",
-    stayMin: 50, cost: 18000, open: "08:00", close: "21:00", closedDays: [],
+    stayMin: 50, cost: 18000, open: "08:00", close: "21:00", closedDays: [], closedMonthly: [{ week: 2, day: "수" }, { week: 4, day: "수" }],
     lastOrder: "20:00",
     lat: 33.24768, lng: 126.55907,
     dog: null, stroller: null, stepFree: null, solo: null,

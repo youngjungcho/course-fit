@@ -40,7 +40,7 @@ const out = T.PLACES.filter((p) => count[p.id] && want(p) && (fk || !always(p)))
   .map((p) => ({
     id: p.id, name: p.name, type: p.type, share: `${Math.round(count[p.id] / n * 100)}%`,
     kakao: p.kakaoId ? `https://place.map.kakao.com/${p.kakaoId}` : null,
-    open: p.open, close: p.close, closedDays: p.closedDays, lastOrder: p.lastOrder ?? null, breaks: p.breaks ?? null, hoursByDay: p.hoursByDay ?? null,
+    open: p.open, close: p.close, closedDays: p.closedDays, closedMonthly: p.closedMonthly ?? null, lastOrder: p.lastOrder ?? null, breaks: p.breaks ?? null, hoursByDay: p.hoursByDay ?? null,
     dog: p.dog, stroller: p.stroller, cost: p.cost
   }));
 console.log(JSON.stringify(out, null, 1));
