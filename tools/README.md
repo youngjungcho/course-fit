@@ -76,4 +76,5 @@ bash tools/osrm-setup.sh
 - 돌리는 법: 이 폴더에서 Claude Code를 열고 `/weekly`(세 지역) 또는 `/weekly 부산`(한 지역).
 - 안내원은 `guide/<지역>-<날짜>` 가지에만 커밋하고 보고서를 `reports/weekly/<날짜>/`에 써요. 사이트 반영은 사용자가 "반영해"라고 해야 해요.
 - 크롬(Claude in Chrome)과 지메일 연결이 켜져 있어야 카카오맵 점검·제보 확인이 돼요.
+- 새 지역 담당(new-region-guide): `/weekly 새지역 경주`처럼 불러요. `region/<지역 id>` 가지에 주마다 장소를 쌓고, 사용자가 "○○ 공개해"라고 해야 main에 합쳐요.
 
