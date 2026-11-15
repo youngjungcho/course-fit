@@ -259,6 +259,9 @@
   .stop .name { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 700; margin: 6px 0 2px; }
   .stop .ticon { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); font-size: 22px; flex: none; }
   .stop .desc { font-size: 15px; margin: 0 0 2px; }
+  .pname { color: inherit; text-decoration: none; }
+  .pname .ext { margin-left: 4px; font-size: 14px; color: var(--muted); font-weight: 400; }
+  @media (hover: hover) { .pname:hover { text-decoration: underline; text-underline-offset: 3px; } }
   .why { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 0 14px; margin: 0 0 12px; }
   .why > summary { min-height: 48px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-weight: 700; font-size: 16px; list-style: none; }
   .why > summary::-webkit-details-marker { display: none; }
@@ -438,10 +441,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261115q"></script>
+<script src="regions.js?v=20261115r"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261115q";
+const REGION_VERSION = "20261115r";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -1566,11 +1569,13 @@ function emptyFixes() {
 
 // 장소 종류 아이콘 (사진 대신 카드에 크게 보여 줘요)
 const TYPE_ICON = { 식당: "🍜", 카페: "☕", 볼거리: "🏛️", 공원: "🌳", 쇼핑: "🛍️" };
-// 지도 바로가기: 카카오맵은 장소 번호로(사진·후기가 있는 장소 페이지), 번호가 없으면 이름 검색, 네이버지도는 이름 검색으로 열어요
+// 지도 바로가기: 장소 이름·"사진·후기"는 카카오맵 장소 페이지(번호가 없으면 이름 검색), "지도 보기"는 카카오맵 지도에서 위치를 열어요
+const placeUrl = (p) => p.kakaoId ? `https://place.map.kakao.com/${p.kakaoId}` : `https://map.kakao.com/?q=${encodeURIComponent(`${p.name} ${REGION.search}`)}`;
 function mapLinks(p) {
-  const kakao = p.kakaoId ? `https://place.map.kakao.com/${p.kakaoId}` : `https://map.kakao.com/?q=${encodeURIComponent(p.name)}`;
-  const naver = `https://map.naver.com/p/search/${encodeURIComponent(`${p.name} ${REGION.search}`)}`;
-  return `<a href="${kakao}" target="_blank" rel="noopener" data-map="kakao" aria-label="${esc(p.name)} 사진·후기 카카오맵에서 보기">${p.kakaoId ? "📷 사진·후기" : "카카오맵"}</a><a href="${naver}" target="_blank" rel="noopener" data-map="naver">네이버지도</a>`;
+  const kakao = placeUrl(p);
+  // 지도에서 위치 보기: 장소 번호가 있으면 그 장소로, 없으면 이름·좌표로 카카오맵을 열어요
+  const onMap = p.kakaoId ? `https://map.kakao.com/link/map/${p.kakaoId}` : `https://map.kakao.com/link/map/${encodeURIComponent(String(p.name).replace(/,/g, " "))},${p.lat},${p.lng}`;
+  return `<a href="${kakao}" target="_blank" rel="noopener" data-map="kakao" aria-label="${esc(p.name)} 사진·후기 카카오맵에서 보기">${p.kakaoId ? "📷 사진·후기" : "카카오맵"}</a><a href="${onMap}" target="_blank" rel="noopener" data-map="kakao_map" aria-label="${esc(p.name)} 위치 카카오맵 지도에서 보기">🗺️ 카카오지도</a>`;
 }
 
 // 전부 정보가 없는 칸은 배지를 안 띄워요 (예: 자전거 거치대는 아직 60곳 모두 모름)
@@ -1993,7 +1998,7 @@ function renderResult() {
     ${moveLine(s.move, i === 0 ? start : stops[i - 1].place, s.place)}
     <li class="stop">
       <div class="time"><button class="no" data-stop="${i + 1}" aria-label="${i + 1}번 ${esc(s.place.name)} 지도에서 보기">${i + 1}</button>${toHHMM(s.begin)} – ${toHHMM(s.leave)}</div>
-      <div class="name"><span class="ticon" aria-hidden="true">${TYPE_ICON[s.place.type] ?? "📍"}</span><span>${esc(s.place.name)}</span></div>
+      <div class="name"><span class="ticon" aria-hidden="true">${TYPE_ICON[s.place.type] ?? "📍"}</span><a class="pname" href="${placeUrl(s.place)}" target="_blank" rel="noopener" data-map="name" aria-label="${esc(s.place.name)} 카카오맵에서 보기">${esc(s.place.name)}<span class="ext" aria-hidden="true">↗</span></a></div>
       ${s.place.desc ? `<div class="desc">${esc(s.place.desc)}</div>` : ""}
       <div class="meta">${s.place.type} · ${s.place.stayMin}분 · ${s.place.cost !== null ? won(s.place.cost) : costOf(s.place) ? `약 ${won(costOf(s.place))}(추정)` : "비용 확인 필요"}${s.place.lastOrder && !s.place.hoursByDay ? ` · ${isFood(s.place) ? "마지막 주문" : "입장 마감"} ${s.place.lastOrder}` : ""}</div>
       <div class="badges">${MUST.has(s.place) ? `<span class="badge must">${em("📌")} 꼭 갈 곳</span>` : ""}${badgesFor(s)}</div>
