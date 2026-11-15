@@ -355,10 +355,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261115a"></script>
+<script src="regions.js?v=20261115b"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261115a";
+const REGION_VERSION = "20261115b";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -385,7 +385,7 @@ function applyRegion(region, data) {
   TRAVEL_INDEX = Object.fromEntries(TRAVEL.ids.map((id, i) => [id, i]));
   // 아직 자료를 못 모은 칸 (전부 비어 있으면 화면 문구를 낮춰요)
   NO_DATA_YET = { bikeRack: PLACES.every((p) => p.bikeRack === null) };
-  sunsetSpots.clear();
+  sunsetSpots.clear(); typicalCosts.clear();
   transitLoading = null;
 }
 
@@ -1033,6 +1033,18 @@ const isSunsetSpot = (p) => {
     || (!REGION.noSeaSunset && (p.type === "공원" || p.type === "볼거리") && /바다|해안|포구|해수욕|전망/.test(p.name + p.note) && !isInland(p)));
   return sunsetSpots.get(p);
 };
+// 이름부터 노을 명소인 곳 (썬셋클리프처럼). 한낮에 들르면 이름값을 못 해서 피해요
+const isSunsetNamed = (p) => /노을|일몰|선셋|썬셋/.test(p.name);
+// 비용을 모르는 곳은 그 지역 같은 종류의 가운데 값으로 어림해요 (천 원 단위). 화면에는 "약 …(추정)"으로 보여요
+const typicalCosts = new Map();
+const typicalCost = (type) => {
+  if (!typicalCosts.has(type)) {
+    const xs = PLACES.filter((p) => p.type === type && p.cost !== null).map((p) => p.cost).sort((a, b) => a - b);
+    typicalCosts.set(type, xs.length ? Math.round(xs[xs.length >> 1] / 1000) * 1000 : 0);
+  }
+  return typicalCosts.get(type);
+};
+const costOf = (p) => p.cost ?? typicalCost(p.type);
 // 해가 지는 시각에 그곳에 있으면 노을을 봐요
 const sunsetCache = {};
 const sunsetToday = () => (sunsetCache[state.date] ??= sunsetMin(state.date));
@@ -1057,9 +1069,9 @@ const maxStops = () => Math.ceil(state.hours * 0.75);
 function startCtx() {
   const startMin = toMin(state.depart);
   return {
-    stops: [], here: startPoint(), now: startMin, spent: 0, fares: 0, lastType: null, lastMeal: -999, lastCafe: -999, cafes: 0,
-    // 고른 시간을 꽉 채우지 않게 15분 여유를 둬요
-    endMin: startMin + state.hours * 60 - PACE_BUFFER, maxCafes: state.hours <= 4 ? 1 : 2, day: tripDay()
+    stops: [], here: startPoint(), now: startMin, spent: 0, fares: 0, lastType: null, lastMeal: -999, lastCafe: -999, cafes: 0, shops: 0,
+    // 고른 시간을 꽉 채우지 않게 15분 여유를 둬요. 카페·쇼핑은 8시간 미만이면 1곳, 8시간이면 2곳까지 (종류가 고르게 섞이게)
+    endMin: startMin + state.hours * 60 - PACE_BUFFER, maxCafes: state.hours >= 8 ? 2 : 1, maxShops: state.hours >= 8 ? 2 : 1, day: tripDay()
   };
 }
 
@@ -1068,9 +1080,10 @@ function visit(ctx, p) {
   if (ctx.stops.some((s) => s.place === p)) return null;
   if (isOutside(p) && ctx.stops.filter((s) => isOutside(s.place)).length >= maxOutside()) return null;
   if (p.closedDays && p.closedDays.includes(ctx.day)) return null;
-  // 카페·식당은 연달아 넣지 않고, 카페는 4시간 이하면 1곳·그보다 길면 2곳까지
+  // 카페·식당은 연달아 넣지 않고, 카페·쇼핑은 개수를 정해 둬요
   if (p.type === ctx.lastType && (p.type === "카페" || p.type === "식당")) return null;
   if (p.type === "카페" && ctx.cafes >= ctx.maxCafes) return null;
+  if (p.type === "쇼핑" && ctx.shops >= ctx.maxShops) return null;
 
   const [open, close] = hoursOf(p);
   const mv = travel(ctx.here, p, state.how);
@@ -1089,7 +1102,7 @@ function visit(ctx, p) {
   const end = endPoint(), back = end && travel(p, end, state.how);
   if (back && (back.min === Infinity || leave + back.min > ctx.endMin - airportBuffer())) return null;
   // 입장료·밥값에 교통비까지, 돌아갈 차비도 남겨 두고 예산 안이어야 해요
-  if (ctx.spent + (p.cost ?? 0) + mv.fare + (back?.fare ?? 0) > state.budget) return null;
+  if (ctx.spent + costOf(p) + mv.fare + (back?.fare ?? 0) > state.budget) return null;
 
   // 카페는 2시간 넘게 띄우고, 점심 전(11시~13시 30분)에는 넣지 않아요. 점심을 먼저 먹어요
   if (p.type === "카페" && (begin - ctx.lastCafe < 120 || (ctx.lastMeal < 0 && begin >= 660 && begin <= 810))) return null;
@@ -1109,6 +1122,9 @@ function visit(ctx, p) {
   if ((state.how === "ev" || state.how === "car") && p.parking) score += 10;
   if (state.how === "ev" && chargesHere(p)) score += 20;
   if (seesSunset(p, begin, leave)) score += 40;
+  // 노을 명소는 해 지기 1시간 안에 도착하면 조금 더, 이름이 노을 명소인데 한낮(해 지기 2시간도 더 전)이면 빼는 쪽으로
+  else if (isSunsetSpot(p) && begin >= sunsetToday() - 60 && begin <= sunsetToday()) score += 20;
+  if (isSunsetNamed(p) && leave < sunsetToday() - 120) score -= 100;
   // 바닷가·산 쪽 위주를 골랐으면 그쪽 장소를 먼저 (식당은 산 쪽에 적어서 조금만)
   if (state.area === "sea" || state.area === "mountain") score += (isInland(p) === (state.area === "mountain") ? 1 : -1) * (p.type === "식당" ? 15 : 40);
   return { place: p, move: mv, begin, leave, score };
@@ -1116,14 +1132,15 @@ function visit(ctx, p) {
 
 function add(ctx, stop) {
   ctx.stops.push(stop);
-  ctx.here = stop.place; ctx.now = stop.leave; ctx.spent += (stop.place.cost ?? 0) + stop.move.fare; ctx.fares += stop.move.fare; ctx.lastType = stop.place.type;
+  ctx.here = stop.place; ctx.now = stop.leave; ctx.spent += costOf(stop.place) + stop.move.fare; ctx.fares += stop.move.fare; ctx.lastType = stop.place.type;
   if (stop.place.type === "식당") ctx.lastMeal = stop.begin;
   if (stop.place.type === "카페") { ctx.cafes++; ctx.lastCafe = stop.leave; }
+  if (stop.place.type === "쇼핑") ctx.shops++;
 }
 
 // 갈 수 있는 곳 중 점수가 제일 높은 곳을 하나씩 이어 붙여요
-function extend(ctx, pool) {
-  while (ctx.stops.length < maxStops()) {
+function extend(ctx, pool, limit = maxStops()) {
+  while (ctx.stops.length < limit) {
     let best = null;
     for (const p of pool) {
       const v = visit(ctx, p);
@@ -1177,13 +1194,34 @@ function shorten(ctx, pool) {
 function buildCourse(pool, first) {
   const ctx = startCtx();
   if (first) { const v = visit(ctx, first); if (v) add(ctx, v); else return { stops: [], spent: 0, fares: 0, finish: ctx.now }; }
-  const c = shorten(extend(ctx, pool), pool);
+  let c = shorten(extend(ctx, pool), pool);
+  // 순서를 줄였는데도 1시간 넘게 남으면 한 곳 더 넣어요 (해 질 무렵이면 노을 명소가 먼저 뽑혀요)
+  // 볼거리가 다 떨어졌으면 카페·쇼핑을 한 곳 더 허락해요 (빈 시간보다 쉬어 가는 게 나아서)
+  if (c.endMin - c.now > 60) {
+    const before = c.stops.length;
+    c = extend(c, pool, maxStops() + 1);
+    if (c.stops.length === before) { c.maxCafes++; c.maxShops++; c = extend(c, pool, maxStops() + 1); }
+  }
   const back = backOf(c);
   const backFare = back?.fare ?? 0;
   return { stops: c.stops, spent: c.spent + backFare, fares: c.fares + backFare, back, finish: c.now + (back?.min ?? 0) };
 }
 
-// 코스 좋은 정도: 장소에서 즐기는 시간이 길수록, 이동이 짧을수록, 식사가 들어갈수록 좋아요 (오래 머무는 곳도 공평하게)
+// 왔던 길을 되돌아가는 정도: 지나간 직선 거리 ÷ 같은 장소를 가장 짧게 도는 거리 (1이면 군더더기 없음)
+const kmBetween = (a, b) => Math.hypot((a.lat - b.lat) * 111, (a.lng - b.lng) * 111 * Math.cos(a.lat * Math.PI / 180));
+function detourOf(c) {
+  const start = startPoint(), pts = c.stops.map((s) => s.place);
+  const len = pts.reduce((sum, p, i) => sum + kmBetween(i ? pts[i - 1] : start, p), 0);
+  let best = Infinity;
+  const go = (from, left, sum) => {
+    if (sum >= best) return;
+    if (!left.length) { best = sum; return; }
+    left.forEach((p, i) => go(p, left.filter((_, k) => k !== i), sum + kmBetween(from, p)));
+  };
+  go(start, pts, 0);
+  return best > 0.3 ? len / best : 1;
+}
+// 코스 좋은 정도: 장소에서 즐기는 시간이 길수록, 이동이 짧을수록, 식사가 들어갈수록, 되돌아가지 않을수록 좋아요 (오래 머무는 곳도 공평하게)
 function courseScore(c) {
   if (c.stops.length === 0) return -Infinity;
   const moving = c.stops.reduce((sum, s) => sum + s.move.min, 0) + (c.back?.min ?? 0);
@@ -1196,7 +1234,9 @@ function courseScore(c) {
   // 옆 구역도 조금: 고른 구역이 중심이고 옆 구역이 한두 곳 섞이면 좋아요
   const outside = c.stops.filter((s) => isOutside(s.place)).length;
   const roam = !roaming() ? 0 : outside * 2 >= c.stops.length ? -300 : outside > 0 ? 80 : 0;
-  return staying + c.stops.length * 10 - moving + meal + area + roam + sunsetOf(c) * 40;
+  // 이름이 노을 명소인데 한낮에 들르는 코스는 뒤로 미뤄요
+  const daySunset = c.stops.filter((s) => isSunsetNamed(s.place) && s.leave < sunsetToday() - 120).length;
+  return staying + c.stops.length * 10 - moving + meal + area + roam + sunsetOf(c) * 40 - (detourOf(c) - 1) * 150 - daySunset * 80;
 }
 
 // includeUnknown: 정보가 없는 곳도 넣어 보기 (코스가 안 나올 때 이유를 찾으려고만 써요)
@@ -1551,7 +1591,7 @@ function renderResult() {
       <div class="time"><button class="no" data-stop="${i + 1}" aria-label="${i + 1}번 ${esc(s.place.name)} 지도에서 보기">${i + 1}</button>${toHHMM(s.begin)} – ${toHHMM(s.leave)}</div>
       <div class="name"><span class="ticon" aria-hidden="true">${TYPE_ICON[s.place.type] ?? "📍"}</span><span>${esc(s.place.name)}</span></div>
       ${s.place.desc ? `<div class="desc">${esc(s.place.desc)}</div>` : ""}
-      <div class="meta">${s.place.type} · ${s.place.stayMin}분 · ${s.place.cost === null ? "비용 확인 필요" : won(s.place.cost)}${s.place.lastOrder && !s.place.hoursByDay ? ` · ${isFood(s.place) ? "마지막 주문" : "입장 마감"} ${s.place.lastOrder}` : ""}</div>
+      <div class="meta">${s.place.type} · ${s.place.stayMin}분 · ${s.place.cost !== null ? won(s.place.cost) : costOf(s.place) ? `약 ${won(costOf(s.place))}(추정)` : "비용 확인 필요"}${s.place.lastOrder && !s.place.hoursByDay ? ` · ${isFood(s.place) ? "마지막 주문" : "입장 마감"} ${s.place.lastOrder}` : ""}</div>
       <div class="badges">${badgesFor(s)}</div>
       <div class="links">${mapLinks(s.place)}<button class="skip" data-id="${s.place.id}" aria-label="${esc(s.place.name)} 빼기">이곳 빼기</button></div>
       ${moreInfo(s.place)}
@@ -1565,7 +1605,7 @@ function renderResult() {
       <div class="summary">
         <div><b>${stops.length}곳</b><span>장소</span></div>
         <div><b>${Math.floor(used / 60)}시간 ${used % 60}분</b><span>걸리는 시간</span></div>
-        <div><b>${spent.toLocaleString("ko-KR")}원${costUnknown ? "+" : ""}</b><span>1명 비용</span></div>
+        <div><b>${costUnknown ? "약 " : ""}${spent.toLocaleString("ko-KR")}원</b><span>1명 비용${costUnknown ? "(추정 포함)" : ""}</span></div>
       </div>
       ${fares ? `<p class="fare-line">교통비 ${won(fares)} 포함${state.how === "any" && state.people > 1 ? ` (택시비는 ${state.people}명이 나눈 1명 몫)` : ""}</p>` : ""}
       ${left > 60 ? `<p class="left-time">시간이 ${Math.floor(left / 60) ? `${Math.floor(left / 60)}시간 ` : ""}${left % 60 ? `${left % 60}분 ` : ""}남아요. ${stops.length >= maxStops() ? `쉬엄쉬엄 다니도록 ${maxStops()}곳까지만 넣었어요. 마음에 드는 곳에서 더 머물러 보세요.` : `조건에 맞는 곳을 다 넣어서 일찍 끝나요. 시간을 줄이거나 "누구랑"·"어디 위주"를 바꿔 보세요.`}</p>` : ""}
@@ -1589,7 +1629,7 @@ function renderResult() {
       ${state.who === "wheel" && (state.how === "walk" || state.how === "any") ? `<p>• 걷는 시간은 보통보다 1.5배 넉넉히 잡았어요.${state.how === "walk" ? (REGION.subway ? " 저상버스·지하철 엘리베이터 자료가 아직 없어 대중교통은 넣지 않았어요." : REGION.noBus ? "" : " 버스는 저상버스가 있는 노선만 넣었어요. 저상버스는 일부 차량만이라 기다리는 시간을 배차 간격만큼 잡았어요. 오는 버스가 저상버스인지는 그때그때 달라요.") : ""}${REGION.area === "제주" ? ` 휠체어를 쓰는 분은 제주 교통약자이동지원센터(행복콜, <a href="tel:18996884">1899-6884</a>, 24시간)의 휠체어 차량을 쓸 수 있어요. 미리 회원등록이 필요해요.` : ""}</p>` : ""}
       ${state.how === "bike" ? `<p>• 자전거 대여료는 비용에 넣지 않았어요.</p>` : ""}
       ${fares ? `<p>• 교통비는 어른 1명 기준이에요. ${state.how === "walk" ? (REGION.subway ? "지하철·버스 교통카드 요금으로 어림했어요. 지하철은 1구간 요금 기준이라 멀리 가면 더 나오고, 갈아탈 때는 환승 할인을 받는 것으로 쳤어요. " : "버스는 교통카드 요금이고, 40분 안에 갈아타면 환승 할인으로 따로 내지 않아요. ") : `택시비는 거리로 어림했고, ${state.people}명이 나눠 낸 1명 몫이에요(막힐 때 붙는 요금·밤 11시 이후 할증은 빠졌어요). 4명이 넘으면 택시가 2대 필요할 수 있어요. `}</p>` : ""}
-      ${costUnknown ? `<p>• 비용을 모르는 곳 ${costUnknown}곳은 비용 합계에 들어가지 않았어요.</p>` : ""}
+      ${costUnknown ? `<p>• 비용을 모르는 곳 ${costUnknown}곳은 이 지역 같은 종류 장소의 가운데 값으로 어림했어요. 실제와 다를 수 있어요.</p>` : ""}
       ${unknownSkipped ? `<p>• ${{ dog: "반려견", kid: "유모차", wheel: "계단" }[state.who]} 정보가 없는 곳 ${unknownSkipped}곳은 안전하게 뺐어요. 꼭 가고 싶은 곳이 있으면 전화로 확인해 보세요.</p>` : ""}
       ${noLocation ? `<p>• 위치를 아직 모르는 곳 ${noLocation}곳은 코스에서 뺐어요.</p>` : ""}
       <p>• 방문 통계를 위해 구글 애널리틱스를 써요. <a href="privacy.html">개인정보처리방침</a></p>
