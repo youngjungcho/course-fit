@@ -22,6 +22,7 @@
 //   dogRule       반려견이 되지만 조건이 있으면 그 조건 (없으면 안 써도 돼요)
 //   forDogs       애견카페처럼 반려견과 갈 때만 코스에 넣는 곳 true
 //   stroller      유모차 다닐 수 있어요?
+//   babyChair     카카오 시설정보에 유아의자가 있으면 true (아기랑 코스에서 유모차 정보가 없는 식당도 넣어요. 없으면 안 써도 돼요)
 //   dogReview, strollerReview  블로그 후기 2건 이상으로만 아는 값 true (화면에 '후기 기준'으로 표시해요)
 //   stepFree      계단 없이 들어갈 수 있어요? (휠체어·어르신)
 //   indoor        공원·볼거리 중 실내인 곳 true (실내 위주 코스에 넣어요. 메모에 실내로 나온 곳만)
@@ -230,6 +231,7 @@ const PLACES = [
     id: "danso", name: "단소", type: "식당",
     desc: "한상차림·도시락 (점심만)",
     stayMin: 50, cost: 17000, open: "11:00", close: "15:30", lastOrder: "14:50", closedDays: ["일"],
+    babyChair: true,
     lat: 33.46445, lng: 126.32264,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "애월중학교 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: false,
@@ -314,6 +316,7 @@ const PLACES = [
     id: "jeongjikhan-don", name: "정직한돈 본점", type: "식당",
     desc: "흑돼지 구이",
     stayMin: 70, cost: 30000, open: "15:00", close: "23:00", closedDays: [],
+    babyChair: true,
     lat: 33.46740, lng: 126.33900,
     dogRule: "이동가방이나 유모차에 넣어서",
     dogReview: true,
@@ -586,6 +589,7 @@ const PLACES = [
     desc: "물회·해산물",
     stayMin: 60, cost: 21000, open: "10:30", close: "19:30", closedDays: ["수"],
     breaks: [["14:30", "17:00"]],
+    babyChair: true,
     lat: 33.47843, lng: 126.36244,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "신엄입구 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
@@ -598,6 +602,7 @@ const PLACES = [
     desc: "정식·해장국, 아침 7시부터",
     stayMin: 50, cost: 10000, open: "07:00", close: "23:00", closedDays: ["일"],
     breaks: [["15:00", "17:00"]],
+    babyChair: true,
     lat: 33.47221, lng: 126.36854,
     dog: null, stroller: null, stepFree: false, solo: null,
     station: "신엄리 정류장 걸어서 1분", bikeRack: null, evChargerMin: 3, parking: null,
@@ -609,6 +614,7 @@ const PLACES = [
     id: "ikkan-shita", name: "잇칸시타", type: "식당",
     desc: "일본 가정식 (텐동)",
     stayMin: 60, cost: 18000, open: "11:00", close: "20:50", lastOrder: "20:20", closedDays: [],
+    babyChair: true,
     lat: 33.47707, lng: 126.37024,
     dog: true, stroller: true, stepFree: true, solo: true,
     station: "중엄새물 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,

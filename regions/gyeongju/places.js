@@ -449,11 +449,12 @@ const PLACES = [
     desc: "한옥에서 먹는 정식",
     stayMin: 50, cost: 13000, open: "11:00", close: "20:30", closedDays: ["화","수"],
     lastOrder: "19:30", breaks: [["15:00","17:00"]],
+    babyChair: true,
     lat: 35.83703, lng: 129.21125,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "7831539",
-    note: "손효자길 8-13. 카카오맵(2026-11-15): 11:00~20:30, 시설정보 주차. 화·수 휴무, 마지막 주문 19:30.",
+    note: "손효자길 8-13. 카카오맵(2026-11-15): 11:00~20:30, 시설정보 유아의자, 주차. 화·수 휴무, 마지막 주문 19:30.",
     sources: ["https://place.map.kakao.com/7831539"]
   },
   {
@@ -472,11 +473,12 @@ const PLACES = [
     id: "gurossambap", name: "이풍녀구로쌈밥", type: "식당",
     desc: "대릉원 앞 쌈밥 정식",
     stayMin: 50, cost: 18000, open: "09:00", close: "20:30", closedDays: [],
+    babyChair: true,
     lat: 35.83595, lng: 129.2178,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "8208934",
-    note: "첨성로 155. 카카오맵(2026-11-15): 09:00~20:30, 시설정보 주차. 연중무휴.",
+    note: "첨성로 155. 카카오맵(2026-11-15): 09:00~20:30, 시설정보 유아의자, 주차. 연중무휴.",
     sources: ["https://place.map.kakao.com/8208934"]
   },
   {
@@ -566,11 +568,12 @@ const PLACES = [
     desc: "보문단지 한식",
     stayMin: 50, cost: 17000, open: "11:30", close: "21:30", closedDays: [],
     hoursByDay: {"일":["11:30","21:00"]}, breaks: [["14:00","16:00"]],
+    babyChair: true,
     lat: 35.84477, lng: 129.28799,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "9043565",
-    note: "보문로 435. 카카오맵(2026-11-15): 11:30~21:30, 시설정보 주차. 첫 줄 25,000원은 큰 상차림으로 보여 17,000원으로 넣었어요.",
+    note: "보문로 435. 카카오맵(2026-11-15): 11:30~21:30, 시설정보 유아의자, 주차. 첫 줄 25,000원은 큰 상차림으로 보여 17,000원으로 넣었어요.",
     sources: ["https://place.map.kakao.com/9043565"]
   },
   {
@@ -601,11 +604,12 @@ const PLACES = [
     id: "samneung-kalguksu", name: "삼릉고향칼국수", type: "식당",
     desc: "삼릉 앞 칼국수",
     stayMin: 40, cost: 9000, open: "08:30", close: "20:30", closedDays: [],
+    babyChair: true,
     lat: 35.79475, lng: 129.20558,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "23012857",
-    note: "삼릉3길 2. 카카오맵(2026-11-15): 08:30~20:30, 시설정보 주차. 카카오맵 이름은 삼릉고향칼국수.",
+    note: "삼릉3길 2. 카카오맵(2026-11-15): 08:30~20:30, 시설정보 유아의자, 주차. 카카오맵 이름은 삼릉고향칼국수.",
     sources: ["https://place.map.kakao.com/23012857"]
   },
   {

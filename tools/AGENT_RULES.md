@@ -23,7 +23,7 @@
 | 직접 고쳐도 돼요 | 제안만 해요 (보고서에 적고 사람이 정해요) |
 |---|---|
 | 운영시간 `open`·`close`, 쉬는 날 `closedDays`·`closedMonthly`(매월 ○째 ○요일), `lastOrder`, `breaks`, `hoursByDay` | 장소 **더하기·빼기**, **위치(lat·lng) 바꾸기** |
-| 카카오 시설정보로 확인된 `dog`·`stroller`·`parking` (`true`로만) | 폐업·장기 휴업 장소 처리 |
+| 카카오 시설정보로 확인된 `dog`·`stroller`·`parking`·`babyChair`(유아의자) (`true`로만) | 폐업·장기 휴업 장소 처리 |
 | 카카오 시설정보에 "주차 불가"·"주차장 없음"이 있으면 `parking: false` | `dog`·`stroller`를 `false`로 바꾸기 (아래 참고) |
 | `stepFree`: 관광공사 무장애 정보나 카카오 시설정보의 휠체어 항목으로만, `true`로만 | `stepFree`를 `false`로 바꾸기 |
 | 공식 조건이 있는 `dogRule` | `dog`·`stroller`의 `false`(안 돼요)는 공식 안내(가게·관광공사)이거나 출처가 2곳 이상일 때만 |
