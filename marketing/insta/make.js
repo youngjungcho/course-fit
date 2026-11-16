@@ -74,9 +74,10 @@ const moveText = (m) => m ? `${m.text} 약 ${m.min}분` : "";
 const { css, logo, deco, doc } = require("./style.js");
 
 const stops = r.stops;
-const perCard = stops.length <= 4 ? 2 : stops.length <= 6 ? 2 : 3;
+// 한 장에 2곳씩. 장소 수가 홀수면 마지막 장에 3곳을 조금 작게 넣어요 (한 곳만 덩그러니 남지 않게)
 const groups = [];
-for (let i = 0; i < stops.length; i += perCard) groups.push(stops.slice(i, i + perCard));
+for (let i = 0; i < stops.length; i += 2) groups.push(stops.slice(i, i + 2));
+if (groups.length > 1 && groups.at(-1).length === 1) groups.at(-2).push(...groups.pop());
 const N = 1 + groups.length + 1;
 const dayLabel = (iso) => `${Number(iso.slice(5, 7))}월 ${Number(iso.slice(8, 10))}일(${"일월화수목금토"[new Date(iso + "T00:00:00Z").getUTCDay()]})`;
 const slides = [];
@@ -88,7 +89,7 @@ slides.push(doc(`${deco}<div class="pad">${logo}
   <p class="swipe" style="margin-top:auto">옆으로 넘겨 보세요 →</p></div><div class="page">1/${N}</div>`));
 groups.forEach((g, gi) => {
   const blocks = g.map((s, k) => {
-    const idx = gi * perCard + k, p = s.place, next = stops[idx + 1];
+    const idx = stops.indexOf(s), p = s.place, next = stops[idx + 1];
     const meta = [p.type, `${p.stayMin}분`, p.cost === null ? "비용 확인 필요" : T.won(p.cost)].join(" · ");
     return `<div class="stop"><div class="time"><span class="no">${idx + 1}</span>${hm(s.begin)} – ${hm(s.leave)}</div>
       <div class="name"><span class="ic">${T.TYPE_ICON[p.type] ?? "📍"}</span>${esc(p.name)}</div>
@@ -96,7 +97,7 @@ groups.forEach((g, gi) => {
       <div class="badges">${badgesOf(p).map(([c, t]) => `<span class="badge ${c === "ok" ? "" : c}">${esc(t)}</span>`).join("")}</div></div>
       ${next ? `<div class="move">${esc(moveText(next.move))}</div>` : ""}`;
   }).join("");
-  slides.push(doc(`<div class="pad" style="padding-top:80px">${logo}<div style="margin-top:44px;display:flex;flex-direction:column">${blocks}</div></div><div class="page">${gi + 2}/${N}</div>`));
+  slides.push(doc(`<div class="pad" style="padding-top:80px">${logo}<div class="${g.length > 2 ? "compact" : ""}" style="margin-top:44px;display:flex;flex-direction:column">${blocks}</div></div><div class="page">${gi + 2}/${N}</div>`));
 });
 slides.push(doc(`${deco}<div class="pad">${logo}
   <h1 style="margin-top:70px;font-size:70px">한눈에 보기</h1>

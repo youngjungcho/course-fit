@@ -38,6 +38,11 @@ h1 em{font-style:normal;color:#1f7a5a}
 .cta h2{font-size:56px;font-weight:800;letter-spacing:-.03em;margin-bottom:18px}
 .cta p{font-size:34px;line-height:1.5;opacity:.92}
 .cta .url{display:inline-block;margin-top:26px;background:#fff;color:#1f7a5a;font-weight:800;font-size:38px;padding:14px 26px;border-radius:18px}
+.compact .stop{padding:28px 40px}
+.compact .time{font-size:32px}.compact .no{width:50px;height:50px;font-size:28px}
+.compact .name{font-size:46px;margin:14px 0 6px}.compact .ic{width:66px;height:66px;font-size:38px;border-radius:20px}
+.compact .desc{font-size:31px}.compact .meta{font-size:27px;margin-top:6px}.compact .badges{margin-top:12px}.compact .badge{font-size:25px;padding:8px 16px}
+.compact .move{font-size:29px;padding:12px 0 12px 34px}
 .foot{font-size:26px;color:#7d847f;line-height:1.5}
 </style>`;
 const logo = `<div class="brand"><svg width="56" height="56" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#1f7a5a"/><circle cx="68" cy="36" r="16" fill="#f2a541"/><path d="M0 66 Q25 56 50 66 T100 66 V100 H0Z" fill="#e3f1ea"/></svg><span>쉼<i>,</i>표</span></div>`;
