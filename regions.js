@@ -15,6 +15,7 @@
 //   noBus    버스 자료가 없는 지역: "뚜벅이"를 빼고 busNote를 보여 줘요
 //   noSeaSunset 바다로 해가 지지 않는 곳: 바닷가라고 노을 명소로 치지 않아요
 //   coastEast 해안선이 남북으로 뻗고 바다가 동쪽인 곳: 해안선 서쪽 2.5km 넘으면 산 쪽으로 봐요
+//   inland   바다가 없는 곳: "바닷가·산 쪽 위주"를 빼요 (COASTLINE은 비워 둬요)
 const JEJU_AREA = {
   area: "제주", sun: [33.46, 126.33], bounds: { latMin: 33.1, latMax: 33.6, lngMin: 126.1, lngMax: 127.0 },
   hub: { label: "제주공항 (비행기)", emoji: "✈️", ride: "비행기", place: "공항", buffer: 90, bufferLabel: "1시간 반" },
@@ -37,6 +38,11 @@ const GYEONGBUK_GYEONGJU = {
   hub: { label: "신경주역 (기차)", emoji: "🚆", ride: "기차", place: "역", buffer: 30, bufferLabel: "30분" },
   taxiBase: 4500, taxiBaseKm: 1.7, taxiMeter: 128 // 경주시 2026-02-01 시행 요금 (트위그24 2026-01-26 보도: 기본 1.7km 4,500원, 128m당 100원). 2026-11-15 검색
 };
+const JEONBUK_JEONJU = {
+  area: "전북", sun: [35.82, 127.15], bounds: { latMin: 35.74, latMax: 35.92, lngMin: 127.02, lngMax: 127.22 },
+  hub: { label: "전주역 (기차)", emoji: "🚆", ride: "기차", place: "역", buffer: 30, bufferLabel: "30분" },
+  taxiBase: 4300, taxiMeter: 134 // 전주시 2023-08-01 시행 요금 (전주시 보도자료·뉴시스 2023-07-24: 기본 2km 4,300원, 134m당 100원). 2026-11-17 검색에서 그 뒤 인상 소식은 못 찾음 — 확인 필요
+};
 const REGIONS = [
   { ...JEJU_AREA, id: "aewol", count: 65, name: "애월", search: "애월" },
   { ...JEJU_AREA, id: "hallim", count: 57, name: "한림·협재", keywords: "협재 금능", search: "한림" },
@@ -52,5 +58,7 @@ const REGIONS = [
     zones: [{ id: "east", count: 27, label: "해운대·송정·기장", near: ["gwangan"] }, { id: "gwangan", count: 20, label: "광안리·수영·남구", near: ["east", "seomyeon"] }, { id: "seomyeon", count: 19, label: "서면·전포·동래", near: ["gwangan", "nampo"] }, { id: "nampo", count: 40, label: "남포동·영도·송도·다대포", near: ["seomyeon"] }],
     busNote: "뚜벅이는 지하철과 버스로 짜요. 배차 간격은 평균이고 실시간 도착 정보는 아니에요. 휠체어 코스는 저상버스·엘리베이터 자료가 아직 없어 걷기·차 기준으로 짜요." },
   { ...GYEONGBUK_GYEONGJU, id: "gyeongju", count: 61, router: "OSRM", name: "경주", search: "경주", keywords: "황리단길 대릉원 보문 불국사 감포 양남", note: "차로 다니는 곳", noBus: true, noSeaSunset: true, coastEast: true,
-    busNote: "경주는 버스 정보를 아직 넣지 않았어요. 볼거리가 넓게 흩어져 있어 차나 택시로 다니는 코스로 짜요." }
+    busNote: "경주는 버스 정보를 아직 넣지 않았어요. 볼거리가 넓게 흩어져 있어 차나 택시로 다니는 코스로 짜요." },
+  { ...JEONBUK_JEONJU, id: "jeonju", count: 60, router: "OSRM", name: "전주", search: "전주", keywords: "한옥마을 객사 덕진공원 남부시장 서학동", note: "한옥마을 걷기·차", noBus: true, noSeaSunset: true, inland: true,
+    busNote: "전주는 버스 정보를 아직 넣지 않았어요. 한옥마을 안은 걸어서, 그 밖은 차나 택시로 다니는 코스로 짜요." }
 ];

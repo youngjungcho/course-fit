@@ -28,7 +28,7 @@ function lint(r) {
 
   // 지역 설정
   if (r.count !== PLACES.length) E(null, `regions.js count ${r.count} ≠ 장소 ${PLACES.length}곳`);
-  if (!Array.isArray(D.COASTLINE) || D.COASTLINE.length !== 2 || D.COASTLINE.some((c) => !c.lat || !c.lng)) E(null, "COASTLINE은 해안선 양 끝 두 점이어야 해요 (바다/산 구분에 써요)");
+  if (r.inland ? !Array.isArray(D.COASTLINE) : !Array.isArray(D.COASTLINE) || D.COASTLINE.length !== 2 || D.COASTLINE.some((c) => !c.lat || !c.lng)) E(null, r.inland ? "바다 없는 지역(inland)도 COASTLINE = [] 은 있어야 해요" : "COASTLINE은 해안선 양 끝 두 점이어야 해요 (바다/산 구분에 써요)");
   if (!STARTS.some((s) => s.id === "airport")) E(null, `STARTS에 id "airport"(대표 역·공항)가 없어요 — hub가 이걸 써요`);
   for (const h of r.extraHubs ?? []) if (!STARTS.some((s) => s.id === h.start)) E(null, `extraHubs ${h.id}의 출발지 ${h.start}가 STARTS에 없어요`);
   for (const s of STARTS) {
