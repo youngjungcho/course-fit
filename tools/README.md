@@ -11,6 +11,7 @@
 | `check.js` | 조건을 바꿔 가며 코스를 짜 보고 규칙(운영시간·쉬는 날·조건·예산·시간)을 어긴 코스가 있는지 검사 |
 | `places-template.js` | 새 지역 places.js 틀 |
 | `top-places.js` | 코스에 자주 나오는 장소 목록 (안내원 주간 점검용). `node tools/top-places.js busan 20` |
+| `geocode.js` | 주소 → 위치(위도·경도). 행정안전부 도로명주소 API (`.env`의 `JUSO_SEARCH_KEY`·`JUSO_COORD_KEY`). 카카오 좌표는 저장하지 않아요 |
 | `kakao-read.js` | 크롬에서 카카오맵 장소 페이지의 영업정보·시설정보·폐업 표시를 읽는 코드 (안내원용) |
 | `quality.js` | 코스 품질 재기(되돌아가기·남는 시간·카페 겹침 등), `MUSTALL=1`이면 꼭 갈 곳 검사 |
 | `ci-check.sh` | 올리기 전 검사 묶음. GitHub Actions가 올릴 때마다 돌려요 (`.github/workflows/check.yml`) |
@@ -39,6 +40,7 @@ bash tools/osrm-setup.sh
 2. **장소 모으기** — `tools/places-template.js`를 `regions/<지역 id>/places.js`로 복사해서 채워요.
    - 목표는 50곳 이상, 식당·카페·볼거리·공원이 고르게. 30곳 이하면 코스가 비거나 매번 같아져요.
    - 운영시간·시설은 카카오맵 장소 페이지 → 한국관광공사 API 순서. 모르는 건 null.
+   - **위치(lat·lng)와 주소는 카카오에서 가져오지 않아요.** 한국관광공사 좌표 → `node tools/geocode.js "주소"`(도로명주소 API) → OpenStreetMap 순서. 카카오 로컬 API는 장소 번호(kakaoId)를 찾을 때만 써요.
    - 후기 값은 서로 다른 글 2건 이상이 같을 때만, 최근 2년 글만. 휠체어는 후기로 채우지 않아요.
 3. **검사** — 오류가 0이 될 때까지 고쳐요.
    ```bash

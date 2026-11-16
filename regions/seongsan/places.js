@@ -1,4 +1,5 @@
 // 장소 데이터 · 성산·표선 (2026-10-31 정리, 아직 직접 확인 안 함)
+// 위치(lat·lng): 한국관광공사 국문 관광정보·행정안전부 도로명주소 좌표·OpenStreetMap(© OpenStreetMap contributors, ODbL) (2026-11-16). 카카오 로컬 API 좌표·주소는 저장하지 않아요(장소 번호 kakaoId만 써요).
 // 칸 설명은 regions/aewol/places.js 맨 위를 보세요.
 // 운영시간·시설: 카카오맵 장소 페이지(2026-10-31 읽음)를 먼저 쓰고, 없으면 한국관광공사 API를 썼어요.
 // 모르는 것은 null이에요. 배로 가는 우도, 임시 휴업 표시인 곳은 뺐어요.
@@ -8,7 +9,7 @@ const INLAND_NORTH = true;
 const COASTLINE = [{ lat: 33.325, lng: 126.820 }, { lat: 33.460, lng: 126.940 }];
 
 const STARTS = [
-  { id: "airport", emoji: "✈️", label: "제주공항", name: "제주국제공항", lat: 33.50684, lng: 126.49272 },
+  { id: "airport", emoji: "✈️", label: "제주공항", name: "제주국제공항", lat: 33.50631, lng: 126.49263 },
   { id: "seongsan", emoji: "🏠", label: "성산일출봉 근처", name: "성산일출봉 근처", lat: 33.463, lng: 126.934 },
   { id: "sinyang", emoji: "🏠", label: "섭지코지·신양 근처", name: "섭지코지·신양 근처", lat: 33.436, lng: 126.919 },
   { id: "pyoseon", emoji: "🏠", label: "표선 근처", name: "표선 근처", lat: 33.327, lng: 126.836 },
@@ -23,23 +24,23 @@ const PLACES = [
     stayMin: 70, cost: null, open: "06:00", close: "18:00", closedDays: ["월"],
     holidayShift: "day",
     hoursByDay: {"토":["05:00","19:00"]},
-    lat: 33.45913, lng: 126.94054,
+    lat: 33.45808, lng: 126.94150,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "성산일출봉입구 정류장 걸어서 14분", bikeRack: null, evChargerMin: 10, parking: null,
     kakaoId: "25285071",
-    note: "성산읍 성산리 78. 카카오맵(2026-10-31): 일·화~금 06:00~18:00, 토 05:00~19:00, 월 휴무(공휴일이면 다음 날), 유료입장, 휴게공간. 시간은 계절마다 다를 수 있어요. 입장료는 확인 못 했어요.",
+    note: "성산읍 일출로 284-12. 카카오맵(2026-10-31): 일·화~금 06:00~18:00, 토 05:00~19:00, 월 휴무(공휴일이면 다음 날), 유료입장, 휴게공간. 시간은 계절마다 다를 수 있어요. 입장료는 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/25285071"]
   },
   {
     id: "seopjikoji", name: "섭지코지", type: "공원",
     desc: "붉은 언덕과 푸른 바다의 산책길",
     stayMin: 70, cost: 0, open: "09:00", close: "18:00", closedDays: [],
-    lat: 33.42394, lng: 126.93061,
+    lat: 33.42363, lng: 126.92973,
     dogRule: "목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "신양항 정류장 걸어서 25분", bikeRack: null, evChargerMin: 8, parking: true,
     kakaoId: "8413659",
-    note: "성산읍 섭지코지로 107. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 무료입장, 유모차 가능, 카페·식당, 유료 주차장. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책한 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    note: "성산읍 섭지코지로 262. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 무료입장, 유모차 가능, 카페·식당, 유료 주차장. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책한 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/8413659","https://blog.naver.com/kimsuravita/224416380620","https://blog.naver.com/yeartist/224320809513"]
   },
   {
@@ -47,23 +48,23 @@ const PLACES = [
     desc: "넓은 백사장과 평온한 산책길",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     dogReview: true,
-    lat: 33.32751, lng: 126.83742,
+    lat: 33.32563, lng: 126.84241,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "표선초등학교 정류장 걸어서 5분", bikeRack: null, evChargerMin: 7, parking: true,
     kakaoId: "8640631",
-    note: "표선면 표선리. 카카오맵(2026-10-31): 무료입장, 물품보관소, 무료 공영주차장. 개장 기간은 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책한 후기 여러 건.",
+    note: "표선면 표선리. 카카오맵(2026-10-31): 무료입장, 물품보관소, 무료 공영주차장. 개장 기간은 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책한 후기 여러 건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/8640631","https://blog.naver.com/senmayong/224219903582","https://blog.naver.com/jeyah/224226579653"]
   },
   {
     id: "gwangchigi", name: "광치기해변", type: "공원",
     desc: "성산일출봉이 보이는 바다 풍경",
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
-    lat: 33.45252, lng: 126.92419,
+    lat: 33.45151, lng: 126.92464,
     dogRule: "목줄 필수",
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "광치기해변 정류장 걸어서 1분", bikeRack: null, evChargerMin: 6, parking: null,
     kakaoId: "13723499",
-    note: "성산읍 고성리 224-1. 카카오맵(2026-10-31): 무료입장, 반려동물 동반. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    note: "성산읍 고성리. 카카오맵(2026-10-31): 무료입장, 반려동물 동반. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/13723499"]
   },
   {
@@ -72,22 +73,22 @@ const PLACES = [
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     dogRule: "목줄과 배변봉투 필수",
     dogReview: true,
-    lat: 33.43510, lng: 126.92347,
+    lat: 33.43022, lng: 126.92805,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "섭지코지 정류장 걸어서 4분", bikeRack: null, evChargerMin: 9, parking: null,
     kakaoId: "10607235",
-    note: "성산읍 섭지코지로 88. 카카오맵(2026-10-31): 무료입장, 카페·식당, 휴게공간. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 글 2건.",
+    note: "성산읍 섭지코지로 107. 카카오맵(2026-10-31): 무료입장, 카페·식당, 휴게공간. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/10607235","https://blog.naver.com/jhb916/224370874883","https://blog.naver.com/aurorahyo/224188029283"]
   },
   {
     id: "baegyagi", name: "백약이오름", type: "공원",
     desc: "부드러운 능선과 초원",
     stayMin: 60, cost: 0, open: null, close: null, closedDays: [],
-    lat: 33.43681, lng: 126.78976,
+    lat: 33.43721, lng: 126.79018,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "백약이오름 정류장 걸어서 12분", bikeRack: null, evChargerMin: 24, parking: null,
     kakaoId: "25248461",
-    note: "표선면 성읍리 산 1. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반.",
+    note: "표선면 성읍리 산1 1. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/25248461"]
   },
   {
@@ -95,11 +96,11 @@ const PLACES = [
     desc: "억새가 물결치는 오름",
     stayMin: 70, cost: 0, open: null, close: null, closedDays: [],
     strollerReview: true,
-    lat: 33.38871, lng: 126.75286,
+    lat: 33.38710, lng: 126.75340,
     dog: true, stroller: false, stepFree: null, solo: null,
     station: "성읍2리 정류장 걸어서 50분", bikeRack: null, evChargerMin: 21, parking: true,
     kakaoId: "25036598",
-    note: "표선면 가시리 산 63. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 어렵다는 글 2건.",
+    note: "표선면 가시리 산62 63. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 어렵다는 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/25036598","https://blog.naver.com/baptist01/224267264869","https://wowjj8631.tistory.com/331"]
   },
   {
@@ -107,11 +108,11 @@ const PLACES = [
     desc: "제주 오름 산책길",
     stayMin: 60, cost: 0, open: null, close: null, closedDays: [],
     dogReview: true,
-    lat: 33.40457, lng: 126.79624,
+    lat: 33.40440, lng: 126.79770,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "영주산 정류장 걸어서 17분", bikeRack: null, evChargerMin: 21, parking: true,
     kakaoId: "8018193",
-    note: "표선면 성읍리 산 18-1. 카카오맵(2026-10-31): 무료입장, 입구 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 오른 후기 여러 건.",
+    note: "표선면 성읍리 18-1. 카카오맵(2026-10-31): 무료입장, 입구 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 오른 후기 여러 건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/8018193","https://blog.naver.com/momopia/224229561707","https://blog.naver.com/senmayong/224214232774"]
   },
   {
@@ -120,11 +121,11 @@ const PLACES = [
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     dogReview: true,
     strollerReview: true,
-    lat: 33.46568, lng: 126.91994,
+    lat: 33.46570, lng: 126.91989,
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "오조해녀의집 정류장 걸어서 7분", bikeRack: null, evChargerMin: 7, parking: false,
     kakaoId: "25297842",
-    note: "성산읍 오조리 313. 카카오맵(2026-10-31): 무료입장, 휴게공간, 주차장 없음. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 걸은 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 둘레길 데크와 해안길은 유모차로 갈 수 있다는 글 2건(정상은 달라요).",
+    note: "카카오맵(2026-10-31): 무료입장, 휴게공간, 주차장 없음. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 걸은 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 둘레길 데크와 해안길은 유모차로 갈 수 있다는 글 2건(정상은 달라요). 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/25297842","https://blog.naver.com/senmayong/223873219672","https://blog.naver.com/5rkaend/223642369086","https://blog.naver.com/qkr0461/224344876275","https://blog.naver.com/jeju2156/224308007603"]
   },
   {
@@ -133,91 +134,91 @@ const PLACES = [
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     dogRule: "목줄 필수",
     dogReview: true,
-    lat: 33.33122, lng: 126.84254,
+    lat: 33.33118, lng: 126.84247,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "표선초등학교 정류장 걸어서 11분", bikeRack: null, evChargerMin: 12, parking: false,
     kakaoId: "1932375305",
-    note: "표선면 표선리. 카카오맵(2026-10-31): 무료입장, 휴게공간, 전용 주차장 없음. 반려견 후기(블로그, 2026-10-31 확인): 반려견 동반이 된다는 글 여러 건.",
+    note: "표선면 표선리. 카카오맵(2026-10-31): 무료입장, 휴게공간, 전용 주차장 없음. 반려견 후기(블로그, 2026-10-31 확인): 반려견 동반이 된다는 글 여러 건. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/1932375305","https://blog.naver.com/hiel_joon/224214202467","https://blog.naver.com/boriwithpets/224311499340"]
   },
   {
     id: "saryeoni-barrierfree", name: "사려니숲 무장애나눔길", type: "공원",
     desc: "휠체어로도 걷는 초록 숲길",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
-    lat: 33.39323, lng: 126.68211,
+    lat: 33.39520, lng: 126.68504,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "남조로 사려니숲길 정류장 걸어서 6분", bikeRack: null, evChargerMin: 19, parking: true,
     kakaoId: "340485722",
-    note: "표선면 가시리 산 158. 카카오맵(2026-10-31): 무료입장, 휠체어 접근, 유모차 가능, 휴게공간, 붉은오름 입구 무료 주차. 이름대로 무장애 길이에요.",
+    note: "카카오맵(2026-10-31): 무료입장, 휠체어 접근, 유모차 가능, 휴게공간, 붉은오름 입구 무료 주차. 이름대로 무장애 길이에요. 위치: OpenStreetMap (OSM 사려니숲길 붉은오름 입구) (2026-11-16).",
     sources: ["https://place.map.kakao.com/340485722"]
   },
   {
     id: "jeju-folk-village", name: "제주민속촌", type: "볼거리",
     desc: "제주의 옛 정취가 있는 마을",
     stayMin: 90, cost: 15000, open: "09:30", close: "18:00", closedDays: [],
-    lat: 33.32240, lng: 126.84230,
+    lat: 33.32129, lng: 126.84309,
     dogRule: "9kg 이하만, 이동장 필요",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "제주민속촌(종점) 정류장 걸어서 5분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "8063566",
-    note: "표선면 민속해안로 631-34. 카카오맵(2026-10-31): 09:30~18:00, 성인 15,000원, 휠체어 접근, 유모차 가능, 반려동물 동반, 전용 주차장. 관광공사 무장애: 출입구까지 경사로, 휠체어 무료 대여. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 9kg 이하 동반 가능 / 필요: 목줄 착용,이동장(켄넬)사용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    note: "표선면 민속해안로 631-34. 카카오맵(2026-10-31): 09:30~18:00, 성인 15,000원, 휠체어 접근, 유모차 가능, 반려동물 동반, 전용 주차장. 관광공사 무장애: 출입구까지 경사로, 휠체어 무료 대여. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 9kg 이하 동반 가능 / 필요: 목줄 착용,이동장(켄넬)사용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://www.data.go.kr/data/15135102/openapi.do", "관광공사 API 130474","https://place.map.kakao.com/8063566"]
   },
   {
     id: "seongeup-village", name: "제주성읍마을", type: "볼거리",
     desc: "시간을 품은 전통 마을",
     stayMin: 60, cost: 0, open: "00:00", close: "24:00", closedDays: [],
-    lat: 33.38496, lng: 126.80150,
+    lat: 33.38596, lng: 126.80180,
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "성읍초등학교 앞 정류장 걸어서 4분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "12501794",
-    note: "표선면 성읍정의현로 30. 카카오맵(2026-10-31): 24시간, 무료입장, 주차. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "표선면 성읍정의현로34번길 5-3. 카카오맵(2026-10-31): 24시간, 무료입장, 주차. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/12501794"]
   },
   {
     id: "herb-garden", name: "제주허브동산", type: "볼거리",
     desc: "핑크빛 물결의 정원",
     stayMin: 70, cost: null, open: "09:00", close: "22:00", closedDays: [],
-    lat: 33.33039, lng: 126.81519,
+    lat: 33.33043, lng: 126.81558,
     dogRule: "목줄 필수, 족욕장은 안 돼요",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "표선허브동산 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "23397740",
-    note: "표선면 돈오름로 170. 카카오맵(2026-10-31): 09:00~22:00, 연중무휴, 유료입장, 휠체어 접근, 유모차 가능, 반려동물 동반, 주차. 입장료는 확인 못 했어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 입마개 착용,목줄 착용 / 목줄착용시 카페 입장 가능, 족욕장은 불가 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    note: "표선면 돈오름로 170. 카카오맵(2026-10-31): 09:00~22:00, 연중무휴, 유료입장, 휠체어 접근, 유모차 가능, 반려동물 동반, 주차. 입장료는 확인 못 했어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 입마개 착용,목줄 착용 / 목줄착용시 카페 입장 가능, 족욕장은 불가 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/23397740"]
   },
   {
     id: "ilchul-land", name: "일출랜드", type: "볼거리",
     desc: "미천굴과 정원 산책",
     stayMin: 80, cost: null, open: "09:00", close: "18:00", closedDays: [],
-    lat: 33.38340, lng: 126.84158,
+    lat: 33.38280, lng: 126.84180,
     dogRule: "맹견 제외, 유모차나 이동장",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "일출랜드입구 정류장 걸어서 8분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "10399499",
-    note: "성산읍 중산간동로 4150-30. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유료입장, 휠체어 접근, 유모차 가능, 반려동물 동반, 무료 주차. 관광공사 무장애: 휠체어·유모차 무료 대여. 입장료는 확인 못 했어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 맹견 제외 예방 접종 완료한 전 견종 동반 가능 / 필요: 목줄 착용,반려동물 유모차 탑승,이동장(켄넬)사용 / 배변봉투 지참 및 배변처리 필수.",
+    note: "성산읍 중산간동로 4150-30. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유료입장, 휠체어 접근, 유모차 가능, 반려동물 동반, 무료 주차. 관광공사 무장애: 휠체어·유모차 무료 대여. 입장료는 확인 못 했어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 맹견 제외 예방 접종 완료한 전 견종 동반 가능 / 필요: 목줄 착용,반려동물 유모차 탑승,이동장(켄넬)사용 / 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://www.data.go.kr/data/15135102/openapi.do", "관광공사 API 127857","https://place.map.kakao.com/10399499"]
   },
   {
     id: "venice-land", name: "물의도시 베니스랜드", type: "볼거리",
     desc: "유럽 느낌의 물길 산책",
     stayMin: 70, cost: null, open: "09:00", close: "18:00", closedDays: [],
-    lat: 33.41527, lng: 126.84071,
+    lat: 33.41545, lng: 126.84027,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "유건이오름 정류장 걸어서 4분", bikeRack: null, evChargerMin: 8, parking: true,
     kakaoId: "23231118",
-    note: "성산읍 서성일로 474. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유료입장, 반려동물 동반, 무료 주차. 입장료는 확인 못 했어요.",
+    note: "카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유료입장, 반려동물 동반, 무료 주차. 입장료는 확인 못 했어요. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/23231118"]
   },
   {
     id: "gasirim", name: "가시림 수목원", type: "볼거리",
     desc: "자연 속 수목원",
     stayMin: 70, cost: 5200, open: "09:30", close: "17:30", closedDays: ["수"],
-    lat: 33.36115, lng: 126.75160,
+    lat: 33.36153, lng: 126.75158,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "안좌동 정류장 걸어서 6분", bikeRack: null, evChargerMin: 19, parking: true,
     kakaoId: "1615441814",
-    note: "표선면 녹산로5번길 171. 카카오맵(2026-10-31): 09:30~17:30, 수 휴무, 일반 5,200원, 반려동물 동반, 무료 주차.",
+    note: "표선면 녹산로5번길 171번길 171. 카카오맵(2026-10-31): 09:30~17:30, 수 휴무, 일반 5,200원, 반려동물 동반, 무료 주차. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1615441814"]
   },
   {
@@ -226,11 +227,11 @@ const PLACES = [
     stayMin: 50, cost: 0, open: "09:30", close: "17:00", closedDays: [],
     breaks: [["12:00","13:00"]],
     indoor: true,
-    lat: 33.38401, lng: 126.80530,
+    lat: 33.38379, lng: 126.80565,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "성읍 동문통 정류장 걸어서 9분", bikeRack: null, evChargerMin: 7, parking: true,
     kakaoId: "27313146",
-    note: "성산읍 성읍정의현로32번길 43-1. 카카오맵(2026-10-31): 09:30~17:00, 12:00~13:00 쉼, 무료입장, 카페·식당, 기념품샵, 무료 주차.",
+    note: "성산읍 성읍정의현로32번길 43-1번길 43-1. 카카오맵(2026-10-31): 09:30~17:00, 12:00~13:00 쉼, 무료입장, 카페·식당, 기념품샵, 무료 주차. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/27313146"]
   },
   {
@@ -239,11 +240,11 @@ const PLACES = [
     stayMin: 60, cost: 10000, open: "09:00", close: "18:00", closedDays: ["수"],
     indoor: true,
     strollerReview: true,
-    lat: 33.42946, lng: 126.85514,
+    lat: 33.42948, lng: 126.85513,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "제주해양동물박물관 정류장 걸어서 4분", bikeRack: null, evChargerMin: 8, parking: true,
     kakaoId: "819488120",
-    note: "성산읍 서성일로 689-21. 카카오맵(2026-10-31): 09:00~18:00, 수 휴무, 성인 10,000원, 수유실, 아이놀이방, 주차. 유모차 후기(블로그, 2026-10-31 확인): 평지라 유모차로 된다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "성산읍 서성일로 689-21. 카카오맵(2026-10-31): 09:00~18:00, 수 휴무, 성인 10,000원, 수유실, 아이놀이방, 주차. 유모차 후기(블로그, 2026-10-31 확인): 평지라 유모차로 된다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/819488120","https://blog.naver.com/zzzoz/224445425423","https://blog.naver.com/legolandmom/224355446260"]
   },
   {
@@ -252,22 +253,22 @@ const PLACES = [
     stayMin: 50, cost: 0, open: "10:00", close: "17:00", closedDays: ["화"],
     hoursByDay: {"토":["10:00","18:00"]},
     indoor: true,
-    lat: 33.38315, lng: 126.73627,
+    lat: 33.38310, lng: 126.73629,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "안좌동 정류장 걸어서 54분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "22854993",
-    note: "표선면 녹산로 381-15. 카카오맵(2026-10-31): 10:00~17:00(토 18:00), 화 휴무, 무료입장.",
+    note: "표선면 녹산로 381-15. 카카오맵(2026-10-31): 10:00~17:00(토 18:00), 화 휴무, 무료입장. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/22854993"]
   },
   {
     id: "lumiverse", name: "빛의섬루미버스", type: "볼거리",
     desc: "밤에 걷는 빛의 산책",
     stayMin: 70, cost: 19000, open: "19:00", close: "23:30", closedDays: [],
-    lat: 33.32129, lng: 126.84308,
+    lat: 33.32129, lng: 126.84309,
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "제주민속촌 정류장 걸어서 7분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "373975033",
-    note: "표선면 민속해안로 631-34. 카카오맵(2026-10-31): 19:00~23:30(22:30 입장 마감, 악천후 조기 마감), 성인 19,000원, 휠체어 접근, 유모차 가능, 반려동물 동반.",
+    note: "표선면 민속해안로 631-34. 카카오맵(2026-10-31): 19:00~23:30(22:30 입장 마감, 악천후 조기 마감), 성인 19,000원, 휠체어 접근, 유모차 가능, 반려동물 동반. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/373975033"]
   },
   {
@@ -275,11 +276,11 @@ const PLACES = [
     desc: "바다 생물 대형 수족관",
     stayMin: 120, cost: null, open: "09:30", close: "18:00", closedDays: [],
     indoor: true,
-    lat: 33.43307, lng: 126.92785,
+    lat: 33.43280, lng: 126.92784,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "섭지코지 정류장 걸어서 12분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "23150855",
-    note: "성산읍 섭지코지로 95. 카카오맵(2026-10-31): 09:30~18:00, 연중무휴, 유료입장, 휠체어 접근, 유모차 가능, 수유실, 아이놀이방, 무료 주차. 입장료는 확인 못 했어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
+    note: "성산읍 섭지코지로 95. 카카오맵(2026-10-31): 09:30~18:00, 연중무휴, 유료입장, 휠체어 접근, 유모차 가능, 수유실, 아이놀이방, 무료 주차. 입장료는 확인 못 했어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/23150855"]
   },
   {
@@ -288,11 +289,11 @@ const PLACES = [
     stayMin: 70, cost: 19000, open: "10:00", close: "18:00", closedDays: [],
     indoor: true,
     strollerReview: true,
-    lat: 33.43988, lng: 126.89921,
+    lat: 33.43990, lng: 126.89960,
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "고성리 장만이동산 정류장 걸어서 11분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "1682547680",
-    note: "성산읍 서성일로1168번길 89-17. 카카오맵(2026-10-31): 10:00~18:00(발권 17:30까지), 성인 19,000원, 반려동물 동반, 장애인 시설. 유모차 후기(블로그, 2026-10-31 확인): 경사로로 유모차가 된다는 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "성산읍 서성일로1168번길 89-17번길 89-17. 카카오맵(2026-10-31): 10:00~18:00(발권 17:30까지), 성인 19,000원, 반려동물 동반, 장애인 시설. 유모차 후기(블로그, 2026-10-31 확인): 경사로로 유모차가 된다는 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1682547680","https://blog.naver.com/yumding-ing/224398057471","https://blog.naver.com/jihyun2747/224361811396"]
   },
   {
@@ -300,11 +301,11 @@ const PLACES = [
     desc: "제주의 바람과 빛을 담은 사진 갤러리",
     stayMin: 60, cost: null, open: "09:30", close: "18:00", closedDays: ["월"],
     indoor: true,
-    lat: 33.37190, lng: 126.85414,
+    lat: 33.37241, lng: 126.85427,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "삼달1리 구보건진료소 정류장 걸어서 4분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "8222476",
-    note: "성산읍 삼달로 137. 카카오맵(2026-10-31): 09:30~18:00, 월 휴무, 유료입장, 카페·식당. 관광공사 무장애: 장애인 화장실 있음. 입장료는 확인 못 했어요.",
+    note: "성산읍 삼달로 137. 카카오맵(2026-10-31): 09:30~18:00, 월 휴무, 유료입장, 카페·식당. 관광공사 무장애: 장애인 화장실 있음. 입장료는 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["관광공사 API 130723","https://place.map.kakao.com/8222476"]
   },
   {
@@ -315,18 +316,18 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "성산일출봉입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "767322313",
-    note: "성산읍 일출로 270-1. 카카오맵(2026-10-31): 09:00~20:00, 연중무휴, 반려동물 동반, 무료 주차. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능.",
+    note: "성산읍 일출로 270-1. 카카오맵(2026-10-31): 09:00~20:00, 연중무휴, 반려동물 동반, 무료 주차. 물건값은 빼고 0원으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/767322313"]
   },
   {
     id: "dal-mujigae", name: "달무지개", type: "쇼핑",
     desc: "돌담 액자와 제주 기념품",
     stayMin: 30, cost: 0, open: "11:00", close: "18:00", closedDays: ["수"],
-    lat: 33.32229, lng: 126.83108,
+    lat: 33.32224, lng: 126.83131,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "표선오일시장 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "1817747870",
-    note: "표선면 표선동서로 204. 카카오맵(2026-10-31): 11:00~18:00, 수 휴무, 반려동물 동반, 무료 주차. 물건값은 빼고 0원으로 넣었어요.",
+    note: "표선면 표선동서로 204. 카카오맵(2026-10-31): 11:00~18:00, 수 휴무, 반려동물 동반, 무료 주차. 물건값은 빼고 0원으로 넣었어요. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1817747870"]
   },
   {
@@ -337,7 +338,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "신산환승정류장(성산농협신산지점) 정류장 걸어서 1분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "1065438405",
-    note: "성산읍 일주동로 5117-1. 카카오맵(2026-10-31): 월~금 11:00~16:00, 토·일 휴무. 물건값은 빼고 0원으로 넣었어요.",
+    note: "성산읍 일주동로 5117-1. 카카오맵(2026-10-31): 월~금 11:00~16:00, 토·일 휴무. 물건값은 빼고 0원으로 넣었어요. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1065438405"]
   },
   {
@@ -347,22 +348,22 @@ const PLACES = [
     lastOrder: "18:30",
     breaks: [["15:00","17:00"]],
     babyChair: true,
-    lat: 33.35306, lng: 126.77144,
+    lat: 33.35303, lng: 126.77152,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "가시리사무소 정류장 걸어서 1분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "8636832",
-    note: "표선면 가시로565번길 22. 카카오맵(2026-10-31): 08:30~20:00, 15:00~17:00 브레이크타임, 18:30 마지막 주문, 두루치기 10,000원(2인 이상), 유아의자, 키즈메뉴.",
+    note: "카카오맵(2026-10-31): 08:30~20:00, 15:00~17:00 브레이크타임, 18:30 마지막 주문, 두루치기 10,000원(2인 이상), 유아의자, 키즈메뉴. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/8636832"]
   },
   {
     id: "old-patjuk", name: "옛날팥죽", type: "식당",
     desc: "한옥의 새알팥죽",
     stayMin: 40, cost: 11000, open: "10:00", close: "17:00", closedDays: ["월"],
-    lat: 33.38849, lng: 126.79885,
+    lat: 33.38860, lng: 126.79895,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "성읍환승정류장(성읍1리사무소) 정류장 걸어서 2분", bikeRack: null, evChargerMin: 7, parking: true,
     kakaoId: "12653693",
-    note: "표선면 성읍민속로 130. 카카오맵(2026-10-31): 10:00~17:00, 월 휴무, 새알팥죽 11,000원, 장애인 시설, 무료 주차.",
+    note: "성읍민속로 130. 카카오맵(2026-10-31): 10:00~17:00, 월 휴무, 새알팥죽 11,000원, 장애인 시설, 무료 주차. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/12653693"]
   },
   {
@@ -370,11 +371,11 @@ const PLACES = [
     desc: "불향 짬뽕과 탕수육",
     stayMin: 40, cost: 13000, open: "11:00", close: "14:10", closedDays: ["화"],
     strollerReview: true,
-    lat: 33.46295, lng: 126.93159,
+    lat: 33.46296, lng: 126.93159,
     dog: null, stroller: true, stepFree: null, solo: null,
     station: "성산일출봉입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "1812156330",
-    note: "성산읍 성산중앙로25번길 13. 카카오맵(2026-10-31): 11:00~14:10, 화 휴무, 일출봉짬뽕 13,000원. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 들어갔다는 후기 2건.",
+    note: "성산읍 성산중앙로25번길 13번길 13. 카카오맵(2026-10-31): 11:00~14:10, 화 휴무, 일출봉짬뽕 13,000원. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 들어갔다는 후기 2건. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1812156330","https://blog.naver.com/new_jieuns/224275156802","https://blog.naver.com/yeolmoo22/223995174279"]
   },
   {
@@ -383,11 +384,11 @@ const PLACES = [
     stayMin: 60, cost: 15000, open: "10:00", close: "15:00", closedDays: ["수"],
     lastOrder: "14:30",
     babyChair: true,
-    lat: 33.47096, lng: 126.91701,
+    lat: 33.47096, lng: 126.91698,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "성산고등학교 정류장 걸어서 5분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "10112205",
-    note: "성산읍 해맞이해안로 2732. 카카오맵(2026-10-31): 10:00~15:00, 14:30 마지막 주문, 수 휴무, 전복돌솥밥 15,000원, 유아의자, 전용 주차.",
+    note: "성산읍 해맞이해안로 2732. 카카오맵(2026-10-31): 10:00~15:00, 14:30 마지막 주문, 수 휴무, 전복돌솥밥 15,000원, 유아의자, 전용 주차. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/10112205"]
   },
   {
@@ -395,11 +396,11 @@ const PLACES = [
     desc: "참돔과 활고등어회",
     stayMin: 80, cost: 30000, open: "14:00", close: "21:00", closedDays: [],
     lastOrder: "20:00",
-    lat: 33.45013, lng: 126.91413,
+    lat: 33.45013, lng: 126.91422,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "고성리제주은행 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "16525091",
-    note: "성산읍 고성동서로56번길 11. 카카오맵(2026-10-31): 14:00~21:00, 20:00 마지막 주문, 비정기 휴무, 활고등어 60,000원(2명 기준으로 1인 30,000원).",
+    note: "카카오맵(2026-10-31): 14:00~21:00, 20:00 마지막 주문, 비정기 휴무, 활고등어 60,000원(2명 기준으로 1인 30,000원). 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/16525091"]
   },
   {
@@ -407,11 +408,11 @@ const PLACES = [
     desc: "현지인 두루치기",
     stayMin: 50, cost: 9000, open: "09:00", close: "20:00", closedDays: ["수"],
     babyChair: true,
-    lat: 33.35354, lng: 126.77176,
+    lat: 33.35349, lng: 126.77183,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "가시리사무소 정류장 걸어서 2분", bikeRack: null, evChargerMin: 5, parking: true,
     kakaoId: "10200928",
-    note: "표선면 가시로613번길 60. 카카오맵(2026-10-31): 09:00~20:00, 수 휴무, 두루치기 9,000원, 유아의자, 앞 주차 2대.",
+    note: "카카오맵(2026-10-31): 09:00~20:00, 수 휴무, 두루치기 9,000원, 유아의자, 앞 주차 2대. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/10200928"]
   },
   {
@@ -419,11 +420,11 @@ const PLACES = [
     desc: "전복죽과 제주 해산물",
     stayMin: 50, cost: 12000, open: "07:30", close: "18:30", closedDays: [],
     babyChair: true,
-    lat: 33.43453, lng: 126.92603,
+    lat: 33.43447, lng: 126.92608,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "섭지코지 정류장 걸어서 8분", bikeRack: null, evChargerMin: 5, parking: true,
     kakaoId: "10489744",
-    note: "성산읍 섭지코지로 93-15. 카카오맵(2026-10-31): 07:30~18:30, 전복죽 12,000원, 유아의자, 테라스, 전용 주차.",
+    note: "카카오맵(2026-10-31): 07:30~18:30, 전복죽 12,000원, 유아의자, 테라스, 전용 주차. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/10489744"]
   },
   {
@@ -434,11 +435,11 @@ const PLACES = [
     dogReview: true,
     strollerReview: true,
     babyChair: true,
-    lat: 33.32529, lng: 126.84334,
+    lat: 33.32533, lng: 126.84313,
     dog: false, stroller: false, stepFree: null, solo: null,
     station: "제주민속촌 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "25589899",
-    note: "표선면 민속해안로 584. 카카오맵(2026-10-31): 08:00~17:00, 16:30 마지막 주문, 목 휴무, 보말칼국수 12,000원, 유아의자, 맞은편 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려동물 동반이 안 된다는 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 유모차 반입이 안 된다는 후기 여러 건.",
+    note: "표선면 표선당포로 4. 카카오맵(2026-10-31): 08:00~17:00, 16:30 마지막 주문, 목 휴무, 보말칼국수 12,000원, 유아의자, 맞은편 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려동물 동반이 안 된다는 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 유모차 반입이 안 된다는 후기 여러 건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/25589899","https://blog.naver.com/blooming_ur_life/224419558162","https://blog.naver.com/hueanddesign/224401647548","https://blog.naver.com/blooming_ur_life/224419558162","https://blog.naver.com/ovo08_24/224394340206"]
   },
   {
@@ -446,11 +447,11 @@ const PLACES = [
     desc: "100% 메밀 국수",
     stayMin: 40, cost: 12000, open: "11:00", close: "17:00", closedDays: ["화"],
     lastOrder: "16:30",
-    lat: 33.34670, lng: 126.78317,
+    lat: 33.34672, lng: 126.78317,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "역지동 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "1027567350",
-    note: "표선면 가시로 423. 카카오맵(2026-10-31): 11:00~17:00, 16:30 마지막 주문, 화 휴무, 메밀 비빔면 12,000원, 장애인 시설, 무료 주차.",
+    note: "카카오맵(2026-10-31): 11:00~17:00, 16:30 마지막 주문, 화 휴무, 메밀 비빔면 12,000원, 장애인 시설, 무료 주차. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/1027567350"]
   },
   {
@@ -459,11 +460,11 @@ const PLACES = [
     stayMin: 40, cost: 9000, open: "09:40", close: "20:30", closedDays: [],
     lastOrder: "19:50",
     babyChair: true,
-    lat: 33.43861, lng: 126.91806,
+    lat: 33.43863, lng: 126.91808,
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "동모루왓 정류장 걸어서 3분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "22895321",
-    note: "성산읍 섭지코지로 10. 카카오맵(2026-10-31): 09:40~20:30, 19:50 마지막 주문, 고기국수 9,000원, 유아의자, 테라스. 관광공사 무장애: 주출입구 경사로 완만함, 자동문.",
+    note: "성산읍 섭지코지로 10. 카카오맵(2026-10-31): 09:40~20:30, 19:50 마지막 주문, 고기국수 9,000원, 유아의자, 테라스. 관광공사 무장애: 주출입구 경사로 완만함, 자동문. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["관광공사 API 2791481","https://place.map.kakao.com/22895321"]
   },
   {
@@ -471,11 +472,11 @@ const PLACES = [
     desc: "정갈한 제주 한식",
     stayMin: 70, cost: 16000, open: "11:00", close: "22:00", closedDays: [],
     breaks: [["14:00","16:00"]],
-    lat: 33.45461, lng: 126.91074,
+    lat: 33.45485, lng: 126.90865,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "성산일출도서관 정류장 걸어서 4분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "152859829",
-    note: "성산읍 일주동로 4188. 카카오맵(2026-10-31): 11:00~22:00, 14:00~16:00 브레이크타임, 메뉴 16,000원, 단체석, 큰 주차장.",
+    note: "카카오맵(2026-10-31): 11:00~22:00, 14:00~16:00 브레이크타임, 메뉴 16,000원, 단체석, 큰 주차장. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/152859829"]
   },
   {
@@ -484,22 +485,22 @@ const PLACES = [
     stayMin: 80, cost: 28500, open: "12:00", close: "22:00", closedDays: ["수"],
     breaks: [["15:00","17:00"]],
     babyChair: true,
-    lat: 33.32586, lng: 126.84407,
+    lat: 33.32586, lng: 126.84414,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "제주민속촌 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "26418624",
-    note: "표선면 표선당포로 13-1. 카카오맵(2026-10-31): 12:00~22:00, 15:00~17:00 브레이크타임, 수 휴무, 세트 57,000원(2명 기준으로 1인 28,500원), 유아의자, 반려동물 동반.",
+    note: "카카오맵(2026-10-31): 12:00~22:00, 15:00~17:00 브레이크타임, 수 휴무, 세트 57,000원(2명 기준으로 1인 28,500원), 유아의자, 반려동물 동반. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/26418624"]
   },
   {
     id: "masitne", name: "맛있네식당", type: "식당",
     desc: "갈치와 정갈한 밑반찬",
     stayMin: 60, cost: 22500, open: "09:00", close: "20:30", closedDays: [],
-    lat: 33.45221, lng: 126.91423,
+    lat: 33.45220, lng: 126.91423,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "고성오일시장 정류장 걸어서 1분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "2054470601",
-    note: "성산읍 고성오조로 96. 카카오맵(2026-10-31): 09:00~20:30, 메뉴 45,000원(2명 기준으로 1인 22,500원), 반려동물 동반. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
+    note: "성산읍 고성오조로 96. 카카오맵(2026-10-31): 09:00~20:30, 메뉴 45,000원(2명 기준으로 1인 22,500원), 반려동물 동반. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/2054470601"]
   },
   {
@@ -508,44 +509,44 @@ const PLACES = [
     stayMin: 50, cost: 15000, open: "07:00", close: "20:00", closedDays: ["일"],
     lastOrder: "19:30",
     breaks: [["15:20","17:00"]],
-    lat: 33.47168, lng: 126.91711,
+    lat: 33.47169, lng: 126.91711,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "성산고등학교 정류장 걸어서 6분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "338007220",
-    note: "성산읍 해맞이해안로 2725. 카카오맵(2026-10-31): 07:00~20:00, 15:20~17:00 브레이크타임, 19:30 마지막 주문, 일 휴무, 보말칼국수 15,000원, 장애인 시설.",
+    note: "성산읍 해맞이해안로 2725. 카카오맵(2026-10-31): 07:00~20:00, 15:20~17:00 브레이크타임, 19:30 마지막 주문, 일 휴무, 보말칼국수 15,000원, 장애인 시설. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/338007220"]
   },
   {
     id: "doljip", name: "돌집식당", type: "식당",
     desc: "제주 가정식 한상",
     stayMin: 70, cost: 25000, open: "10:00", close: "21:00", closedDays: ["수"],
-    lat: 33.39402, lng: 126.80073,
+    lat: 33.39401, lng: 126.80073,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "산내또 정류장 걸어서 1분", bikeRack: null, evChargerMin: 5, parking: null,
     kakaoId: "10313982",
-    note: "표선면 서성일로 23. 카카오맵(2026-10-31): 10:00~21:00, 수 휴무, 세트 50,000원(2명 기준으로 1인 25,000원).",
+    note: "카카오맵(2026-10-31): 10:00~21:00, 수 휴무, 세트 50,000원(2명 기준으로 1인 25,000원). 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/10313982"]
   },
   {
     id: "mohae-galchi", name: "모해통갈치화덕구이", type: "식당",
     desc: "화덕에 구운 제주 통갈치",
     stayMin: 70, cost: 15000, open: "08:00", close: "23:00", closedDays: [],
-    lat: 33.46177, lng: 126.93373,
+    lat: 33.46178, lng: 126.93373,
     dog: null, stroller: null, stepFree: true, solo: null,
     station: "성산일출봉입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "983132283",
-    note: "성산읍 일출로 267. 카카오맵(2026-10-31): 08:00~23:00, 고등어구이 15,000원, 단체석, 앞 주차. 관광공사 무장애: 출입구까지·주출입구 경사로. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
+    note: "성산읍 일출로 267. 카카오맵(2026-10-31): 08:00~23:00, 고등어구이 15,000원, 단체석, 앞 주차. 관광공사 무장애: 출입구까지·주출입구 경사로. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["관광공사 API 2871879","https://place.map.kakao.com/983132283"]
   },
   {
     id: "gyeongmi", name: "경미네집", type: "식당",
     desc: "해녀가 잡은 해물 라면",
     stayMin: 40, cost: 8000, open: "08:30", close: "16:00", closedDays: [],
-    lat: 33.46123, lng: 126.93340,
+    lat: 33.46125, lng: 126.93347,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "성산일출봉입구 정류장 걸어서 3분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "21931852",
-    note: "성산읍 일출로 259. 카카오맵(2026-10-31): 08:30~16:00, 해물라면 8,000원.",
+    note: "카카오맵(2026-10-31): 08:30~16:00, 해물라면 8,000원. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/21931852"]
   },
   {
@@ -556,7 +557,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "성산리입구 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "271695280",
-    note: "성산읍 일출로 230. 카카오맵(2026-10-31): 10:00~22:00, 커피+입장료 16,000원.",
+    note: "성산읍 일출로 230. 카카오맵(2026-10-31): 10:00~22:00, 커피+입장료 16,000원. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/271695280"]
   },
   {
@@ -564,11 +565,11 @@ const PLACES = [
     desc: "억새와 풍력발전기 보는 카페",
     stayMin: 50, cost: 6500, open: "09:30", close: "17:30", closedDays: [],
     dogReview: true,
-    lat: 33.39370, lng: 126.73167,
+    lat: 33.39373, lng: 126.73177,
     dog: true, stroller: null, stepFree: true, solo: null,
     station: "표선면 충혼묘지 정류장 걸어서 66분", bikeRack: null, evChargerMin: 20, parking: null,
     kakaoId: "26844539",
-    note: "표선면 녹산로 464-65. 카카오맵(2026-10-31): 09:30~17:30, 가시리 청귤에이드 6,500원, 장애인 시설. 반려견 후기(블로그, 2026-10-31 확인): 강아지 동반이 된다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "표선면 녹산로 464-65. 카카오맵(2026-10-31): 09:30~17:30, 가시리 청귤에이드 6,500원, 장애인 시설. 반려견 후기(블로그, 2026-10-31 확인): 강아지 동반이 된다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/26844539","https://blog.naver.com/nsh2537/223980734053","https://blog.naver.com/yun_nim0108/223841744489"]
   },
   {
@@ -579,18 +580,18 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "성읍2리 정류장 걸어서 6분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "1011635289",
-    note: "표선면 번영로 2486. 카카오맵(2026-10-31): 09:00~18:00, 수 휴무, 목장아이스크림라떼 8,000원, 반려동물 동반, 장애인 시설, 무료 주차.",
+    note: "표선면 번영로 2486. 카카오맵(2026-10-31): 09:00~18:00, 수 휴무, 목장아이스크림라떼 8,000원, 반려동물 동반, 장애인 시설, 무료 주차. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1011635289"]
   },
   {
     id: "hailey-cafe", name: "해일리 카페", type: "카페",
     desc: "바다가 보이는 오션뷰 카페",
     stayMin: 60, cost: 9500, open: "09:00", close: "21:00", closedDays: [],
-    lat: 33.46885, lng: 126.93539,
+    lat: 33.46872, lng: 126.93552,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "성산리 취락구조 정류장 걸어서 6분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "1546248756",
-    note: "성산읍 한도로 269-37. 카카오맵(2026-10-31): 09:00~21:00, 해일리라떼 9,500원, 반려동물 동반, 장애인 시설.",
+    note: "성산읍 한도로 269-37. 카카오맵(2026-10-31): 09:00~21:00, 해일리라떼 9,500원, 반려동물 동반, 장애인 시설. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1546248756"]
   },
   {
@@ -600,33 +601,33 @@ const PLACES = [
     dogRule: "목줄이나 유모차·케이지 필수",
     dogReview: true,
     strollerReview: true,
-    lat: 33.45942, lng: 126.93012,
+    lat: 33.45947, lng: 126.93029,
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "성산리입구 정류장 걸어서 4분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "1403064814",
-    note: "성산읍 일출로 222. 카카오맵(2026-10-31): 08:00~19:00, 아메리카노 5,700원, 반려동물 동반, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 글 1건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 온 손님이 있다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
+    note: "성산읍 일출로 222. 카카오맵(2026-10-31): 08:00~19:00, 아메리카노 5,700원, 반려동물 동반, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 글 1건. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 온 손님이 있다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1403064814","https://blog.naver.com/orbyun/224423832893","https://blog.naver.com/kkyskk01/224451370909","https://blog.naver.com/alice-220/224367162667"]
   },
   {
     id: "dreukumda-pyoseon", name: "목장카페 드르쿰다 표선", type: "카페",
     desc: "넓은 초원과 액티비티 카페",
     stayMin: 70, cost: 8000, open: "09:00", close: "18:00", closedDays: [],
-    lat: 33.40946, lng: 126.77034,
+    lat: 33.40918, lng: 126.77056,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "성읍2리 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "1176884672",
-    note: "표선면 번영로 2454. 카카오맵(2026-10-31): 09:00~18:00(카페 17:30 마감, 체험 16:50 마지막), 라떼 8,000원, 루프탑, 반려동물 동반.",
+    note: "카카오맵(2026-10-31): 09:00~18:00(카페 17:30 마감, 체험 16:50 마지막), 라떼 8,000원, 루프탑, 반려동물 동반. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/1176884672"]
   },
   {
     id: "orrrn", name: "오른", type: "카페",
     desc: "바다와 꽃이 어우러진 카페",
     stayMin: 60, cost: 8500, open: "10:00", close: "19:00", closedDays: [],
-    lat: 33.47180, lng: 126.91575,
+    lat: 33.47183, lng: 126.91577,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "성산고등학교 정류장 걸어서 7분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "2070757323",
-    note: "성산읍 해맞이해안로 2714. 카카오맵(2026-10-31): 10:00~19:00, 연중무휴, 오른라떼 8,500원, 반려동물 동반, 장애인 시설, 무료 주차.",
+    note: "성산읍 해맞이해안로 2714. 카카오맵(2026-10-31): 10:00~19:00, 연중무휴, 오른라떼 8,500원, 반려동물 동반, 장애인 시설, 무료 주차. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/2070757323"]
   },
   {
@@ -634,11 +635,11 @@ const PLACES = [
     desc: "녹차밭 속 족욕 카페",
     stayMin: 60, cost: 7000, open: "09:00", close: "17:30", closedDays: [],
     lastOrder: "17:00",
-    lat: 33.38183, lng: 126.79099,
+    lat: 33.38109, lng: 126.79129,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "너븐못 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "24598037",
-    note: "표선면 중산간동로 4772. 카카오맵(2026-10-31): 09:00~17:30, 17:00 마지막 주문, 말차 라떼 7,000원, 키즈프렌들리, 테라스, 무료 주차.",
+    note: "표선면 중산간동로 4772. 카카오맵(2026-10-31): 09:00~17:30, 17:00 마지막 주문, 말차 라떼 7,000원, 키즈프렌들리, 테라스, 무료 주차. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/24598037"]
   },
   {
@@ -646,22 +647,22 @@ const PLACES = [
     desc: "바다 품은 오션뷰 카페",
     stayMin: 50, cost: null, open: "09:00", close: "22:00", closedDays: [],
     hoursByDay: {"월":["09:00","19:30"]},
-    lat: 33.32543, lng: 126.84239,
+    lat: 33.32545, lng: 126.84243,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "제주민속촌(종점) 정류장 걸어서 2분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "646235382",
-    note: "표선면 민속해안로 594. 카카오맵(2026-10-31): 09:00~22:00(월 19:30까지). 가격은 확인 못 했어요.",
+    note: "표선면 민속해안로 594. 카카오맵(2026-10-31): 09:00~22:00(월 19:30까지). 가격은 확인 못 했어요. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/646235382"]
   },
   {
     id: "modeurak572", name: "모드락572", type: "카페",
     desc: "가시리 갤러리 카페",
     stayMin: 50, cost: 5000, open: "10:00", close: "22:00", closedDays: [],
-    lat: 33.35432, lng: 126.77375,
+    lat: 33.35440, lng: 126.77380,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "가시리동상동 정류장 걸어서 2분", bikeRack: null, evChargerMin: 7, parking: null,
     kakaoId: "19637817",
-    note: "표선면 가시로 572. 카카오맵(2026-10-31): 10:00~22:00, 아메리카노 5,000원.",
+    note: "카카오맵(2026-10-31): 10:00~22:00, 아메리카노 5,000원. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/19637817"]
   },
   {
@@ -669,11 +670,11 @@ const PLACES = [
     desc: "에메랄드빛 바다 카페",
     stayMin: 50, cost: 5500, open: "11:00", close: "18:00", closedDays: [],
     lastOrder: "17:30",
-    lat: 33.43549, lng: 126.91891,
+    lat: 33.43551, lng: 126.91890,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "신양리 정류장 걸어서 5분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "1335585931",
-    note: "성산읍 신양로122번길 45-1. 카카오맵(2026-10-31): 11:00~18:00, 17:30 주문 마감, 아메리카노 5,500원, 반려동물 동반, 무료 주차.",
+    note: "성산읍 신양로122번길 45-1번길 45-1. 카카오맵(2026-10-31): 11:00~18:00, 17:30 주문 마감, 아메리카노 5,500원, 반려동물 동반, 무료 주차. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1335585931"]
   }
 ];

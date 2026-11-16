@@ -1,4 +1,5 @@
 // 장소 데이터 · 한경·대정·안덕 (2026-10-31 정리, 아직 직접 확인 안 함)
+// 위치(lat·lng): 한국관광공사 국문 관광정보·행정안전부 도로명주소 좌표·OpenStreetMap(© OpenStreetMap contributors, ODbL) (2026-11-16). 카카오 로컬 API 좌표·주소는 저장하지 않아요(장소 번호 kakaoId만 써요).
 // 칸 설명은 regions/aewol/places.js 맨 위를 보세요.
 // 운영시간·시설: 카카오맵 장소 페이지(2026-10-31 읽음)를 먼저 쓰고, 없으면 한국관광공사 API를 썼어요.
 // 모르는 것은 null이에요. 배로 가는 마라도·가파도, 2027년 7월까지 출입 제한인 송악산, 임시 휴업 표시인 유리의성, 영업 종료 표시인 곳은 뺐어요.
@@ -8,7 +9,7 @@ const INLAND_NORTH = true;
 const COASTLINE = [{ lat: 33.360, lng: 126.200 }, { lat: 33.240, lng: 126.340 }];
 
 const STARTS = [
-  { id: "airport", emoji: "✈️", label: "제주공항", name: "제주국제공항", lat: 33.50684, lng: 126.49272 },
+  { id: "airport", emoji: "✈️", label: "제주공항", name: "제주국제공항", lat: 33.50631, lng: 126.49263 },
   { id: "moseulpo", emoji: "🏠", label: "모슬포·대정 근처", name: "모슬포·대정 근처", lat: 33.218, lng: 126.251 },
   { id: "sagye", emoji: "🏠", label: "사계·산방산 근처", name: "사계·산방산 근처", lat: 33.234, lng: 126.305 },
   { id: "gosan", emoji: "🏠", label: "고산·수월봉 근처", name: "고산·수월봉 근처", lat: 33.299, lng: 126.175 },
@@ -21,12 +22,12 @@ const PLACES = [
     id: "sagye-beach", name: "사계해변", type: "공원",
     desc: "화산 지형과 노을이 어우러진 해변",
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
-    lat: 33.22866, lng: 126.30860,
+    lat: 33.22850, lng: 126.30880,
     dogRule: "물에는 못 들어가요",
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "사계용해경로당 정류장 걸어서 5분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "11055702",
-    note: "안덕면 사계리. 카카오맵(2026-10-31): 무료입장, 주차(소형 무료). 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 해수욕장 산책은 가능하지만, 바다 입수는 불가 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    note: "안덕면 사계리. 카카오맵(2026-10-31): 무료입장, 주차(소형 무료). 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 해수욕장 산책은 가능하지만, 바다 입수는 불가 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/11055702"]
   },
   {
@@ -34,11 +35,11 @@ const PLACES = [
     desc: "바다 품은 오름 산책길",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     strollerReview: true,
-    lat: 33.29477, lng: 126.16311,
+    lat: 33.29476, lng: 126.16341,
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "한장동 정류장 걸어서 11분", bikeRack: null, evChargerMin: 29, parking: null,
     kakaoId: "25294439",
-    note: "한경면 고산리 3760. 카카오맵(2026-10-31): 무료입장, 카페·식당, 기념품샵, 반려동물 동반. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 걷기 좋다는 후기 2건.",
+    note: "한경면 고산리 3760. 카카오맵(2026-10-31): 무료입장, 카페·식당, 기념품샵, 반려동물 동반. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 걷기 좋다는 후기 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/25294439","https://blog.naver.com/ssanai28/224404166049","https://blog.naver.com/520ohy520/224303709172"]
   },
   {
@@ -46,22 +47,22 @@ const PLACES = [
     desc: "바람과 풍차의 바다 풍경",
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     strollerReview: true,
-    lat: 33.34534, lng: 126.17763,
+    lat: 33.34310, lng: 126.17213,
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "구 한경의원 앞 정류장 걸어서 9분", bikeRack: null, evChargerMin: 9, parking: true,
     kakaoId: "25049180",
-    note: "한경면 신창리 1290-2. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 데크길이라 유모차로 편하다는 글 2건.",
+    note: "한경면 한경해안로 485. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 데크길이라 유모차로 편하다는 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/25049180","https://blog.naver.com/sarahavo/224346575826","https://blog.naver.com/smb0005/224358587007"]
   },
   {
     id: "hwasun-beach", name: "화순금모래해수욕장", type: "공원",
     desc: "산방산이 보이는 금빛 해변",
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
-    lat: 33.24003, lng: 126.33359,
+    lat: 33.24067, lng: 126.33350,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "화순금모래해수욕장 정류장 걸어서 5분", bikeRack: null, evChargerMin: 10, parking: null,
     kakaoId: "8173573",
-    note: "안덕면 화순해안로 69. 카카오맵(2026-10-31): 무료입장, 휴게공간. 개장 기간은 확인 못 했어요.",
+    note: "안덕면 화순해안로. 카카오맵(2026-10-31): 무료입장, 휴게공간. 개장 기간은 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/8173573"]
   },
   {
@@ -69,22 +70,22 @@ const PLACES = [
     desc: "숲과 기암절벽의 계곡",
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     dogReview: true,
-    lat: 33.25720, lng: 126.35258,
+    lat: 33.25733, lng: 126.35291,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "안덕계곡 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "8001026",
-    note: "안덕면 감산리 1946. 카카오맵(2026-10-31): 무료입장, 휴게공간, 입구 맞은편 주차장. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 걸은 글 2건.",
+    note: "안덕면 감산리. 카카오맵(2026-10-31): 무료입장, 휴게공간, 입구 맞은편 주차장. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 걸은 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/8001026","https://blog.naver.com/tnsdoqnqn0922/223862489744","https://blog.naver.com/ssoyeon_yoon/224326536821"]
   },
   {
     id: "gunsan-oreum", name: "군산오름", type: "공원",
     desc: "안개 속 숨은 오름",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
-    lat: 33.25324, lng: 126.36997,
+    lat: 33.25320, lng: 126.37070,
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "창천리남당물동산 정류장 걸어서 17분", bikeRack: null, evChargerMin: 22, parking: true,
     kakaoId: "25186462",
-    note: "안덕면 창천리 산 3-1. 카카오맵(2026-10-31): 무료입장, 유모차 가능, 반려동물 동반, 무료 주차 20대 정도.",
+    note: "안덕면 창천리 3-1. 카카오맵(2026-10-31): 무료입장, 유모차 가능, 반려동물 동반, 무료 주차 20대 정도. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/25186462"]
   },
   {
@@ -92,11 +93,11 @@ const PLACES = [
     desc: "숲길 산책",
     stayMin: 70, cost: null, open: "09:00", close: "15:00", closedDays: [],
     hoursByDay: {"토":["09:00","16:30"]},
-    lat: 33.28895, lng: 126.27172,
+    lat: 33.28322, lng: 126.27357,
     dog: null, stroller: true, stepFree: null, solo: null,
     station: "삼정지에듀/곶자왈도립공원 정류장 걸어서 13분", bikeRack: null, evChargerMin: 11, parking: true,
     kakaoId: "27254363",
-    note: "대정읍 에듀시티로 178. 카카오맵(2026-10-31): 09:00~15:00(토 16:30), 사전예약, 유모차 가능, 전용 무료 주차. 입장료는 확인 못 했어요.",
+    note: "대정읍 에듀시티로 178. 카카오맵(2026-10-31): 09:00~15:00(토 16:30), 사전예약, 유모차 가능, 전용 무료 주차. 입장료는 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/27254363"]
   },
   {
@@ -104,23 +105,23 @@ const PLACES = [
     desc: "신비로운 절벽과 바다",
     stayMin: 50, cost: 2000, open: "09:00", close: "17:00", closedDays: [],
     strollerReview: true,
-    lat: 33.23166, lng: 126.31472,
+    lat: 33.23170, lng: 126.31510,
     dog: null, stroller: false, stepFree: null, solo: null,
     station: "산방산 정류장 걸어서 10분", bikeRack: null, evChargerMin: 9, parking: true,
     kakaoId: "10706886",
-    note: "안덕면 사계리 112-3. 카카오맵(2026-10-31): 09:00~17:00, 연중무휴, 성인 2,000원, 공영주차장 무료. 물때와 파도에 따라 통제될 수 있어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차를 쓸 수 없다는 글 여러 건.",
+    note: "안덕면 사계리. 카카오맵(2026-10-31): 09:00~17:00, 연중무휴, 성인 2,000원, 공영주차장 무료. 물때와 파도에 따라 통제될 수 있어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차를 쓸 수 없다는 글 여러 건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/10706886","https://blog.naver.com/mky_y/224390238563","https://blog.naver.com/honeybees07/224416764925"]
   },
   {
     id: "sanyang-gotjawal", name: "산양큰엉곶", type: "공원",
     desc: "동화 속 숲길과 기찻길",
     stayMin: 70, cost: 8000, open: "09:30", close: "18:00", closedDays: [],
-    lat: 33.29092, lng: 126.25063,
+    lat: 33.29070, lng: 126.25030,
     dogRule: "목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "산양 큰엉곶 입구 정류장 걸어서 1분", bikeRack: null, evChargerMin: 18, parking: null,
     kakaoId: "1901034660",
-    note: "한경면 청수리 956-6. 카카오맵(2026-10-31): 09:30~18:00, 입장료 8,000원, 휠체어 접근, 유모차 가능, 반려동물 동반. 관광공사 무장애: 출입구까지·주출입구 턱 없음. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    note: "한경면 청수리. 카카오맵(2026-10-31): 09:30~18:00, 입장료 8,000원, 휠체어 접근, 유모차 가능, 반려동물 동반. 관광공사 무장애: 출입구까지·주출입구 턱 없음. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://www.data.go.kr/data/15135102/openapi.do", "관광공사 API 2948051","https://place.map.kakao.com/1901034660"]
   },
   {
@@ -128,11 +129,11 @@ const PLACES = [
     desc: "제주 원시림 산책",
     stayMin: 60, cost: 5000, open: "09:00", close: "18:00", closedDays: ["일"],
     strollerReview: true,
-    lat: 33.32291, lng: 126.26303,
+    lat: 33.32240, lng: 126.26292,
     dog: null, stroller: false, stepFree: null, solo: null,
     station: "환상숲곶자왈공원 정류장 걸어서 2분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "19763694",
-    note: "한경면 녹차분재로 594-1. 카카오맵(2026-10-31): 09:00~18:00, 일 휴무, 사전예약, 일반 5,000원, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 요철 지형이라 유모차가 어렵다는 글 2건.",
+    note: "한경면 녹차분재로 594-1. 카카오맵(2026-10-31): 09:00~18:00, 일 휴무, 사전예약, 일반 5,000원, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 요철 지형이라 유모차가 어렵다는 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/19763694","https://blog.naver.com/chaerishhh/224436662705","https://blog.naver.com/carpediem0910/224292425682"]
   },
   {
@@ -141,12 +142,12 @@ const PLACES = [
     stayMin: 80, cost: null, open: "08:30", close: "18:00", closedDays: [],
     hoursByDay: {"토":["08:30","18:30"]},
     strollerReview: true,
-    lat: 33.29034, lng: 126.36819,
+    lat: 33.28987, lng: 126.36825,
     dogRule: "8kg 이하만, 목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "동백동산 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "9461977",
-    note: "안덕면 병악로 166. 카카오맵(2026-10-31): 08:30~18:00(토 18:30, 마감 1시간 전 입장 마감), 연중무휴. 입장료는 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견 동반이 된다는 글 2건. 유모차 후기(블로그, 2026-10-31 확인): 유모차 무료 대여가 된다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 8kg 이하 동반 가능 / 필요: 목줄 착용 / 배변봉투 지참 및 배변처리 필수.",
+    note: "안덕면 병악로 166. 카카오맵(2026-10-31): 08:30~18:00(토 18:30, 마감 1시간 전 입장 마감), 연중무휴. 입장료는 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견 동반이 된다는 글 2건. 유모차 후기(블로그, 2026-10-31 확인): 유모차 무료 대여가 된다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 8kg 이하 동반 가능 / 필요: 목줄 착용 / 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/9461977","https://blog.naver.com/tndus251/224447015457","https://blog.naver.com/smart_paeng/224443126623","https://blog.naver.com/tndus251/224447015457","https://blog.naver.com/ddaomingsuk/224452558592"]
   },
   {
@@ -158,7 +159,7 @@ const PLACES = [
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "생각하는정원 정류장 걸어서 1분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "27539430",
-    note: "한경면 녹차분재로 675. 카카오맵(2026-10-31): 09:00~18:00, 어른 15,000원, 반려동물 동반, 장애인 시설, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 큰 불편 없다는 글 여러 건, 무료 대여. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "한경면 녹차분재로 675. 카카오맵(2026-10-31): 09:00~18:00, 어른 15,000원, 반려동물 동반, 장애인 시설, 무료 주차. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 큰 불편 없다는 글 여러 건, 무료 대여. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/27539430","https://blog.naver.com/geolaputa/224427361491","https://blog.naver.com/jejuda-he/224412834442"]
   },
   {
@@ -171,7 +172,7 @@ const PLACES = [
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "탄산온천 정류장 걸어서 10분", bikeRack: null, evChargerMin: 11, parking: null,
     kakaoId: "27199017",
-    note: "안덕면 일주서로2100번길 46. 카카오맵(2026-10-31): 09:00~19:00, 성인 6,000원. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건.",
+    note: "안덕면 일주서로2100번길 46번길 46. 카카오맵(2026-10-31): 09:00~19:00, 성인 6,000원. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/27199017","https://blog.naver.com/sourceyu/224424652117","https://blog.naver.com/g0heaven/224321495724"]
   },
   {
@@ -179,11 +180,11 @@ const PLACES = [
     desc: "자연과 예술의 정원",
     stayMin: 60, cost: null, open: "09:00", close: "17:00", closedDays: [],
     strollerReview: true,
-    lat: 33.33715, lng: 126.26853,
+    lat: 33.33729, lng: 126.26859,
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "방림원 정류장 걸어서 2분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "8318161",
-    note: "한경면 용금로 864. 카카오맵(2026-10-31): 09:00~17:00(입장은 폐장 1시간 전까지), 연중무휴, 반려동물 동반, 장애인 시설. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 갈 수 있다는 글 2건.",
+    note: "한경면 용금로 864. 카카오맵(2026-10-31): 09:00~17:00(입장은 폐장 1시간 전까지), 연중무휴, 반려동물 동반, 장애인 시설. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 갈 수 있다는 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/8318161","https://blog.naver.com/haroo-012/224257839628","https://sopang96.tistory.com/24"]
   },
   {
@@ -198,7 +199,7 @@ const PLACES = [
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "제주항공우주박물관 정류장 걸어서 3분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "19585161",
-    note: "안덕면 항공우주로 83. 카카오맵(2026-10-31): 09:00~18:00(매표 17:00까지), 장애인 시설, 무료 주차. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 편하다는 후기 2건, 36개월까지 대여. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 09:00~18:00, 매표 마감 17:00. 공식 누리집(jdc-jam.com, 2026-11-15): 매월 셋째 월요일 휴관(공휴일이면 다음 평일).",
+    note: "안덕면 항공우주로 83. 카카오맵(2026-10-31): 09:00~18:00(매표 17:00까지), 장애인 시설, 무료 주차. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 편하다는 후기 2건, 36개월까지 대여. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 09:00~18:00, 매표 마감 17:00. 공식 누리집(jdc-jam.com, 2026-11-15): 매월 셋째 월요일 휴관(공휴일이면 다음 평일). 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/19585161","https://blog.naver.com/jky675/224409045818","https://blog.naver.com/awefth565/224040167886"]
   },
   {
@@ -206,11 +207,11 @@ const PLACES = [
     desc: "자연과 건축이 어우러진 미술관",
     stayMin: 80, cost: 30000, open: "10:00", close: "18:00", closedDays: [],
     indoor: true,
-    lat: 33.30377, lng: 126.39248,
+    lat: 33.30401, lng: 126.39254,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "상천리 정류장 걸어서 20분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "18539729",
-    note: "안덕면 산록남로762번길 69. 카카오맵(2026-10-31): 10:00~18:00, 상설+기획 전시 성인 30,000원.",
+    note: "안덕면 산록남로762번길 69록남로762번길 69. 카카오맵(2026-10-31): 10:00~18:00, 상설+기획 전시 성인 30,000원. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/18539729"]
   },
   {
@@ -219,11 +220,11 @@ const PLACES = [
     stayMin: 70, cost: 16000, open: "09:00", close: "18:00", closedDays: [],
     indoor: true,
     strollerReview: true,
-    lat: 33.29003, lng: 126.35208,
+    lat: 33.29005, lng: 126.35212,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "테디밸리 골프앤리조트, 헬로키티 아일랜드 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "26608807",
-    note: "안덕면 한창로 340. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 성인 16,000원, 수유실, 아이놀이방. 유모차 후기(블로그, 2026-10-31 확인): 유모차 이동이 무리 없다는 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "안덕면 한창로 340. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 성인 16,000원, 수유실, 아이놀이방. 유모차 후기(블로그, 2026-10-31 확인): 유모차 이동이 무리 없다는 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/26608807","https://blog.naver.com/love_rangee/224447590890","https://blog.naver.com/mega4036/224363070801"]
   },
   {
@@ -233,11 +234,11 @@ const PLACES = [
     indoor: true,
     dogReview: true,
     strollerReview: true,
-    lat: 33.28191, lng: 126.35536,
+    lat: 33.28194, lng: 126.35539,
     dog: false, stroller: true, stepFree: true, solo: null,
     station: "숨비나리 정류장 걸어서 5분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "1608663587",
-    note: "안덕면 한창로 243. 카카오맵(2026-10-31): 09:30~18:00, 연중무휴, 성인 14,000원, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려견 입장이 안 된다는 글 2건. 유모차 후기(블로그, 2026-10-31 확인): 엘리베이터가 있어 유모차가 된다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "안덕면 한창로 243. 카카오맵(2026-10-31): 09:30~18:00, 연중무휴, 성인 14,000원, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 반려견 입장이 안 된다는 글 2건. 유모차 후기(블로그, 2026-10-31 확인): 엘리베이터가 있어 유모차가 된다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1608663587","https://blog.naver.com/0cn17/223655393546","https://blog.naver.com/congal30/224458663798","https://blog.naver.com/dins_log/224391188489","https://blog.naver.com/deksoman/224406501006"]
   },
   {
@@ -245,22 +246,22 @@ const PLACES = [
     desc: "클래식 자동차와 피아노",
     stayMin: 70, cost: null, open: "09:00", close: "18:00", closedDays: [],
     indoor: true,
-    lat: 33.28376, lng: 126.34981,
+    lat: 33.28341, lng: 126.34993,
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "세계자동차 피아노박물관 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "7952882",
-    note: "안덕면 중산간서로 1610. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유모차 가능, 반려동물 동반, 주차. 입장료는 확인 못 했어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
+    note: "안덕면 중산간서로 1610. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유모차 가능, 반려동물 동반, 주차. 입장료는 확인 못 했어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/7952882"]
   },
   {
     id: "sanbangsan", name: "산방산", type: "볼거리",
     desc: "웅장한 산방산과 들꽃 풍경",
     stayMin: 50, cost: 0, open: "09:00", close: "18:00", closedDays: [],
-    lat: 33.24156, lng: 126.31337,
+    lat: 33.24156, lng: 126.31334,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "산방산 정류장 걸어서 11분", bikeRack: null, evChargerMin: 11, parking: true,
     kakaoId: "8386141",
-    note: "안덕면 사계리 산 16. 카카오맵(2026-10-31): 09:00~18:00, 무료입장, 공영주차장 무료.",
+    note: "카카오맵(2026-10-31): 09:00~18:00, 무료입장, 공영주차장 무료. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/8386141"]
   },
   {
@@ -269,11 +270,11 @@ const PLACES = [
     stayMin: 50, cost: null, open: "10:30", close: "17:00", closedDays: [],
     indoor: true,
     strollerReview: true,
-    lat: 33.25706, lng: 126.22994,
+    lat: 33.25699, lng: 126.23001,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "대정농공단지 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "8096619",
-    note: "대정읍 일주서로3000번길 144. 카카오맵(2026-10-31): 10:30~17:00, 유료입장, 휠체어 접근, 카페·식당, 체험. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 갔다는 글 2건.",
+    note: "대정읍 일주서로3000번길 144번길 144. 카카오맵(2026-10-31): 10:30~17:00, 유료입장, 휠체어 접근, 카페·식당, 체험. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 갔다는 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/8096619","https://blog.naver.com/geumpalchi5813/224331197369","https://happykairos.com/70"]
   },
   {
@@ -281,23 +282,23 @@ const PLACES = [
     desc: "자연 속 테마파크",
     stayMin: 70, cost: 16000, open: "08:40", close: "18:00", closedDays: [],
     strollerReview: true,
-    lat: 33.34948, lng: 126.21852,
+    lat: 33.34943, lng: 126.21823,
     dog: true, stroller: false, stepFree: null, solo: null,
     station: "금등대안길 정류장 걸어서 19분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "664283303",
-    note: "한경면 판조로 253-6. 카카오맵(2026-10-31): 08:40~18:00, 입장료 16,000원, 반려동물 동반, 주차. 유모차 후기(블로그, 2026-10-31 확인): 유모차가 험난하고 입구에 두고 간다는 후기 2건.",
+    note: "한경면 판조로 253-6. 카카오맵(2026-10-31): 08:40~18:00, 입장료 16,000원, 반려동물 동반, 주차. 유모차 후기(블로그, 2026-10-31 확인): 유모차가 험난하고 입구에 두고 간다는 후기 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/664283303","https://blog.naver.com/dream00556/224396507132","https://blog.naver.com/ymc2564/224278439980"]
   },
   {
     id: "norimae", name: "노리매", type: "볼거리",
     desc: "자연과 감성의 산책길",
     stayMin: 70, cost: 9000, open: "09:00", close: "18:00", closedDays: [],
-    lat: 33.28311, lng: 126.28734,
+    lat: 33.28257, lng: 126.28754,
     dogRule: "목줄 필수",
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "노리매 정류장 걸어서 4분", bikeRack: null, evChargerMin: 7, parking: true,
     kakaoId: "19265298",
-    note: "대정읍 중산간서로 2260-15. 카카오맵(2026-10-31): 09:00~18:00(계절마다 달라요), 성인 9,000원, 휠체어 접근, 유모차 가능, 반려동물 동반, 주차. 관광공사 무장애: 출입구까지·주출입구 턱 없음, 휠체어 대여. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수.",
+    note: "카카오맵(2026-10-31): 09:00~18:00(계절마다 달라요), 성인 9,000원, 휠체어 접근, 유모차 가능, 반려동물 동반, 주차. 관광공사 무장애: 출입구까지·주출입구 턱 없음, 휠체어 대여. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://www.data.go.kr/data/15135102/openapi.do", "관광공사 API 2704456","https://place.map.kakao.com/19265298"]
   },
   {
@@ -306,33 +307,33 @@ const PLACES = [
     stayMin: 60, cost: 2000, open: "09:00", close: "18:00", closedDays: ["월"],
     indoor: true,
     strollerReview: true,
-    lat: 33.33966, lng: 126.26559,
+    lat: 33.33984, lng: 126.26566,
     dog: null, stroller: true, stepFree: true, solo: null,
     station: "신흥동 정류장 걸어서 4분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "15786539",
-    note: "한경면 저지14길 35. 카카오맵(2026-10-31): 09:00~18:00, 어른 2,000원, 장애인 시설, 무료 주차. 전시 교체 때 쉬어요(11/3~11/5 등). 유모차 후기(블로그, 2026-10-31 확인): 길이 평탄하고 엘리베이터가 있다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요.",
+    note: "한경면 저지14길 35. 카카오맵(2026-10-31): 09:00~18:00, 어른 2,000원, 장애인 시설, 무료 주차. 전시 교체 때 쉬어요(11/3~11/5 등). 유모차 후기(블로그, 2026-10-31 확인): 길이 평탄하고 엘리베이터가 있다는 글 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/15786539","https://blog.naver.com/wjsqhfka73/224388526922","https://blog.naver.com/travelerjay1155/224370544146"]
   },
   {
     id: "sagye-station", name: "제주소품샵 사계정거장", type: "쇼핑",
     desc: "사계 소품샵",
     stayMin: 30, cost: 0, open: "11:00", close: "18:00", closedDays: [],
-    lat: 33.23115, lng: 126.30864,
+    lat: 33.23110, lng: 126.30875,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "사계용해경로당 정류장 걸어서 1분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "686299746",
-    note: "안덕면 사계남로 202. 카카오맵(2026-10-31): 11:00~18:00, 반려동물 동반, 장애인 시설, 무료 주차. 물건값은 빼고 0원으로 넣었어요.",
+    note: "안덕면 사계남로 202. 카카오맵(2026-10-31): 11:00~18:00, 반려동물 동반, 장애인 시설, 무료 주차. 물건값은 빼고 0원으로 넣었어요. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/686299746"]
   },
   {
     id: "time-traveler", name: "시간여행자의집", type: "쇼핑",
     desc: "평화로 소품샵",
     stayMin: 30, cost: 0, open: "10:30", close: "18:00", closedDays: [],
-    lat: 33.29131, lng: 126.32780,
+    lat: 33.29155, lng: 126.32788,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "서광리 정류장 걸어서 6분", bikeRack: null, evChargerMin: 7, parking: null,
     kakaoId: "1591812165",
-    note: "안덕면 평화로 654. 카카오맵(2026-10-31): 10:30~18:00. 물건값은 빼고 0원으로 넣었어요.",
+    note: "안덕면 평화로 654. 카카오맵(2026-10-31): 10:30~18:00. 물건값은 빼고 0원으로 넣었어요. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1591812165"]
   },
   {
@@ -340,11 +341,11 @@ const PLACES = [
     desc: "제주 바다의 회와 고등어",
     stayMin: 70, cost: 30000, open: "11:00", close: "21:30", closedDays: ["월"],
     breaks: [["14:30","16:00"]],
-    lat: 33.21816, lng: 126.25003,
+    lat: 33.21815, lng: 126.25004,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "하모체육공원 정류장 걸어서 4분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "10963527",
-    note: "대정읍 하모항구로 50. 카카오맵(2026-10-31): 11:00~21:30, 14:30~16:00 브레이크타임, 월 휴무, 고등어세트 30,000원.",
+    note: "하모항구로 50 수눌음. 카카오맵(2026-10-31): 11:00~21:30, 14:30~16:00 브레이크타임, 월 휴무, 고등어세트 30,000원. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/10963527"]
   },
   {
@@ -352,11 +353,11 @@ const PLACES = [
     desc: "순살 갈치강정 한식",
     stayMin: 50, cost: 15000, open: "08:00", close: "19:00", closedDays: ["일"],
     babyChair: true,
-    lat: 33.26501, lng: 126.37119,
+    lat: 33.26499, lng: 126.37126,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "창천리 정류장 걸어서 1분", bikeRack: null, evChargerMin: 5, parking: true,
     kakaoId: "11250634",
-    note: "안덕면 일주서로 1332. 카카오맵(2026-10-31): 08:00~19:00, 일 휴무, 메뉴 15,000원(2인 이상), 유아의자, 앞 주차 10대 내외.",
+    note: "카카오맵(2026-10-31): 08:00~19:00, 일 휴무, 메뉴 15,000원(2인 이상), 유아의자, 앞 주차 10대 내외. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/11250634"]
   },
   {
@@ -364,11 +365,11 @@ const PLACES = [
     desc: "산방산 보며 먹는 전복돌솥밥",
     stayMin: 60, cost: 13000, open: "08:00", close: "20:00", closedDays: [],
     babyChair: true,
-    lat: 33.24842, lng: 126.30314,
+    lat: 33.24842, lng: 126.30315,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "덕수초등학교 정류장 걸어서 4분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "2011590693",
-    note: "안덕면 사계로 207. 카카오맵(2026-10-31): 08:00~20:00, 전복돌솥밥 13,000원, 유아의자, 전용 주차.",
+    note: "안덕면 사계로 207. 카카오맵(2026-10-31): 08:00~20:00, 전복돌솥밥 13,000원, 유아의자, 전용 주차. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/2011590693"]
   },
   {
@@ -377,11 +378,11 @@ const PLACES = [
     stayMin: 50, cost: 15900, open: "11:00", close: "19:30", closedDays: ["목"],
     lastOrder: "18:30",
     breaks: [["15:00","16:00"]],
-    lat: 33.30735, lng: 126.25398,
+    lat: 33.30736, lng: 126.25402,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "평화동 회관 정류장 걸어서 1분", bikeRack: null, evChargerMin: 18, parking: null,
     kakaoId: "27477200",
-    note: "한경면 청수동8길 3. 카카오맵(2026-10-31): 11:00~19:30, 15:00~16:00 브레이크타임, 18:30 마지막 주문, 목 휴무, 양버거 15,900원, 반려동물 동반.",
+    note: "한경면 청수동8길 3길 3. 카카오맵(2026-10-31): 11:00~19:30, 15:00~16:00 브레이크타임, 18:30 마지막 주문, 목 휴무, 양버거 15,900원, 반려동물 동반. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/27477200"]
   },
   {
@@ -389,11 +390,11 @@ const PLACES = [
     desc: "모슬포항 중식",
     stayMin: 60, cost: 23000, open: "09:00", close: "21:00", closedDays: [],
     babyChair: true,
-    lat: 33.22017, lng: 126.25166,
+    lat: 33.22017, lng: 126.25163,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "하모체육공원 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "16841033",
-    note: "대정읍 하모항구로 76. 카카오맵(2026-10-31): 09:00~21:00, 탕수육+해물짬뽕 23,000원, 유아의자, 반려동물 동반, 앞 주차 4대.",
+    note: "카카오맵(2026-10-31): 09:00~21:00, 탕수육+해물짬뽕 23,000원, 유아의자, 반려동물 동반, 앞 주차 4대. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/16841033"]
   },
   {
@@ -405,7 +406,7 @@ const PLACES = [
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "환상숲곶자왈공원 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "1059580174",
-    note: "한경면 녹차분재로 571. 카카오맵(2026-10-31): 11:00~16:00, 15:30 마지막 주문, 수 휴무, 들기름 간장 골동면 15,000원.",
+    note: "한경면 녹차분재로 571. 카카오맵(2026-10-31): 11:00~16:00, 15:30 마지막 주문, 수 휴무, 들기름 간장 골동면 15,000원. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1059580174"]
   },
   {
@@ -413,11 +414,11 @@ const PLACES = [
     desc: "50년 전통 제주식 밀면",
     stayMin: 40, cost: 9000, open: "11:00", close: "18:00", closedDays: ["수"],
     babyChair: true,
-    lat: 33.22346, lng: 126.25421,
+    lat: 33.22336, lng: 126.25420,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "모슬포우체국 정류장 걸어서 3분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "10437289",
-    note: "대정읍 하모이삼로 62. 카카오맵(2026-10-31): 11:00~18:00, 수 휴무, 비빔밀냉면 9,000원, 유아의자, 전용 주차.",
+    note: "대정읍 하모이삼로 62. 카카오맵(2026-10-31): 11:00~18:00, 수 휴무, 비빔밀냉면 9,000원, 유아의자, 전용 주차. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/10437289"]
   },
   {
@@ -426,11 +427,11 @@ const PLACES = [
     stayMin: 70, cost: 35000, open: "11:30", close: "22:00", closedDays: ["수"],
     lastOrder: "20:30",
     babyChair: true,
-    lat: 33.21774, lng: 126.24983,
+    lat: 33.21775, lng: 126.24981,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "하모체육공원 정류장 걸어서 4분", bikeRack: null, evChargerMin: 5, parking: true,
     kakaoId: "9006988",
-    note: "대정읍 하모항구로 42. 카카오맵(2026-10-31): 11:30~22:00, 20:30 마지막 주문, 수 휴무, 고등어회&탕(소) 70,000원(2명 기준으로 1인 35,000원), 유아의자, 앞 주차.",
+    note: "대정읍 하모항구로 42. 카카오맵(2026-10-31): 11:30~22:00, 20:30 마지막 주문, 수 휴무, 고등어회&탕(소) 70,000원(2명 기준으로 1인 35,000원), 유아의자, 앞 주차. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/9006988"]
   },
   {
@@ -438,11 +439,11 @@ const PLACES = [
     desc: "보말전복 손칼국수",
     stayMin: 40, cost: 12000, open: "11:00", close: "16:00", closedDays: ["수"],
     babyChair: true,
-    lat: 33.21997, lng: 126.24901,
+    lat: 33.21998, lng: 126.24900,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "하모3리 정류장 걸어서 5분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "9940398",
-    note: "대정읍 신영로36번길 62. 카카오맵(2026-10-31): 11:00~16:00, 수 휴무, 보말전복손칼국수 12,000원, 유아의자, 전용 주차.",
+    note: "카카오맵(2026-10-31): 11:00~16:00, 수 휴무, 보말전복손칼국수 12,000원, 유아의자, 전용 주차. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/9940398"]
   },
   {
@@ -451,22 +452,22 @@ const PLACES = [
     stayMin: 70, cost: 25000, open: "10:00", close: "20:00", closedDays: ["목"],
     lastOrder: "19:00",
     babyChair: true,
-    lat: 33.23566, lng: 126.31248,
+    lat: 33.23570, lng: 126.31249,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "산방산 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "11996067",
-    note: "안덕면 사계남로216번길 24-73. 카카오맵(2026-10-31): 10:00~20:00, 19:00 마지막 주문, 목 휴무, 2인 50,000원(1인 25,000원), 테라스, 유아의자, 반려동물 동반, 공영주차장.",
+    note: "안덕면 사계남로216번길 24-73번길 24-73. 카카오맵(2026-10-31): 10:00~20:00, 19:00 마지막 주문, 목 휴무, 2인 50,000원(1인 25,000원), 테라스, 유아의자, 반려동물 동반, 공영주차장. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/11996067"]
   },
   {
     id: "chogajip", name: "제주초가집 산방산본점", type: "식당",
     desc: "해산물 초가집",
     stayMin: 70, cost: 39000, open: "11:00", close: "21:00", closedDays: ["화"],
-    lat: 33.24551, lng: 126.33870,
+    lat: 33.24551, lng: 126.33889,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "화순환승정류장(안덕농협) 정류장 걸어서 7분", bikeRack: null, evChargerMin: 6, parking: true,
     kakaoId: "952185310",
-    note: "안덕면 화순해안로 189. 카카오맵(2026-10-31): 11:00~21:00, 화 휴무, 2인 78,000원(1인 39,000원), 장애인 시설, 무료 주차.",
+    note: "안덕면 화순해안로 189. 카카오맵(2026-10-31): 11:00~21:00, 화 휴무, 2인 78,000원(1인 39,000원), 장애인 시설, 무료 주차. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/952185310"]
   },
   {
@@ -476,11 +477,11 @@ const PLACES = [
     breaks: [["15:00","17:00"]],
     strollerReview: true,
     babyChair: true,
-    lat: 33.24584, lng: 126.33067,
+    lat: 33.24585, lng: 126.33076,
     dog: null, stroller: true, stepFree: null, solo: null,
     station: "화순리 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "11143153",
-    note: "안덕면 산방로 7. 카카오맵(2026-10-31): 10:00~21:00, 15:00~17:00 브레이크타임, 화 휴무, 전복돌솥밥 15,000원, 유아의자, 전용 주차. 유모차 후기(블로그, 2026-10-31 확인): 2층까지 경사로라 유모차가 된다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
+    note: "안덕면 산방로 7방로 7. 카카오맵(2026-10-31): 10:00~21:00, 15:00~17:00 브레이크타임, 화 휴무, 전복돌솥밥 15,000원, 유아의자, 전용 주차. 유모차 후기(블로그, 2026-10-31 확인): 2층까지 경사로라 유모차가 된다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/11143153","https://blog.naver.com/jeoungs2/223851788500","https://blog.naver.com/alkong_yun/223846217873"]
   },
   {
@@ -490,33 +491,33 @@ const PLACES = [
     lastOrder: "20:00",
     breaks: [["14:30","16:00"]],
     babyChair: true,
-    lat: 33.31659, lng: 126.27042,
+    lat: 33.31663, lng: 126.27043,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "명리동 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "131995276",
-    note: "한경면 녹차분재로 498. 카카오맵(2026-10-31): 11:30~21:00, 14:30~16:00 브레이크타임, 20:00 마지막 주문, 월 휴무, 메뉴 15,000원, 유아의자, 테라스, 맞은편 주차.",
+    note: "한경면 녹차분재로 498. 카카오맵(2026-10-31): 11:30~21:00, 14:30~16:00 브레이크타임, 20:00 마지막 주문, 월 휴무, 메뉴 15,000원, 유아의자, 테라스, 맞은편 주차. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/131995276"]
   },
   {
     id: "halmang-bapsang", name: "제주할망밥상 산방산본점", type: "식당",
     desc: "생선구이와 집밥 한상",
     stayMin: 60, cost: 18000, open: "09:00", close: "20:00", closedDays: [],
-    lat: 33.24000, lng: 126.33566,
+    lat: 33.24004, lng: 126.33572,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "화순금모래해수욕장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 12, parking: true,
     kakaoId: "1212473779",
-    note: "안덕면 화순해안로 89. 카카오맵(2026-10-31): 09:00~20:00, 메뉴 18,000원(2인 이상), 장애인 시설, 무료 주차.",
+    note: "안덕면 화순해안로 89. 카카오맵(2026-10-31): 09:00~20:00, 메뉴 18,000원(2인 이상), 장애인 시설, 무료 주차. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1212473779"]
   },
   {
     id: "oppane-sanbang", name: "산방산해물라면오빠네", type: "식당",
     desc: "제주 수제 해물라면",
     stayMin: 40, cost: 12000, open: "09:00", close: "17:00", closedDays: [],
-    lat: 33.23522, lng: 126.31285,
+    lat: 33.23524, lng: 126.31286,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "산방산 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "2085143112",
-    note: "안덕면 사계남로216번길 24-68. 카카오맵(2026-10-31): 09:00~17:00, 해물라면 12,000원, 반려동물 동반, 무료 주차.",
+    note: "안덕면 사계남로216번길 24-68번길 24-68. 카카오맵(2026-10-31): 09:00~17:00, 해물라면 12,000원, 반려동물 동반, 무료 주차. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/2085143112"]
   },
   {
@@ -524,33 +525,33 @@ const PLACES = [
     desc: "통갈치구이",
     stayMin: 70, cost: 44500, open: "10:30", close: "21:00", closedDays: [],
     lastOrder: "20:20",
-    lat: 33.26449, lng: 126.37053,
+    lat: 33.26448, lng: 126.37043,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "창천초등학교 정류장 걸어서 1분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "19316749",
-    note: "안덕면 창천중앙로24번길 16. 카카오맵(2026-10-31): 10:30~21:00, 20:20 마지막 주문, 통갈치구이+조림뚝배기 세트 89,000원(2명 기준으로 1인 44,500원), 장애인 시설, 주차.",
+    note: "카카오맵(2026-10-31): 10:30~21:00, 20:20 마지막 주문, 통갈치구이+조림뚝배기 세트 89,000원(2명 기준으로 1인 44,500원), 장애인 시설, 주차. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/19316749"]
   },
   {
     id: "yeonghae-sikdang", name: "영해식당", type: "식당",
     desc: "70년 전통 제주 노포",
     stayMin: 40, cost: 8000, open: "11:00", close: "19:30", closedDays: [],
-    lat: 33.22140, lng: 126.25248,
+    lat: 33.22138, lng: 126.25260,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "하모2리 정류장 걸어서 1분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "9283811",
-    note: "대정읍 하모상가로 34-2. 카카오맵(2026-10-31): 11:00~19:30, 비정기 휴무, 밀냉면(소) 8,000원, 단체석, 앞 주차.",
+    note: "카카오맵(2026-10-31): 11:00~19:30, 비정기 휴무, 밀냉면(소) 8,000원, 단체석, 앞 주차. 위치: OpenStreetMap (2026-11-16).",
     sources: ["https://place.map.kakao.com/9283811"]
   },
   {
     id: "panpo-fishery", name: "판포어촌계직영 펜션식당", type: "식당",
     desc: "바다 앞 국물 한식",
     stayMin: 40, cost: 10000, open: "09:00", close: "16:00", closedDays: ["화"],
-    lat: 33.36482, lng: 126.20110,
+    lat: 33.36480, lng: 126.20111,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "판포리 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "26842431",
-    note: "한경면 일주서로 4542. 카카오맵(2026-10-31): 09:00~16:00, 화 휴무, 사골고기국수 10,000원, 테라스, 길 건너 주차장.",
+    note: "한경면 일주서로 4542. 카카오맵(2026-10-31): 09:00~16:00, 화 휴무, 사골고기국수 10,000원, 테라스, 길 건너 주차장. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/26842431"]
   },
   {
@@ -564,18 +565,18 @@ const PLACES = [
     dog: true, stroller: true, stepFree: true, solo: null,
     station: "오설록 정류장 걸어서 2분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "11332661",
-    note: "안덕면 신화역사로 15. 카카오맵(2026-10-31): 09:00~18:00, 17:30 마지막 주문, 말차아이스크림 5,800원, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 경사로와 평탄한 길로 유모차가 된다는 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 입마개 착용,목줄 착용 / 카페 외부좌석 이용가능 실내 전시관은 동반 불가 맹견 및 대형견의 경우, 입마개 착용 필수.",
+    note: "안덕면 신화역사로 15. 카카오맵(2026-10-31): 09:00~18:00, 17:30 마지막 주문, 말차아이스크림 5,800원, 장애인 시설, 무료 주차. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 경사로와 평탄한 길로 유모차가 된다는 후기 2건. 구글 지도(2026-10-31): 휠체어 이용가능 입구 있음 → 계단 없음으로 넣었어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 입마개 착용,목줄 착용 / 카페 외부좌석 이용가능 실내 전시관은 동반 불가 맹견 및 대형견의 경우, 입마개 착용 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/11332661","https://blog.naver.com/deokhodong/224380133441","https://blog.naver.com/daeun_93/224266716269","https://blog.naver.com/you_need_more/224414152342","https://blog.naver.com/jini0320/224439058792"]
   },
   {
     id: "suaegi-bakery", name: "수애기베이커리카페", type: "카페",
     desc: "바다 품은 베이커리 카페",
     stayMin: 60, cost: 6500, open: "10:00", close: "20:00", closedDays: ["목"],
-    lat: 33.22214, lng: 126.24418,
+    lat: 33.22222, lng: 126.24420,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "짐개동산 정류장 걸어서 7분", bikeRack: null, evChargerMin: 7, parking: true,
     kakaoId: "336756812",
-    note: "대정읍 동일하모로98번길 48-59. 카카오맵(2026-10-31): 10:00~20:00, 목 휴무, 아메리카노 6,500원, 테라스, 반려동물 동반, 장애인 시설, 무료 주차. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음.",
+    note: "대정읍 동일하모로98번길 48-59번길 48-59. 카카오맵(2026-10-31): 10:00~20:00, 목 휴무, 아메리카노 6,500원, 테라스, 반려동물 동반, 장애인 시설, 무료 주차. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/336756812"]
   },
   {
@@ -583,11 +584,11 @@ const PLACES = [
     desc: "숲속 오두막 북카페",
     stayMin: 60, cost: 6000, open: "11:00", close: "19:00", closedDays: ["화","수"],
     hoursByDay: {"금":["11:00","22:00"],"토":["11:00","22:00"]},
-    lat: 33.33974, lng: 126.23479,
+    lat: 33.33974, lng: 126.23477,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "저지리 수동 정류장 걸어서 6분", bikeRack: null, evChargerMin: 11, parking: null,
     kakaoId: "528690715",
-    note: "한경면 조수동2길 54-36. 카카오맵(2026-10-31): 11:00~19:00(금·토 22:00), 화·수 휴무, 아메리카노 6,000원.",
+    note: "한경면 조수동2길 54-36길 54-36. 카카오맵(2026-10-31): 11:00~19:00(금·토 22:00), 화·수 휴무, 아메리카노 6,000원. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/528690715"]
   },
   {
@@ -596,11 +597,11 @@ const PLACES = [
     stayMin: 40, cost: 5800, open: "08:00", close: "18:00", closedDays: ["일"],
     lastOrder: "17:50",
     dogReview: true,
-    lat: 33.22546, lng: 126.25654,
+    lat: 33.22549, lng: 126.25655,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "대정초교후문 정류장 걸어서 1분", bikeRack: null, evChargerMin: 5, parking: null,
     kakaoId: "1028238972",
-    note: "대정읍 동일하모로 238. 카카오맵(2026-10-31): 08:00~18:00, 일 휴무, 와토알프스 5,800원. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 글 2건.",
+    note: "동일하모로 238. 카카오맵(2026-10-31): 08:00~18:00, 일 휴무, 와토알프스 5,800원. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1028238972","https://blog.naver.com/hunii2_/223763458546","https://blog.naver.com/0summer-/224276427004"]
   },
   {
@@ -612,11 +613,11 @@ const PLACES = [
     dogReview: true,
     strollerReview: true,
     babyChair: true,
-    lat: 33.26916, lng: 126.18006,
+    lat: 33.26916, lng: 126.18014,
     dog: true, stroller: true, stepFree: null, solo: null,
     station: "신도2리 정류장 걸어서 18분", bikeRack: null, evChargerMin: 13, parking: null,
     kakaoId: "28741599",
-    note: "대정읍 도원남로 16. 카카오맵(2026-10-31): 09:00~20:00, 19:30 마지막 주문, 연중무휴, 아메리카노 6,000원, 유아의자, 키즈메뉴. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 동선이 넓어 유모차가 된다는 후기 2건.",
+    note: "도원남로 16. 카카오맵(2026-10-31): 09:00~20:00, 19:30 마지막 주문, 연중무휴, 아메리카노 6,000원, 유아의자, 키즈메뉴. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 유모차 후기(블로그, 2026-10-31 확인): 동선이 넓어 유모차가 된다는 후기 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/28741599","https://blog.naver.com/in2002kr/224403810239","https://blog.naver.com/whdkfkek111/224416234593","https://blog.naver.com/z_zang2/224121730002","https://blog.naver.com/skfk5546/224332511935"]
   },
   {
@@ -624,11 +625,11 @@ const PLACES = [
     desc: "숨은 오션뷰 브런치 카페",
     stayMin: 60, cost: 8000, open: "09:00", close: "19:00", closedDays: [],
     lastOrder: "18:00",
-    lat: 33.20921, lng: 126.29129,
+    lat: 33.20924, lng: 126.29128,
     dog: null, stroller: null, stepFree: null, solo: null,
     station: "산이수동 정류장 걸어서 3분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "1055250555",
-    note: "대정읍 형제해안로 284. 카카오맵(2026-10-31): 09:00~19:00, 18:00 마지막 주문, 스무디 8,000원, 단체석.",
+    note: "대정읍 형제해안로 284. 카카오맵(2026-10-31): 09:00~19:00, 18:00 마지막 주문, 스무디 8,000원, 단체석. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1055250555"]
   },
   {
@@ -636,11 +637,11 @@ const PLACES = [
     desc: "바다 품은 아늑한 카페",
     stayMin: 50, cost: 7000, open: "10:00", close: "18:00", closedDays: [],
     babyChair: true,
-    lat: 33.19994, lng: 126.27586,
+    lat: 33.20015, lng: 126.27578,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "산이수동 정류장 걸어서 29분", bikeRack: null, evChargerMin: 25, parking: null,
     kakaoId: "1148912647",
-    note: "대정읍 최남단해안로 412. 카카오맵(2026-10-31): 10:00~18:00, 시나브로티 7,000원, 유아의자, 테라스, 반려동물 동반.",
+    note: "대정읍 최남단해안로 412. 카카오맵(2026-10-31): 10:00~18:00, 시나브로티 7,000원, 유아의자, 테라스, 반려동물 동반. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1148912647"]
   },
   {
@@ -652,7 +653,7 @@ const PLACES = [
     dog: true, stroller: false, stepFree: null, solo: null,
     station: "안성리가스충전소 정류장 걸어서 6분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "363468370",
-    note: "대정읍 추사로36번길 45-1. 카카오맵(2026-10-31): 09:30~20:00, 청귤스무디 12,800원, 반려동물 동반, 주차. 유모차 후기(블로그, 2026-10-31 확인): 바닥이 고르지 않아 유모차가 불편하다는 후기 2건.",
+    note: "대정읍 추사로36번길 45-1번길 45-1. 카카오맵(2026-10-31): 09:30~20:00, 청귤스무디 12,800원, 반려동물 동반, 주차. 유모차 후기(블로그, 2026-10-31 확인): 바닥이 고르지 않아 유모차가 불편하다는 후기 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
     sources: ["https://place.map.kakao.com/363468370","https://blog.naver.com/eunwoofit/224401103425","https://blog.naver.com/kmij1280/224423930366"]
   },
   {
@@ -661,11 +662,11 @@ const PLACES = [
     stayMin: 60, cost: 6000, open: "09:30", close: "19:30", closedDays: [],
     dogRule: "야외 자리만",
     dogReview: true,
-    lat: 33.23521, lng: 126.36307,
+    lat: 33.23459, lng: 126.36323,
     dog: true, stroller: null, stepFree: null, solo: null,
     station: "대평리 정류장 걸어서 7분", bikeRack: null, evChargerMin: 2, parking: null,
     kakaoId: "1666998566",
-    note: "안덕면 난드르로 49-17. 카카오맵(2026-10-31): 09:30~19:30, 아메리카노 6,000원. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건.",
+    note: "안덕면 난드르로 49-17. 카카오맵(2026-10-31): 09:30~19:30, 아메리카노 6,000원. 반려견 후기(블로그, 2026-10-31 확인): 후기 2건. 위치: 행정안전부 도로명주소 좌표 (2026-11-16).",
     sources: ["https://place.map.kakao.com/1666998566","https://blog.naver.com/allies103_/224146902742","https://blog.naver.com/kslover508/223911799994"]
   }
 ];
