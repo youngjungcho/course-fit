@@ -22,11 +22,11 @@ const PLACES = [
     desc: "에메랄드빛 바다와 고운 백사장",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.39375, lng: 126.23943,
-    dog: true, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "협재해수욕장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "8159415",
-    note: "협재리. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반. 해수욕장 개장 기간은 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/8159415"]
+    note: "협재리. 카카오맵(2026-10-31): 무료입장, 휴게공간, 반려동물 동반. 해수욕장 개장 기간은 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 해변가까지 무단차구간 있음.",
+    sources: ["관광공사 무장애 여행 정보 API 127490", "https://place.map.kakao.com/8159415"]
   },
   {
     id: "geumneung-beach", name: "금능해수욕장", type: "공원",
@@ -36,11 +36,11 @@ const PLACES = [
     dogReview: true,
     strollerReview: true,
     lat: 33.39031, lng: 126.23602,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "금능해수욕장 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: null,
     kakaoId: "13723603",
-    note: "한림읍 금능길 119-10. 카카오맵(2026-10-31): 무료입장, 물품보관소, 카페·식당, 휴게공간. 해수욕장 개장 기간은 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 길이 잘 되어 있어 유모차로 갈 수 있었다는 후기 2건. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/13723603","https://blog.naver.com/tjsaud8922/224418732437","https://blog.naver.com/wltpsl/224406362043","https://blog.naver.com/hugbee300/224390630239","https://blog.naver.com/rankkaeng/224445119535"]
+    note: "한림읍 금능길 119-10. 카카오맵(2026-10-31): 무료입장, 물품보관소, 카페·식당, 휴게공간. 해수욕장 개장 기간은 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 길이 잘 되어 있어 유모차로 갈 수 있었다는 후기 2건. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 출입구까지 경사로가 설치되어 있음(가파름).",
+    sources: ["관광공사 무장애 여행 정보 API 591866", "https://place.map.kakao.com/13723603","https://blog.naver.com/tjsaud8922/224418732437","https://blog.naver.com/wltpsl/224406362043","https://blog.naver.com/hugbee300/224390630239","https://blog.naver.com/rankkaeng/224445119535"]
   },
   {
     id: "geum-oreum", name: "금오름", type: "공원",

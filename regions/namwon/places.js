@@ -118,11 +118,11 @@ const PLACES = [
     stayMin: 60, cost: 20000, open: "09:00", close: "18:00", closedDays: [],
     breaks: [["12:00","13:00"]],
     lat: 33.28992, lng: 126.69375,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: "최남단체험감귤농장 정류장 걸어서 1분", bikeRack: null, evChargerMin: 23, parking: null,
     kakaoId: "9966725",
-    note: "남원읍 남위남성로 164. 카카오맵(2026-10-31): 09:00~18:00, 12:00~13:00 쉼, 감귤따기체험 20,000원, 카페·식당. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/9966725"]
+    note: "남원읍 남위남성로 164. 카카오맵(2026-10-31): 09:00~18:00, 12:00~13:00 쉼, 감귤따기체험 20,000원, 카페·식당. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함(수동문) / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 635928", "https://place.map.kakao.com/9966725"]
   },
   {
     id: "hueree", name: "휴애리자연생활공원", type: "볼거리",

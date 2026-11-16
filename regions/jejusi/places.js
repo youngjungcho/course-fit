@@ -141,11 +141,11 @@ const PLACES = [
     stayMin: 30, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     dogReview: true,
     lat: 33.51835, lng: 126.48756,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "어영마을 정류장 걸어서 5분", bikeRack: null, evChargerMin: 8, parking: true,
     kakaoId: "13723959",
-    note: "용담삼동. 카카오맵(2026-10-31): 무료입장, 유모차 가능, 공영주차장. 관광공사 무장애: 대부분 단차 없지만 돌길이 있어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["관광공사 API 1925362","https://place.map.kakao.com/13723959","https://blog.naver.com/dikefr/223838613453","https://blog.naver.com/bbolife_/223909688946"]
+    note: "용담삼동. 카카오맵(2026-10-31): 무료입장, 유모차 가능, 공영주차장. 관광공사 무장애: 대부분 단차 없지만 돌길이 있어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 대부분 무단차이나 돌길있음.",
+    sources: ["관광공사 무장애 여행 정보 API 1925362", "관광공사 API 1925362","https://place.map.kakao.com/13723959","https://blog.naver.com/dikefr/223838613453","https://blog.naver.com/bbolife_/223909688946"]
   },
   {
     id: "national-museum", name: "국립제주박물관", type: "볼거리",
@@ -167,11 +167,11 @@ const PLACES = [
     indoor: true,
     strollerReview: true,
     lat: 33.50639, lng: 126.53134,
-    dog: null, stroller: true, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: "민속자연사박물관 정류장 걸어서 2분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "8067497",
-    note: "삼성로 40. 카카오맵(2026-10-31): 09:00~18:00, 월 휴무, 장애인 시설, 유료 주차, 수유실. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 경사로·엘리베이터로 유모차 이동이 편했다는 후기 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 박물관 내부는 동반 불가 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/8067497","https://blog.naver.com/managemm/224422028733","https://blog.naver.com/wjsqhfka73/224356463686"]
+    note: "삼성로 40. 카카오맵(2026-10-31): 09:00~18:00, 월 휴무, 장애인 시설, 유료 주차, 수유실. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 경사로·엘리베이터로 유모차 이동이 편했다는 후기 2건. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 박물관 내부는 동반 불가 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 경사로가 있어 휠체어 접근 가능함 / 출입구까지 경사로가 설치되어 있음.",
+    sources: ["관광공사 무장애 여행 정보 API 129894", "https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/8067497","https://blog.naver.com/managemm/224422028733","https://blog.naver.com/wjsqhfka73/224356463686"]
   },
   {
     id: "jeju-art-museum", name: "제주도립미술관", type: "볼거리",
@@ -180,11 +180,11 @@ const PLACES = [
     indoor: true,
     strollerReview: true,
     lat: 33.45252, lng: 126.48974,
-    dog: null, stroller: true, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: "제주도립미술관입구 정류장 걸어서 6분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "10801589",
-    note: "1100로 2894-78. 카카오맵(2026-10-31): 10:00~18:00(7~9월 09:00~20:00), 월 휴무, 장애인 시설, 주차. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 다녀온 후기, 유모차 대여 가능. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/10801589","https://blog.naver.com/blackout10/224433419624","https://blog.naver.com/hana_315/224329912092"]
+    note: "1100로 2894-78. 카카오맵(2026-10-31): 10:00~18:00(7~9월 09:00~20:00), 월 휴무, 장애인 시설, 주차. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 다녀온 후기, 유모차 대여 가능. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 입구에 턱이 없고 실내 단차 없음.",
+    sources: ["관광공사 무장애 여행 정보 API 759595", "https://place.map.kakao.com/10801589","https://blog.naver.com/blackout10/224433419624","https://blog.naver.com/hana_315/224329912092"]
   },
   {
     id: "arario-tapdong", name: "아라리오뮤지엄 탑동시네마", type: "볼거리",
@@ -204,11 +204,11 @@ const PLACES = [
     stayMin: 70, cost: 14000, open: "10:00", close: "18:00", closedDays: ["월"],
     indoor: true,
     lat: 33.47213, lng: 126.48576,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: "제주고등학교 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "20303776",
-    note: "노형동. 카카오맵(2026-10-31): 10:00~18:00, 월 휴관, 성인 14,000원·청소년 12,000원·어린이 10,000원, 장애인 시설, 무료 주차. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/20303776"]
+    note: "노형동. 카카오맵(2026-10-31): 10:00~18:00, 월 휴관, 성인 14,000원·청소년 12,000원·어린이 10,000원, 장애인 시설, 무료 주차. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함(자동문) / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 2472824", "https://place.map.kakao.com/20303776"]
   },
   {
     id: "rainbow-road", name: "도두동무지개해안도로", type: "볼거리",
@@ -262,11 +262,11 @@ const PLACES = [
     stayMin: 50, cost: null, open: "09:00", close: "18:00", closedDays: [],
     dogReview: true,
     lat: 33.51367, lng: 126.52205,
-    dog: false, stroller: true, stepFree: null, solo: null,
+    dog: false, stroller: true, stepFree: true, solo: null,
     station: "관덕정 정류장 걸어서 3분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "10805294",
-    note: "관덕로. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유료입장, 유모차 가능, 주차장 작음. 입장료는 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견 금지 구역이라는 글 2건(축제 때는 다를 수 있어요). 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/10805294","https://blog.naver.com/yunjung7870/224124838730","https://blog.naver.com/athena0930/223817017143"]
+    note: "관덕로. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유료입장, 유모차 가능, 주차장 작음. 입장료는 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견 금지 구역이라는 글 2건(축제 때는 다를 수 있어요). 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 경사로가 있어 휠체어 접근 가능함(흙길 구간 있음) / 출입구까지 경사로가 설치되어 있음.",
+    sources: ["관광공사 무장애 여행 정보 API 128641", "https://place.map.kakao.com/10805294","https://blog.naver.com/yunjung7870/224124838730","https://blog.naver.com/athena0930/223817017143"]
   },
   {
     id: "jeju-literature", name: "제주문학관", type: "볼거리",

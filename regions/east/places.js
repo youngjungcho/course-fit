@@ -200,11 +200,11 @@ const PLACES = [
     dogReview: true,
     strollerReview: true,
     lat: 33.44662, lng: 126.66399,
-    dog: false, stroller: true, stepFree: null, solo: null,
+    dog: false, stroller: true, stepFree: true, solo: null,
     station: "제주돌문화공원 정류장 걸어서 7분", bikeRack: null, evChargerMin: 8, parking: null,
     kakaoId: "13322621",
-    note: "조천읍 남조로 2023. 카카오맵(2026-10-31): 09:00~18:00, 월 휴무. 입장료는 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견 입장이 안 된다는 글 2건. 유모차 후기(블로그, 2026-10-31 확인): 유모차를 챙기라는 후기 여러 건(입구부터 많이 걸어요). 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/13322621","https://blog.naver.com/healyou_/223846618810","https://blog.naver.com/yinhaeun/224294584534","https://blog.naver.com/dkfkd1114/224453492031","https://blog.naver.com/its__min/224443722275"]
+    note: "조천읍 남조로 2023. 카카오맵(2026-10-31): 09:00~18:00, 월 휴무. 입장료는 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견 입장이 안 된다는 글 2건. 유모차 후기(블로그, 2026-10-31 확인): 유모차를 챙기라는 후기 여러 건(입구부터 많이 걸어요). 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함 / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 1544730", "https://place.map.kakao.com/13322621","https://blog.naver.com/healyou_/223846618810","https://blog.naver.com/yinhaeun/224294584534","https://blog.naver.com/dkfkd1114/224453492031","https://blog.naver.com/its__min/224443722275"]
   },
   {
     id: "snoopy-garden", name: "스누피가든", type: "볼거리",
@@ -249,11 +249,11 @@ const PLACES = [
     stayMin: 90, cost: null, open: "09:00", close: "18:00", closedDays: [],
     indoor: true,
     lat: 33.47869, lng: 126.70351,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "선녀와 나무꾼 정류장 걸어서 4분", bikeRack: null, evChargerMin: 14, parking: true,
     kakaoId: "12501734",
-    note: "카카오맵(2026-10-31): 09:00~18:00(매표 17:00까지), 유료입장, 유모차 가능, 반려동물 동반, 전용 주차장. 입장료는 확인 못 했어요. 위치: OpenStreetMap (2026-11-16).",
-    sources: ["https://place.map.kakao.com/12501734"]
+    note: "카카오맵(2026-10-31): 09:00~18:00(매표 17:00까지), 유료입장, 유모차 가능, 반려동물 동반, 전용 주차장. 입장료는 확인 못 했어요. 위치: OpenStreetMap (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함 / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 598187", "https://place.map.kakao.com/12501734"]
   },
   {
     id: "gimnyeong-maze", name: "김녕미로공원", type: "볼거리",
@@ -261,11 +261,11 @@ const PLACES = [
     stayMin: 50, cost: 9900, open: "09:00", close: "18:30", closedDays: [],
     strollerReview: true,
     lat: 33.53629, lng: 126.77203,
-    dog: null, stroller: false, stepFree: null, solo: null,
+    dog: null, stroller: false, stepFree: true, solo: null,
     station: "김녕미로공원 정류장 걸어서 1분", bikeRack: null, evChargerMin: 15, parking: null,
     kakaoId: "17110921",
-    note: "구좌읍 만장굴길 122. 카카오맵(2026-10-31): 09:00~18:30, 성인 9,900원. 유모차 후기(블로그, 2026-10-31 확인): 계단과 경사가 있어 유모차가 불편하다는 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/17110921","https://blog.naver.com/umi0108/224418563366","https://blog.naver.com/appadobalrunda/224377071872"]
+    note: "구좌읍 만장굴길 122. 카카오맵(2026-10-31): 09:00~18:30, 성인 9,900원. 유모차 후기(블로그, 2026-10-31 확인): 계단과 경사가 있어 유모차가 불편하다는 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 단차가 없고 경사가 매우 완만함 / 출입구까지 평지와 경사로로 연결되어 휠체어 접근 가능.",
+    sources: ["관광공사 무장애 여행 정보 API 127046", "https://place.map.kakao.com/17110921","https://blog.naver.com/umi0108/224418563366","https://blog.naver.com/appadobalrunda/224377071872"]
   },
   {
     id: "mazeland", name: "메이즈랜드", type: "볼거리",

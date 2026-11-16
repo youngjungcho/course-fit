@@ -23,11 +23,11 @@ const PLACES = [
     desc: "제주의 바다와 여유를 담은 해변",
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.24417, lng: 126.40557,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "롯데호텔 정류장 걸어서 8분", bikeRack: null, evChargerMin: 5, parking: true,
     kakaoId: "8069764",
-    note: "중문관광로72번길 100. 카카오맵(2026-10-31): 무료입장, 유모차 가능, 카페·식당, 반려동물 동반, 전용 주차장(최초 30분 무료). 개장 기간은 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/8069764"]
+    note: "중문관광로72번길 100. 카카오맵(2026-10-31): 무료입장, 유모차 가능, 카페·식당, 반려동물 동반, 전용 주차장(최초 30분 무료). 개장 기간은 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 해변가까지 접근 가능한 경사로가 설치되어 있으나 모래가 있음(경사로 중간에 낮은 턱의 단차가 있음).",
+    sources: ["관광공사 무장애 여행 정보 API 126449", "https://place.map.kakao.com/8069764"]
   },
   {
     id: "healing-forest", name: "서귀포치유의숲", type: "공원",
@@ -105,11 +105,11 @@ const PLACES = [
     stayMin: 40, cost: 0, open: "00:00", close: "24:00", closedDays: [],
     dogReview: true,
     lat: 33.24389, lng: 126.54635,
-    dog: true, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "삼매봉입구 정류장 걸어서 5분", bikeRack: null, evChargerMin: 9, parking: false,
     kakaoId: "7919832",
-    note: "남성로115번길 83. 관광공사: 상시 개방, 연중무휴, 주차 불가. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["관광공사 API 127049","https://place.map.kakao.com/7919832","https://blog.naver.com/outsalon/223683519713","https://blog.naver.com/rain0fmoon/223851146387"]
+    note: "남성로115번길 83. 관광공사: 상시 개방, 연중무휴, 주차 불가. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 단차없어 휠체어로 출입가능.",
+    sources: ["관광공사 무장애 여행 정보 API 1939093", "관광공사 API 127049","https://place.map.kakao.com/7919832","https://blog.naver.com/outsalon/223683519713","https://blog.naver.com/rain0fmoon/223851146387"]
   },
   {
     id: "yeomiji", name: "여미지식물원", type: "볼거리",
@@ -140,11 +140,11 @@ const PLACES = [
     desc: "예술과 음악이 흐르는 거리",
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.24549, lng: 126.56446,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: "제주은행 정류장 걸어서 2분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "8523750",
-    note: "이중섭로 29. 카카오맵(2026-10-31): 무료입장, 카페·식당, 기념품샵, 공영주차장. 이중섭미술관은 카카오맵에 휴관중으로 나와요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/8523750"]
+    note: "이중섭로 29. 카카오맵(2026-10-31): 무료입장, 카페·식당, 기념품샵, 공영주차장. 이중섭미술관은 카카오맵에 휴관중으로 나와요. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 보행로는 경사로로 연결되어 휠체어 접근 가능.",
+    sources: ["관광공사 무장애 여행 정보 API 1620936", "https://place.map.kakao.com/8523750"]
   },
   {
     id: "waljong-museum", name: "왈종미술관", type: "볼거리",
@@ -152,11 +152,11 @@ const PLACES = [
     stayMin: 50, cost: null, open: "10:00", close: "18:00", closedDays: ["월"],
     indoor: true,
     lat: 33.24530, lng: 126.57366,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: "서복전시관 정류장 걸어서 6분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "19175660",
-    note: "칠십리로214번길 30번길 30. 카카오맵(2026-10-31): 10:00~18:00, 월 휴무, 유료입장, 무료 주차. 입장료는 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/19175660"]
+    note: "칠십리로214번길 30번길 30. 카카오맵(2026-10-31): 10:00~18:00, 월 휴무, 유료입장, 무료 주차. 입장료는 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함 / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 2606690", "https://place.map.kakao.com/19175660"]
   },
   {
     id: "gidang-museum", name: "기당미술관", type: "볼거리",
@@ -178,11 +178,11 @@ const PLACES = [
     indoor: true,
     strollerReview: true,
     lat: 33.25002, lng: 126.41215,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "리틀프린스뮤지엄 정류장 걸어서 3분", bikeRack: null, evChargerMin: 5, parking: true,
     kakaoId: "8559375",
-    note: "중문관광로110번길 31번길 31. 카카오맵(2026-10-31): 09:00~18:00(입장 17:30까지), 연중무휴, 반려동물 동반, 장애인 시설, 주차. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 관람한 후기 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/8559375","https://blog.naver.com/phe0921/224144916398","https://blog.naver.com/jjh376/223697825938"]
+    note: "중문관광로110번길 31번길 31. 카카오맵(2026-10-31): 09:00~18:00(입장 17:30까지), 연중무휴, 반려동물 동반, 장애인 시설, 주차. 입장료는 확인 못 했어요. 유모차 후기(블로그, 2026-10-31 확인): 유모차로 관람한 후기 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 단차와 경사가 거의없음 / 휠체어 접근 가능.",
+    sources: ["관광공사 무장애 여행 정보 API 130317", "https://place.map.kakao.com/8559375","https://blog.naver.com/phe0921/224144916398","https://blog.naver.com/jjh376/223697825938"]
   },
   {
     id: "africa-museum", name: "아프리카박물관", type: "볼거리",
@@ -190,11 +190,11 @@ const PLACES = [
     stayMin: 60, cost: null, open: "10:00", close: "19:00", closedDays: [],
     indoor: true,
     lat: 33.23987, lng: 126.42908,
-    dog: true, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "동물개동산 앞 정류장 걸어서 3분", bikeRack: null, evChargerMin: 1, parking: true,
     kakaoId: "7991509",
-    note: "이어도로 49. 카카오맵(2026-10-31): 10:00~19:00, 연중무휴, 반려동물 동반, 장애인 시설, 무료 주차. 입장료는 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/7991509"]
+    note: "이어도로 49. 카카오맵(2026-10-31): 10:00~19:00, 연중무휴, 반려동물 동반, 장애인 시설, 무료 주차. 입장료는 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 경사로가 있어 휠체어 접근 가능함 / 출입구까지 경사로가 설치되어 있음.",
+    sources: ["관광공사 무장애 여행 정보 API 130180", "https://place.map.kakao.com/7991509"]
   },
   {
     id: "sanghyowon", name: "상효원수목원", type: "볼거리",
@@ -264,11 +264,11 @@ const PLACES = [
     dogReview: true,
     strollerReview: true,
     lat: 33.23710, lng: 126.42740,
-    dog: false, stroller: false, stepFree: null, solo: null,
+    dog: false, stroller: false, stepFree: true, solo: null,
     station: "동물개동산 앞 정류장 걸어서 10분", bikeRack: null, evChargerMin: 6, parking: true,
     kakaoId: "10793668",
-    note: "이어도로 36-24. 카카오맵(2026-10-31): 09:00~17:10(일몰에 따라 바뀜), 연중무휴, 유료입장, 카페·식당, 전용 주차장(유료). 관광공사 무장애: 출입구까지 평지지만 이후 곳곳에 계단이 있어요. 입장료는 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려동물 금지라는 글 2건. 유모차 후기(블로그, 2026-10-31 확인): 계단이라 유모차·휠체어가 전망대에 못 간다는 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["관광공사 API 127053","https://place.map.kakao.com/10793668","https://blog.naver.com/mirany_kim/224073773983","https://blog.naver.com/rhalsdk91/223702540340","https://blog.naver.com/mirany_kim/224073773983","https://blog.naver.com/rhalsdk91/223702540340"]
+    note: "이어도로 36-24. 카카오맵(2026-10-31): 09:00~17:10(일몰에 따라 바뀜), 연중무휴, 유료입장, 카페·식당, 전용 주차장(유료). 관광공사 무장애: 출입구까지 평지지만 이후 곳곳에 계단이 있어요. 입장료는 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려동물 금지라는 글 2건. 유모차 후기(블로그, 2026-10-31 확인): 계단이라 유모차·휠체어가 전망대에 못 간다는 글 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함 / 출입구까지 평지로 휠체어 접근 가능함 출입구 이후로 곳곳에 계단이 있어 휠체어 사용자 이용 불편.",
+    sources: ["관광공사 무장애 여행 정보 API 127053", "관광공사 API 127053","https://place.map.kakao.com/10793668","https://blog.naver.com/mirany_kim/224073773983","https://blog.naver.com/rhalsdk91/223702540340","https://blog.naver.com/mirany_kim/224073773983","https://blog.naver.com/rhalsdk91/223702540340"]
   },
   {
     id: "oedolgae", name: "외돌개", type: "볼거리",
@@ -349,11 +349,11 @@ const PLACES = [
     desc: "서귀포 대표 전통시장",
     stayMin: 60, cost: 0, open: "07:00", close: "21:00", closedDays: [],
     lat: 33.25015, lng: 126.56323,
-    dog: true, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "중앙동주민센터/청소년문화의집 정류장 걸어서 2분", bikeRack: null, evChargerMin: 0, parking: true,
     kakaoId: "7938166",
-    note: "서귀동번길 18. 카카오맵(2026-10-31): 07:00~21:00(동절기 20:00, 점포별 달라요), 연중무휴, 반려동물 동반, 장애인 시설, 유료 주차. 물건값은 빼고 0원으로 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/7938166"]
+    note: "서귀동번길 18. 카카오맵(2026-10-31): 07:00~21:00(동절기 20:00, 점포별 달라요), 연중무휴, 반려동물 동반, 장애인 시설, 유료 주차. 물건값은 빼고 0원으로 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함 / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 1013258", "https://place.map.kakao.com/7938166"]
   },
   {
     id: "jestory", name: "제스토리", type: "쇼핑",
@@ -443,11 +443,11 @@ const PLACES = [
     lastOrder: "20:40",
     babyChair: true,
     lat: 33.24851, lng: 126.55926,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: "(구)중앙파출소 정류장 걸어서 3분", bikeRack: null, evChargerMin: 2, parking: false,
     kakaoId: "9733194",
-    note: "카카오맵(2026-10-31): 07:00~21:40, 20:40 마지막 주문, 갈치조림(대) 65,000원(2명 기준으로 1인 32,500원), 유아의자, 전용 주차장 없음(근처 무료 공영주차장). 위치: OpenStreetMap (2026-11-16).",
-    sources: ["https://place.map.kakao.com/9733194"]
+    note: "카카오맵(2026-10-31): 07:00~21:40, 20:40 마지막 주문, 갈치조림(대) 65,000원(2명 기준으로 1인 32,500원), 유아의자, 전용 주차장 없음(근처 무료 공영주차장). 위치: OpenStreetMap (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 원활한 이동 가능함_무장애 편의정보 / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 664223", "https://place.map.kakao.com/9733194"]
   },
   {
     id: "daepo-myeonok", name: "대포면옥", type: "식당",
@@ -660,11 +660,11 @@ const PLACES = [
     dogReview: true,
     strollerReview: true,
     lat: 33.24401, lng: 126.41551,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "중문색달해수욕장 입구 정류장 걸어서 7분", bikeRack: null, evChargerMin: 4, parking: true,
     kakaoId: "1378746048",
-    note: "카카오맵(2026-10-31): 10:00~24:00, 테라스, 라이브밴드, 부분 노키즈존, 무료 주차. 가격은 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 야외·테라스에 유모차로 갔다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: OpenStreetMap (2026-11-16).",
-    sources: ["https://place.map.kakao.com/1378746048","https://blog.naver.com/wonderful_ym/224424258577","https://blog.naver.com/juliet_4/224437858334","https://blog.naver.com/olivelee_/224318356233","https://blog.naver.com/giselesj0414/224414243753"]
+    note: "카카오맵(2026-10-31): 10:00~24:00, 테라스, 라이브밴드, 부분 노키즈존, 무료 주차. 가격은 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 다녀온 후기 여러 건. 유모차 후기(블로그, 2026-10-31 확인): 야외·테라스에 유모차로 갔다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: OpenStreetMap (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함(자동문) / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 2708338", "https://place.map.kakao.com/1378746048","https://blog.naver.com/wonderful_ym/224424258577","https://blog.naver.com/juliet_4/224437858334","https://blog.naver.com/olivelee_/224318356233","https://blog.naver.com/giselesj0414/224414243753"]
   },
   {
     id: "the-gumi", name: "더구두미", type: "카페",

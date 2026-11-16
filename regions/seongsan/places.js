@@ -49,11 +49,11 @@ const PLACES = [
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     dogReview: true,
     lat: 33.32563, lng: 126.84241,
-    dog: true, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "표선초등학교 정류장 걸어서 5분", bikeRack: null, evChargerMin: 7, parking: true,
     kakaoId: "8640631",
-    note: "표선면 표선리. 카카오맵(2026-10-31): 무료입장, 물품보관소, 무료 공영주차장. 개장 기간은 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책한 후기 여러 건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/8640631","https://blog.naver.com/senmayong/224219903582","https://blog.naver.com/jeyah/224226579653"]
+    note: "표선면 표선리. 카카오맵(2026-10-31): 무료입장, 물품보관소, 무료 공영주차장. 개장 기간은 확인 못 했어요. 반려견 후기(블로그, 2026-10-31 확인): 반려견과 산책한 후기 여러 건. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 해변근처 무단차구간 있음(올레길3-A코스).",
+    sources: ["관광공사 무장애 여행 정보 API 128794", "https://place.map.kakao.com/8640631","https://blog.naver.com/senmayong/224219903582","https://blog.naver.com/jeyah/224226579653"]
   },
   {
     id: "gwangchigi", name: "광치기해변", type: "공원",

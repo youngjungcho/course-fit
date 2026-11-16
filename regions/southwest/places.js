@@ -59,11 +59,11 @@ const PLACES = [
     desc: "산방산이 보이는 금빛 해변",
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     lat: 33.24067, lng: 126.33350,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: "화순금모래해수욕장 정류장 걸어서 5분", bikeRack: null, evChargerMin: 10, parking: null,
     kakaoId: "8173573",
-    note: "안덕면 화순해안로. 카카오맵(2026-10-31): 무료입장, 휴게공간. 개장 기간은 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/8173573"]
+    note: "안덕면 화순해안로. 카카오맵(2026-10-31): 무료입장, 휴게공간. 개장 기간은 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 해변가까지 접근 가능한 경사로가 있으나 모래사장까지 접근하는 경로에 1단 정도의 단차가 있고 일부구간은 휠체어 접근이 용이한 산책로가 있음.",
+    sources: ["관광공사 무장애 여행 정보 API 126443", "https://place.map.kakao.com/8173573"]
   },
   {
     id: "andeok-valley", name: "안덕계곡", type: "공원",
@@ -94,11 +94,11 @@ const PLACES = [
     stayMin: 70, cost: null, open: "09:00", close: "15:00", closedDays: [],
     hoursByDay: {"토":["09:00","16:30"]},
     lat: 33.28322, lng: 126.27357,
-    dog: null, stroller: true, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: "삼정지에듀/곶자왈도립공원 정류장 걸어서 13분", bikeRack: null, evChargerMin: 11, parking: true,
     kakaoId: "27254363",
-    note: "대정읍 에듀시티로 178. 카카오맵(2026-10-31): 09:00~15:00(토 16:30), 사전예약, 유모차 가능, 전용 무료 주차. 입장료는 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/27254363"]
+    note: "대정읍 에듀시티로 178. 카카오맵(2026-10-31): 09:00~15:00(토 16:30), 사전예약, 유모차 가능, 전용 무료 주차. 입장료는 확인 못 했어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 2858467", "https://place.map.kakao.com/27254363"]
   },
   {
     id: "yongmeori", name: "용머리해안", type: "공원",
@@ -208,11 +208,11 @@ const PLACES = [
     stayMin: 80, cost: 30000, open: "10:00", close: "18:00", closedDays: [],
     indoor: true,
     lat: 33.30401, lng: 126.39254,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: "상천리 정류장 걸어서 20분", bikeRack: null, evChargerMin: 1, parking: null,
     kakaoId: "18539729",
-    note: "안덕면 산록남로762번길 69록남로762번길 69. 카카오맵(2026-10-31): 10:00~18:00, 상설+기획 전시 성인 30,000원. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/18539729"]
+    note: "안덕면 산록남로762번길 69록남로762번길 69. 카카오맵(2026-10-31): 10:00~18:00, 상설+기획 전시 성인 30,000원. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함(자동문).",
+    sources: ["관광공사 무장애 여행 정보 API 1798082", "https://place.map.kakao.com/18539729"]
   },
   {
     id: "hello-kitty", name: "헬로키티아일랜드", type: "볼거리",
@@ -247,11 +247,11 @@ const PLACES = [
     stayMin: 70, cost: null, open: "09:00", close: "18:00", closedDays: [],
     indoor: true,
     lat: 33.28341, lng: 126.34993,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: "세계자동차 피아노박물관 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "7952882",
-    note: "안덕면 중산간서로 1610. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유모차 가능, 반려동물 동반, 주차. 입장료는 확인 못 했어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/7952882"]
+    note: "안덕면 중산간서로 1610. 카카오맵(2026-10-31): 09:00~18:00, 연중무휴, 유모차 가능, 반려동물 동반, 주차. 입장료는 확인 못 했어요. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 경사로를 이용하여 휠체어로 출입가능.",
+    sources: ["관광공사 무장애 여행 정보 API 596964", "https://place.map.kakao.com/7952882"]
   },
   {
     id: "sanbangsan", name: "산방산", type: "볼거리",
@@ -283,11 +283,11 @@ const PLACES = [
     stayMin: 70, cost: 16000, open: "08:40", close: "18:00", closedDays: [],
     strollerReview: true,
     lat: 33.34943, lng: 126.21823,
-    dog: true, stroller: false, stepFree: null, solo: null,
+    dog: true, stroller: false, stepFree: true, solo: null,
     station: "금등대안길 정류장 걸어서 19분", bikeRack: null, evChargerMin: 2, parking: true,
     kakaoId: "664283303",
-    note: "한경면 판조로 253-6. 카카오맵(2026-10-31): 08:40~18:00, 입장료 16,000원, 반려동물 동반, 주차. 유모차 후기(블로그, 2026-10-31 확인): 유모차가 험난하고 입구에 두고 간다는 후기 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/664283303","https://blog.naver.com/dream00556/224396507132","https://blog.naver.com/ymc2564/224278439980"]
+    note: "한경면 판조로 253-6. 카카오맵(2026-10-31): 08:40~18:00, 입장료 16,000원, 반려동물 동반, 주차. 유모차 후기(블로그, 2026-10-31 확인): 유모차가 험난하고 입구에 두고 간다는 후기 2건. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 2674014", "https://place.map.kakao.com/664283303","https://blog.naver.com/dream00556/224396507132","https://blog.naver.com/ymc2564/224278439980"]
   },
   {
     id: "norimae", name: "노리매", type: "볼거리",
@@ -342,11 +342,11 @@ const PLACES = [
     stayMin: 70, cost: 30000, open: "11:00", close: "21:30", closedDays: ["월"],
     breaks: [["14:30","16:00"]],
     lat: 33.21815, lng: 126.25004,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: "하모체육공원 정류장 걸어서 4분", bikeRack: null, evChargerMin: 4, parking: null,
     kakaoId: "10963527",
-    note: "하모항구로 50 수눌음. 카카오맵(2026-10-31): 11:00~21:30, 14:30~16:00 브레이크타임, 월 휴무, 고등어세트 30,000원. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/10963527"]
+    note: "하모항구로 50 수눌음. 카카오맵(2026-10-31): 11:00~21:30, 14:30~16:00 브레이크타임, 월 휴무, 고등어세트 30,000원. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 문의 형태 : 여닫이문(밖), 자동문(안)출입통로가 넓어 휠체어, 전동 스쿠터 사용자 진입 쉬움..",
+    sources: ["관광공사 무장애 여행 정보 API 2941421", "https://place.map.kakao.com/10963527"]
   },
   {
     id: "samgeori-sikdang", name: "삼거리식당", type: "식당",
@@ -478,11 +478,11 @@ const PLACES = [
     strollerReview: true,
     babyChair: true,
     lat: 33.24585, lng: 126.33076,
-    dog: null, stroller: true, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: "화순리 정류장 걸어서 3분", bikeRack: null, evChargerMin: 3, parking: true,
     kakaoId: "11143153",
-    note: "안덕면 산방로 7방로 7. 카카오맵(2026-10-31): 10:00~21:00, 15:00~17:00 브레이크타임, 화 휴무, 전복돌솥밥 15,000원, 유아의자, 전용 주차. 유모차 후기(블로그, 2026-10-31 확인): 2층까지 경사로라 유모차가 된다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/11143153","https://blog.naver.com/jeoungs2/223851788500","https://blog.naver.com/alkong_yun/223846217873"]
+    note: "안덕면 산방로 7방로 7. 카카오맵(2026-10-31): 10:00~21:00, 15:00~17:00 브레이크타임, 화 휴무, 전복돌솥밥 15,000원, 유아의자, 전용 주차. 유모차 후기(블로그, 2026-10-31 확인): 2층까지 경사로라 유모차가 된다는 글 2건. 카카오맵 다시 확인(2026-11-15): 시간·쉬는 날 같음. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 문의 형태 : 미닫이문출입통로가 좁아 휠체어, 전동 스쿠터 진입 주의.경사로 있음. / 테이블 간격이 넓어 휠체어, 전동 스쿠터 사용자 이용 쉬움.내부 턱 없음..",
+    sources: ["관광공사 무장애 여행 정보 API 404151", "https://place.map.kakao.com/11143153","https://blog.naver.com/jeoungs2/223851788500","https://blog.naver.com/alkong_yun/223846217873"]
   },
   {
     id: "myeongnidong", name: "명리동식당 본점", type: "식당",

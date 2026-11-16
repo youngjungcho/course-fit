@@ -26,11 +26,11 @@ const PLACES = [
     stayMin: 90, cost: 0, open: "09:00", close: "18:00", closedDays: [],
     lastOrder: "17:00",
     lat: 35.79230, lng: 129.33173,
-    dog: false, stroller: null, stepFree: null, solo: null,
+    dog: false, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "12760573",
-    note: "불국로 385. 카카오맵(2026-11-15): 09:00~18:00, 시설정보 주차. 입장 마감 17:00, 연중무휴. 2023년 5월부터 문화유산 관람료가 없어 무료예요(카카오맵에 입장료 표시 없음). 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 배변봉투 지참 및 배변처리 필수 불국사 사찰 내부의 경우 반려동물 동반 입장 제한 불국사 인근의 불국공원의 경우 반려동물과 함께 산책 가능. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/12760573"]
+    note: "불국로 385. 카카오맵(2026-11-15): 09:00~18:00, 시설정보 주차. 입장 마감 17:00, 연중무휴. 2023년 5월부터 문화유산 관람료가 없어 무료예요(카카오맵에 입장료 표시 없음). 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 배변봉투 지참 및 배변처리 필수 불국사 사찰 내부의 경우 반려동물 동반 입장 제한 불국사 인근의 불국공원의 경우 반려동물과 함께 산책 가능. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 원활한 이동 가능함 / 주출입구에서 대웅전까지 경사로가 설치되어 있음장애인 탑승차량은 매표소 앞까지 차량접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 126166", "https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/12760573"]
   },
   {
     id: "seokguram", name: "석굴암", type: "볼거리",
@@ -38,11 +38,11 @@ const PLACES = [
     stayMin: 60, cost: 0, open: "09:00", close: "17:00", closedDays: [],
     seasonalHours: true,
     lat: 35.79524, lng: 129.35047,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "8361996",
-    note: "석굴로 238. 카카오맵(2026-11-15): 09:00~17:00, 시설정보 주차. 연중무휴. 관광공사: 3~9월 09:00~18:00, 2·10월 09:00~17:30, 11~1월 09:00~17:00. 2023년 5월부터 관람료 없음. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/8361996","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
+    note: "석굴로 238. 카카오맵(2026-11-15): 09:00~17:00, 시설정보 주차. 연중무휴. 관광공사: 3~9월 09:00~18:00, 2·10월 09:00~17:30, 11~1월 09:00~17:00. 2023년 5월부터 관람료 없음. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함 / 주차장에서 매표소 진입로까지 경사로가 있으며 도움이 필요.",
+    sources: ["관광공사 무장애 여행 정보 API 126216", "https://place.map.kakao.com/8361996","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
   },
   {
     id: "daereungwon", name: "대릉원", type: "볼거리",
@@ -50,11 +50,11 @@ const PLACES = [
     stayMin: 60, cost: 0, open: "09:00", close: "22:00", closedDays: [],
     lastOrder: "21:30",
     lat: 35.83820, lng: 129.21280,
-    dog: null, stroller: true, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "8288444",
-    note: "황남동. 카카오맵(2026-11-15): 09:00~22:00, 시설정보 유모차 가능, 주차. 입장 마감 21:30, 연중무휴, 무료입장. 주차: 대릉원 공영주차장 유료, 쪽샘 임시주차장 무료. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/8288444"]
+    note: "황남동. 카카오맵(2026-11-15): 09:00~22:00, 시설정보 유모차 가능, 주차. 입장 마감 21:30, 연중무휴, 무료입장. 주차: 대릉원 공영주차장 유료, 쪽샘 임시주차장 무료. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함 / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 1492402", "https://place.map.kakao.com/8288444"]
   },
   {
     id: "cheomseongdae", name: "첨성대", type: "볼거리",
@@ -86,11 +86,11 @@ const PLACES = [
     stayMin: 30, cost: 0, open: "09:00", close: "22:00", closedDays: [],
     dogRule: "유모차나 이동장에 넣어서만(다리 위를 걷게 하면 안 돼요)",
     lat: 35.82930, lng: 129.21810,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "1839209698",
-    note: "교동 274. 카카오맵(2026-11-15): 09:00~22:00, 시설정보 유모차 가능, 주차. 무료입장. 문루 홍보관 10:00~20:00, 비 오면 2층 문루 관람 중단. 공영주차장 무료. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용,반려동물 유모차 탑승,이동장(켄넬)사용 / 유모차 및 케이지 사용 가능한 견종만 동반 가능 반려동물 유모차 혹은 이동장 필수 반려동물은 다리 직접 보행 불가 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/1839209698"]
+    note: "교동 274. 카카오맵(2026-11-15): 09:00~22:00, 시설정보 유모차 가능, 주차. 무료입장. 문루 홍보관 10:00~20:00, 비 오면 2층 문루 관람 중단. 공영주차장 무료. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용,반려동물 유모차 탑승,이동장(켄넬)사용 / 유모차 및 케이지 사용 가능한 견종만 동반 가능 반려동물 유모차 혹은 이동장 필수 반려동물은 다리 직접 보행 불가 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 경사로가 있어 휠체어 접근 가능함 / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 2603509", "https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/1839209698"]
   },
   {
     id: "gyeongju-museum", name: "국립경주박물관", type: "볼거리",
@@ -111,11 +111,11 @@ const PLACES = [
     stayMin: 50, cost: 0, open: null, close: null, closedDays: [],
     dogRule: "목줄 필수, 실내 시설은 확인 필요",
     lat: 35.82963, lng: 129.21469,
-    dog: true, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "12578939",
-    note: "교촌길 39-2. 카카오맵(2026-11-15): 운영시간 표시 없음, 시설정보 반려동물 동반, 주차. 관광공사: 상시 개방, 연중무휴. 마을 안 가게는 시간이 따로예요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 일부 실내 시설 이용 시 입장 가능 여부 확인 필요 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/12578939","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
+    note: "교촌길 39-2. 카카오맵(2026-11-15): 운영시간 표시 없음, 시설정보 반려동물 동반, 주차. 관광공사: 상시 개방, 연중무휴. 마을 안 가게는 시간이 따로예요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 일부 실내 시설 이용 시 입장 가능 여부 확인 필요 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함 / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 128676", "https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/12578939","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
   },
   {
     id: "bunhwangsa", name: "분황사", type: "볼거리",
@@ -123,11 +123,11 @@ const PLACES = [
     stayMin: 30, cost: 0, open: "09:00", close: "17:00", closedDays: [],
     seasonalHours: true,
     lat: 35.84077, lng: 129.23367,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "25046596",
-    note: "분황로 94-11. 카카오맵(2026-11-15): 09:00~17:00, 시설정보 주차. 관광공사: 4~10월 09:00~17:30, 11~3월 09:00~17:00, 연중무휴. 카카오맵은 모전석탑 장소로 찾았어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/25046596","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
+    note: "분황로 94-11. 카카오맵(2026-11-15): 09:00~17:00, 시설정보 주차. 관광공사: 4~10월 09:00~17:30, 11~3월 09:00~17:00, 연중무휴. 카카오맵은 모전석탑 장소로 찾았어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 경사로가 있어 휠체어 접근 가능함 / 출입구까지 평지로 되어 있으나 흙(돌) 구간 있음.",
+    sources: ["관광공사 무장애 여행 정보 API 317503", "https://place.map.kakao.com/25046596","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
   },
   {
     id: "yangdong-village", name: "양동마을", type: "볼거리",
@@ -160,11 +160,11 @@ const PLACES = [
     closedHolidays: ["신정","설날","추석"],
     lastOrder: "17:30", indoor: true,
     lat: 35.84160, lng: 129.28593,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: null,
     kakaoId: "20133506",
-    note: "보문로 484-7. 카카오맵(2026-11-15): 10:00~18:00. 월 휴관, 입장 마감 17:30. 관광공사: 어른 18,000원, 1월 1일·설·추석 당일·전시 교체 기간 휴관. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/20133506","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
+    note: "보문로 484-7. 카카오맵(2026-11-15): 10:00~18:00. 월 휴관, 입장 마감 17:30. 관광공사: 어른 18,000원, 1월 1일·설·추석 당일·전시 교체 기간 휴관. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 경사로가 있어 휠체어 접근 가능함(수동문) / 출입구까지 경사로가 설치되어 있음.",
+    sources: ["관광공사 무장애 여행 정보 API 130509", "https://place.map.kakao.com/20133506","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
   },
   {
     id: "donggungwon", name: "동궁원", type: "볼거리",
@@ -173,11 +173,11 @@ const PLACES = [
     holidayShift: "weekday", closedHolidays: ["신정","설날","추석"],
     lastOrder: "18:00", indoor: true,
     lat: 35.85275, lng: 129.26042,
-    dog: null, stroller: null, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "19464673",
-    note: "보문로 74-14. 카카오맵(2026-11-15): 09:30~19:00, 시설정보 주차. 식물원 월 휴관(관광공사: 공휴일이면 다음 평일), 매표 마감 18:00. 요금은 카카오맵 메뉴판 첫 줄. 관광공사: 1월 1일·설·추석 당일 휴관. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/19464673","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
+    note: "보문로 74-14. 카카오맵(2026-11-15): 09:30~19:00, 시설정보 주차. 식물원 월 휴관(관광공사: 공휴일이면 다음 평일), 매표 마감 18:00. 요금은 카카오맵 메뉴판 첫 줄. 관광공사: 1월 1일·설·추석 당일 휴관. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 경사로가 있어 휠체어 접근 가능함 / 출입구까지 경사로가 설치되어 있음.",
+    sources: ["관광공사 무장애 여행 정보 API 2603463", "https://place.map.kakao.com/19464673","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
   },
   {
     id: "birdpark", name: "경주버드파크", type: "볼거리",
@@ -221,11 +221,11 @@ const PLACES = [
     holidayOpen: true,
     lastOrder: "17:00", indoor: true,
     lat: 35.84000, lng: 129.28960,
-    dog: true, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "26597473",
-    note: "엑스포로 9. 카카오맵(2026-11-15): 10:00~18:00, 시설정보 반려동물 동반, 주차. 카카오맵: 화 휴무, 월 10:00~17:00. 관광공사: 월·화 휴관(법정 휴일이면 열어요), 입장 마감 17:00, 어른 15,000원. 출처가 엇갈려서 월·화 모두 쉰다고 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/26597473","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
+    note: "엑스포로 9. 카카오맵(2026-11-15): 10:00~18:00, 시설정보 반려동물 동반, 주차. 카카오맵: 화 휴무, 월 10:00~17:00. 관광공사: 월·화 휴관(법정 휴일이면 열어요), 입장 마감 17:00, 어른 15,000원. 출처가 엇갈려서 월·화 모두 쉰다고 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 단차가 없어 휠체어 접근 가능함(수동문) / 주차장에서 출입구까지 단차가 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 2049478", "https://place.map.kakao.com/26597473","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
   },
   {
     id: "car-museum", name: "경주세계자동차박물관", type: "볼거리",
@@ -245,11 +245,11 @@ const PLACES = [
     stayMin: 30, cost: 0, open: null, close: null, closedDays: [],
     dogRule: "목줄 필수",
     lat: 35.83260, lng: 129.21897,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: false,
     kakaoId: "8183204",
-    note: "교동. 카카오맵(2026-11-15): 운영시간 표시 없음, 시설정보 유모차 가능, 반려동물 동반, 주차 불가. 무료입장. 카카오맵 시설정보에 주차 불가. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/8183204"]
+    note: "교동. 카카오맵(2026-11-15): 운영시간 표시 없음, 시설정보 유모차 가능, 반려동물 동반, 주차 불가. 무료입장. 카카오맵 시설정보에 주차 불가. 관광공사 반려동물 동반여행 API(2026-11-15): 전구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구 무단차 원활한 이동 가능함 / 휠체어 접근 가능.",
+    sources: ["관광공사 무장애 여행 정보 API 128116", "https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/8183204"]
   },
   {
     id: "bomun-lake", name: "보문호반길", type: "공원",
@@ -269,11 +269,11 @@ const PLACES = [
     stayMin: 40, cost: 0, open: null, close: null, closedDays: [],
     dogRule: "목줄 필수, 맨발 황토길은 안 돼요",
     lat: 35.85900, lng: 129.21424,
-    dog: true, stroller: true, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "10959374",
-    note: "황성동 1-1. 카카오맵(2026-11-15): 운영시간 표시 없음, 시설정보 유모차 가능, 반려동물 동반, 주차. 연중무휴, 무료입장. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맨발 걷기 황토길은 반려견 출입 불가 인식표 착용 요망 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/10959374"]
+    note: "황성동 1-1. 카카오맵(2026-11-15): 운영시간 표시 없음, 시설정보 유모차 가능, 반려동물 동반, 주차. 연중무휴, 무료입장. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 맨발 걷기 황토길은 반려견 출입 불가 인식표 착용 요망 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 127619", "https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/10959374"]
   },
   {
     id: "samneung-forest", name: "삼릉숲", type: "공원",
@@ -363,11 +363,11 @@ const PLACES = [
     stayMin: 30, cost: 2000, open: "09:00", close: "17:00", closedDays: [],
     seasonalHours: true,
     lat: 35.82504, lng: 129.18750,
-    dog: null, stroller: true, stepFree: null, solo: null,
+    dog: null, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "7968204",
-    note: "카카오맵(2026-11-15): 09:00~17:00, 시설정보 유모차 가능, 주차. 연중무휴. 관광공사: 3~10월 09:00~18:00, 11~2월 09:00~17:00. 어른 2,000원(카카오맵 메뉴판). 위치: OpenStreetMap (2026-11-16).",
-    sources: ["https://place.map.kakao.com/7968204","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
+    note: "카카오맵(2026-11-15): 09:00~17:00, 시설정보 유모차 가능, 주차. 연중무휴. 관광공사: 3~10월 09:00~18:00, 11~2월 09:00~17:00. 어른 2,000원(카카오맵 메뉴판). 위치: OpenStreetMap (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 경사로가 있어 휠체어 접근 가능함 / 출입구까지 경사로가 있어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 126210", "https://place.map.kakao.com/7968204","관광공사 국문 관광정보 API(상세정보, 2026-11-15)"]
   },
   {
     id: "seochulji", name: "서출지", type: "공원",
@@ -387,33 +387,33 @@ const PLACES = [
     stayMin: 60, cost: 0, open: null, close: null, closedDays: [],
     dogRule: "목줄 필수, 가게 안은 가게마다 달라요",
     lat: 35.83741, lng: 129.20995,
-    dog: true, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: null,
     kakaoId: "627627078",
-    note: "포석로 1080. 카카오맵(2026-11-15): 운영시간 표시 없음. 거리라서 운영시간 없음. 가게마다 시간이 달라요. 물건값은 빼고 0원으로 넣었어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 일부 실내 시설 이용 시 입장 가능 여부 확인 필요 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/627627078"]
+    note: "포석로 1080. 카카오맵(2026-11-15): 운영시간 표시 없음. 거리라서 운영시간 없음. 가게마다 시간이 달라요. 물건값은 빼고 0원으로 넣었어요. 관광공사 반려동물 동반여행 API(2026-11-15): 일부구역 동반가능 / 전 견종 동반 가능 / 필요: 목줄 착용 / 일부 실내 시설 이용 시 입장 가능 여부 확인 필요 맹견의 경우, 입마개 착용 필수 배변봉투 지참 및 배변처리 필수. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함_무장애 편의시설 / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 2658227", "https://www.data.go.kr/data/15135102/openapi.do", "https://place.map.kakao.com/627627078"]
   },
   {
     id: "jungang-market", name: "경주중앙시장", type: "쇼핑",
     desc: "경주 가장 큰 전통시장, 주말 야시장",
     stayMin: 50, cost: 0, open: "09:00", close: "19:00", closedDays: [],
     lat: 35.84393, lng: 129.20672,
-    dog: true, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "2136388558",
-    note: "금성로 295. 카카오맵(2026-11-15): 09:00~19:00, 시설정보 반려동물 동반, 주차. 물건값은 빼고 0원으로 넣었어요. 야시장 시간은 따로 확인이 필요해요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/2136388558"]
+    note: "금성로 295. 카카오맵(2026-11-15): 09:00~19:00, 시설정보 반려동물 동반, 주차. 물건값은 빼고 0원으로 넣었어요. 야시장 시간은 따로 확인이 필요해요. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함 / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 990539", "https://place.map.kakao.com/2136388558"]
   },
   {
     id: "seongdong-market", name: "성동시장", type: "쇼핑",
     desc: "먹거리 많은 시내 시장",
     stayMin: 40, cost: 0, open: "07:00", close: "20:00", closedDays: [],
     lat: 35.84539, lng: 129.21631,
-    dog: true, stroller: null, stepFree: null, solo: null,
+    dog: true, stroller: true, stepFree: true, solo: null,
     station: null, bikeRack: null, evChargerMin: null, parking: true,
     kakaoId: "7951085",
-    note: "원화로281번길 11번길 11. 카카오맵(2026-11-15): 07:00~20:00, 시설정보 반려동물 동반, 주차. 물건값은 빼고 0원으로 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16).",
-    sources: ["https://place.map.kakao.com/7951085"]
+    note: "원화로281번길 11번길 11. 카카오맵(2026-11-15): 07:00~20:00, 시설정보 반려동물 동반, 주차. 물건값은 빼고 0원으로 넣었어요. 위치: 한국관광공사 국문 관광정보 (2026-11-16). 관광공사 무장애 여행 정보(2026-11-16): 주출입구는 턱이 없어 휠체어 접근 가능함 / 출입구까지 턱이 없어 휠체어 접근 가능함.",
+    sources: ["관광공사 무장애 여행 정보 API 990516", "https://place.map.kakao.com/7951085"]
   },
   {
     id: "hwangnam-bbang", name: "황남빵 본점", type: "쇼핑",
