@@ -307,7 +307,7 @@
   .wx-tip .ghost { flex: 0 0 auto; min-height: 40px; padding: 0 12px; font-size: 14px; color: var(--text); }
   .wx-rain { margin: 10px 0 0; padding: 12px; border-radius: 12px; background: color-mix(in srgb, var(--warn) 12%, transparent); }
   .wx-rain p { margin: 0 0 10px; color: var(--warn); font-size: 14px; font-weight: 600; }
-  .wx-rain .primary { width: 100%; min-height: 44px; font-size: 15px; }
+  .wx-rain .primary, .wx-rain .ghost { width: 100%; min-height: 44px; font-size: 15px; }
   .share-choice { display: flex; gap: 8px; margin: 0 0 8px; }
   .share-choice .kakao { background: #fee500; color: #191919; border-color: #fee500; }
   .skipped { color: var(--muted); font-size: 15px; margin: 0 0 8px; }
@@ -468,10 +468,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261118a"></script>
+<script src="regions.js?v=20261118b"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261118a";
+const REGION_VERSION = "20261118b";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -1061,6 +1061,7 @@ function renderWhen() {
     chip.onclick = () => {
       const key = chip.dataset.key;
       state[key] = (key === "depart" || key === "from" || key === "area" || key === "when" || key === "end" || key === "zone" || key === "roam" || key === "leave") ? chip.dataset.v : Number(chip.dataset.v);
+      if (key === "area") rainSkip = true; // 사람이 직접 고르면 비 때문에 실내로 바꾸지 않아요
       if (key === "when") {
         staleDate = null; screen.querySelector(".stale")?.remove();
         datePick.hidden = state.when !== "pick";
@@ -1756,6 +1757,14 @@ function weatherFor(series, date, fromMin, toMin) {
   if (!any) return null;
   return { code: worst, rain: Math.round(rain * 10) / 10, rate, wind: Math.round(wind), tmin: Math.round(Math.min(...temps)), tmax: Math.round(Math.max(...temps)) };
 }
+// 비가 제법 오면(시간당 3mm 넘게, 또는 뇌우) "골고루" 코스를 실내 위주로 먼저 바꿔 보여 줘요.
+// 같은 지역·날짜에서 "골고루로 되돌리기"를 누르거나 실내 코스가 비면 다시 바꾸지 않아요
+let rainAuto = null;            // 지금 비 때문에 실내로 바꾼 조건 열쇠
+const rainKept = new Set();     // 되돌렸거나 실내 코스가 없던 조건 열쇠
+const rainNoIndoor = new Set(); // 실내 코스가 비었던 조건 열쇠 (실내 버튼을 숨겨요)
+let rainSkip = false;           // 조건 화면에서 "어디 위주"를 직접 골랐어요
+const outdoorOf = (stops) => stops.filter((s) => s.place.type === "공원" || (s.place.type === "볼거리" && !s.place.indoor)).length;
+const rainKey = () => `${REGION.id}|${state.date}|${state.depart}|${state.zone ?? ""}`;
 async function drawWeather(stops, finish, redo) {
   const box = document.getElementById("weather");
   if (!box) return;
@@ -1769,13 +1778,23 @@ async function drawWeather(stops, finish, redo) {
   // 비는 예보 이름 대신 시간당 강수량으로 나눠요 (기상청 기준: 3mm 미만 약한 비, 15mm 이상 강한 비)
   if (/rain/.test(w.code) && !/thunder|snow|sleet/.test(w.code)) [label, icon] = w.rate >= 15 ? ["많은 비", "🌧️"] : w.rate >= 3 ? ["비", "🌧️"] : ["약한 비", "🌦️"];
   const wet = WX_RANK(w.code) >= 3 || w.rain >= 1;
-  const outdoor = stops.filter((s) => s.place.type === "공원" || (s.place.type === "볼거리" && !s.place.indoor)).length;
+  const heavy = /thunder/.test(w.code) || (/rain|sleet/.test(w.code) && w.rate >= 3);
+  const outdoor = outdoorOf(stops);
   const coast = stops.some((s) => (s.place.type === "공원" || s.place.type === "볼거리") && !isInland(s.place) && /바다|해안|해변|해수욕|포구|코지|산책로/.test(s.place.name + s.place.note));
+  if (heavy && outdoorOf(stops) && state.area === "mix" && !rainSkip && !rainKept.has(rainKey())) {
+    rainAuto = rainKey(); state.area = "indoor"; state.alt = 0;
+    track("weather_auto_indoor", { region: REGION.id });
+    redo(); return;
+  }
+  const autoOn = state.area === "indoor" && rainAuto === rainKey();
   box.innerHTML = `<p class="wx-line">${em(icon)} <b>${label}</b> · ${w.tmin === w.tmax ? `${w.tmin}℃` : `${w.tmin}~${w.tmax}℃`}${w.rain ? ` · 비 ${w.rain}mm` : ""} · 바람 ${w.wind}m/s <small>(코스 시간 예보)</small></p>
-    ${wet && outdoor && state.area !== "indoor" ? `<div class="wx-rain"><p>비 소식이 있어요. 야외 장소가 ${outdoor}곳 있어요.</p><button class="primary" id="wxIndoor">${em("☔")} 실내 위주로 다시 짜기</button></div>` : ""}
+    ${autoOn ? `<div class="wx-rain"><p>비가 와서 실내 위주로 짰어요.</p><button class="ghost" id="wxMix">${em("🤷")} 골고루로 되돌리기</button></div>` : ""}
+    ${wet && outdoor && state.area !== "indoor" && rainNoIndoor.has(rainKey()) ? `<p class="wx-tip">비 소식이 있어요. 이 조건엔 실내 장소가 모자라 야외 장소가 ${outdoor}곳 들어 있어요. 우산을 챙겨 주세요.</p>` : ""}
+    ${wet && outdoor && state.area !== "indoor" && !rainNoIndoor.has(rainKey()) ? `<div class="wx-rain"><p>비 소식이 있어요. 야외 장소가 ${outdoor}곳 있어요.</p><button class="primary" id="wxIndoor">${em("☔")} 실내 위주로 다시 짜기</button></div>` : ""}
     ${w.wind >= 9 && coast ? `<p class="wx-tip">바람이 세요(${w.wind}m/s). 바닷가 산책로·해안 절벽에서는 조심하세요.</p>` : ""}`;
   box.hidden = false;
   track("weather_show", { region: REGION.id, wet: wet ? 1 : 0 });
+  document.getElementById("wxMix")?.addEventListener("click", () => { rainKept.add(rainKey()); rainAuto = null; state.area = "mix"; state.alt = 0; track("weather_auto_undo", { region: REGION.id }); redo(); });
   document.getElementById("wxIndoor")?.addEventListener("click", () => { state.area = "indoor"; state.alt = 0; track("weather_indoor", { region: REGION.id }); redo(); });
 }
 
@@ -2147,6 +2166,8 @@ function renderResult() {
   // 브라우저 탭·즐겨찾기 제목도 코스에 맞춰요 (다른 화면으로 가면 원래 제목으로 돌아가요)
   document.title = stops.length ? `${shareText().line} | 쉼,표` : BASE_TITLE;
   if (stops.length) drawWeather(stops, finish, redo);
+  // 비 때문에 실내로 바꿨는데 실내 코스가 없으면 골고루로 되돌려요
+  else if (state.area === "indoor" && rainAuto === rainKey()) { rainKept.add(rainKey()); rainNoIndoor.add(rainKey()); rainAuto = null; state.area = "mix"; state.alt = 0; redo(); return; }
   document.getElementById("save")?.addEventListener("click", (e) => {
     const on = toggleSaved(stops);
     e.currentTarget.innerHTML = on ? `${em("⭐")} 저장됨` : `${em("☆")} 저장`;
