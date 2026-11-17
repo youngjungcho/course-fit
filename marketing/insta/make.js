@@ -12,18 +12,8 @@ const read = (f) => fs.existsSync(`${ROOT}/${f}`) ? fs.readFileSync(`${ROOT}/${f
 const [RG, WHO_ID = "group", HOW_ID = "car", DEPART = "10:00", HOURS = "6", DATE_ARG, FROM_ARG] = process.argv.slice(2);
 if (!RG) { console.error("사용법: node marketing/insta/make.js <지역 id> <who> <how> [출발] [시간] [날짜] [출발지]"); process.exit(1); }
 
-// ----- 코스 엔진 불러오기 (tools/top-places.js와 같은 방식) -----
-const html = read("index.html");
-const main = html.split("<script>").find((b) => b.includes("function applyRegion")).split("// ----- 시작 -----")[0];
-const stub = `
-const el = () => ({ style: {}, setAttribute() {}, querySelectorAll: () => [], addEventListener() {}, set onclick(v) {}, set textContent(v) {}, set innerHTML(v) {}, hidden: false });
-const document = { getElementById: el, querySelector: el, querySelectorAll: () => [], createElement: el, head: { append() {} }, body: el() };
-const window = { scrollTo() {}, addEventListener() {} }; const track = () => {}; const gtag = () => {}; const navigator = {};
-const history = { pushState() {}, replaceState() {}, state: null }; const location = { search: "", pathname: "/" };
-`;
-const DATA = new Function(read(`regions/${RG}/places.js`) + read(`regions/${RG}/travel.js`) + read(`regions/${RG}/transit.js`) + ";return { PLACES, STARTS, COASTLINE, TRAVEL, INLAND_NORTH: typeof INLAND_NORTH !== \"undefined\" && INLAND_NORTH };")();
-const T = new Function("DATA", read("regions.js") + stub + main +
-  `;applyRegion(REGIONS.find((r) => r.id === ${JSON.stringify(RG)}), DATA);return { makeCourse, state, STARTS, REGION, WHO, HOW, TYPE_ICON, costOf, won, babyChairOnly, sunsetToday, josa };`)(DATA);
+// ----- 코스 엔진 불러오기 (engine.js) -----
+const T = require("./engine.js").loadEngine(RG);
 
 const kst = new Date(Date.now() + 9 * 3600e3);
 const today = kst.toISOString().slice(0, 10);
