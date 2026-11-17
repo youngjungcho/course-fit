@@ -154,6 +154,17 @@
   .ex-go { color: var(--accent); font-weight: 700; }
   @media (min-width: 720px) { .ex-stops { grid-template-columns: 1fr 1fr; } }
   .area-title { font-size: 15px; color: var(--muted); margin: 18px 0 8px; }
+  .hero-points { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; position: relative; z-index: 1; }
+  .hero-points li { padding: 4px 10px; border-radius: 999px; background: var(--card); font-size: 13px; font-weight: 600; box-shadow: var(--shadow); }
+  .pick-grid { display: flex; flex-direction: column; }
+  .pick-grid.seen .pick-side { order: 2; margin-top: 24px; }
+  .choices.regions .choice small.rc-places { color: var(--text); opacity: .8; font-size: 14px; }
+  .choices.regions .choice small.rc-how { font-size: 13px; }
+  .choices.regions .choice small.rc-area { font-size: 12px; font-weight: 700; color: var(--accent); }
+  .choices.regions .choice:only-child { grid-column: auto; }
+  .region-pages { margin: 24px 0 0; color: var(--muted); font-size: 14px; }
+  .region-pages summary { cursor: pointer; }
+  .caution a, .notes a, .region-pages a { color: var(--accent); }
   .choices.regions { grid-template-columns: 1fr 1fr; }
   .choices.regions .choice { min-height: 64px; padding: 10px 14px; }
   .splash {
@@ -414,6 +425,12 @@
     .result.has-map .map { height: calc(100vh - 150px); min-height: 400px; max-height: 740px; margin: 0; }
     .result.has-map .map-legend { margin: 8px 0 0; }
     .result:not(.has-map) { max-width: 860px; }
+    .wrap.is-pick { max-width: 1120px; }
+    .wrap.is-pick .pick-grid { display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-areas: "main side"; column-gap: 32px; align-items: start; }
+    .wrap.is-pick .pick-main { grid-area: main; }
+    .wrap.is-pick .pick-side { grid-area: side; position: sticky; top: 16px; margin-top: 0; }
+    .wrap.is-pick .pick-side .ex-stops { grid-template-columns: 1fr; }
+    .wrap.is-pick .choices.regions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .result.has-map .dock { grid-area: dock; position: sticky; bottom: 0; margin: 16px 0 0; padding: 8px 0 12px; background: linear-gradient(to top, var(--bg) 80%, transparent); }
   }
 </style>
@@ -451,10 +468,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261117b"></script>
+<script src="regions.js?v=20261117c"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261117b";
+const REGION_VERSION = "20261117c";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -670,6 +687,7 @@ function renderTransitWait() {
 function render() {
   const picking = state.step === PICK || state.step === SAVED;
   document.querySelector(".wrap").classList.toggle("is-wide", state.step === 3);
+  document.querySelector(".wrap").classList.toggle("is-pick", state.step === PICK);
   document.getElementById("topRow").hidden = picking;
   regionBtn.hidden = picking || !REGION;
   document.getElementById("brand").hidden = !regionBtn.hidden;
@@ -731,9 +749,10 @@ const DOG_TRANSIT = `버스·지하철은 보통 반려견을 이동장에 넣�
 const EXAMPLE = {
   title: "제주 애월 · 반려견이랑 · 뚜벅이", sub: "토요일 10시 출발 · 6시간 · 1명 5만 원",
   q: "region=aewol&who=dog&how=walk&from=aewol&time=10%3A00&hours=6&budget=50000",
-  stops: [["10:15", "볼거리", "고내포구"], ["10:52", "쇼핑", "라이프워크 메가스토어"], ["11:37", "식당", "단소 (점심)"],
-    ["12:46", "공원", "한담해안산책로"], ["13:29", "카페", "트라이브"], ["14:30", "공원", "곽지해수욕장"]],
-  foot: "6곳 · 버스·걷기 이동 · 1명 약 37,000원"
+  // 바꿀 때는 이 조건으로 실제 코스를 띄워 보고 그대로 옮겨요 (2026-11-17 확인)
+  stops: [["10:24", "공원", "곽지해수욕장"], ["11:22", "공원", "한담해안산책로"], ["12:13", "식당", "고이정 (점심)"],
+    ["13:32", "카페", "트라이브"], ["14:29", "쇼핑", "귤귤스토어 애월점"]],
+  foot: "5곳 · 버스·걷기 이동 · 1명 약 46,000원"
 };
 function exampleCard() {
   return `<a class="example" id="example" href="?${EXAMPLE.q}&date=${nextSaturday()}&step=3">
@@ -754,14 +773,15 @@ const courseSlug = (r) => r.area === "제주" ? `jeju-${r.id === "jejusi" ? "cit
 // 지역 고르기: 이름으로 찾고, 시·도별로 묶어 보여 줘요
 const AREA_ICON = { 제주: "🍊", 강원: "🌊", 부산: "🌉", 경북: "🏯", 전북: "🏮" };
 function renderRegion() {
-  screen.innerHTML = `<section class="hero"><p class="hero-kicker">잠깐 멈춰 가는 하루</p><h1>어디로 가요?</h1><p class="sub">지역을 고르면 누구랑, 어떻게 가는지에 맞춰 하루 코스를 짜 드려요.</p><svg class="hero-wave" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 22 Q50 8 100 22 T200 22 T300 22 T400 22 V40 H0Z"/></svg></section>
-    ${seenCourse() ? "" : exampleCard()}
+  screen.innerHTML = `<section class="hero"><p class="hero-kicker">잠깐 멈춰 가는 하루</p><h1>어디로 가요?</h1><p class="sub">지역을 고르면 누구랑, 어떻게 가는지에 맞춰 하루 코스를 짜 드려요.</p><ul class="hero-points"><li>${em("🕐")} 운영시간·쉬는 날까지 따져요</li><li>${em("🚌")} 버스 번호·이동 시간</li><li>${em("💰")} 1명 비용 계산</li></ul><svg class="hero-wave" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 22 Q50 8 100 22 T200 22 T300 22 T400 22 V40 H0Z"/></svg></section>
+    <div class="pick-grid${seenCourse() ? " seen" : ""}"><aside class="pick-side">${exampleCard()}</aside><div class="pick-main">
     <input class="search" id="regionSearch" type="search" placeholder="지역 찾기 (예: 부산, 애월)" aria-label="지역 찾기" autocomplete="off" enterkeyhint="search">
     <div id="regionList" aria-live="polite"></div>
     ${navigator.onLine ? "" : `<p class="caution">인터넷이 연결되어 있지 않아요. 전에 열어 본 지역만 열 수 있어요.</p>`}
     <div class="install" id="install"></div>
-    <p class="caution" style="margin-top:24px">지역별 장소 목록: ${REGIONS.map((r) => `<a href="course/${courseSlug(r)}/">${esc(r.name)}</a>`).join(" · ")}</p>
-    <p class="caution foot-links"><a href="${footMail("문의")}" data-foot="contact">문의하기</a> · <a href="${footMail("정보 제보")}" data-foot="report">정보가 틀렸어요</a> · <a href="privacy.html">개인정보처리방침</a></p>`;
+    <details class="region-pages"><summary>지역별 장소 목록 보기</summary><p class="caution">${REGIONS.map((r) => `<a href="course/${courseSlug(r)}/">${esc(r.name)}</a>`).join(" · ")}</p></details>
+    <p class="caution foot-links"><a href="${footMail("문의")}" data-foot="contact">문의하기</a> · <a href="${footMail("정보 제보")}" data-foot="report">정보가 틀렸어요</a> · <a href="privacy.html">개인정보처리방침</a></p>
+    </div></div>`;
   drawInstall();
   bindFoot();
   document.getElementById("example")?.addEventListener("click", () => track("example_open"));
@@ -771,13 +791,22 @@ function renderRegion() {
     const rs = REGIONS.filter((r) => !w || (r.area + r.name + (r.keywords ?? "") + (r.zones ?? []).map((z) => z.label).join("")).replace(/\s/g, "").includes(w));
     const areas = [...new Set(REGIONS.map((r) => r.area))];
     // 구역이 있는 큰 도시는 구역마다 카드를 따로 보여 줘요 (제주처럼 바로 고르게)
-    const card = (r, z) => {
+    const card = (r, z, area) => {
       const on = REGION === r && (z ? state.zone === z.id : !state.zone || state.zone === "all");
       const label = `${z ? z.label : r.zones ? `${r.name} 전체` : r.name}${on ? " (골랐던 것)" : ""}, 장소 ${z ? z.count : r.count}곳${r.note ? `, ${r.note}` : ""}`;
-      return `<button class="choice${on ? " picked" : ""}" data-id="${r.id}"${z ? ` data-zone="${z.id}"` : ""} aria-label="${esc(label)}"><span>${esc(z ? z.label : r.zones ? `${r.name} 전체` : r.name)}${on ? `<span class="sr"> (골랐던 것)</span>` : ""}<small>장소 ${z ? z.count : r.count}곳${r.note ? ` · ${esc(r.note)}` : ""}</small></span></button>`;
+      const places = z ? "" : (r.keywords ?? "").split(" ").filter(Boolean).slice(0, 3).join("·");
+      return `<button class="choice${on ? " picked" : ""}" data-id="${r.id}"${z ? ` data-zone="${z.id}"` : ""} aria-label="${esc(`${label}${places ? `, ${places}` : ""}`)}"><span>${area ? `<small class="rc-area">${em(AREA_ICON[area] ?? "📍")} ${esc(area)}</small>` : ""}${esc(z ? z.label : r.zones ? `${r.name} 전체` : r.name)}${on ? `<span class="sr"> (골랐던 것)</span>` : ""}${places ? `<small class="rc-places">${esc(places)}</small>` : ""}<small class="rc-how">${em(moveIcon(r))} ${esc(moveNote(r))} · ${z ? z.count : r.count}곳</small></span></button>`;
     };
+    const moveIcon = (r) => r.subway ? "🚇" : r.noBus ? "🚗" : "🚌";
+    const moveNote = (r) => r.subway ? "지하철·버스" : r.noBus ? "차로" : "버스로도";
     const cards = (r) => r.zones ? [...r.zones.map((z) => card(r, z)), card(r)].join("") : card(r);
-    box.innerHTML = rs.length ? areas.filter((a) => rs.some((r) => r.area === a)).map((a) => `<h2 class="area-title"><span aria-hidden="true">${AREA_ICON[a] ?? "📍"}</span> ${esc(a)}</h2><div class="choices regions">${rs.filter((r) => r.area === a).map(cards).join("")}</div>`).join("")
+    // 카드가 하나뿐인 시·도(강원·경북·전북 등)는 "그 밖의 지역" 한 줄에 모아요 (제목만 여러 개 늘어서지 않게)
+    const shown = areas.filter((a) => rs.some((r) => r.area === a));
+    const solo = shown.filter((a) => { const x = rs.filter((r) => r.area === a); return x.length === 1 && !x[0].zones; });
+    const big = shown.filter((a) => !solo.includes(a));
+    const section = (title, icon, list, withArea) => `<h2 class="area-title"><span aria-hidden="true">${icon}</span> ${esc(title)}</h2><div class="choices regions">${list.map((r) => withArea ? card(r, null, r.area) : cards(r)).join("")}</div>`;
+    box.innerHTML = rs.length ? big.map((a) => section(a, AREA_ICON[a] ?? "📍", rs.filter((r) => r.area === a))).join("")
+      + (solo.length ? (solo.length === 1 && !big.length ? section(solo[0], AREA_ICON[solo[0]] ?? "📍", rs.filter((r) => r.area === solo[0])) : section("그 밖의 지역", "🗺️", rs.filter((r) => solo.includes(r.area)), true)) : "")
       : `<p class="caution">"${esc(input.value)}"에 맞는 지역이 아직 없어요. 지금은 ${areas.join("·")}만 있어요.</p>`;
     box.querySelectorAll(".choice").forEach((b) => { b.onclick = () => pickRegion(b.dataset.id, b.dataset.zone ?? "all"); });
   };
