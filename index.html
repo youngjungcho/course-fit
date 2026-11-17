@@ -276,7 +276,12 @@
   .badge { font-size: 13px; padding: 3px 9px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); }
   .badge.warn { background: var(--warn-soft); color: var(--warn); }
   .badge.sun { background: var(--warn-soft); color: var(--text); }
-  .links .skip { flex: 1; min-height: 44px; padding: 0 6px; border: 1px solid var(--line); border-radius: 10px; background: none; color: var(--muted); font-size: 14px; cursor: pointer; }
+  .stop .skip { margin-left: auto; flex: 0 0 auto; width: 36px; height: 36px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: none; color: var(--muted); font-size: 15px; line-height: 1; cursor: pointer; }
+  .stop .skip:hover { color: var(--text); border-color: var(--muted); }
+  .actions .kakao { background: #fee500; color: #191919; border-color: #fee500; flex: 1.4; }
+  .actions .alt { flex: 0 0 auto; padding: 0 14px; }
+  .r-bottom { display: flex; gap: 8px; margin: 16px 0 0; }
+  .r-bottom > * { flex: 1; }
   .dock { position: sticky; bottom: 0; z-index: 5; margin: 0 -16px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom)); background: linear-gradient(to top, var(--bg) 80%, transparent); }
   .actions { display: flex; gap: 8px; }
   .wide { width: 100%; flex: none; margin-bottom: 4px; }
@@ -289,6 +294,9 @@
   .wx-line small { color: var(--muted); font-size: 13px; }
   .wx-tip { margin: 8px 0 0; color: var(--warn); font-size: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
   .wx-tip .ghost { flex: 0 0 auto; min-height: 40px; padding: 0 12px; font-size: 14px; color: var(--text); }
+  .wx-rain { margin: 10px 0 0; padding: 12px; border-radius: 12px; background: color-mix(in srgb, var(--warn) 12%, transparent); }
+  .wx-rain p { margin: 0 0 10px; color: var(--warn); font-size: 14px; font-weight: 600; }
+  .wx-rain .primary { width: 100%; min-height: 44px; font-size: 15px; }
   .share-choice { display: flex; gap: 8px; margin: 0 0 8px; }
   .share-choice .kakao { background: #fee500; color: #191919; border-color: #fee500; }
   .skipped { color: var(--muted); font-size: 15px; margin: 0 0 8px; }
@@ -399,14 +407,14 @@
     .cta { position: static; margin: 8px 0 0; padding: 0; background: none; }
     .cta .primary { max-width: 360px; }
     /* 결과: 왼쪽 일정, 오른쪽 지도(내려도 따라와요) */
-    .result.has-map { display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 46%); grid-template-areas: "head map" "dock map" "rest map"; column-gap: 32px; align-items: start; }
+    .result.has-map { display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 46%); grid-template-areas: "head map" "rest map" "dock map"; column-gap: 32px; align-items: start; }
     .result.has-map .r-head { grid-area: head; }
     .result.has-map .r-rest { grid-area: rest; }
     .result.has-map .r-map { grid-area: map; position: sticky; top: 16px; }
     .result.has-map .map { height: calc(100vh - 150px); min-height: 400px; max-height: 740px; margin: 0; }
     .result.has-map .map-legend { margin: 8px 0 0; }
     .result:not(.has-map) { max-width: 860px; }
-    .result.has-map .dock { grid-area: dock; position: static; margin: 0 0 16px; padding: 0; background: none; }
+    .result.has-map .dock { grid-area: dock; position: sticky; bottom: 0; margin: 16px 0 0; padding: 8px 0 12px; background: linear-gradient(to top, var(--bg) 80%, transparent); }
   }
 </style>
 </head>
@@ -443,10 +451,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261117a"></script>
+<script src="regions.js?v=20261117b"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261117a";
+const REGION_VERSION = "20261117b";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -753,8 +761,9 @@ function renderRegion() {
     ${navigator.onLine ? "" : `<p class="caution">인터넷이 연결되어 있지 않아요. 전에 열어 본 지역만 열 수 있어요.</p>`}
     <div class="install" id="install"></div>
     <p class="caution" style="margin-top:24px">지역별 장소 목록: ${REGIONS.map((r) => `<a href="course/${courseSlug(r)}/">${esc(r.name)}</a>`).join(" · ")}</p>
-    <p class="caution"><a href="privacy.html">개인정보처리방침</a></p>`;
+    <p class="caution foot-links"><a href="${footMail("문의")}" data-foot="contact">문의하기</a> · <a href="${footMail("정보 제보")}" data-foot="report">정보가 틀렸어요</a> · <a href="privacy.html">개인정보처리방침</a></p>`;
   drawInstall();
+  bindFoot();
   document.getElementById("example")?.addEventListener("click", () => track("example_open"));
   const input = document.getElementById("regionSearch"), box = document.getElementById("regionList");
   const draw = () => {
@@ -764,7 +773,8 @@ function renderRegion() {
     // 구역이 있는 큰 도시는 구역마다 카드를 따로 보여 줘요 (제주처럼 바로 고르게)
     const card = (r, z) => {
       const on = REGION === r && (z ? state.zone === z.id : !state.zone || state.zone === "all");
-      return `<button class="choice${on ? " picked" : ""}" data-id="${r.id}"${z ? ` data-zone="${z.id}"` : ""}><span>${esc(z ? z.label : r.zones ? `${r.name} 전체` : r.name)}${on ? `<span class="sr"> (골랐던 것)</span>` : ""}<small>장소 ${z ? z.count : r.count}곳${r.note ? ` · ${esc(r.note)}` : ""}</small></span></button>`;
+      const label = `${z ? z.label : r.zones ? `${r.name} 전체` : r.name}${on ? " (골랐던 것)" : ""}, 장소 ${z ? z.count : r.count}곳${r.note ? `, ${r.note}` : ""}`;
+      return `<button class="choice${on ? " picked" : ""}" data-id="${r.id}"${z ? ` data-zone="${z.id}"` : ""} aria-label="${esc(label)}"><span>${esc(z ? z.label : r.zones ? `${r.name} 전체` : r.name)}${on ? `<span class="sr"> (골랐던 것)</span>` : ""}<small>장소 ${z ? z.count : r.count}곳${r.note ? ` · ${esc(r.note)}` : ""}</small></span></button>`;
     };
     const cards = (r) => r.zones ? [...r.zones.map((z) => card(r, z)), card(r)].join("") : card(r);
     box.innerHTML = rs.length ? areas.filter((a) => rs.some((r) => r.area === a)).map((a) => `<h2 class="area-title"><span aria-hidden="true">${AREA_ICON[a] ?? "📍"}</span> ${esc(a)}</h2><div class="choices regions">${rs.filter((r) => r.area === a).map(cards).join("")}</div>`).join("")
@@ -962,7 +972,7 @@ function renderWhen() {
     if (!moved && !shrunk) { box.hidden = true; return; }
     if (!today) box.textContent = `다른 날이라 ${[moved && `출발 ${state.depart}`, shrunk && `${state.hours}시간`].filter(Boolean).join(", ")}으로 되돌렸어요.`; // 오늘 때문에 바꿨던 값을 되돌림
     else {
-      if (moved) parts.push(`이미 지난 시간이라 출발을 ${state.depart}로`);
+      if (moved) parts.push(`출발을 지금에서 가장 가까운 ${state.depart}로`);
       if (shrunk) parts.push(`밤 9시 안에 끝나게 ${state.hours}시간으로`);
       box.textContent = `${parts.join(", ")} 맞췄어요. 아래에서 바꿀 수 있어요.`;
     }
@@ -1612,13 +1622,24 @@ function badgesFor(s) {
     if (chargesHere(p)) out.push(`<span class="badge">${em("🔌")} 여기서 충전하며 쉬기 좋아요</span>`);
   }
   if (p.closedDays === null) out.push(`<span class="badge warn">쉬는 날 확인 필요</span>`);
-  if (p.open === null) out.push(`<span class="badge warn">운영시간 확인 필요</span>`);
+  if (p.open === null && !alwaysOpen(p)) out.push(`<span class="badge warn">운영시간 확인 필요</span>`);
   if (p.seasonalHours) out.push(`<span class="badge warn">계절마다 시간이 달라요</span>`);
   const beach = inBeachSeason(p);
   if (beach !== null) out.push(beach ? `<span class="badge">해수욕장 개장 기간</span>` : `<span class="badge warn">해수욕장 개장 기간 아님 · 산책·노을만</span>`);
   if (seesSunset(p, s.begin, s.leave)) out.push(`<span class="badge sun">${em("🌅")} 노을 볼 시간</span>`);
   return out.join("");
 }
+
+// 카드에 보여 줄 종류: 해수욕장·해변은 분류가 "공원"이어도 "해변"으로 보여 줘요 (코스 계산은 그대로 공원)
+const isBeach = (p) => p.type === "공원" && (p.beachSeason || /해수욕장|해변/.test(p.name));
+const kindLabel = (p) => isBeach(p) ? "해변" : p.type;
+// 비용: 식당·카페는 메뉴판 대표 메뉴 값이라 "1인 예상"으로, 입장료는 그대로
+function costLabel(p) {
+  if (p.cost === null) return costOf(p) ? `1인 약 ${won(costOf(p))}(추정)` : "비용 확인 필요";
+  return isFood(p) && p.cost > 0 ? `1인 예상 ${won(p.cost)}` : won(p.cost);
+}
+// 운영시간이 없는 곳 중 늘 열려 있는 곳(공원·해변, 메모에 '상시 개방' 등)은 "확인 필요"를 띄우지 않아요
+const alwaysOpen = (p) => p.type === "공원" || /상시\s*개방|24시간|운영시간 없음|운영시간 없어요|거리라서|둘레길/.test(p.note ?? "");
 
 // 받침에 맞는 조사: josa("한담공원", "은", "는") → "은" (이름 끝의 한글 글자로 봐요)
 function josa(word, withBatchim, without) {
@@ -1687,7 +1708,7 @@ const WX_RANK = (code) => /thunder|snow|sleet|heavyrain/.test(code) ? 4 : /rain/
 // 코스 시간(출발~끝, 한국 시각)에 걸치는 예보만 모아요. 처음 2~3일은 1시간, 그 뒤는 6시간 단위예요
 function weatherFor(series, date, fromMin, toMin) {
   const t0 = Date.parse(`${date}T00:00:00+09:00`) + fromMin * 60e3, t1 = Date.parse(`${date}T00:00:00+09:00`) + toMin * 60e3;
-  let worst = null, rain = 0, wind = 0, temps = [], any = false;
+  let worst = null, rain = 0, rate = 0, wind = 0, temps = [], any = false;
   for (const e of series) {
     const t = Date.parse(e.time);
     const block = e.data.next_1_hours ? 1 : e.data.next_6_hours ? 6 : 0;
@@ -1697,11 +1718,12 @@ function weatherFor(series, date, fromMin, toMin) {
     const code = d.summary.symbol_code;
     if (!worst || WX_RANK(code) > WX_RANK(worst)) worst = code;
     rain += d.details?.precipitation_amount ?? 0;
+    rate = Math.max(rate, (d.details?.precipitation_amount ?? 0) / block); // 시간당 강수량(mm)
     wind = Math.max(wind, e.data.instant.details.wind_speed ?? 0);
     temps.push(e.data.instant.details.air_temperature);
   }
   if (!any) return null;
-  return { code: worst, rain: Math.round(rain * 10) / 10, wind: Math.round(wind), tmin: Math.round(Math.min(...temps)), tmax: Math.round(Math.max(...temps)) };
+  return { code: worst, rain: Math.round(rain * 10) / 10, rate, wind: Math.round(wind), tmin: Math.round(Math.min(...temps)), tmax: Math.round(Math.max(...temps)) };
 }
 async function drawWeather(stops, finish, redo) {
   const box = document.getElementById("weather");
@@ -1712,24 +1734,22 @@ async function drawWeather(stops, finish, redo) {
   if (state.date !== date || REGION !== region || !document.body.contains(box)) return; // 그새 조건이 바뀌었어요
   const w = weatherFor(series, date, toMin(state.depart), finish);
   if (!w) return; // 예보 범위(9일) 밖이에요
-  const [, label, icon] = wxOf(w.code);
+  let [, label, icon] = wxOf(w.code);
+  // 비는 예보 이름 대신 시간당 강수량으로 나눠요 (기상청 기준: 3mm 미만 약한 비, 15mm 이상 강한 비)
+  if (/rain/.test(w.code) && !/thunder|snow|sleet/.test(w.code)) [label, icon] = w.rate >= 15 ? ["많은 비", "🌧️"] : w.rate >= 3 ? ["비", "🌧️"] : ["약한 비", "🌦️"];
   const wet = WX_RANK(w.code) >= 3 || w.rain >= 1;
   const outdoor = stops.filter((s) => s.place.type === "공원" || (s.place.type === "볼거리" && !s.place.indoor)).length;
   const coast = stops.some((s) => (s.place.type === "공원" || s.place.type === "볼거리") && !isInland(s.place) && /바다|해안|해변|해수욕|포구|코지|산책로/.test(s.place.name + s.place.note));
   box.innerHTML = `<p class="wx-line">${em(icon)} <b>${label}</b> · ${w.tmin === w.tmax ? `${w.tmin}℃` : `${w.tmin}~${w.tmax}℃`}${w.rain ? ` · 비 ${w.rain}mm` : ""} · 바람 ${w.wind}m/s <small>(코스 시간 예보)</small></p>
-    ${wet && outdoor && state.area !== "indoor" ? `<p class="wx-tip">비 소식이 있어요. 야외 장소가 ${outdoor}곳 있어요. <button class="ghost" id="wxIndoor">${em("☔")} 실내 위주로 다시 짜기</button></p>` : ""}
+    ${wet && outdoor && state.area !== "indoor" ? `<div class="wx-rain"><p>비 소식이 있어요. 야외 장소가 ${outdoor}곳 있어요.</p><button class="primary" id="wxIndoor">${em("☔")} 실내 위주로 다시 짜기</button></div>` : ""}
     ${w.wind >= 9 && coast ? `<p class="wx-tip">바람이 세요(${w.wind}m/s). 바닷가 산책로·해안 절벽에서는 조심하세요.</p>` : ""}`;
   box.hidden = false;
   track("weather_show", { region: REGION.id, wet: wet ? 1 : 0 });
   document.getElementById("wxIndoor")?.addEventListener("click", () => { state.area = "indoor"; state.alt = 0; track("weather_indoor", { region: REGION.id }); redo(); });
 }
 
-// 공유: 카카오톡 카드로 보내기 / 링크 복사·다른 앱 중에서 골라요
+// 공유: 카카오톡 카드로 보내기(위 버튼) / 링크 복사·다른 앱(아래 버튼)
 let lastCourse = null;
-function shareCourse() {
-  const box = document.getElementById("shareChoice");
-  box.hidden = !box.hidden;
-}
 // 카카오톡 공유 (카카오 JavaScript SDK). 누를 때만 불러와요
 let kakaoShareLoading = null;
 function loadKakaoShare() {
@@ -1831,6 +1851,8 @@ async function drawMap(points, n, legs) {
   if (matchMedia("(pointer: coarse)").matches) map.setDraggable(false);
   map.setZoomable(false);
   map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
+  // 카카오 지도의 확대·축소 버튼은 title만 있어서 화면 읽기 프로그램용 이름을 붙여요
+  box.querySelectorAll("button[title]:not([aria-label])").forEach((b) => b.setAttribute("aria-label", `지도 ${b.title}`));
   // 출발한 곳으로 돌아오면 '출발·끝' 핀 하나로 합쳐요
   const loop = points.length > 2 && points[0] === points[points.length - 1];
   const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
@@ -1912,6 +1934,9 @@ function moreInfo(p) {
 }
 // 제보: 메일 앱을 열어 장소 이름·번호를 미리 적어 둬요 (서버가 없어서 메일로 받아요. 나중에 구글 폼으로 바꿀 수 있어요)
 const REPORT_MAIL = "wwjocom88@gmail.com";
+// 푸터의 문의·제보 메일 (장소 카드의 "정보가 달라요"와 같은 주소)
+const footMail = (kind) => `mailto:${REPORT_MAIL}?subject=${encodeURIComponent(`[쉼,표 ${kind}]`)}&body=${encodeURIComponent(kind === "정보 제보" ? "어느 지역·장소의 어떤 정보가 다른지 적어 주세요.\n\n" : "")}`;
+const bindFoot = () => screen.querySelectorAll("a[data-foot]").forEach((a) => a.addEventListener("click", () => track("foot_click", { kind: a.dataset.foot })));
 function reportLink(p) {
   const subject = `[쉼,표 제보] ${p.name}`;
   const body = `장소: ${p.name} (${REGION.name}, ${p.id})\n확인한 날짜: \n무엇이 다른가요? (예: 운영시간, 쉬는 날, 폐업, 반려견·유모차 가능 여부)\n\n`;
@@ -2004,11 +2029,11 @@ function renderResult() {
     ${moveLine(s.move, i === 0 ? start : stops[i - 1].place, s.place)}
     <li class="stop">
       <div class="time"><button class="no" data-stop="${i + 1}" aria-label="${i + 1}번 ${esc(s.place.name)} 지도에서 보기">${i + 1}</button>${toHHMM(s.begin)} – ${toHHMM(s.leave)}</div>
-      <div class="name"><span class="ticon" aria-hidden="true">${TYPE_ICON[s.place.type] ?? "📍"}</span><a class="pname" href="${placeUrl(s.place)}" target="_blank" rel="noopener" data-map="name" aria-label="${esc(s.place.name)} 카카오맵에서 보기">${esc(s.place.name)}<span class="ext" aria-hidden="true">↗</span></a></div>
+      <div class="name"><span class="ticon" aria-hidden="true">${TYPE_ICON[s.place.type] ?? "📍"}</span><a class="pname" href="${placeUrl(s.place)}" target="_blank" rel="noopener" data-map="name" aria-label="${esc(s.place.name)} 카카오맵에서 보기">${esc(s.place.name)}<span class="ext" aria-hidden="true">↗</span></a><button class="skip" data-id="${s.place.id}" aria-label="${esc(s.place.name)} 코스에서 빼기" title="이곳 빼기">✕</button></div>
       ${s.place.desc ? `<div class="desc">${esc(s.place.desc)}</div>` : ""}
-      <div class="meta">${s.place.type} · ${s.place.stayMin}분 · ${s.place.cost !== null ? won(s.place.cost) : costOf(s.place) ? `약 ${won(costOf(s.place))}(추정)` : "비용 확인 필요"}${s.place.lastOrder && !s.place.hoursByDay ? ` · ${isFood(s.place) ? "마지막 주문" : "입장 마감"} ${s.place.lastOrder}` : ""}</div>
+      <div class="meta">${kindLabel(s.place)} · ${s.place.stayMin}분 · ${costLabel(s.place)}${s.place.lastOrder && !s.place.hoursByDay ? ` · ${isFood(s.place) ? "마지막 주문" : "입장 마감"} ${s.place.lastOrder}` : ""}</div>
       <div class="badges">${MUST.has(s.place) ? `<span class="badge must">${em("📌")} 꼭 갈 곳</span>` : ""}${badgesFor(s)}</div>
-      <div class="links">${mapLinks(s.place)}<button class="skip" data-id="${s.place.id}" aria-label="${esc(s.place.name)} 빼기">이곳 빼기</button></div>
+      <div class="links">${mapLinks(s.place)}</div>
       ${moreInfo(s.place)}
     </li>`).join("");
 
@@ -2031,7 +2056,7 @@ function renderResult() {
       ${caution ? `<p class="caution">${caution}</p>` : ""}
       ${dogRuled.length ? `<p class="caution">${em("🐕")} 작은 개만 들어갈 수 있는 곳 ${dogRuled.length}곳이 들어 있어요: ${dogRuled.map((p) => `${esc(p.name)}(${esc(p.dogRule)})`).join(", ")}. 이동가방에 들어가지 않는 큰 개와 함께라면 "이곳 빼기"로 빼 주세요.</p>` : ""}
       ${state.skip.length ? `<p class="skipped">뺀 곳: ${state.skip.map((id) => esc(PLACES.find((p) => p.id === id).name)).join(", ")} <button class="link" id="unskip">다시 넣기</button></p>` : ""}
-      </div><div class="r-map"><div class="map" id="map" aria-label="코스 지도"></div>${stops.length ? `<p class="map-legend" aria-hidden="true">${[...new Set([...stops.map((s) => s.move), ...(back ? [back] : [])].map(legKind))].map((k) => `<span><b>${LEG_MARK[k]}</b> ${LEG_STYLE[k].label}</span>`).join("")}<span>· 곧은 선이라 실제 길과 달라요</span></p>` : ""}</div><div class="r-rest">
+      </div><div class="r-map"><div class="map" id="map" role="region" aria-label="코스 지도"></div>${stops.length ? `<p class="map-legend" aria-hidden="true">${[...new Set([...stops.map((s) => s.move), ...(back ? [back] : [])].map(legKind))].map((k) => `<span><b>${LEG_MARK[k]}</b> ${LEG_STYLE[k].label}</span>`).join("")}<span>· 곧은 선이라 실제 길과 달라요</span></p>` : ""}</div><div class="r-rest">
       ${explain.length ? `<details class="why"${matchMedia("(min-width: 1024px)").matches ? " open" : ""}><summary>이 코스는요</summary><ul>${explain.map((t) => `<li>${t}</li>`).join("")}</ul></details>` : ""}
       <ul class="timeline">
         <li class="endpoint">${em("📍")} ${state.depart} ${esc(start.name)}에서 출발</li>
@@ -2051,19 +2076,15 @@ function renderResult() {
       ${unknownSkipped ? `<p>• ${{ dog: "반려견", kid: "유모차", wheel: "계단" }[state.who]} 정보가 없는 곳 ${unknownSkipped}곳은 안전하게 뺐어요. 꼭 가고 싶은 곳이 있으면 전화로 확인해 보세요.</p>` : ""}
       ${noLocation ? `<p>• 위치를 아직 모르는 곳 ${noLocation}곳은 코스에서 뺐어요.</p>` : ""}
       <p>• 날씨는 노르웨이 기상청(MET Norway) 예보로, 지역 한가운데 기준이에요(CC BY 4.0). 산 쪽·바닷가는 다를 수 있어요.</p>
-      <p>• 방문 통계를 위해 구글 애널리틱스를 써요. <a href="privacy.html">개인정보처리방침</a></p>
+      <p>• 방문 통계를 위해 구글 애널리틱스를 써요. <a href="privacy.html">개인정보처리방침</a> · <a href="${footMail("문의")}" data-foot="contact">문의하기</a> · <a href="${footMail("정보 제보")}" data-foot="report">정보가 틀렸어요</a></p>
     </details>
-    <button class="${stops.length ? "ghost wide" : "primary"}" id="again">조건 바꾸기</button></div>
+    <div class="r-bottom"><button class="${stops.length ? "ghost" : "primary"}" id="again">조건 바꾸기</button>${stops.length ? `<button class="ghost" id="shareLink">${em("🔗")} 링크 복사·다른 앱</button>` : ""}</div></div>
     ${stops.length ? `<div class="dock">
       <p class="share-msg" id="shareMsg" role="status"></p>
-      <div class="share-choice" id="shareChoice" hidden>
-        <button class="ghost kakao" id="shareKakao">${em("💬")} 카카오톡으로 보내기</button>
-        <button class="ghost" id="shareLink">${em("🔗")} 링크 복사·다른 앱</button>
-      </div>
       <div class="actions">
-        ${count > 1 ? `<button class="ghost" id="alt">${em("🔄")} 다른 코스 ${(state.alt % count) + 1}/${count}</button>` : ""}
+        <button class="ghost kakao" id="shareKakao">${em("💬")} 카톡으로 보내기</button>
         <button class="ghost" id="save">${isSaved() ? `${em("⭐")} 저장됨` : `${em("☆")} 저장`}</button>
-        <button class="ghost" id="share">${em("🔗")} 공유</button>
+        ${count > 1 ? `<button class="ghost alt" id="alt" aria-label="다른 코스 보기, ${count}개 중 ${(state.alt % count) + 1}번째">${em("🔄")} ${(state.alt % count) + 1}/${count}</button>` : ""}
       </div>
     </div>` : ""}</div>`;
   trackCourse(stops, emptyWhy);
@@ -2082,7 +2103,6 @@ function renderResult() {
   screen.querySelectorAll("[data-fix]").forEach((b) => { b.onclick = () => { const f = fixes[b.dataset.fix]; Object.assign(state, f.change, { alt: 0 }); track("empty_fix", { region: REGION.id, fix: f.key }); redo(); }; });
   document.getElementById("unskip")?.addEventListener("click", () => { state.skip = []; state.alt = 0; redo(); });
   document.getElementById("alt")?.addEventListener("click", () => { state.alt = (state.alt + 1) % count; track("course_alt", { region: REGION.id }); redo(); });
-  document.getElementById("share")?.addEventListener("click", shareCourse);
   document.getElementById("shareKakao")?.addEventListener("click", shareKakao);
   document.getElementById("shareLink")?.addEventListener("click", shareLink);
   lastCourse = { stops, spent, used, costUnknown };
@@ -2096,6 +2116,7 @@ function renderResult() {
   // 장소 카드의 번호를 누르면 지도가 그 장소로 가요
   screen.querySelectorAll("button.no").forEach((b) => { b.onclick = () => focusOnMap(Number(b.dataset.stop)); });
   screen.querySelectorAll("a[data-map]").forEach((a) => { a.addEventListener("click", () => track("map_open", { region: REGION.id, map: a.dataset.map })); });
+  bindFoot();
   screen.querySelectorAll("a[data-report]").forEach((a) => { a.addEventListener("click", () => track("report_click", { region: REGION.id, place: a.dataset.report })); });
 }
 
