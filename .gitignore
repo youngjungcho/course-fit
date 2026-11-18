@@ -5,3 +5,4 @@
 .DS_Store
 .env
 tools/osrm-data/
+tools/transit-data/

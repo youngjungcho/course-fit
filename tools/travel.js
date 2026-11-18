@@ -5,8 +5,8 @@
 //   node tools/travel.js gangneung                  # regions/gangneung/travel.js 새로 쓰기
 //   node tools/travel.js gangneung --out /tmp/t.js  # 다른 곳에 쓰기 (비교용)
 //
-// 버스·지하철 칸(bus…, transit.js)은 만들지 않아요. 그 칸이 있는 지역(제주·부산)에서 장소를 바꾸면
-// 대중교통 표도 다시 계산해야 해요 — 이 스크립트는 그런 지역이면 멈춰요(--force로 무시).
+// 버스·지하철 칸(bus…, transit.js)은 tools/transit.js가 만들어요. 장소 순서가 그대로면 지금 버스 칸을 남기고,
+// 장소를 더하거나 뺐으면 버스 칸을 빼고 쓴 뒤 "node tools/transit.js <지역>"을 돌리라고 알려 줘요.
 // 장소를 더하거나 빼거나 위치를 고치면 꼭 다시 돌려요(표의 줄·칸 순서가 장소 순서와 같아야 해요).
 const fs = require("fs");
 const path = require("path");
@@ -25,21 +25,21 @@ if (!fs.existsSync(placesFile)) { console.error(`${placesFile} 가 없어요.`);
 
 const { PLACES, STARTS } = new Function(fs.readFileSync(placesFile, "utf8") + ";return { PLACES, STARTS };")();
 
-// 대중교통 표가 있는 지역은 버스 칸이 장소 순서와 어긋나지 않게 확인해요
+// 대중교통 표가 있는 지역(제주): travel.js의 bus… 칸은 장소 순서가 같으면 그대로 두고, 바뀌었으면 tools/transit.js로 다시 만들어요
 const oldTravel = path.join(regionDir, "travel.js");
-if (!force && outAt < 0 && fs.existsSync(oldTravel)) {
-  const t = fs.readFileSync(oldTravel, "utf8");
-  if (/\bbus\s*:/.test(t) || fs.existsSync(path.join(regionDir, "transit.js"))) {
-    console.error("이 지역은 버스·지하철 표가 있어요. 이 스크립트로 다시 쓰면 대중교통 표와 장소 순서가 어긋날 수 있어요.");
-    console.error("대중교통까지 다시 계산할 게 아니면 --out으로 다른 곳에 써서 비교만 하세요. (무시하려면 --force)");
-    process.exit(1);
-  }
-}
+const oldSrc = fs.existsSync(oldTravel) ? fs.readFileSync(oldTravel, "utf8") : "";
+const hasBus = /\n\s*bus\s*:/.test(oldSrc);
+const hasTransitFile = fs.existsSync(path.join(regionDir, "transit.js"));
 
 // 위치(lat·lng)가 없는 장소는 코스에 안 나와서 표에서도 빼요
 const noPos = PLACES.filter((p) => typeof p.lat !== "number" || typeof p.lng !== "number");
 if (noPos.length) console.warn(`위치가 없어 빼는 곳: ${noPos.map((p) => p.id).join(", ")}`);
-const pts = [...STARTS.map((s) => ({ id: `start:${s.id}`, lat: s.lat, lng: s.lng })), ...PLACES.filter((p) => !noPos.includes(p)).map((p) => ({ id: p.id, lat: p.lat, lng: p.lng }))];
+let pts = [...STARTS.map((s) => ({ id: `start:${s.id}`, lat: s.lat, lng: s.lng })), ...PLACES.filter((p) => !noPos.includes(p)).map((p) => ({ id: p.id, lat: p.lat, lng: p.lng }))];
+// 장소는 그대로인데 순서만 다르면(예전 표), 예전 순서를 따라요 — 버스 칸을 그대로 쓸 수 있게
+if (oldSrc) {
+  const oldIds = new Function(oldSrc + ";return TRAVEL")().ids;
+  if (oldIds.length === pts.length && oldIds.every((id) => pts.some((p) => p.id === id))) pts.sort((a, b) => oldIds.indexOf(a.id) - oldIds.indexOf(b.id));
+}
 const dup = pts.map((p) => p.id).filter((id, i, a) => a.indexOf(id) !== i);
 if (dup.length) { console.error("id가 겹쳐요:", dup.join(", ")); process.exit(1); }
 const bad = pts.filter((p) => typeof p.lat !== "number" || typeof p.lng !== "number");
@@ -70,7 +70,7 @@ const rows = (m) => "[" + m.map((r) => JSON.stringify(r)).join(",\n") + "]";
   const mapDateFile = path.join(__dirname, "osrm-data", "MAP_DATE");
   const mapDate = fs.existsSync(mapDateFile) ? fs.readFileSync(mapDateFile, "utf8").trim() : "날짜 모름";
   const today = new Date().toISOString().slice(0, 10);
-  const out = `// 장소끼리 이동 시간표 (분). ${today} OSRM(내 컴퓨터, ${mapDate} 지도 자료)으로 계산했어요. tools/travel.js로 만들었어요.
+  let out = `// 장소끼리 이동 시간표 (분). ${today} OSRM(내 컴퓨터, ${mapDate} 지도 자료)으로 계산했어요. tools/travel.js로 만들었어요.
 // 길 데이터: © OpenStreetMap contributors (ODbL) · 계산: OSRM (Open Source Routing Machine)
 // 막히는 길(실시간 교통)은 반영되지 않아요.
 // 장소가 바뀌면 다시 계산해야 해요: node tools/travel.js ${region}
@@ -82,6 +82,18 @@ const TRAVEL = {
   carKm: ${rows(km(car.distances))}
 };
 `;
+  // 버스 칸 이어 붙이기 (장소 순서가 그대로일 때만)
+  let busNote = "";
+  if (hasBus || hasTransitFile) {
+    const old = new Function(oldSrc + ";return TRAVEL")();
+    const same = JSON.stringify(old.ids) === JSON.stringify(pts.map((p) => p.id));
+    if (hasBus && same) {
+      const busPart = oldSrc.slice(oldSrc.search(/,\s*\n\s*bus\s*:/)).replace(/\n\};\s*$/, "");
+      const busHead = (oldSrc.match(/^\/\/ 버스:.*\n(\/\/ {2,}.*\n)*/m) ?? [""])[0];
+      out = out.replace(/\n\};\n$/, busPart + "\n};\n").replace("const TRAVEL = {", busHead + "const TRAVEL = {");
+      busNote = " · 버스 칸은 그대로 뒀어요";
+    } else if (!same) busNote = ` · 장소 순서가 바뀌었어요. 이제 버스 표를 다시 만들어요: node tools/transit.js ${region} (그다음 node tools/bus-stops.js ${region})`;
+  }
   fs.writeFileSync(travelFile, out);
-  console.log(`${path.relative(ROOT, travelFile)} 를 썼어요: ${pts.length}곳 (출발지 ${STARTS.length} + 장소 ${pts.length - STARTS.length}), ${Math.round(out.length / 1024)}KB`);
+  console.log(`${path.relative(ROOT, travelFile)} 를 썼어요: ${pts.length}곳 (출발지 ${STARTS.length} + 장소 ${pts.length - STARTS.length}), ${Math.round(out.length / 1024)}KB${busNote}`);
 })().catch((e) => { console.error(e.message); process.exit(1); });

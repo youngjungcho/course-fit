@@ -67,9 +67,26 @@ bash tools/osrm-setup.sh
 
 ## 대중교통
 
-- 지금 도구는 차·걷기·자전거만 만들어요. 버스·지하철 표(제주 `bus…` 칸, 부산 `transit.js`)를 만들던 스크립트는 저장소에 없어요.
-- 그래서 `travel.js`는 대중교통 표가 있는 지역(제주 8곳·부산)은 덮어쓰지 않고 멈춰요. 그 지역 장소를 바꾸려면 대중교통 표까지 다시 계산하는 도구를 먼저 만들어야 해요.
-  비교만 하려면 `--out` 으로 다른 곳에 써요.
+- 버스·지하철 표(제주 `travel.js`의 `bus…` 칸, 부산 `transit.js`)는 `tools/transit.js`가 만들어요. 먼저 자료를 받아요(처음 한 번, 노선이 바뀌면 다시):
+  ```bash
+  node tools/transit-fetch.js jeju
+  ```
+  ```bash
+  node tools/transit-fetch.js busan
+  ```
+  자료는 `tools/transit-data/`에 두고 git에는 안 올려요. 제주 시간표 엑셀을 읽으려고 그 안에 파이썬 venv(openpyxl)를 만들어요.
+- 제주·부산에서 장소를 더하거나 빼거나 위치를 옮겼으면 이 순서로 돌려요:
+  ```bash
+  node tools/travel.js aewol
+  ```
+  ```bash
+  node tools/transit.js aewol
+  ```
+  ```bash
+  node tools/bus-stops.js aewol
+  ```
+  `travel.js`는 장소 순서가 그대로면 버스 칸을 남겨 두고, 바뀌었으면 버스 칸을 빼고 써요(그때는 꼭 `transit.js`를 돌려요).
+  `node tools/transit.js aewol --compare`는 쓰지 않고 지금 표와 얼마나 같은지만 보여 줘요.
 - 새 지역은 처음엔 강릉처럼 `noBus: true`(차·택시로 다니는 곳)로 시작하는 걸 권해요.
 - 지도의 🚏 정류장 위치는 `regions/<지역 id>/stops.json`이에요. 버스 표(busPlans)에 나오는 정류장 이름을 TAGO 노선별 정류장 목록에서 찾아 만들어요.
   버스 표를 다시 만들면 이것도 다시 돌려요(없거나 못 찾은 정류장은 지도에서 곧은 선으로 그려요).
