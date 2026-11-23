@@ -290,6 +290,8 @@
   .stop .skip { margin-left: auto; flex: 0 0 auto; width: 36px; height: 36px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: none; color: var(--muted); font-size: 15px; line-height: 1; cursor: pointer; }
   .stop .skip:hover { color: var(--text); border-color: var(--muted); }
   .actions .kakao { background: #fee500; color: #191919; border-color: #fee500; flex: 1.4; }
+  /* 아래 바 버튼 글자가 두 줄로 꺾이지 않게 */
+  .actions .ghost { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .actions .alt { flex: 0 0 auto; padding: 0 14px; }
   .r-bottom { display: flex; gap: 8px; margin: 16px 0 0; }
   .r-bottom > * { flex: 1; }
@@ -489,7 +491,7 @@ const track = (name, params = {}) => gtag("event", name, params);
 <script src="regions.js?v=20261118d"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261123a";
+const REGION_VERSION = "20261123b";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -2337,7 +2339,7 @@ function renderResult() {
     ${stops.length ? `<div class="dock">
       <p class="share-msg" id="shareMsg" role="status"></p>
       <div class="actions">
-        <button class="ghost kakao" id="shareKakao">${em("💬")} 카톡으로 보내기</button>
+        <button class="ghost kakao" id="shareKakao" aria-label="카카오톡으로 코스 보내기">${em("💬")} 카톡 공유</button>
         <button class="ghost" id="save">${isSaved() ? `${em("⭐")} 저장됨` : `${em("☆")} 저장`}</button>
         ${count > 1 ? `<button class="ghost alt" id="alt" aria-label="다른 코스 보기, ${count}개 중 ${(state.alt % count) + 1}번째">${em("🔄")} ${(state.alt % count) + 1}/${count}</button>` : ""}
       </div>
