@@ -302,6 +302,20 @@
   .share-msg:empty { display: none; }
   .weather { margin: 0 0 12px; padding: 10px 12px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); font-size: 15px; }
   .wx-line { margin: 0; }
+  .glow-btn { flex: none; display: inline-flex; align-items: center; gap: 4px; min-height: 40px; padding: 0 14px; margin: 0 0 12px; font-size: 14px; }
+  .glow-btn[aria-pressed="true"] { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+  .left-time .fixes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .left-time .fixes .ghost { flex: 1 1 auto; min-height: 40px; font-size: 14px; color: var(--text); }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
+  .chip-box { flex: 1 1 auto; min-width: 0; border-radius: 12px; background: var(--card); border: 1px solid var(--line); font-size: 14px; }
+  .chip-box[open] { flex-basis: 100%; }
+  .chip-box > summary { min-height: 40px; padding: 8px 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 4px; cursor: pointer; list-style: none; }
+  .chip-box > summary::-webkit-details-marker { display: none; }
+  .chip-box > summary::after { content: "▾"; margin-left: auto; padding-left: 6px; color: var(--accent); }
+  .chip-box[open] > summary::after { content: "▴"; }
+  .chip-body { padding: 0 12px 10px; }
+  .chip-body .caution, .chip-body .left-time { margin: 0 0 8px; }
+  .wx-flag { color: var(--warn); }
   .wx-line small { color: var(--muted); font-size: 13px; }
   .wx-tip { margin: 8px 0 0; color: var(--warn); font-size: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
   .wx-tip .ghost { flex: 0 0 auto; min-height: 40px; padding: 0 12px; font-size: 14px; color: var(--text); }
@@ -312,6 +326,9 @@
   .share-choice { display: flex; gap: 8px; margin: 0 0 8px; }
   .share-choice .kakao { background: #fee500; color: #191919; border-color: #fee500; }
   .skipped { color: var(--muted); font-size: 15px; margin: 0 0 8px; }
+  .dog-size { margin: 20px 0 0; padding: 14px; border-radius: 14px; background: var(--accent-soft, var(--card)); }
+  .dog-size h2 { font-size: 18px; margin: 0 0 4px; }
+  .dog-size .sub { margin: 0 0 10px; }
   .must-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 12px; }
   .must-title { font-size: 14px; font-weight: 700; }
   .must-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 4px 4px 10px; border-radius: 16px; background: var(--accent-soft); color: var(--text); font-size: 14px; }
@@ -472,7 +489,7 @@ const track = (name, params = {}) => gtag("event", name, params);
 <script src="regions.js?v=20261118d"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261118d";
+const REGION_VERSION = "20261123a";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -526,6 +543,12 @@ const wheelReady = () => {
   const ok = PLACES.filter((p) => p.stepFree === true && p.lat !== null);
   return ok.length >= 15 && ok.filter((p) => p.type === "식당").length >= 3;
 };
+// 반려견 크기: 작은 개(이동가방·유모차에 들어가요)면 "이동가방에 넣어서" 같은 곳도 넣고, 중·대형견이면 빼요
+const DOG_SIZES = [
+  { id: "small", emoji: "🐕", label: "작은 개", hint: "이동가방·유모차에 들어가요" },
+  { id: "big",   emoji: "🦮", label: "중·대형견", hint: "이동가방에 안 들어가요" }
+];
+const dogSizeLabel = () => state.who === "dog" && state.dogSize ? ` (${DOG_SIZES.find((d) => d.id === state.dogSize).label})` : "";
 const whoHere = () => WHO.filter((w) => w.id !== "wheel" || wheelReady());
 const howHere = () => HOW
   .filter((h) => !(REGION?.noBus && h.id === "walk") && !(state.who === "wheel" && h.id === "bike"))
@@ -558,7 +581,7 @@ const AREAS = [
 // 바다가 없는 지역(REGION.inland)은 "바닷가·산 쪽 위주"를 빼요
 const areaChoices = () => AREAS.filter((a) => !(REGION?.inland && (a.id === "sea" || a.id === "mountain")));
 
-const state = { step: 0, who: null, how: null, people: null, when: null, date: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix", end: "start", skip: [], must: [], alt: 0 };
+const state = { step: 0, glow: false, who: null, dogSize: null, how: null, people: null, when: null, date: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix", end: "start", skip: [], must: [], alt: 0 };
 
 const screen = document.getElementById("screen");
 const bar = document.getElementById("bar");
@@ -571,7 +594,7 @@ const ROAMS = [{ id: "stay", label: "이 구역에서만" }, { id: "near", label
 const roaming = () => state.roam === "near" && state.zone && state.zone !== "all";
 const isOutside = (p) => roaming() && p.zone !== state.zone;
 const maxOutside = () => Math.max(1, Math.floor(maxStops() / 3)); // 코스의 3분의 1까지만 옆 구역으로 나가요
-const URL_KEYS = { who: "who", how: "how", people: "people", date: "date", from: "from", depart: "time", hours: "hours", budget: "budget", end: "end", area: "area", zone: "zone", roam: "roam", leave: "leave" };
+const URL_KEYS = { who: "who", dogSize: "dog", how: "how", people: "people", date: "date", from: "from", depart: "time", hours: "hours", budget: "budget", end: "end", area: "area", zone: "zone", roam: "roam", leave: "leave" };
 function queryOf() {
   const q = new URLSearchParams();
   for (const [k, name] of Object.entries(URL_KEYS)) {
@@ -579,12 +602,14 @@ function queryOf() {
     if (v === null || v === undefined || (k === "from" && v === "here")) continue;
     if ((k === "end" && v === "start") || (k === "area" && v === "mix") || (k === "zone" && v === "all") || (k === "roam" && (v === "stay" || state.zone === "all")) || (k === "leave" && !hubOf())) continue; // 기본값은 빼요
     if (k === "people" && state.how !== "any") continue; // 인원은 택시비를 나눌 때만 써요
+    if (k === "dogSize" && state.who !== "dog") continue; // 반려견 크기는 반려견이랑일 때만
     q.set(name, v);
   }
   if (REGION) q.set("region", REGION.id);
   if (state.skip.length) q.set("skip", state.skip.join(","));
   if (state.must.length) q.set("must", state.must.join(","));
   if (state.alt) q.set("alt", state.alt);
+  if (state.glow) q.set("glow", "1");
   if (state.step === PICK) q.set("pick", "1");
   else if (state.step === SAVED) q.set("saved", "1");
   else if (state.step) q.set("step", state.step);
@@ -595,6 +620,7 @@ function readQuery(search = location.search) {
   const one = (name, ok) => { const v = q.get(name); return v !== null && ok(v) ? v : null; };
   const num = (name, list) => { const v = Number(q.get(name)); return list.includes(v) ? v : null; };
   state.who = one("who", (v) => whoHere().some((w) => w.id === v));
+  state.dogSize = state.who === "dog" ? one("dog", (v) => DOG_SIZES.some((d) => d.id === v)) : null; // 크기가 없는 예전 링크는 모름(null)
   state.how = one("how", (v) => howHere().some((h) => h.id === v));
   state.people = num("people", PEOPLE) ?? defaultPeople(); // 인원이 없는 예전 링크는 기본값으로
   state.date = one("date", (v) => /^\d{4}-\d\d-\d\d$/.test(v));
@@ -616,6 +642,7 @@ function readQuery(search = location.search) {
   // 꼭 갈 곳: 위치가 있는 그 지역 장소만, 3곳까지
   state.must = [...new Set((q.get("must") ?? "").split(","))].filter((id) => PLACES.some((p) => p.id === id && p.lat !== null)).slice(0, MUST_MAX);
   state.alt = Math.max(0, Number(q.get("alt")) || 0);
+  state.glow = q.get("glow") === "1";
   // 앞 단계를 다 골라야 다음 단계로 갈 수 있어요
   const ready = [true, !!state.who, !!state.how, !!(state.date && state.from && state.depart && state.hours && state.budget)];
   let step = Math.min(3, Math.max(0, Number(q.get("step")) || 0));
@@ -731,31 +758,43 @@ function choiceList(items, key) {
 }
 
 function bindChoices(key) {
-  screen.querySelectorAll(".choice").forEach((btn) => {
+  screen.querySelectorAll(".choice:not([data-size])").forEach((btn) => {
     btn.onclick = () => {
       if (key === "who" && state.who !== btn.dataset.id) state.people = null; // 누구랑이 바뀌면 인원 기본값도 다시
       state[key] = btn.dataset.id;
+      if (key === "who" && btn.dataset.id !== "dog") state.dogSize = null;
+      // 반려견이면 크기를 한 번 더 물어요 (다음 단계로 바로 가지 않아요)
+      if (key === "who" && btn.dataset.id === "dog") { renderWho(true); return; }
       track(key === "who" ? "who_select" : "how_select", { region: REGION.id, [key]: btn.dataset.id });
       goStep(state.step + 1);
     };
   });
 }
 
-function renderWho() {
-  screen.innerHTML = `<h1>누구랑 가요?</h1><p class="sub">하나만 골라 주세요.</p>${choiceList(whoHere(), "who")}${wheelReady() ? "" : `<p class="caution" style="margin-top:14px">${em("♿")} 휠체어 코스는 이 지역의 "계단 없음" 정보를 모으는 중이라 잠시 숨겨 두었어요.</p>`}`;
+function renderWho(askSize = false) {
+  const sizeBox = state.who === "dog" && (askSize || state.dogSize) ? `<section class="dog-size" aria-labelledby="dogSizeTitle">
+    <h2 id="dogSizeTitle">${em("🐶")} 반려견이 어느 정도 크기예요?</h2>
+    <p class="sub">이동가방에 넣어야 들어갈 수 있는 곳이 있어서 여쭤봐요.</p>
+    <div class="choices">${DOG_SIZES.map((d) => `<button class="choice${state.dogSize === d.id ? " picked" : ""}" data-size="${d.id}"><span class="emoji" aria-hidden="true">${d.emoji}</span><span>${d.label}${state.dogSize === d.id ? `<span class="sr"> (골랐던 것)</span>` : ""}<small>${d.hint}</small></span></button>`).join("")}</div>
+  </section>` : "";
+  screen.innerHTML = `<h1>누구랑 가요?</h1><p class="sub">하나만 골라 주세요.</p>${choiceList(whoHere(), "who")}${sizeBox}${wheelReady() ? "" : `<p class="caution" style="margin-top:14px">${em("♿")} 휠체어 코스는 이 지역의 "계단 없음" 정보를 모으는 중이라 잠시 숨겨 두었어요.</p>`}`;
   bindChoices("who");
+  screen.querySelectorAll("[data-size]").forEach((btn) => {
+    btn.onclick = () => { state.dogSize = btn.dataset.size; track("dog_size_select", { region: REGION.id, size: state.dogSize }); goStep(state.step + 1); };
+  });
+  if (askSize) { const t = document.getElementById("dogSizeTitle"); t.tabIndex = -1; t.scrollIntoView({ block: "center", behavior: "smooth" }); t.focus({ preventScroll: true }); }
 }
 
 const DOG_TRANSIT = `버스·지하철은 보통 반려견을 이동장에 넣어야 탈 수 있어요. 이동장에 들어가지 않는 큰 개와 다닌다면 "자차·렌터카"나 "상관없어요"(택시·차)를 골라 주세요.`;
 // 첫 화면 예시 코스: 처음 온 사람에게 "이런 결과가 나와요"를 먼저 보여 줘요.
-// 2026-11-15에 tools/quality.js로 실제로 짠 코스예요 (애월·반려견·뚜벅이·토요일 10시·6시간·1명 5만 원). 장소가 바뀌면 다시 뽑아요
+// 실제로 짠 코스예요 (애월·반려견(작은 개)·뚜벅이·토요일 10시·6시간·1명 5만 원). 장소나 코스 짜는 규칙이 바뀌면 다시 뽑아요
 const EXAMPLE = {
-  title: "제주 애월 · 반려견이랑 · 뚜벅이", sub: "토요일 10시 출발 · 6시간 · 1명 5만 원",
-  q: "region=aewol&who=dog&how=walk&from=aewol&time=10%3A00&hours=6&budget=50000",
-  // 바꿀 때는 이 조건으로 실제 코스를 띄워 보고 그대로 옮겨요 (2026-11-17 확인)
-  stops: [["10:24", "공원", "곽지해수욕장"], ["11:22", "공원", "한담해안산책로"], ["12:13", "식당", "고이정 (점심)"],
-    ["13:32", "카페", "트라이브"], ["14:29", "쇼핑", "귤귤스토어 애월점"]],
-  foot: "5곳 · 버스·걷기 이동 · 1명 약 46,000원"
+  title: "제주 애월 · 반려견(작은 개)이랑 · 뚜벅이", sub: "토요일 10시 출발 · 6시간 · 1명 5만 원",
+  q: "region=aewol&who=dog&dog=small&how=walk&from=aewol&time=10%3A00&hours=6&budget=50000",
+  // 바꿀 때는 이 조건으로 실제 코스를 띄워 보고 그대로 옮겨요 (2026-11-23 확인, 11월 28일 토요일 기준)
+  stops: [["10:44", "카페", "애월후식"], ["12:02", "식당", "블루그라스 (점심)"], ["13:06", "공원", "곽지해수욕장"],
+    ["14:04", "공원", "한담해안산책로"], ["14:51", "쇼핑", "귤귤스토어 애월점"]],
+  foot: "5곳 · 버스·걷기 이동 · 1명 약 29,000원"
 };
 function exampleCard() {
   return `<a class="example" id="example" href="?${EXAMPLE.q}&date=${nextSaturday()}&step=3">
@@ -1125,7 +1164,30 @@ const taxiFare = (km) => REGION.taxiBase + taxiMeterFare(km) + (REGION.taxiFarKm
 // 택시는 같이 타는 사람끼리 나눠 내요 (1명 몫, 100원 단위 올림)
 const taxiShare = (km) => Math.ceil(taxiFare(km) / (state.people || 1) / 100) * 100;
 
-function travel(a, b, how) {
+// 차로 다닐 때도 이만큼(분) 안으로 가까운 곳은 걸어가게 해요 (차는 세워 둔 곳에 두고 다녀와요)
+const CAR_WALK_MAX = 10;
+const isCar = (how) => how === "car" || how === "ev";
+const samePlace = (x, y) => x === y || (!!x && !!y && x.id !== undefined && x.id === y.id);
+// 걸어서 걸리는 시간(분). 시간표에 없으면 직선거리로 어림해요
+function walkMin(a, b) {
+  const i = travelIndex(a), j = travelIndex(b), wheel = state.who === "wheel";
+  if (i === undefined || j === undefined) return distKm(a, b) / (wheel ? 3 : 4.5) * 60;
+  return TRAVEL.walk[i][j] * (wheel ? 1.5 : 1);
+}
+// a에서 b로 가는 방법. 차로 다닐 때는 차를 세워 둔 곳(carAt)을 따져요
+// - 차가 지금 자리에 있으면: 가까우면 걷고(차는 그대로), 멀면 차로(차도 b로)
+// - 차를 두고 걸어 나왔으면: 가까우면 그대로 걷고, 멀면 차까지 걸어 돌아가서 차로 가요
+// 돌려주는 car는 이동한 뒤 차가 있는 곳이에요
+function travel(a, b, how, carAt = a) {
+  if (!isCar(how)) return travelBase(a, b, how);
+  if (samePlace(carAt, a)) { const m = travelBase(a, b, how); return { ...m, car: m.text === "걸어서" ? carAt : b }; }
+  const direct = walkMin(a, b);
+  // 차가 있는 곳으로 가는 길이면 그냥 걸어가요
+  if (samePlace(carAt, b) || direct <= CAR_WALK_MAX) return { min: Math.max(1, Math.ceil(direct)), text: "걸어서", fare: 0, plan: null, car: carAt };
+  const toCar = Math.max(1, Math.ceil(walkMin(a, carAt))), drive = travelBase(carAt, b, "drive");
+  return { ...drive, min: toCar + drive.min, walkToCar: toCar, carFrom: carAt, car: b };
+}
+function travelBase(a, b, how) {
   const i = travelIndex(a), j = travelIndex(b);
   if (i === undefined || j === undefined) return travelGuess(a, b, how);
   // 휠체어·어르신은 1.5배 느리게 걸어요
@@ -1149,6 +1211,9 @@ function travel(a, b, how) {
     if (walk <= 15) { min = walk; text = "걸어서"; }
     else { min = car + 5; text = "택시로"; fare = taxiShare(TRAVEL.carKm[i][j]); }
   } else if (how === "bike") { min = bike + 3; text = "자전거로"; }
+  // 차(자차·전기차): 걸어서 10분 안이고 차(주차 5분 포함)보다 빠르거나 같으면 걸어가요
+  // ("drive"는 세워 둔 차를 타러 간 뒤라 가까워도 차로 가요)
+  else if (how !== "drive" && walk <= CAR_WALK_MAX && walk <= car + 5) { min = walk; text = "걸어서"; }
   else { min = car + 5; text = "차로"; } // 주차 5분
   return { min: Math.max(1, Math.ceil(min)), text, fare, plan };
 }
@@ -1165,6 +1230,7 @@ function travelGuess(a, b, how) {
     if (km <= 1.2) { min = km / walkKmh * 60; text = "걸어서"; }
     else { min = 5 + km / 35 * 60; text = "택시로"; fare = taxiShare(km); }
   } else if (how === "bike") { min = 3 + km / 12 * 60; text = "자전거로"; }
+  else if (how !== "drive" && km / walkKmh * 60 <= CAR_WALK_MAX && km / walkKmh * 60 <= 5 + km / 35 * 60) { min = km / walkKmh * 60; text = "걸어서"; }
   else { min = 5 + km / 35 * 60; text = "차로"; }
   return { min: Math.max(3, Math.ceil(min)), text, fare };
 }
@@ -1291,15 +1357,30 @@ function isInland(p) {
 
 // 쉬엄쉬엄 다니게: 3시간 3곳, 4시간 3곳, 6시간 5곳, 8시간 6곳까지
 const PACE_BUFFER = 15;
-const maxStops = () => Math.ceil(state.hours * 0.75);
+const maxStops = () => Math.ceil(dayHours() * 0.75);
+// 점심은 11시 30분부터 넣어요 (11시는 이른 편이에요)
+const LUNCH_FROM = 690;
+
+// 노을까지 보기: 코스 끝을 해 지기 30분 전 노을 명소로 늘려요. 그 명소에서 해 진 뒤 10분까지 머물러요
+// 공항·역으로 끝나는 코스는 떠나는 시각이 정해져 있어서 못 써요
+const GLOW_BEFORE = 30, GLOW_AFTER = 10;
+const glowTarget = () => sunsetToday() - GLOW_BEFORE;
+const glowReady = () => !!state.date && !!state.depart && !hubOf() && glowTarget() - toMin(state.depart) >= 90 && PLACES.some((p) => p.lat !== null && isSunsetSpot(p));
+const glowOn = () => !!state.glow && glowReady();
+// 노을 명소에 가기 전까지 쓰는 시간(시간): 노을까지 보기면 출발부터 해 지기 30분 전까지예요 (15분은 명소까지 가는 몫)
+const dayHours = () => glowOn() ? Math.max(1, (glowTarget() - 15 - toMin(state.depart)) / 60) : state.hours;
 
 // 코스를 짜는 중의 상태: 지금 어디서 몇 시인지, 돈·카페·식사를 얼마나 썼는지
-function startCtx() {
+// goal: 노을까지 보기에서 마지막에 갈 노을 명소. 주면 낮 코스를 그곳까지 해 지기 30분 전에 닿게 짜요
+function startCtx(goal = null) {
   const startMin = toMin(state.depart);
   return {
-    stops: [], here: startPoint(), now: startMin, spent: 0, fares: 0, lastType: null, lastMeal: -999, lastCafe: -999, cafes: 0, shops: 0,
+    // car: 차로 다닐 때 차를 세워 둔 곳 (처음엔 출발한 곳)
+    stops: [], here: startPoint(), car: startPoint(), now: startMin, spent: 0, fares: 0, lastType: null, lastMeal: -999, lastCafe: -999, cafes: 0, shops: 0,
     // 고른 시간을 꽉 채우지 않게 15분 여유를 둬요. 카페·쇼핑은 8시간 미만이면 1곳, 8시간이면 2곳까지 (종류가 고르게 섞이게)
-    endMin: startMin + state.hours * 60 - PACE_BUFFER, day: tripDay(),
+    endMin: goal ? glowTarget() : glowOn() ? glowTarget() - 15 : startMin + state.hours * 60 - PACE_BUFFER, day: tripDay(),
+    // 노을까지 보기면 끝나는 곳으로 돌아가는 건 노을 명소 다음이라 중간 장소에서는 따지지 않아요
+    noBack: glowOn(), goal,
     // 꼭 갈 곳에 카페·쇼핑이 여럿이면 그만큼은 허락해요
     maxCafes: Math.max(state.hours >= 8 ? 2 : 1, [...MUST].filter((p) => p.type === "카페").length),
     maxShops: Math.max(state.hours >= 8 ? 2 : 1, [...MUST].filter((p) => p.type === "쇼핑").length)
@@ -1311,18 +1392,21 @@ function visit(ctx, p) {
   if (ctx.stops.some((s) => s.place === p)) return null;
   if (isOutside(p) && ctx.stops.filter((s) => isOutside(s.place)).length >= maxOutside()) return null;
   if (closedOn(p)) return null;
+  if (ctx.noBack && isSunsetNamed(p) && !MUST.has(p)) return null;
   // 카페·식당은 연달아 넣지 않고, 카페·쇼핑은 개수를 정해 둬요
   if (p.type === ctx.lastType && (p.type === "카페" || p.type === "식당")) return null;
   if (p.type === "카페" && ctx.cafes >= ctx.maxCafes) return null;
   if (p.type === "쇼핑" && ctx.shops >= ctx.maxShops) return null;
 
   const [open, close] = hoursOf(p);
-  const mv = travel(ctx.here, p, state.how);
+  const mv = travel(ctx.here, p, state.how, ctx.car);
   if (mv.min === Infinity) return null; // 버스로 못 가는 곳
   let begin = ctx.now + mv.min;
   // 문 열기 전이나 쉬는 시간이면 30분까지는 기다리고, 더 길면 다음 후보로
   const waitUntil = (min) => { if (min - begin > 30) return false; begin = min; return true; };
   if (open && begin < toMin(open) && !waitUntil(toMin(open))) return null;
+  // 점심때(11:30) 30분 안쪽 전에 식당에 들어갈 수 있으면 점심때까지 기다렸다 들어가요
+  if (p.type === "식당" && begin >= LUNCH_FROM - 30 && begin < LUNCH_FROM) begin = LUNCH_FROM;
   const hitBreak = (p.breaks ?? []).find(([from, to]) => begin < toMin(to) && begin + p.stayMin > toMin(from));
   if (hitBreak && !waitUntil(toMin(hitBreak[1]))) return null;
   const leave = begin + p.stayMin;
@@ -1330,7 +1414,8 @@ function visit(ctx, p) {
   if (close && leave > toMin(close)) return null;
   if (close && begin > lastOrderMin(p, close)) return null;
   // 끝나는 곳이 있으면 거기까지 돌아가는 시간도 넣어서 시간 안에 들어와야 해요
-  const end = endPoint(), back = end && travel(p, end, state.how);
+  if (p === ctx.goal) return null; // 노을 명소는 마지막에 따로 붙여요
+  const end = ctx.goal ?? (ctx.noBack ? null : endPoint()), back = end && travel(p, end, state.how, mv.car);
   if (back && (back.min === Infinity || leave + back.min > ctx.endMin - airportBuffer())) return null;
   // 입장료·밥값에 교통비까지, 돌아갈 차비도 남겨 두고 예산 안이어야 해요
   if (ctx.spent + costOf(p) + mv.fare + (back?.fare ?? 0) > state.budget) return null;
@@ -1338,17 +1423,19 @@ function visit(ctx, p) {
   // 카페는 2시간 넘게 띄우고, 점심 전(11시~13시 30분)에는 넣지 않아요. 점심을 먼저 먹어요
   if (p.type === "카페" && (begin - ctx.lastCafe < 120 || (ctx.lastMeal < 0 && begin >= 660 && begin <= 810))) return null;
 
-  // 식당은 밥때(아침 7~9:30, 점심 11~14시, 저녁 17~20시)에만, 앞 식사에서 3시간이 지나야 넣어요
-  const mealTime = (begin >= 420 && begin <= 570) || (begin >= 660 && begin <= 840) || (begin >= 1020 && begin <= 1200);
+  // 식당은 밥때(아침 7~9:30, 점심 11:30~14시, 저녁 17~20시)에만, 앞 식사에서 3시간이 지나야 넣어요
+  const mealTime = (begin >= 420 && begin <= 570) || (begin >= LUNCH_FROM && begin <= 840) || (begin >= 1020 && begin <= 1200);
   if (p.type === "식당" && (!mealTime || begin - ctx.lastMeal < 180)) return null;
   // 숙소·공항에서 나와 1시간 안에 아침 식당은 넣지 않아요 (보통 아침을 먹고 나와요. 점심을 먹게 해요)
   if (p.type === "식당" && begin < 660 && begin - toMin(state.depart) < 60) return null;
 
   let score = -(begin - ctx.now);
   // 점심·저녁 식당에 가산점을 몰아줘요
-  if (p.type === "식당") score += begin >= 690 && begin <= 810 ? 120 : begin >= 660 ? 60 : 20;
+  if (p.type === "식당") score += begin >= LUNCH_FROM && begin <= 810 ? 120 : 20;
   if (p.type === ctx.lastType) score -= 25;
   if (state.who === "solo" && p.solo) score += 30;
+  // 반려견: 이동가방에 넣어야 하는 곳은 뒤로 미뤄요 (크기를 모르면 많이, 작은 개면 조금). 조건 없이 되는 곳이 없을 때만 들어가요
+  if (state.who === "dog" && smallDogOnly(p)) score -= state.dogSize === "small" ? 15 : 80;
   if (state.how === "bike" && p.bikeRack) score += 10;
   if ((state.how === "ev" || state.how === "car") && p.parking) score += 10;
   if (state.how === "ev" && chargesHere(p)) score += 20;
@@ -1364,7 +1451,7 @@ function visit(ctx, p) {
 
 function add(ctx, stop) {
   ctx.stops.push(stop);
-  ctx.here = stop.place; ctx.now = stop.leave; ctx.spent += costOf(stop.place) + stop.move.fare; ctx.fares += stop.move.fare; ctx.lastType = stop.place.type;
+  ctx.here = stop.place; ctx.car = stop.move.car ?? stop.place; ctx.now = stop.leave; ctx.spent += costOf(stop.place) + stop.move.fare; ctx.fares += stop.move.fare; ctx.lastType = stop.place.type;
   if (stop.place.type === "식당") ctx.lastMeal = stop.begin;
   if (stop.place.type === "카페") { ctx.cafes++; ctx.lastCafe = stop.leave; }
   if (stop.place.type === "쇼핑") ctx.shops++;
@@ -1389,8 +1476,8 @@ function extend(ctx, pool, limit = maxStops()) {
 }
 
 // 정한 순서대로 다녀 보기 (규칙에 안 맞으면 null)
-function follow(places) {
-  const ctx = startCtx();
+function follow(places, goal = null) {
+  const ctx = startCtx(goal);
   for (const p of places) {
     const v = visit(ctx, p);
     if (!v) return null;
@@ -1400,7 +1487,7 @@ function follow(places) {
 }
 
 // 마지막 장소에서 끝나는 곳까지 (끝나는 곳이 상관없거나 장소가 없으면 null)
-const backOf = (ctx) => endPoint() && ctx.stops.length ? travel(ctx.here, endPoint(), state.how) : null;
+const backOf = (ctx) => endPoint() && ctx.stops.length ? travel(ctx.here, endPoint(), state.how, ctx.car) : null;
 const sunsetOf = (c) => c.stops.some((s) => seesSunset(s.place, s.begin, s.leave)) ? 1 : 0;
 const movingOf = (ctx) => ctx.stops.reduce((sum, s) => sum + s.move.min, 0) + (backOf(ctx)?.min ?? 0);
 
@@ -1419,7 +1506,7 @@ function shorten(ctx, pool) {
       tries.push(rest);
     }
     for (const t of tries) {
-      const c = follow(t);
+      const c = follow(t, ctx.goal);
       if (c && movingOf(c) < movingOf(best) && sunsetOf(c) >= sunsetOf(best)) { best = c; improved = true; }
     }
   }
@@ -1427,8 +1514,8 @@ function shorten(ctx, pool) {
 }
 
 // 한 번 코스 짜기. first를 주면 첫 장소는 그곳으로 정해요.
-function buildCourse(pool, first) {
-  const ctx = startCtx();
+function buildCourse(pool, first, goal = null) {
+  const ctx = startCtx(goal);
   if (first) { const v = visit(ctx, first); if (v) add(ctx, v); else return { stops: [], spent: 0, fares: 0, finish: ctx.now }; }
   let c = shorten(extend(ctx, pool), pool);
   // 순서를 줄였는데도 1시간 넘게 남으면 한 곳 더 넣어요 (해 질 무렵이면 노을 명소가 먼저 뽑혀요)
@@ -1438,9 +1525,34 @@ function buildCourse(pool, first) {
     c = extend(c, pool, maxStops() + 1);
     if (c.stops.length === before) { c.maxCafes++; c.maxShops++; c = extend(c, pool, maxStops() + 1); }
   }
+  // 노을까지 보기: 마지막에 해 지기 30분 전까지 갈 수 있는 노을 명소를 하나 붙여요 (가장 가까운 곳, 이름부터 노을 명소면 먼저)
+  let glow = null;
+  if (glowOn() && c.stops.length) {
+    const sunset = sunsetToday(), target = glowTarget();
+    // 카페·식당은 연달아 넣지 않는 규칙을 여기서도 지켜요
+    const cands = pool.filter((p) => isSunsetSpot(p) && !c.stops.some((s) => s.place === p) && !closedOn(p) && !(p.type === c.lastType && (p.type === "카페" || p.type === "식당")) && !(isOutside(p) && c.stops.filter((s) => isOutside(s.place)).length >= maxOutside()))
+      .map((p) => {
+        const mv = travel(c.here, p, state.how, c.car);
+        if (mv.min === Infinity) return null;
+        const begin = Math.max(c.now + mv.min, target), leave = Math.max(begin + p.stayMin, sunset + GLOW_AFTER);
+        const [open, close] = hoursOf(p);
+        if (begin > sunset - 10) return null; // 해 지기 10분 전엔 도착해야 노을을 봐요
+        if (open && begin < toMin(open)) return null;
+        if (close && toMin(close) < sunset + GLOW_AFTER) return null;
+        if (c.spent + costOf(p) + mv.fare > state.budget) return null;
+        return { place: p, move: mv, begin, leave, score: -mv.min + (isSunsetNamed(p) ? 15 : 0) };
+      }).filter(Boolean).sort((a, b) => b.score - a.score);
+    if (cands[0]) { add(c, cands[0]); glow = cands[0].place; }
+    // 낮 코스를 다 짠 뒤엔 멀어서 못 가면: 가장 가까운 노을 명소를 목표로 정하고 그쪽으로 다가가며 다시 짜요
+    else if (!goal) {
+      const near = pool.filter((p) => isSunsetSpot(p) && !closedOn(p))
+        .map((p) => ({ p, min: travel(startPoint(), p, state.how).min })).filter((x) => x.min < Infinity).sort((a, b) => a.min - b.min)[0];
+      if (near) { const again = buildCourse(pool, first, near.p); if (again.glow) return again; }
+    }
+  }
   const back = backOf(c);
   const backFare = back?.fare ?? 0;
-  return { stops: c.stops, spent: c.spent + backFare, fares: c.fares + backFare, back, finish: c.now + (back?.min ?? 0) };
+  return { stops: c.stops, spent: c.spent + backFare, fares: c.fares + backFare, back, finish: c.now + (back?.min ?? 0), glow };
 }
 
 // 왔던 길을 되돌아가는 정도: 지나간 직선 거리 ÷ 같은 장소를 가장 짧게 도는 거리 (1이면 군더더기 없음)
@@ -1472,7 +1584,8 @@ function courseScore(c) {
   const roam = !roaming() ? 0 : outside * 2 >= c.stops.length ? -300 : outside > 0 ? 80 : 0;
   // 이름이 노을 명소인데 한낮에 들르는 코스는 뒤로 미뤄요
   const daySunset = c.stops.filter((s) => isSunsetNamed(s.place) && s.leave < sunsetToday() - 120).length;
-  return staying + c.stops.length * 10 - moving + meal + area + roam + sunsetOf(c) * 40 - (detourOf(c) - 1) * 150 - daySunset * 80;
+  const dogBag = state.who === "dog" ? c.stops.filter((s) => smallDogOnly(s.place)).length * (state.dogSize === "small" ? 10 : 60) : 0;
+  return -dogBag + staying + c.stops.length * 10 - moving + meal + area + roam + sunsetOf(c) * 40 - (detourOf(c) - 1) * 150 - daySunset * 80;
 }
 
 // 꼭 갈 곳 (사용자가 골라 반드시 넣는 곳, 3곳까지)
@@ -1546,6 +1659,7 @@ function makeCourse({ includeUnknown = false } = {}) {
     if (MUST.has(p)) return true; // 사용자가 고른 곳은 구역·실내·동행 정보와 상관없이 넣어 봐요 (정보 없음은 배지로 알려요)
     if (state.zone && state.zone !== "all" && p.zone !== state.zone && !(roaming() && REGION.zones.find((z) => z.id === state.zone).near.includes(p.zone))) return false;
     if (p.forDogs && state.who !== "dog") return false; // 애견카페는 반려견과 갈 때만
+    if (state.who === "dog" && state.dogSize === "big" && smallDogOnly(p)) return false; // 중·대형견은 이동가방에 넣어야 하는 곳을 빼요
     // 실내 위주: 공원과 야외 볼거리는 빼요
     if (state.area === "indoor" && (p.type === "공원" || (p.type === "볼거리" && !p.indoor))) return false;
     if (!need) return true;
@@ -1564,7 +1678,7 @@ function makeCourse({ includeUnknown = false } = {}) {
     if ([...MUST].some((p) => !c.stops.some((s) => s.place === p))) continue; // 꼭 갈 곳이 빠진 코스는 버려요
     seen.add(key); courses.push(c);
   }
-  courses.sort((a, b) => courseScore(b) - courseScore(a));
+  courses.sort((a, b) => courseScore(b) - (glowOn() && !b.glow ? 500 : 0) - courseScore(a) + (glowOn() && !a.glow ? 500 : 0));
   const pick = courses.length ? courses[(state.alt ?? 0) % courses.length] : { stops: [], spent: 0, fares: 0, finish: toMin(state.depart) };
   return { ...pick, unknownSkipped, noLocation, count: courses.length };
 }
@@ -1584,6 +1698,22 @@ function whyEmpty() {
   if (state.zone && state.zone !== "all" && tryWith({ zone: "all" })) return "zone";
   if (makeCourse({ includeUnknown: true }).stops.length) return "unknown";
   return "other";
+}
+
+// 코스가 일찍 끝날 때: 하나만 바꿔서 장소가 더 들어가는 대안 (2개까지)
+// 이웃 지역(예: 애월 → 한림·제주시내) 장소는 지역끼리 이동 시간표가 없어서 아직 못 섞어요
+function leftFixes(now) {
+  const count = (change) => {
+    const saved = { ...state }; Object.assign(state, change, { alt: 0 });
+    const n = makeCourse().stops.length;
+    Object.assign(state, saved); return n;
+  };
+  const out = [];
+  const tryAdd = (key, change, label) => { if (out.length < 2) { const n = count(change); if (n > now) out.push({ key, change, label: `${label} → ${n}곳` }); } };
+  if (state.how === "walk") tryAdd("how", { how: "any" }, `${em("🚕")} 먼 곳은 택시로`);
+  if (state.zone && state.zone !== "all" && state.roam !== "near") tryAdd("roam", { roam: "near" }, `${em("🧭")} 옆 구역도 조금`);
+  if (state.area === "indoor") tryAdd("area", { area: "mix" }, `${em("🤷")} "골고루"로 바꾸기`);
+  return out;
 }
 
 // 코스가 비었을 때: 조건을 하나만 바꿔서 코스가 나오는 것만 버튼으로 보여 줘요 (작은 변화부터, 3개까지)
@@ -1738,7 +1868,15 @@ const WX_LABEL = [[/thunder/, "뇌우", "⛈️"], [/snow/, "눈", "🌨️"], [
   [/fog/, "안개", "🌫️"], [/cloudy/, "흐림", "☁️"], [/partlycloudy/, "구름 조금", "⛅"], [/fair/, "대체로 맑음", "🌤️"], [/clearsky/, "맑음", "☀️"]];
 const wxOf = (code) => WX_LABEL.find(([re]) => re.test(code)) ?? [null, "", "🌤️"];
 const WX_RANK = (code) => /thunder|snow|sleet|heavyrain/.test(code) ? 4 : /rain/.test(code) ? 3 : /fog/.test(code) ? 2 : /cloudy/.test(code) && !/partly/.test(code) ? 1 : 0;
-// 코스 시간(출발~끝, 한국 시각)에 걸치는 예보만 모아요. 처음 2~3일은 1시간, 그 뒤는 6시간 단위예요
+// 하루를 나눠 보여 주는 때 (분): 오전 6~12시, 오후 12~18시, 저녁 18~24시
+const DAY_PARTS = [["오전", 360, 720], ["오후", 720, 1080], ["저녁", 1080, 1440]];
+// 비는 예보 이름 대신 시간당 강수량으로 나눠요 (기상청 기준: 3mm 미만 약한 비, 15mm 이상 강한 비)
+function wxLabel(w) {
+  const [, label, icon] = wxOf(w.code);
+  if (/rain/.test(w.code) && !/thunder|snow|sleet/.test(w.code)) return w.rate >= 15 ? ["많은 비", "🌧️"] : w.rate >= 3 ? ["비", "🌧️"] : ["약한 비", "🌦️"];
+  return [label, icon];
+}
+// 정한 시간(한국 시각, 분)에 걸치는 예보만 모아요. 처음 2~3일은 1시간, 그 뒤는 6시간 단위예요
 function weatherFor(series, date, fromMin, toMin) {
   const t0 = Date.parse(`${date}T00:00:00+09:00`) + fromMin * 60e3, t1 = Date.parse(`${date}T00:00:00+09:00`) + toMin * 60e3;
   let worst = null, rain = 0, rate = 0, wind = 0, temps = [], any = false;
@@ -1773,25 +1911,33 @@ async function drawWeather(stops, finish, redo) {
   let series;
   try { series = await loadForecast(); } catch { return; } // 날씨를 못 받아도 코스는 그대로 보여요
   if (state.date !== date || REGION !== region || !document.body.contains(box)) return; // 그새 조건이 바뀌었어요
-  const w = weatherFor(series, date, toMin(state.depart), finish);
+  // 코스 시간 예보는 실제로 짠 코스가 아니라 고른 시간(출발~출발+시간)으로 봐요.
+  // 그래야 "실내 위주로 다시 짜기"로 코스 길이가 바뀌어도 같은 날 날씨가 그대로예요
+  const fromM = toMin(state.depart), toM = glowOn() ? sunsetToday() + GLOW_AFTER : fromM + state.hours * 60;
+  const w = weatherFor(series, date, fromM, toM);
   if (!w) return; // 예보 범위(9일) 밖이에요
-  let [, label, icon] = wxOf(w.code);
-  // 비는 예보 이름 대신 시간당 강수량으로 나눠요 (기상청 기준: 3mm 미만 약한 비, 15mm 이상 강한 비)
-  if (/rain/.test(w.code) && !/thunder|snow|sleet/.test(w.code)) [label, icon] = w.rate >= 15 ? ["많은 비", "🌧️"] : w.rate >= 3 ? ["비", "🌧️"] : ["약한 비", "🌦️"];
+  const [label, icon] = wxLabel(w);
+  // 위에 크게 보이는 건 하루 단위(오전·오후·저녁)라서 코스를 다시 짜도 바뀌지 않아요
+  const parts = DAY_PARTS.filter(([, a, b]) => a < toM && b > fromM)
+    .map(([name, a, b]) => { const pw = weatherFor(series, date, a, b); return pw && { name, w: pw, l: wxLabel(pw) }; }).filter(Boolean);
+  const temps = parts.length ? parts.map((p) => p.w) : [w];
+  const tmin = Math.min(...temps.map((x) => x.tmin)), tmax = Math.max(...temps.map((x) => x.tmax));
   const wet = WX_RANK(w.code) >= 3 || w.rain >= 1;
   const heavy = /thunder/.test(w.code) || (/rain|sleet/.test(w.code) && w.rate >= 3);
   const outdoor = outdoorOf(stops);
   const coast = stops.some((s) => (s.place.type === "공원" || s.place.type === "볼거리") && !isInland(s.place) && /바다|해안|해변|해수욕|포구|코지|산책로/.test(s.place.name + s.place.note));
-  if (heavy && outdoorOf(stops) && state.area === "mix" && !rainSkip && !rainKept.has(rainKey())) {
+  if (heavy && outdoor && state.area === "mix" && !rainSkip && !rainKept.has(rainKey())) {
     rainAuto = rainKey(); state.area = "indoor"; state.alt = 0;
     track("weather_auto_indoor", { region: REGION.id });
     redo(); return;
   }
   const autoOn = state.area === "indoor" && rainAuto === rainKey();
-  box.innerHTML = `<p class="wx-line">${em(icon)} <b>${label}</b> · ${w.tmin === w.tmax ? `${w.tmin}℃` : `${w.tmin}~${w.tmax}℃`}${w.rain ? ` · 비 ${w.rain}mm` : ""} · 바람 ${w.wind}m/s <small>(코스 시간 예보)</small></p>
+  const rainy = wet && outdoor && state.area !== "indoor";
+  box.querySelector("summary").innerHTML = `${parts.length ? parts.map((p) => `<span class="wx-part">${p.name} ${em(p.l[1])} ${p.l[0]}</span>`).join(" · ") : `${em(icon)} ${label}`} · ${tmin === tmax ? `${tmin}℃` : `${tmin}~${tmax}℃`}${autoOn ? ` · <b class="wx-flag">${em("☔")} 실내 위주로 짰어요</b>` : rainy ? ` · <b class="wx-flag">${em("☔")} 비 소식</b>` : ""}`;
+  box.querySelector(".chip-body").innerHTML = `<p class="wx-line">코스 시간(${state.depart}~${toHHMM(toM)}) 예보: ${em(icon)} <b>${label}</b> · ${w.tmin === w.tmax ? `${w.tmin}℃` : `${w.tmin}~${w.tmax}℃`}${w.rain ? ` · 비 ${w.rain}mm` : ""} · 바람 ${w.wind}m/s</p>
     ${autoOn ? `<div class="wx-rain"><p>비가 와서 실내 위주로 짰어요.</p><button class="ghost" id="wxMix">${em("🤷")} 골고루로 되돌리기</button></div>` : ""}
-    ${wet && outdoor && state.area !== "indoor" && rainNoIndoor.has(rainKey()) ? `<p class="wx-tip">비 소식이 있어요. 이 조건엔 실내 장소가 모자라 야외 장소가 ${outdoor}곳 들어 있어요. 우산을 챙겨 주세요.</p>` : ""}
-    ${wet && outdoor && state.area !== "indoor" && !rainNoIndoor.has(rainKey()) ? `<div class="wx-rain"><p>비 소식이 있어요. 야외 장소가 ${outdoor}곳 있어요.</p><button class="primary" id="wxIndoor">${em("☔")} 실내 위주로 다시 짜기</button></div>` : ""}
+    ${rainy && rainNoIndoor.has(rainKey()) ? `<p class="wx-tip">비 소식이 있어요. 이 조건엔 실내 장소가 모자라 야외 장소가 ${outdoor}곳 들어 있어요. 우산을 챙겨 주세요.</p>` : ""}
+    ${rainy && !rainNoIndoor.has(rainKey()) ? `<div class="wx-rain"><p>비 소식이 있어요. 야외 장소가 ${outdoor}곳 있어요.</p><button class="primary" id="wxIndoor">${em("☔")} 실내 위주로 다시 짜기</button></div>` : ""}
     ${w.wind >= 9 && coast ? `<p class="wx-tip">바람이 세요(${w.wind}m/s). 바닷가 산책로·해안 절벽에서는 조심하세요.</p>` : ""}`;
   box.hidden = false;
   track("weather_show", { region: REGION.id, wet: wet ? 1 : 0 });
@@ -2099,11 +2245,13 @@ function routeLink(from, to, m) {
 
 function renderResult() {
   const { stops, spent, fares, back, finish, unknownSkipped, noLocation, count } = makeCourse();
-  const moveLine = (m, from, to) => `<li class="move">${m.text} 약 ${m.min}분${m.fare ? ` · ${m.text === "택시로" ? "약 " : ""}${won(m.fare)}` : ""}${routeLink(from, to, m)}${m.plan ? `<small class="sub-line">${busSteps(m.plan)}</small>` : ""}</li>`;
+  const moveLine = (m, from, to) => m.walkToCar ? `<li class="move">세워 둔 차까지 걸어서 ${m.walkToCar}분 → 차로 약 ${m.min - m.walkToCar}분${routeLink(m.carFrom, to, m)}<small class="sub-line">차는 ${esc(m.carFrom.name ?? m.carFrom.label ?? "앞에 세운 곳")}에 세워 뒀어요</small></li>`
+    : `<li class="move">${m.text} 약 ${m.min}분${m.fare ? ` · ${m.text === "택시로" ? "약 " : ""}${won(m.fare)}` : ""}${routeLink(from, to, m)}${m.plan ? `<small class="sub-line">${busSteps(m.plan)}</small>` : ""}</li>`;
   const costUnknown = stops.filter((s) => s.place.cost === null).length;
   const who = WHO.find((w) => w.id === state.who), how = HOW.find((h) => h.id === state.how);
   const used = finish - toMin(state.depart);
-  const left = toMin(state.depart) + state.hours * 60 - airportBuffer() - finish;
+  // 노을까지 보기면 끝나는 시각이 해 지는 시각에 맞춰져서 "시간이 남아요"는 보여 주지 않아요
+  const left = glowOn() ? 0 : toMin(state.depart) + state.hours * 60 - airportBuffer() - finish;
   const start = startPoint(), end = endPoint();
 
   const explain = stops.length ? explainCourse(stops, back) : [];
@@ -2113,9 +2261,25 @@ function renderResult() {
   // (목줄·야외 자리만 같은 조건은 크기와 상관없어서 장소 배지에만 보여요)
   const dogRuled = state.who === "dog" ? stops.map((s) => s.place).filter((p) => p.dog && smallDogOnly(p)) : [];
   let emptyWhy = null, fixes = [];
+  // 일찍 끝나면 코스가 더 길어지는 대안을 버튼으로 (실내 장소가 모자랄 때 등)
+  const early = stops.length && left > 60 && stops.length < maxStops();
+  if (early) fixes = leftFixes(stops.length);
+  const leftHM = `${Math.floor(left / 60) ? `${Math.floor(left / 60)}시간 ` : ""}${left % 60 ? `${left % 60}분` : ""}`.trim();
   const longMove = stops.length ? movingTip(stops, back, used) : "";
   // 반려견과 버스·지하철을 타는 코스면 이동장 안내
   const dogBus = state.who === "dog" && state.how === "walk" && [...stops.map((s) => s.move), back].some((m) => m?.plan);
+  // 안내문은 한 줄 칩으로 접어 두고 누르면 펼쳐요 (모바일에서 코스가 먼저 보이게)
+  const notices = !stops.length ? [] : [
+    left > 60 && { icon: "⏳", cls: "left-time", text: `시간이 ${leftHM} 남아요. ${stops.length >= maxStops() ? `쉬엄쉬엄 다니도록 ${maxStops()}곳까지만 넣었어요. 마음에 드는 곳에서 더 머물러 보세요.` : `조건에 맞는 곳을 다 넣어서 일찍 끝나요.${fixes.length ? " 이렇게 바꾸면 더 넣을 수 있어요." : ` 시간을 줄이거나 "누구랑"·"어디 위주"를 바꿔 보세요.`}`}${early && fixes.length ? `<span class="fixes">${fixes.map((f, i) => `<button class="ghost" data-fix="${i}">${f.label}</button>`).join("")}</span>` : ""}` },
+    longMove && { icon: "🚌", text: longMove },
+    dogBus && { icon: "🐶", text: DOG_TRANSIT },
+    caution && { icon: { dog: "🐶", kid: "👶", wheel: "♿" }[state.who] ?? "⚠️", text: caution },
+    dogRuled.length && { icon: "🐕", text: state.dogSize === "small"
+      ? `${em("🐕")} 이동가방이나 유모차가 필요한 곳 ${dogRuled.length}곳이 있어요: ${dogRuled.map((p) => `${esc(p.name)}(${esc(p.dogRule)})`).join(", ")}. 챙겨 가세요.`
+      : `${em("🐕")} 작은 개만 들어갈 수 있는 곳 ${dogRuled.length}곳이 들어 있어요: ${dogRuled.map((p) => `${esc(p.name)}(${esc(p.dogRule)})`).join(", ")}. 이동가방에 들어가지 않는 큰 개와 함께라면 "이곳 빼기"로 빼 주세요.` }
+  ].filter(Boolean);
+  // 첫 칩 아이콘은 동행 안내가 있으면 그걸로 (반려견이면 🐶)
+  notices.sort((a, b) => (["🐶", "👶", "♿", "🐕"].includes(b.icon) ? 1 : 0) - (["🐶", "👶", "♿", "🐕"].includes(a.icon) ? 1 : 0));
   const list = stops.map((s, i) => `
     ${moveLine(s.move, i === 0 ? start : stops[i - 1].place, s.place)}
     <li class="stop">
@@ -2130,10 +2294,10 @@ function renderResult() {
 
   screen.innerHTML = `<div class="result${stops.length ? " has-map" : ""}"><div class="r-head">
     <h1>이런 코스 어때요?</h1>
-    <p class="sub">${em(who.emoji)} ${who.label} · ${em(how.emoji)} ${how.label}${state.how === "any" ? ` · ${state.people}명` : ""}</p>
-    <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${hubOf() ? `${state.leave} ${hubOf().ride}` : hoursText(state.hours)} · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}${state.zone && state.zone !== "all" ? ` · ${esc(ZONES.find((z) => z.id === state.zone).label)}${roaming() ? " + 옆 구역" : ""}` : ""}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
-    <div class="weather" id="weather" role="status" hidden></div>
-    ${mustBar()}
+    <p class="sub">${em(who.emoji)} ${who.label}${dogSizeLabel()} · ${em(how.emoji)} ${how.label}${state.how === "any" ? ` · ${state.people}명` : ""}</p>
+    <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${hubOf() ? `${state.leave} ${hubOf().ride}` : glowOn() ? "노을까지" : hoursText(state.hours)} · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}${state.zone && state.zone !== "all" ? ` · ${esc(ZONES.find((z) => z.id === state.zone).label)}${roaming() ? " + 옆 구역" : ""}` : ""}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
+    ${glowReady() ? `<button class="ghost glow-btn" id="glowBtn" aria-pressed="${glowOn()}">${em("🌅")} ${glowOn() ? "노을까지 보는 중 · 끄기" : "노을까지 보기"}</button>` : ""}
+    ${glowOn() && stops.length && !stops.some((s) => seesSunset(s.place, s.begin, s.leave)) ? `<p class="caution">해 질 무렵에 갈 수 있는 노을 명소가 이 조건에선 없어요.</p>` : ""}
     ${stops.length ? `
       <div class="summary">
         <div><b>${stops.length}곳</b><span>장소</span></div>
@@ -2141,24 +2305,24 @@ function renderResult() {
         <div><b>${costUnknown ? "약 " : ""}${spent.toLocaleString("ko-KR")}원</b><span>1명 비용${costUnknown ? "(추정 포함)" : ""}</span></div>
       </div>
       ${fares ? `<p class="fare-line">교통비 ${won(fares)} 포함${state.how === "any" && state.people > 1 ? ` (택시비는 ${state.people}명이 나눈 1명 몫)` : ""}</p>` : ""}
-      ${left > 60 ? `<p class="left-time">시간이 ${Math.floor(left / 60) ? `${Math.floor(left / 60)}시간 ` : ""}${left % 60 ? `${left % 60}분 ` : ""}남아요. ${stops.length >= maxStops() ? `쉬엄쉬엄 다니도록 ${maxStops()}곳까지만 넣었어요. 마음에 드는 곳에서 더 머물러 보세요.` : `조건에 맞는 곳을 다 넣어서 일찍 끝나요. 시간을 줄이거나 "누구랑"·"어디 위주"를 바꿔 보세요.`}</p>` : ""}
-      ${longMove ? `<p class="caution">${longMove}</p>` : ""}
-      ${dogBus ? `<p class="caution">${DOG_TRANSIT}</p>` : ""}
-      ${caution ? `<p class="caution">${caution}</p>` : ""}
-      ${dogRuled.length ? `<p class="caution">${em("🐕")} 작은 개만 들어갈 수 있는 곳 ${dogRuled.length}곳이 들어 있어요: ${dogRuled.map((p) => `${esc(p.name)}(${esc(p.dogRule)})`).join(", ")}. 이동가방에 들어가지 않는 큰 개와 함께라면 "이곳 빼기"로 빼 주세요.</p>` : ""}
+      <div class="chip-row">
+        <details class="chip-box wx" id="weather" role="status" hidden><summary></summary><div class="chip-body"></div></details>
+        ${notices.length ? `<details class="chip-box notice"><summary>${em(notices[0].icon)} ${early ? `<b class="wx-flag">${leftHM} 남아요</b> · ` : ""}확인할 점 ${notices.length}개</summary><div class="chip-body">${notices.map((n) => `<p class="${n.cls ?? "caution"}">${n.text}</p>`).join("")}</div></details>` : ""}
+      </div>
       ${state.skip.length ? `<p class="skipped">뺀 곳: ${state.skip.map((id) => esc(PLACES.find((p) => p.id === id).name)).join(", ")} <button class="link" id="unskip">다시 넣기</button></p>` : ""}
       </div><div class="r-map"><div class="map" id="map" role="region" aria-label="코스 지도"></div>${stops.length ? `<p class="map-legend" aria-hidden="true">${[...new Set([...[...stops.map((s) => s.move), ...(back ? [back] : [])].map(legKind), ...(stops.some((s) => s.move?.plan) || back?.plan ? ["walk"] : [])])].map((k) => `<span><b>${LEG_MARK[k]}</b> ${LEG_STYLE[k].label}</span>`).join("")}${stops.some((s) => s.move?.plan) || back?.plan ? `<span>🚏 정류장</span>` : ""}<span>· 곧은 선이라 실제 길과 달라요</span></p>` : ""}</div><div class="r-rest">
-      ${explain.length ? `<details class="why"${matchMedia("(min-width: 1024px)").matches ? " open" : ""}><summary>이 코스는요</summary><ul>${explain.map((t) => `<li>${t}</li>`).join("")}</ul></details>` : ""}
       <ul class="timeline">
         <li class="endpoint">${em("📍")} ${state.depart} ${esc(start.name)}에서 출발</li>
         ${list}
         ${back ? moveLine(back, stops[stops.length - 1].place, end) : ""}
         <li class="endpoint">${em("🏁")} ${toHHMM(finish)} ${end ? `${esc(end.name)} 도착` : "코스 끝"}${hubOf() ? `<small class="sub-line">${hubOf().ride} ${toHHMM(toMin(state.depart) + Math.round(state.hours * 60))} 출발에 맞춰 ${hubOf().bufferLabel} 일찍 도착해요</small>` : ""}</li>
-      </ul>` : `
-      <div class="empty">${emptyMessage(emptyWhy = whyEmpty())}${(fixes = emptyFixes()).length ? `<p class="fix-title">이렇게 바꾸면 코스가 나와요</p><div class="fixes">${fixes.map((f, i) => `<button class="ghost" data-fix="${i}">${f.label}</button>`).join("")}</div>` : ""}</div></div><div class="r-rest">`}
+      </ul>
+      ${mustBar()}
+      ${explain.length ? `<details class="why"${matchMedia("(min-width: 1024px)").matches ? " open" : ""}><summary>이 코스는요</summary><ul>${explain.map((t) => `<li>${t}</li>`).join("")}</ul></details>` : ""}` : `
+      ${mustBar()}<div class="empty">${emptyMessage(emptyWhy = whyEmpty())}${(fixes = emptyFixes()).length ? `<p class="fix-title">이렇게 바꾸면 코스가 나와요</p><div class="fixes">${fixes.map((f, i) => `<button class="ghost" data-fix="${i}">${f.label}</button>`).join("")}</div>` : ""}</div></div><div class="r-rest">`}
     <details class="notes"><summary>참고할 점 (자료 기준일·출처)</summary>
       <p>• 장소 정보는 2026년 10월까지의 인터넷 자료로 모았고, 직접 가 보거나 전화로 확인한 건 아니에요. 장소마다 "메모·출처 보기"에 출처가 있어요. 가기 전에 운영시간은 한 번 더 확인해 주세요.</p>
-      <p>• 이동 시간은 실제 길 기준이에요.${state.how !== "walk" ? " 막히는 길은 반영되지 않아요." : (REGION.subway ? " 지하철·버스는 평균 배차 간격으로 기다리는 시간까지 넣은 어림이에요(실시간 도착 정보는 아니에요). 버스는 막히면 더 걸릴 수 있어요." : " 버스는 시간표의 평균 배차 간격으로 기다리는 시간까지 넣었어요(실시간 도착 정보는 아니에요).")}${state.how === "ev" ? " 충전 시간은 따로 넣지 않았어요. 충전소가 가까운 곳에서 오래 머물게 짰으니 그동안 충전해 두세요." : ""}${state.how === "car" || state.how === "ev" ? " 차로 다니는 시간에는 주차 5분을 넣었어요. 렌터카 요금·기름값(충전비)·주차비는 비용에 넣지 않았어요." : ""} ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}지도의 선은 순서만 보여 주는 직선이에요.
+      <p>• 이동 시간은 실제 길 기준이에요.${state.how !== "walk" ? " 막히는 길은 반영되지 않아요." : (REGION.subway ? " 지하철·버스는 평균 배차 간격으로 기다리는 시간까지 넣은 어림이에요(실시간 도착 정보는 아니에요). 버스는 막히면 더 걸릴 수 있어요." : " 버스는 시간표의 평균 배차 간격으로 기다리는 시간까지 넣었어요(실시간 도착 정보는 아니에요).")}${state.how === "ev" ? " 충전 시간은 따로 넣지 않았어요. 충전소가 가까운 곳에서 오래 머물게 짰으니 그동안 충전해 두세요." : ""}${state.how === "car" || state.how === "ev" ? " 차로 다니는 시간에는 주차 5분을 넣었어요. 걸어서 10분 안의 가까운 곳은 차를 세워 두고 걸어가게 짰고, 다시 차를 탈 때는 차까지 걸어가는 시간도 넣었어요. 렌터카 요금·기름값(충전비)·주차비는 비용에 넣지 않았어요." : ""} ${state.from === "here" ? "내 위치에서 첫 장소까지는 직선거리로 어림했어요. " : ""}지도의 선은 순서만 보여 주는 직선이에요.
         (길 데이터 © OpenStreetMap · ${REGION.router ?? "openrouteservice.org"}${state.how === "walk" ? (REGION.subway ? " · 버스 국토교통부 TAGO · 지하철 부산교통공사" : ` · 버스 국토교통부 TAGO · 제주버스정보시스템${state.who === "wheel" ? " · 제주특별자치도 저상버스 운행노선 현황" : ""}`) : ""})</p>
       ${state.who === "wheel" && (state.how === "walk" || state.how === "any") ? `<p>• 걷는 시간은 보통보다 1.5배 넉넉히 잡았어요.${state.how === "walk" ? (REGION.subway ? " 저상버스·지하철 엘리베이터 자료가 아직 없어 대중교통은 넣지 않았어요." : REGION.noBus ? "" : " 버스는 저상버스가 있는 노선만 넣었어요. 저상버스는 일부 차량만이라 기다리는 시간을 배차 간격만큼 잡았어요. 오는 버스가 저상버스인지는 그때그때 달라요.") : ""}${REGION.area === "제주" ? ` 휠체어를 쓰는 분은 제주 교통약자이동지원센터(행복콜, <a href="tel:18996884">1899-6884</a>, 24시간)의 휠체어 차량을 쓸 수 있어요. 미리 회원등록이 필요해요.` : ""}</p>` : ""}
       ${state.how === "bike" ? `<p>• 자전거 대여료는 비용에 넣지 않았어요.</p>` : ""}
@@ -2180,6 +2344,7 @@ function renderResult() {
     </div>` : ""}</div>`;
   trackCourse(stops, emptyWhy);
   document.getElementById("again").onclick = () => goStep(2);
+  document.getElementById("glowBtn")?.addEventListener("click", () => { state.glow = !glowOn(); state.alt = 0; track("glow_toggle", { region: REGION.id, on: state.glow ? 1 : 0 }); redo(); });
   // 다시 그린 뒤 포커스를 같은 자리(다음 장소의 '이곳 빼기')나 제목으로 옮겨요
   const redo = (focusIndex = null) => {
     syncUrl(false); renderResult();
@@ -2191,7 +2356,7 @@ function renderResult() {
   // 꼭 갈 곳을 "이곳 빼기"하면 꼭 갈 곳에서도 빼요
   screen.querySelectorAll(".skip").forEach((b, i) => { b.onclick = () => { state.must = state.must.filter((id) => id !== b.dataset.id); state.skip.push(b.dataset.id); state.alt = 0; redo(i); }; });
   bindMust(redo);
-  screen.querySelectorAll("[data-fix]").forEach((b) => { b.onclick = () => { const f = fixes[b.dataset.fix]; Object.assign(state, f.change, { alt: 0 }); track("empty_fix", { region: REGION.id, fix: f.key }); redo(); }; });
+  screen.querySelectorAll("[data-fix]").forEach((b) => { b.onclick = () => { const f = fixes[b.dataset.fix]; Object.assign(state, f.change, { alt: 0 }); track(stops.length ? "left_fix" : "empty_fix", { region: REGION.id, fix: f.key }); redo(); }; });
   document.getElementById("unskip")?.addEventListener("click", () => { state.skip = []; state.alt = 0; redo(); });
   document.getElementById("alt")?.addEventListener("click", () => { state.alt = (state.alt + 1) % count; track("course_alt", { region: REGION.id }); redo(); });
   document.getElementById("shareKakao")?.addEventListener("click", shareKakao);
