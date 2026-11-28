@@ -295,6 +295,17 @@
   .actions .alt { flex: 0 0 auto; padding: 0 14px; }
   .r-bottom { display: flex; gap: 8px; margin: 16px 0 0; }
   .r-bottom > * { flex: 1; }
+  .r-bottom { flex-wrap: wrap; }
+  .live { margin: 12px 0 0; padding: 12px 14px; border-radius: 14px; background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+  .live p { margin: 0; }
+  .live-head { font-size: 13px; font-weight: 700; color: var(--accent); }
+  .live-now { font-size: 17px; font-weight: 700; margin-top: 4px !important; }
+  .live-body { margin-top: 4px !important; font-size: 15px; line-height: 1.5; }
+  .live-body small { color: var(--muted); font-size: 13px; }
+  .live-body .route { margin-left: 6px; }
+  .live-no { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 4px; border-radius: 10px; background: var(--accent); color: var(--bg); font-size: 12px; }
+  .live-tip { margin-top: 6px !important; font-size: 12px; color: var(--muted); }
+  .timeline .stop.now { outline: 2px solid var(--accent); outline-offset: 2px; }
   .dock { position: sticky; bottom: 0; z-index: 5; margin: 0 -16px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom)); background: linear-gradient(to top, var(--bg) 80%, transparent); }
   .actions { display: flex; gap: 8px; }
   .wide { width: 100%; flex: none; margin-bottom: 4px; }
@@ -504,10 +515,10 @@ if (location.hostname === "swimpyonote.com") {
 // 고른 조건과 결과를 이벤트로 남겨요 (어떤 지역·조건을 많이 고르는지, 코스가 안 나오는 경우가 얼마나 되는지 보려고)
 const track = (name, params = {}) => gtag("event", name, params);
 </script>
-<script src="regions.js?v=20261118d"></script>
+<script src="regions.js?v=20261128a"></script>
 <script>
 // ----- 지역: 고른 지역의 자료만 화면 안에서 불러와요 (지역을 바꿔도 새로고침하지 않아요) -----
-const REGION_VERSION = "20261126b";
+const REGION_VERSION = "20261128a";
 let REGION = null, PLACES = [], STARTS = [], COASTLINE = [], TRAVEL = {}, INLAND_NORTH = false;
 // 지역마다 달라지는 목록 (applyRegion에서 다시 만들어요)
 let HUBS = [], ENDS = [], ZONES = [], TRAVEL_INDEX = {}, NO_DATA_YET = {};
@@ -596,10 +607,29 @@ const AREAS = [
   { id: "indoor",   emoji: "☔", label: "실내 위주" }
 ];
 
+// 무엇 위주로 즐길지 (취향). 장소 이름·소개에 나온 말로만 골라요 (지어내지 않아요)
+const TASTES = [
+  { id: "mix",    emoji: "🤷", label: "골고루" },
+  { id: "nature", emoji: "🌿", label: "자연" },
+  { id: "food",   emoji: "🍜", label: "맛집" },
+  { id: "cafe",   emoji: "☕", label: "카페" },
+  { id: "photo",  emoji: "📸", label: "사진 명소" }
+];
+const placeText = (p) => `${p.name} ${p.desc ?? ""}`;
+const NATURE_RE = /오름|숲|해변|해수욕|폭포|호수|계곡|산책|해안|공원|정원|수목원|섬|올레|둘레길|습지|동굴|바다|포구|등대|자연|꽃|억새|목장|생태/;
+const PHOTO_RE = /전망|뷰|포토|사진|야경|벽화|노을|일출|한옥|등대|다리|스카이|해변|해수욕|오름|정원|꽃|풍경|경치|루프탑|오션/;
+function tasteFits(p, taste = state.taste) {
+  if (taste === "nature") return p.type === "공원" || (p.type === "볼거리" && !p.indoor && NATURE_RE.test(placeText(p)));
+  if (taste === "food") return p.type === "식당" || (p.type === "쇼핑" && /시장/.test(p.name));
+  if (taste === "cafe") return p.type === "카페";
+  if (taste === "photo") return p.type !== "식당" && (isSunsetSpot(p) || PHOTO_RE.test(placeText(p)));
+  return false;
+}
+
 // 바다가 없는 지역(REGION.inland)은 "바닷가·산 쪽 위주"를 빼요
 const areaChoices = () => AREAS.filter((a) => !(REGION?.inland && (a.id === "sea" || a.id === "mountain")));
 
-const state = { step: 0, glow: false, who: null, dogSize: null, how: null, people: null, when: null, date: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix", end: "start", skip: [], must: [], alt: 0, fix: [], stay: {} };
+const state = { step: 0, glow: false, who: null, dogSize: null, how: null, people: null, when: null, date: null, from: null, here: null, depart: null, hours: null, budget: null, area: "mix", taste: "mix", end: "start", skip: [], must: [], alt: 0, fix: [], stay: {} };
 
 const screen = document.getElementById("screen");
 const bar = document.getElementById("bar");
@@ -612,13 +642,13 @@ const ROAMS = [{ id: "stay", label: "이 구역에서만" }, { id: "near", label
 const roaming = () => state.roam === "near" && state.zone && state.zone !== "all";
 const isOutside = (p) => roaming() && p.zone !== state.zone;
 const maxOutside = () => Math.max(1, Math.floor(maxStops() / 3)); // 코스의 3분의 1까지만 옆 구역으로 나가요
-const URL_KEYS = { who: "who", dogSize: "dog", how: "how", people: "people", date: "date", from: "from", depart: "time", hours: "hours", budget: "budget", end: "end", area: "area", zone: "zone", roam: "roam", leave: "leave" };
+const URL_KEYS = { who: "who", dogSize: "dog", how: "how", people: "people", date: "date", from: "from", depart: "time", hours: "hours", budget: "budget", end: "end", area: "area", taste: "taste", zone: "zone", roam: "roam", leave: "leave" };
 function queryOf() {
   const q = new URLSearchParams();
   for (const [k, name] of Object.entries(URL_KEYS)) {
     const v = state[k];
     if (v === null || v === undefined || (k === "from" && v === "here")) continue;
-    if ((k === "end" && v === "start") || (k === "area" && v === "mix") || (k === "zone" && v === "all") || (k === "roam" && (v === "stay" || state.zone === "all")) || (k === "leave" && !hubOf())) continue; // 기본값은 빼요
+    if ((k === "end" && v === "start") || (k === "area" && v === "mix") || (k === "taste" && v === "mix") || (k === "zone" && v === "all") || (k === "roam" && (v === "stay" || state.zone === "all")) || (k === "leave" && !hubOf())) continue; // 기본값은 빼요
     if (k === "people" && state.how !== "any") continue; // 인원은 택시비를 나눌 때만 써요
     if (k === "dogSize" && state.who !== "dog") continue; // 반려견 크기는 반려견이랑일 때만
     q.set(name, v);
@@ -655,6 +685,7 @@ function readQuery(search = location.search) {
   state.budget = num("budget", BUDGET);
   state.end = one("end", (v) => ENDS.some((e) => e.id === v)) ?? "start";
   state.area = one("area", (v) => areaChoices().some((a) => a.id === v)) ?? "mix";
+  state.taste = one("taste", (v) => TASTES.some((t) => t.id === v)) ?? "mix";
   state.zone = one("zone", (v) => ZONES.some((z) => z.id === v)) ?? "all";
   state.leave = one("leave", (v) => LEAVES.includes(v));
   if (hubOf() && state.leave && state.depart) state.hours = hoursFromLeave();
@@ -1021,6 +1052,7 @@ function renderWhen() {
     ${state.how === "any" ? chipGroup("몇 명이서 가요? (택시비를 나눠요)", "people", PEOPLE, (v) => v === 4 ? "4명+" : `${v}명`, 4) : ""}
     ${chipGroup("어디서 끝나요?", "end", ENDS.map((e) => e.id), (id) => { const e = ENDS.find((x) => x.id === id); return `${em(e.emoji)} ${e.label}`; })}
     ${chipGroup("어디 위주로 볼까요?", "area", areaChoices().map((a) => a.id), (id) => { const a = AREAS.find((x) => x.id === id); return `${em(a.emoji)} ${a.label}`; })}
+    ${chipGroup("무엇 위주로 즐길까요?", "taste", TASTES.map((t) => t.id), (id) => { const t = TASTES.find((x) => x.id === id); return `${em(t.emoji)} ${t.label}`; })}
     </div></details>
     <div class="cta"><p class="go-hint" id="goHint" role="status" hidden></p><button class="primary" id="go">코스 짜기</button></div>`;
   const go = document.getElementById("go");
@@ -1032,6 +1064,7 @@ function renderWhen() {
     if (state.how === "any") parts.push(state.people === 4 ? "4명 이상" : `${state.people}명`);
     if (state.end !== "start") parts.push(ENDS.find((e) => e.id === state.end).label);
     if (state.area !== "mix") parts.push(AREAS.find((a) => a.id === state.area).label);
+    if (state.taste !== "mix") parts.push(`${TASTES.find((t) => t.id === state.taste).label} 위주`);
     document.getElementById("advSummary").textContent = parts.join(" · ");
   };
   const sync = () => { if (hubOf() && state.leave) state.hours = hoursFromLeave(); // 출발 시각이 바뀌어도 다시 셈
@@ -1125,7 +1158,7 @@ function renderWhen() {
   screen.querySelectorAll(".chip").forEach((chip) => {
     chip.onclick = () => {
       const key = chip.dataset.key;
-      state[key] = (key === "depart" || key === "from" || key === "area" || key === "when" || key === "end" || key === "zone" || key === "roam" || key === "leave") ? chip.dataset.v : Number(chip.dataset.v);
+      state[key] = (key === "depart" || key === "from" || key === "area" || key === "taste" || key === "when" || key === "end" || key === "zone" || key === "roam" || key === "leave") ? chip.dataset.v : Number(chip.dataset.v);
       if (key === "area") rainSkip = true; // 사람이 직접 고르면 비 때문에 실내로 바꾸지 않아요
       if (key === "when") {
         staleDate = null; screen.querySelector(".stale")?.remove();
@@ -1410,7 +1443,7 @@ function startCtx(goal = null) {
     // 노을까지 보기면 끝나는 곳으로 돌아가는 건 노을 명소 다음이라 중간 장소에서는 따지지 않아요
     noBack: glowOn(), goal,
     // 꼭 갈 곳에 카페·쇼핑이 여럿이면 그만큼은 허락해요
-    maxCafes: Math.max(state.hours >= 8 ? 2 : 1, [...MUST].filter((p) => p.type === "카페").length),
+    maxCafes: Math.max((state.hours >= 8 ? 2 : 1) + (state.taste === "cafe" && state.hours >= 5 ? 1 : 0), [...MUST].filter((p) => p.type === "카페").length),
     maxShops: Math.max(state.hours >= 8 ? 2 : 1, [...MUST].filter((p) => p.type === "쇼핑").length)
   };
 }
@@ -1449,11 +1482,13 @@ function visit(ctx, p) {
   if (ctx.spent + costOf(p) + mv.fare + (back?.fare ?? 0) > state.budget) return null;
 
   // 카페는 2시간 넘게 띄우고, 점심 전(11시~13시 30분)에는 넣지 않아요. 점심을 먼저 먹어요
-  if (p.type === "카페" && (begin - ctx.lastCafe < 120 || (ctx.lastMeal < 0 && begin >= 660 && begin <= 810))) return null;
+  if (p.type === "카페" && (begin - ctx.lastCafe < (state.taste === "cafe" ? 90 : 120) || (ctx.lastMeal < 0 && begin >= 660 && begin <= 810))) return null;
 
   // 식당은 밥때(아침 7~9:30, 점심 11:30~14시, 저녁 17~20시)에만, 앞 식사에서 3시간이 지나야 넣어요
-  const mealTime = (begin >= 420 && begin <= 570) || (begin >= LUNCH_FROM && begin <= 840) || (begin >= 1020 && begin <= 1200);
-  if (p.type === "식당" && (!mealTime || begin - ctx.lastMeal < 180)) return null;
+  // 맛집 위주면 오후 간식 때(15:00~16:30)도 한 곳 더, 앞 식사와 2시간 반만 띄워요
+  const foodie = state.taste === "food";
+  const mealTime = (begin >= 420 && begin <= 570) || (begin >= LUNCH_FROM && begin <= 840) || (foodie && begin >= 900 && begin <= 990) || (begin >= 1020 && begin <= 1200);
+  if (p.type === "식당" && (!mealTime || begin - ctx.lastMeal < (foodie ? 150 : 180))) return null;
   // 숙소·공항에서 나와 1시간 안에 아침 식당은 넣지 않아요 (보통 아침을 먹고 나와요. 점심을 먹게 해요)
   if (p.type === "식당" && begin < 660 && begin - toMin(state.depart) < 60) return null;
 
@@ -1474,6 +1509,8 @@ function visit(ctx, p) {
   if (isSunsetNamed(p) && leave < sunsetToday() - 120) score -= 100;
   // 바닷가·산 쪽 위주를 골랐으면 그쪽 장소를 먼저 (식당은 산 쪽에 적어서 조금만)
   if (state.area === "sea" || state.area === "mountain") score += (isInland(p) === (state.area === "mountain") ? 1 : -1) * (p.type === "식당" ? 15 : 40);
+  // 취향: 맞는 곳을 먼저, 자연 위주면 쇼핑·실내는 뒤로
+  if (state.taste !== "mix") score += tasteFits(p) ? 45 : state.taste === "nature" && (p.type === "쇼핑" || p.indoor) ? -30 : 0;
   return { place: p, move: mv, begin, leave, score };
 }
 
@@ -1676,7 +1713,8 @@ function courseScore(c) {
   // 이름이 노을 명소인데 한낮에 들르는 코스는 뒤로 미뤄요
   const daySunset = c.stops.filter((s) => isSunsetNamed(s.place) && s.leave < sunsetToday() - 120).length;
   const dogBag = state.who === "dog" ? c.stops.filter((s) => smallDogOnly(s.place)).length * (state.dogSize === "small" ? 10 : 60) : 0;
-  return -dogBag + staying + c.stops.length * 10 - moving + meal + area + roam + sunsetOf(c) * 40 - (detourOf(c) - 1) * 150 - daySunset * 80;
+  const taste = state.taste === "mix" ? 0 : c.stops.filter((s) => tasteFits(s.place)).length * 25;
+  return taste - dogBag + staying + c.stops.length * 10 - moving + meal + area + roam + sunsetOf(c) * 40 - (detourOf(c) - 1) * 150 - daySunset * 80;
 }
 
 // 꼭 갈 곳 (사용자가 골라 반드시 넣는 곳, 3곳까지)
@@ -1810,6 +1848,7 @@ function leftFixes(now) {
   if (state.how === "walk") tryAdd("how", { how: "any" }, `${em("🚕")} 먼 곳은 택시로`);
   if (state.zone && state.zone !== "all" && state.roam !== "near") tryAdd("roam", { roam: "near" }, `${em("🧭")} 옆 구역도 조금`);
   if (state.area === "indoor") tryAdd("area", { area: "mix" }, `${em("🤷")} "골고루"로 바꾸기`);
+  if (state.taste !== "mix") tryAdd("taste", { taste: "mix" }, `${em("🤷")} 취향 "골고루"로`);
   return out;
 }
 
@@ -1823,6 +1862,7 @@ function emptyFixes() {
   const out = [];
   const tryAdd = (key, change, label) => { if (out.length < 3) { const n = count(change); if (n) out.push({ key, change, label: `${label} → ${n}곳` }); } };
   if (state.area !== "mix") tryAdd("area", { area: "mix" }, `${em("🤷")} "골고루"로 바꾸기`);
+  if (state.taste !== "mix") tryAdd("taste", { taste: "mix" }, `${em("🤷")} 취향 "골고루"로`);
   if (!hubOf()) {
     const longer = HOURS.find((h) => h > state.hours && count({ hours: h }));
     if (longer) tryAdd("hours", { hours: longer }, `${em("⏱️")} ${longer}시간으로 늘리기`);
@@ -1919,7 +1959,7 @@ function explainCourse(stops, back) {
   if (state.who === "solo" && solo.length) out.push(`혼자 가기 좋은 ${solo.map(name).join(", ")}${josa(solo[solo.length - 1].place.name, "을", "를")} 넣었어요.`);
   // 식사
   const meals = stops.filter((s) => s.place.type === "식당");
-  const mealName = (m) => (m < 660 ? "아침" : m < 960 ? "점심" : "저녁");
+  const mealName = (m) => (m < 660 ? "아침" : m < 870 ? "점심" : m < 1020 ? "간식" : "저녁");
   for (const m of meals) out.push(`${mealName(m.begin)}은 ${toHHMM(m.begin)}에 ${name(m)}${m.place.desc ? `(${esc(m.place.desc.replace(/\s*\(.*?\)/g, ""))})` : ""}에서 먹어요.`);
   const lunchTime = stops.length && stops[0].begin <= 720 && stops[stops.length - 1].leave >= 780;
   if (!meals.length && lunchTime) out.push("조건에 맞는 식당이 없어서 밥은 따로 챙겨 주세요.");
@@ -1932,6 +1972,11 @@ function explainCourse(stops, back) {
   const inland = stops.filter((s) => isInland(s.place)).length, sea = stops.length - inland;
   if (state.area === "indoor") out.push("비가 와도 괜찮게 공원과 야외 볼거리는 뺐어요.");
   else if (!REGION.inland) out.push(inland && sea ? `바닷가 ${sea}곳, 산 쪽 ${inland}곳을 섞었어요.` : inland ? `모두 ${REGION.area === "제주" ? "산 쪽(중산간)" : "바다에서 떨어진 안쪽"}이에요.` : `모두 바닷가 쪽이에요.`);
+  // 취향
+  if (state.taste !== "mix") {
+    const fit = stops.filter((s) => tasteFits(s.place)), t = TASTES.find((x) => x.id === state.taste);
+    out.push(fit.length ? `${t.label} 위주로 ${fit.map(name).join(", ")}${josa(fit[fit.length - 1].place.name, "을", "를")} 골랐어요.` : `${t.label}에 맞는 곳이 조건 안에 없어서 골고루 넣었어요.`);
+  }
   // 이동
   const moves = [...stops.map((s) => s.move), ...(back ? [back] : [])];
   const total = moves.reduce((m, x) => m + x.min, 0);
@@ -2040,6 +2085,92 @@ async function drawWeather(stops, finish, redo) {
   track("weather_show", { region: REGION.id, wet: wet ? 1 : 0 });
   document.getElementById("wxMix")?.addEventListener("click", () => { rainKept.add(rainKey()); rainAuto = null; state.area = "mix"; state.alt = 0; state.fix = []; state.stay = {}; track("weather_auto_undo", { region: REGION.id }); redo(); });
   document.getElementById("wxIndoor")?.addEventListener("click", () => { state.area = "indoor"; state.alt = 0; state.fix = []; state.stay = {}; track("weather_indoor", { region: REGION.id }); redo(); });
+}
+
+// 당일 진행 모드: 여행 날이 오늘이면 지금 시각으로 "지금 어디·다음은 어디"를 1분마다 보여 줘요
+// (실제로 어디 있는지는 몰라서 코스 시간표 기준이에요. 늦어지면 ✕로 빼거나 −로 머무는 시간을 줄이게 안내해요)
+let liveTimer = null;
+const nowKst = () => Math.floor((Date.now() + 9 * 3600e3) / 60000) % 1440;
+function startLive(stops, back, start, end, finish) {
+  clearInterval(liveTimer);
+  const box = document.getElementById("live");
+  if (!box) return;
+  const name = (p) => esc(p.name ?? p.label ?? "");
+  const no = (i) => `<b class="live-no">${i + 1}</b>`;
+  const go = (m, from, to) => `${moveText(m)}${routeLink(from, to, m)}`;
+  const draw = () => {
+    if (!document.body.contains(box)) { clearInterval(liveTimer); return; }
+    const now = nowKst(), first = stops[0], firstLeave = first.begin - first.move.min;
+    let head, body = "", cur = null;
+    if (now < firstLeave) {
+      const left = firstLeave - now;
+      head = `출발까지 ${left >= 60 ? `${Math.floor(left / 60)}시간 ` : ""}${left % 60}분`;
+      body = `${toHHMM(firstLeave)}에 ${name(start)}에서 나서요 → ${no(0)} ${name(first.place)} ${toHHMM(first.begin)} 도착<br><small>${go(first.move, start, first.place)}</small>`;
+    } else if (now >= finish) {
+      head = "오늘 코스가 끝났어요";
+      body = `${end ? `${name(end)}에 ${toHHMM(finish)} 도착 예정이었어요. ` : ""}즐거운 하루였길 바라요!`;
+    } else {
+      const i = stops.findIndex((s) => now >= s.begin && now < s.leave);
+      if (i >= 0) {
+        const s = stops[i], next = stops[i + 1], left = s.leave - now;
+        cur = i;
+        head = `지금은 ${no(i)} ${name(s.place)}`;
+        body = `${toHHMM(s.leave)}까지 ${left}분 남았어요.` + (next ? `<br>다음: ${no(i + 1)} ${name(next.place)} ${toHHMM(next.begin)} 도착<br><small>${go(next.move, s.place, next.place)}</small>`
+          : back ? `<br>다음: ${name(end)}(으)로 ${toHHMM(finish)} 도착<br><small>${go(back, s.place, end)}</small>` : "");
+      } else {
+        const k = stops.findIndex((s) => now < s.begin), to = k >= 0 ? stops[k] : null, from = k > 0 ? stops[k - 1].place : k === 0 ? start : stops[stops.length - 1].place;
+        cur = k >= 0 ? k : null;
+        head = to ? `${no(k)} ${name(to.place)}(으)로 가는 중` : `${name(end)}(으)로 가는 중`;
+        body = to ? `${toHHMM(to.begin)} 도착 예정<br><small>${go(to.move, from, to.place)}</small>` : back ? `${toHHMM(finish)} 도착 예정<br><small>${go(back, from, end)}</small>` : "";
+      }
+    }
+    const bus = /버스|호선|지하철/.test(body) ? `<p class="live-tip">버스·지하철 시간은 평균이에요. 실제 도착은 "길찾기"(카카오맵)에서 확인해 주세요.</p>` : "";
+    box.innerHTML = `<p class="live-head">${em("🟢")} 오늘 진행 · ${toHHMM(now)}</p><p class="live-now">${head}</p>${body ? `<p class="live-body">${body}</p>` : ""}${bus}
+      ${now < finish ? `<p class="live-tip">늦어지면 장소 옆 ✕로 한 곳을 빼거나, −로 머무는 시간을 줄여 보세요.</p>` : ""}`;
+    // 지금·다음 장소를 표시해요
+    screen.querySelectorAll(".timeline .stop").forEach((li, j) => li.classList.toggle("now", j === cur));
+  };
+  draw();
+  liveTimer = setInterval(draw, 60000);
+  track("live_view", { region: REGION.id });
+}
+
+// 캘린더 내보내기: 장소마다 일정 하나씩 .ics 파일로 받아요 (휴대폰에서 열면 캘린더에 넣을지 물어봐요)
+function icsTime(date, min) {
+  const [y, m, d] = date.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d) - 9 * 3600e3 + min * 60e3).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+}
+const icsText = (t) => String(t).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
+// 한 줄이 길면 75바이트마다 접어요 (캘린더 파일 규칙)
+function icsFold(line) {
+  const out = []; let cur = "", bytes = 0;
+  for (const ch of line) { const b = new TextEncoder().encode(ch).length; if (bytes + b > 73) { out.push(cur); cur = " "; bytes = 1; } cur += ch; bytes += b; }
+  return [...out, cur].join("\r\n");
+}
+function moveText(m) {
+  if (!m) return "";
+  if (m.walkToCar) return `세워 둔 차까지 걸어서 ${m.walkToCar}분 → 차로 약 ${m.min - m.walkToCar}분`;
+  return `${m.text} 약 ${m.min}분${m.plan ? ` (${busSteps(m.plan).replace(/<[^>]+>/g, "").replace(/&amp;/g, "&")})` : ""}`;
+}
+function downloadIcs(c) {
+  const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//swimpyonote.com//쉼표 코스//KO", "CALSCALE:GREGORIAN", "METHOD:PUBLISH", `X-WR-CALNAME:${icsText(`쉼,표 ${REGION.name} 코스`)}`];
+  c.stops.forEach((s, i) => {
+    const desc = [s.place.desc, `가는 길: ${moveText(s.move)}`, s.place.kakaoId ? `카카오맵: ${placeUrl(s.place)}` : "", `코스 보기: ${location.href}`].filter(Boolean).join("\n");
+    lines.push("BEGIN:VEVENT", `UID:${state.date}-${s.place.id}-${i}@swimpyonote.com`, `DTSTAMP:${stamp}`,
+      `DTSTART:${icsTime(state.date, s.begin)}`, `DTEND:${icsTime(state.date, s.leave)}`,
+      `SUMMARY:${icsText(`${i + 1}. ${s.place.name}`)}`, `LOCATION:${icsText(s.place.name)}`, `DESCRIPTION:${icsText(desc)}`,
+      ...(s.place.lat != null ? [`GEO:${s.place.lat};${s.place.lng}`] : []), "END:VEVENT");
+  });
+  lines.push("END:VCALENDAR");
+  const blob = new Blob([lines.map(icsFold).join("\r\n") + "\r\n"], { type: "text/calendar;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `쉼표-${REGION.name.replace(/[·\s]/g, "")}-${state.date}.ics`;
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  const msg = document.getElementById("shareMsg");
+  if (msg) msg.textContent = "캘린더 파일을 받았어요. 파일을 열면 캘린더에 넣을지 물어봐요.";
 }
 
 // 공유: 카카오톡 카드로 보내기(위 버튼) / 링크 복사·다른 앱(아래 버튼)
@@ -2398,7 +2529,7 @@ function renderResult() {
     <h1>이런 코스 어때요?</h1>
     ${fixed ? `<p class="fixed-note">${em("✏️")} 직접 바꾼 코스예요 <button class="link" id="unfix">처음 코스로</button></p>` : ""}
     <p class="sub">${em(who.emoji)} ${who.label}${dogSizeLabel()} · ${em(how.emoji)} ${how.label}${state.how === "any" ? ` · ${state.people}명` : ""}</p>
-    <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${hubOf() ? `${state.leave} ${hubOf().ride}` : glowOn() ? "노을까지" : hoursText(state.hours)} · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}${state.zone && state.zone !== "all" ? ` · ${esc(ZONES.find((z) => z.id === state.zone).label)}${roaming() ? " + 옆 구역" : ""}` : ""}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
+    <p class="tags">${dateLabel(state.date)} · ${state.depart} 출발 · ${hubOf() ? `${state.leave} ${hubOf().ride}` : glowOn() ? "노을까지" : hoursText(state.hours)} · 1명 ${manwon(state.budget)} · ${AREAS.find((a) => a.id === state.area).label}${state.taste !== "mix" ? ` · ${TASTES.find((t) => t.id === state.taste).label} 위주` : ""}${state.zone && state.zone !== "all" ? ` · ${esc(ZONES.find((z) => z.id === state.zone).label)}${roaming() ? " + 옆 구역" : ""}` : ""}<br>${esc(start.name)}${end && end !== start ? ` → ${esc(end.name)}` : end ? " 출발·도착" : " 출발"} · ${em("🌅")} 일몰 ${toHHMM(sunsetMin(state.date))}</p>
     ${glowReady() ? `<button class="ghost glow-btn" id="glowBtn" aria-pressed="${glowOn()}">${em("🌅")} ${glowOn() ? "노을까지 보는 중 · 끄기" : "노을까지 보기"}</button>` : ""}
     ${glowOn() && stops.length && !stops.some((s) => seesSunset(s.place, s.begin, s.leave)) ? `<p class="caution">해 질 무렵에 갈 수 있는 노을 명소가 이 조건에선 없어요.</p>` : ""}
     ${stops.length ? `
@@ -2408,6 +2539,7 @@ function renderResult() {
         <div><b>${costUnknown ? "약 " : ""}${spent.toLocaleString("ko-KR")}원</b><span>1명 비용${costUnknown ? "(추정 포함)" : ""}</span></div>
       </div>
       ${fares ? `<p class="fare-line">교통비 ${won(fares)} 포함${state.how === "any" && state.people > 1 ? ` (택시비는 ${state.people}명이 나눈 1명 몫)` : ""}</p>` : ""}
+      ${stops.length && state.date === kstToday() ? `<section class="live" id="live" aria-live="polite" aria-label="오늘 진행 상황"></section>` : ""}
       <div class="chip-row">
         <details class="chip-box wx" id="weather" role="status" hidden><summary></summary><div class="chip-body"></div></details>
         ${notices.length ? `<details class="chip-box notice"><summary>${em(notices[0].icon)} ${early ? `<b class="wx-flag">${leftHM} 남아요</b> · ` : ""}확인할 점 ${notices.length}개</summary><div class="chip-body">${notices.map((n) => `<p class="${n.cls ?? "caution"}">${n.text}</p>`).join("")}</div></details>` : ""}
@@ -2436,7 +2568,7 @@ function renderResult() {
       <p>• 날씨는 노르웨이 기상청(MET Norway) 예보로, 지역 한가운데 기준이에요(CC BY 4.0). 산 쪽·바닷가는 다를 수 있어요.</p>
       <p>• 방문 통계를 위해 구글 애널리틱스를 써요. <a href="privacy.html">개인정보처리방침</a> · <a href="${footMail("문의")}" data-foot="contact">문의하기</a> · <a href="${footMail("정보 제보")}" data-foot="report">정보가 틀렸어요</a></p>
     </details>
-    <div class="r-bottom"><button class="${stops.length ? "ghost" : "primary"}" id="again">조건 바꾸기</button>${stops.length ? `<button class="ghost" id="shareLink">${em("🔗")} 링크 복사·다른 앱</button>` : ""}</div></div>
+    <div class="r-bottom"><button class="${stops.length ? "ghost" : "primary"}" id="again">조건 바꾸기</button>${stops.length ? `<button class="ghost" id="shareLink">${em("🔗")} 링크 복사·다른 앱</button><button class="ghost" id="toCal">${em("📅")} 캘린더에 넣기</button>` : ""}</div></div>
     ${stops.length ? `<div class="dock">
       <p class="share-msg" id="shareMsg" role="status"></p>
       <div class="actions">
@@ -2512,10 +2644,12 @@ function renderResult() {
   document.getElementById("alt")?.addEventListener("click", () => { state.alt = (state.alt + 1) % count; state.fix = []; state.stay = {}; track("course_alt", { region: REGION.id }); redo(); });
   document.getElementById("shareKakao")?.addEventListener("click", shareKakao);
   document.getElementById("shareLink")?.addEventListener("click", shareLink);
-  lastCourse = { stops, spent, used, costUnknown };
+  lastCourse = { stops, spent, used, costUnknown, back, start, end };
+  document.getElementById("toCal")?.addEventListener("click", () => { downloadIcs(lastCourse); track("calendar_export", { region: REGION.id }); });
   // 브라우저 탭·즐겨찾기 제목도 코스에 맞춰요 (다른 화면으로 가면 원래 제목으로 돌아가요)
   document.title = stops.length ? `${shareText().line} | 쉼,표` : BASE_TITLE;
   if (stops.length) drawWeather(stops, finish, redo);
+  if (stops.length) startLive(stops, back, start, end, finish);
   // 비 때문에 실내로 바꿨는데 실내 코스가 없으면 골고루로 되돌려요
   else if (state.area === "indoor" && rainAuto === rainKey()) { rainKept.add(rainKey()); rainNoIndoor.add(rainKey()); rainAuto = null; state.area = "mix"; state.alt = 0; state.fix = []; state.stay = {}; redo(); return; }
   document.getElementById("save")?.addEventListener("click", (e) => {
